@@ -1,5 +1,5 @@
 import Logininput from "../Login/Logininput"
-import Loginbutton from "../Login/Loginbutton"
+
 
 const Createpostleftform = ({handleSubmit, setFormData, formData}) => {
   return (

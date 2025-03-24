@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Blogcard from './Blogcard';
 import Blogcard2 from './Blogcard2';
-import ChatBot from '../ChatBot/ChatBot';  // Chemin d'importation relatif corrigé
+import ChatBot from '../ChatBot/ChatBot'; // Chemin d'importation relatif corrigé
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
-  const [latestPost, setLatestPost] = useState(null); // Correction du nom de la variable pour respecter les conventions
+  const [latestPost, setLatestPost] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Pour naviguer à une autre page si besoin
 
   useEffect(() => {
+    // Vérifier si l'utilisateur est connecté avant de charger les blogs
+    if (!localStorage.getItem('accessToken')) {
+      navigate('/login'); // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+      return;
+    }
+
     const fetchBlogs = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/blog/');
@@ -17,8 +25,14 @@ const Home = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setLatestPost(data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))[0]); // Trier les blogs par date
-        setBlogs(data);
+        
+        console.log('Data received:', data); // Log des données récupérées
+        
+        // Trier les blogs par date
+        const sortedBlogs = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        
+        setBlogs(sortedBlogs);
+        setLatestPost(sortedBlogs[0]); // Mettre à jour le dernier post
       } catch (error) {
         setError(error.message);
       } finally {
@@ -27,7 +41,7 @@ const Home = () => {
     };
 
     fetchBlogs();
-  }, []);
+  }, [navigate]); // Ajout de `navigate` dans les dépendances pour garantir qu'il est à jour
 
   return (
     <div>

@@ -5,6 +5,7 @@ import BlogdetailImage from './BlogdetailImage'
 import Blogdetaildescription from './Blogdetaildescription'
 import Blogdetailuser from './Blogdetailuser'
 import Blogcard2 from '../Home/Blogcard2'
+import Home from '../Home/Home'
 const Blogdetail = () => {
   const params = useParams()
 console.log(params);

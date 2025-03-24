@@ -1,6 +1,6 @@
 import React from 'react'
 import Logininput from '../Login/Logininput'
-import Loginbutton from '../Login/Loginbutton'
+import Loginbutton from '../Login/Login'
 import { Link } from 'react-router-dom'
 
 const Forgotpasswordleft = () => {

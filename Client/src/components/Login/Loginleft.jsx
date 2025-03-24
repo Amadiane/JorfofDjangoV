@@ -1,7 +1,7 @@
 import React from 'react'
 import Logininput from './Logininput'
 import { Link } from 'react-router-dom'
-import Loginbutton from './Loginbutton'
+import Loginbutton from './Login'
 
 const Loginleft = () => {
   return (

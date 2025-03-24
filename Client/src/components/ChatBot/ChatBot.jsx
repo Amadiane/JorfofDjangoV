@@ -52,7 +52,7 @@ const ChatBot = () => {
           <img 
             src="/src/assets/avatar2.png" 
             alt="Chatbot" 
-            className="w-15 h-16" 
+            className="w-21 h-20" 
             style={headAnimation} 
           />
         </button>

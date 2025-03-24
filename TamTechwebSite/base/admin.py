@@ -9,3 +9,11 @@ class BlogAdmin(admin.ModelAdmin):
     search_fields = ('title', 'author', 'content')  # Fields to search in the admin interface
     list_filter = ('created_at', 'author')  # Filters to apply in the admin interface
     ordering = ('-created_at',)  # Default ordering of the list view
+
+
+
+from django.contrib import admin
+from .models import Todo
+
+# Register your models here.
+admin.site.register(Todo)
