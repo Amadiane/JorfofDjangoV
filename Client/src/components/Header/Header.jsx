@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import Navlinks from "./Navlinks";
-import Loginbtn from "./Loginbtn";
+// import Loginbtn from "./Loginbtn";
 
 
 const Header = () => {
@@ -25,7 +25,7 @@ const Header = () => {
         <Logo />
         <Navlinks />
         {/* <LanguageSwitcher /> */}
-        <Loginbtn />
+        {/* <Loginbtn /> */}
       </div>
 
       {/* Barre de progression positionnée en bas du header */}

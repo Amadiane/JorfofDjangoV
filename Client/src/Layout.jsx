@@ -11,25 +11,28 @@ const App = () => {
   const showNavAdmin = location.pathname === "/createpost";
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
       {!hideHeader && <Header />}
 
-      <div className="flex h-screen">
+      {/* Contenu principal avec flex-grow pour occuper tout l'espace */}
+      <div className="flex flex-grow">
         {/* Barre latérale (NavAdmin) */}
         {showNavAdmin && (
-          <div className="w-[250px] bg-white text-white p-5 fixed h-full">
+          <div className="w-[250px] bg-white text-gray-900 p-5 fixed h-full">
             <NavAdmin />
           </div>
         )}
 
-        {/* Contenu principal */}
-        <div className={`flex-1 p-5 ${showNavAdmin ? "ml-[250px]" : ""}`}>
+        {/* Contenu principal avec marge si la sidebar est présente */}
+        <div className={`flex-1 p-5 ${showNavAdmin ? "ml-[250px]" : ""} overflow-auto`}>
           <Outlet />
         </div>
       </div>
 
+      {/* Footer toujours en bas */}
       {!hideFooter && <Footer />}
-    </>
+    </div>
   );
 };
 

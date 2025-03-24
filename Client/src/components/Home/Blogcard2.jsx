@@ -39,12 +39,12 @@ const Blogcard2 = ({ data }) => {
 
           </div>
         </Link>
-        <div className="btn flex gap-4 px-4 py-2">
+        {/* <div className="btn flex gap-4 px-4 py-2"> 
           <Link to={`/updateblog/${data.slug}_${data.id}`}>  
          <button className='py-2 px-4 bg-green-600 text-lg rounded-2xl text-white' >edit</button>
          </Link>
           <button className='py-2 px-4 bg-red-600 text-lg rounded-2xl text-white'  >delete</button>
-        </div>
+        </div>*/}
       </div>
 
 
