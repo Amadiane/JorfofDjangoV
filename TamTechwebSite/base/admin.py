@@ -17,3 +17,20 @@ from .models import Todo
 
 # Register your models here.
 admin.site.register(Todo)
+
+
+
+# admin.py
+from django.contrib import admin
+from .models import MotPresi
+
+admin.site.register(MotPresi)
+
+
+
+# admin.py
+
+from django.contrib import admin
+from .models import Platform
+
+admin.site.register(Platform)

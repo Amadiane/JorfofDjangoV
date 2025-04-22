@@ -1,0 +1,280 @@
+import React, { useState } from 'react';
+
+
+
+const Community = () => {
+  const [form, setForm] = useState({
+    nom: '',
+    prenom: '',
+    role: '',
+    tel: '',
+    email: '',
+    conditions: false,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await fetch("http://localhost:8000/api/community/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("Votre demande d'adhésion a été envoyée avec succès !");
+        setForm({
+          nom: '',
+          prenom: '',
+          role: '',
+          tel: '',
+          email: '',
+          conditions: false,
+        });
+      } else {
+        alert("Erreur : " + (data.error || "Vérifiez les champs du formulaire."));
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi :", error);
+      alert("Une erreur est survenue lors de l'envoi du formulaire.");
+    }
+  };
+  
+  return (
+    <div style={styles.root}>
+      <header style={styles.header}>
+        <h1 style={styles.h1}>Communauté Tamkine</h1>
+        <p>Ensemble pour une éducation de qualité pour tous</p>
+      </header>
+
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <h2 style={styles.h2}>Notre Communauté</h2>
+          <p style={styles.p}>
+            Le nombre des membres de la Communauté Tamkine connait une multiplication continue [...]
+          </p>
+
+          <h2 style={styles.h2}>La Communauté Tamkine regroupe :</h2>
+          <ul style={styles.ul}>
+            <li style={styles.li}>Les élèves de toutes origines [...]</li>
+            <li style={styles.li}>Les parents de ces élèves ;</li>
+            <li style={styles.li}>Les instituteurs, enseignants, inspecteurs [...]</li>
+            <li style={styles.li}>Les entités de gestion et d'administration éducative ;</li>
+            <li style={styles.li}>La Société Civile ;</li>
+            <li style={styles.li}>Des citoyens du monde entier.</li>
+          </ul>
+
+          <p style={styles.p}>
+            Bénéficier de la carte de membre de la Communauté Tamkine [...]
+          </p>
+
+          <p style={styles.highlight}>
+            Être membre de la Famille Tamkine, c'est tout d'abord et avant tout démontrer [...]
+          </p>
+        </div>
+
+        <div className="call-to-action">
+          <h2 style={styles.h2}>N'attendez plus, venez nous rejoindre [...]</h2>
+          <p style={styles.quote}>
+            L'éducation est la pierre angulaire du développement [...]
+          </p>
+        </div>
+
+        <div style={styles.formContainer}>
+          <h2 style={styles.h2}>Rejoignez la Communauté Tamkine</h2>
+          <form onSubmit={handleSubmit}>
+            <div style={styles.twoColumns}>
+              <div style={styles.formGroup}>
+                <label style={styles.label} htmlFor="nom">Nom *</label>
+                <input style={styles.input} id="nom" name="nom" value={form.nom} onChange={handleChange} required />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label} htmlFor="prenom">Prénom *</label>
+                <input style={styles.input} id="prenom" name="prenom" value={form.prenom} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="role">Rôle *</label>
+              <select style={styles.select} id="role" name="role" value={form.role} onChange={handleChange} required>
+                <option value="">-- Sélectionnez votre rôle --</option>
+                <option value="enseignant">Enseignant</option>
+                <option value="parent">Parent d'élève</option>
+                <option value="eleve">Élève</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+
+            <div style={styles.twoColumns}>
+              <div style={styles.formGroup}>
+                <label style={styles.label} htmlFor="tel">Téléphone *</label>
+                <input style={styles.input} id="tel" name="tel" type="tel" value={form.tel} onChange={handleChange} required />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label} htmlFor="email">Email *</label>
+                <input style={styles.input} id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
+              </div>
+            </div>
+
+            <div style={styles.formGroup}>
+              <div style={styles.checkboxGroup}>
+                <input type="checkbox" id="conditions" name="conditions" checked={form.conditions} onChange={handleChange} required />
+                <label htmlFor="conditions">J'accepte les conditions générales CNDP</label>
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <button style={styles.button} type="submit">Envoyer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const styles = {
+  root: {
+    '--primary-color': '#1C1C47', // Bleu foncé
+    '--secondary-color': '#1C1C47', // Bleu foncé
+    '--accent-color': '#1C1C47', // Bleu foncé
+    '--text-color': '#333',
+    '--light-color': '#f5f5f5',
+    '--dark-color': '#262626',
+    '--shadow': '0 4px 6px rgba(0, 0, 0, 0.1)',
+    fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`,
+    backgroundColor: '#f5f5f5',
+    color: '#333',
+    lineHeight: '1.6',
+  },
+  header: {
+    background: 'linear-gradient(135deg, #1C1C47, #1C1C47)', // Bleu foncé
+    color: 'white',
+    padding: '2rem 1rem',
+    textAlign: 'center',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  container: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '2rem 1rem',
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    padding: '2rem',
+    marginBottom: '2rem',
+    transition: 'transform 0.3s ease',
+  },
+  cardHover: {
+    transform: 'translateY(-5px)',
+  },
+  h1: {
+    fontSize: '2.5rem',
+    marginBottom: '1rem',
+  },
+  h2: {
+    color: '#1C1C47', // Bleu foncé
+    marginBottom: '1rem',
+    fontSize: '1.8rem',
+  },
+  p: {
+    marginBottom: '1.5rem',
+  },
+  ul: {
+    paddingLeft: '2rem',
+    marginBottom: '1.5rem',
+  },
+  li: {
+    marginBottom: '0.5rem',
+  },
+  highlight: {
+    fontWeight: 'bold',
+    color: '#1C1C47', // Bleu foncé
+  },
+  quote: {
+    fontStyle: 'italic',
+    textAlign: 'center',
+    fontSize: '1.2rem',
+    margin: '2rem 0',
+    color: '#1C1C47', // Bleu foncé
+  },
+  formContainer: {
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    padding: '2rem',
+  },
+  formGroup: {
+    marginBottom: '1.5rem',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '0.5rem',
+    fontWeight: 'bold',
+    color: '#262626',
+  },
+  input: {
+    width: '100%',
+    padding: '0.8rem',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '1rem',
+  },
+  select: {
+    width: '100%',
+    padding: '0.8rem',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '1rem',
+  },
+  checkboxGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '1rem',
+  },
+  button: {
+    backgroundColor: '#1C1C47', // Bleu foncé
+    color: 'white',
+    border: 'none',
+    padding: '1rem 2rem',
+    fontSize: '1rem',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    width: '100%',
+    transition: 'background-color 0.3s ease',
+  },
+  buttonHover: {
+    backgroundColor: '#1C1C47', // Bleu foncé
+  },
+  footer: {
+    backgroundColor: '#262626',
+    color: 'white',
+    textAlign: 'center',
+    padding: '2rem 1rem',
+    marginTop: '2rem',
+  },
+  twoColumns: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '2rem',
+  },
+};
+
+export default Community;

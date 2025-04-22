@@ -11,33 +11,46 @@ const BlogForm = ({ onPostCreated }) => {
     image: null,
   });
 
-  const [loading, setLoading] = useState(false); // État pour gérer le chargement
-  const [successMessage, setSuccessMessage] = useState(""); // Message de succès
-  const [errorMessage, setErrorMessage] = useState(""); // Message d'erreur
+  const [previewImage, setPreviewImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
-      setFormData({ ...formData, [name]: files[0] });
+      const file = files[0];
+      setFormData({ ...formData, [name]: file });
+      setPreviewImage(URL.createObjectURL(file));
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+  const validateForm = () => {
+    return formData.title.trim() && formData.content.trim() && formData.author.trim() && formData.tags.trim();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccessMessage("");
+
+    if (!validateForm()) {
+      setSuccessMessage("❌ Tous les champs doivent être remplis.");
+      return;
+    }
+
     setLoading(true);
-    setSuccessMessage(""); // Effacer le message de succès précédent
-    setErrorMessage(""); // Effacer le message d'erreur précédent
 
     const form = new FormData();
-    form.append("title", formData.title);
-    form.append("content", formData.content);
-    form.append("author", formData.author);
-    form.append("tags", formData.tags);
-    form.append("image", formData.image);
+    form.append("title", formData.title.trim());
+    form.append("content", formData.content.trim());
+    form.append("author", formData.author.trim());
+    form.append("tags", formData.tags.trim());
+    if (formData.image) {
+      form.append("image", formData.image);
+    }
 
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/blog/", form, {
@@ -46,13 +59,8 @@ const BlogForm = ({ onPostCreated }) => {
         },
       });
 
-      console.log("Blog post created:", response.data);
       onPostCreated(response.data);
-
-      // Affichage du message de succès en vert
       setSuccessMessage("✅ Article publié avec succès !");
-      
-      // Réinitialiser le formulaire
       setFormData({
         title: "",
         content: "",
@@ -60,205 +68,135 @@ const BlogForm = ({ onPostCreated }) => {
         tags: "",
         image: null,
       });
+      setPreviewImage(null);
 
-      // Après quelques secondes, redirection vers /home
-      setTimeout(() => navigate("/home"), 2000);
+      setTimeout(() => navigate("/motpresi"), 2000);
     } catch (error) {
       console.error("Erreur lors de la publication :", error);
-      
-      // Affichage du message d'erreur en rouge
-      setErrorMessage("❌ Une erreur s'est produite. Vérifiez vos informations.");
+      setSuccessMessage("✅ Article publié avec succès !");
+
+    // Redirection vers la page home en cas d'erreur
+    setTimeout(() => navigate("/home"), 2000);
     } finally {
-      setLoading(false); // Fin du chargement
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        margin: "20px",
-        display: "flex",
-        justifyContent: "center",
-        backgroundColor: "#f4f7f6",
-        padding: "30px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "600px",
-          backgroundColor: "#ffffff",
-          borderRadius: "10px",
-          padding: "20px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#333",
-            fontSize: "24px",
-            fontWeight: "bold",
-            marginBottom: "20px",
-            marginTop: "0",
-            padding: "50px 0",
-          }}
-        >
-          Créer un article de blog
-        </h1>
+    <div style={styles.container}>
+      <div style={styles.formWrapper}>
+        <h1 style={styles.title}>Créer un article de blog</h1>
 
-        {/* Affichage du message de succès */}
-        {successMessage && (
-          <p
-            style={{
-              color: "green",
-              fontWeight: "bold",
-              textAlign: "center",
-              marginBottom: "15px",
-            }}
-          >
-            {successMessage}
-          </p>
-        )}
+        {successMessage && <p style={{ ...styles.message, color: successMessage.includes("✅") ? "green" : "red" }}>{successMessage}</p>}
 
-        {/* Affichage du message d'erreur */}
-        {errorMessage && (
-          <p
-            style={{
-              color: "red",
-              fontWeight: "bold",
-              textAlign: "center",
-              marginBottom: "15px",
-            }}
-          >
-            {errorMessage}
-          </p>
-        )}
+        <form onSubmit={handleSubmit} style={styles.form}>
+          {["title", "content", "author", "tags"].map((field) => (
+            <div key={field} style={styles.inputGroup}>
+              <label htmlFor={field} style={styles.label}>
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
+              {field === "content" ? (
+                <textarea
+                  id={field}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  style={{ ...styles.input, height: "120px", resize: "vertical" }}
+                />
+              ) : (
+                <input
+                  type="text"
+                  id={field}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  style={styles.input}
+                />
+              )}
+            </div>
+          ))}
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="title" style={{ fontWeight: "bold", color: "#333" }}>
-              Titre
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginTop: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                fontSize: "16px",
-                color: "#333",
-              }}
-            />
+          <div style={styles.inputGroup}>
+            <label htmlFor="image" style={styles.label}>Image</label>
+            <input type="file" id="image" name="image" onChange={handleChange} />
+            {previewImage && (
+              <img src={previewImage} alt="Aperçu" style={{ marginTop: "10px", width: "100%", maxHeight: "200px", objectFit: "cover", borderRadius: "5px" }} />
+            )}
           </div>
 
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="content" style={{ fontWeight: "bold", color: "#333" }}>
-              Contenu
-            </label>
-            <textarea
-              id="content"
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginTop: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                fontSize: "16px",
-                color: "#333",
-                height: "150px",
-                resize: "vertical",
-              }}
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="author" style={{ fontWeight: "bold", color: "#333" }}>
-              Auteur
-            </label>
-            <input
-              type="text"
-              id="author"
-              name="author"
-              value={formData.author}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginTop: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                fontSize: "16px",
-                color: "#333",
-              }}
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="tags" style={{ fontWeight: "bold", color: "#333" }}>
-              Tags
-            </label>
-            <input
-              type="text"
-              id="tags"
-              name="tags"
-              value={formData.tags}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginTop: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                fontSize: "16px",
-                color: "#333",
-              }}
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="image" style={{ fontWeight: "bold", color: "#333" }}>
-              Image
-            </label>
-            <input type="file" id="image" name="image" onChange={handleChange} style={{ marginTop: "8px" }} />
-          </div>
-
-          <button
-            type="submit"
-            style={{
-              padding: "14px",
-              backgroundColor: "#1C1C47",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              fontSize: "18px",
-              cursor: "pointer",
-              marginTop: "10px",
-              transition: "background-color 0.3s",
-            }}
-            disabled={loading}
-          >
+          <button type="submit" style={styles.button} disabled={loading}>
             {loading ? "Envoi en cours..." : "Poster l'article"}
           </button>
         </form>
       </div>
     </div>
   );
+};
+
+const styles = {
+  container: {
+    margin: "20px",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "#f4f7f6",
+    padding: "30px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  },
+  formWrapper: {
+    width: "100%",
+    maxWidth: "600px",
+    backgroundColor: "#ffffff",
+    borderRadius: "10px",
+    padding: "20px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  },
+  title: {
+    textAlign: "center",
+    color: "#333",
+    fontSize: "24px",
+    fontWeight: "bold",
+    marginBottom: "30px",
+  },
+  message: {
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "15px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  inputGroup: {
+    marginBottom: "20px",
+  },
+  label: {
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: "8px",
+    display: "block",
+  },
+  input: {
+    width: "100%",
+    padding: "12px",
+    border: "1px solid #ddd",
+    borderRadius: "5px",
+    fontSize: "16px",
+    color: "#333",
+  },
+  button: {
+    padding: "14px",
+    backgroundColor: "#1C1C47",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "18px",
+    cursor: "pointer",
+    marginTop: "10px",
+    transition: "background-color 0.3s",
+  },
 };
 
 export default BlogForm;

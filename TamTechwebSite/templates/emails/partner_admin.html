@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle Inscription Partenaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e4f7b;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #2e4f7b;
+            margin-top: 0;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .message-box {
+            background-color: #f5f7fa;
+            border-left: 4px solid #2e4f7b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2e4f7b;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999999;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">SYSTALINK</div>
+        </div>
+        
+        <div class="content">
+            <h1>Nouvelle Inscription Partenaire</h1>
+            
+            <p>Bonjour,</p>
+            
+            <p>Un nouveau partenaire vient de s'inscrire sur la plateforme. Voici les détails :</p>
+            
+            <div class="message-box">
+                <p><strong>Détails du Partenaire :</strong></p>
+                <p><strong>Nom:</strong> {{ partner.first_name }} {{ partner.last_name }}</p>
+                <p><strong>Email:</strong> {{ partner.email }}</p>
+                <p><strong>Rôle:</strong> {{ partner.role }}</p>
+                <p><strong>Organisation:</strong> {{ partner.organization }}</p>
+                <p><strong>Site Web:</strong> <a href="{{ partner.website_url }}" target="_blank">{{ partner.website_url }}</a></p>
+                <p><strong>Téléphone:</strong> {{ partner.phone }}</p>
+                <p><strong>Conditions Générales:</strong> {{ partner.accept_terms|yesno:"Accepté,Non accepté" }}</p>
+                <p><strong>Date d'inscription:</strong> {{ partner.created_at }}</p>
+            </div>
+            
+            <p>Vous pouvez répondre directement à cet email si vous avez besoin de plus d'informations.</p>
+            
+            <p style="text-align: center; margin: 30px 0;">
+                <a href="https://votreplateforme.com/admin" class="button">Voir dans l'admin</a>
+            </p>
+            
+            <p>Cordialement,</p>
+            <p>L'équipe SYSTALINK</p>
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 SYSTALINK. Tous droits réservés.</p>
+            <p>Ceci est une réponse automatique à une inscription d'un nouveau partenaire.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -106,7 +106,7 @@ ROOT_URLCONF = 'TamTechwebSite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -199,4 +199,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
-
+# Looking to send emails in production? Check out our Email API/SMTP product!
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = 'e0ff04df60d0cc'
+EMAIL_HOST_PASSWORD = '613e993f17c7b7'
+EMAIL_PORT = '2525'
+DEFAULT_FROM_EMAIL = 'amadoudianee2@gmail.com'

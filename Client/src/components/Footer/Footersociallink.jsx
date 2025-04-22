@@ -3,29 +3,31 @@ import { Link } from 'react-router-dom'
 
 const Footersociallink = () => {
   return (
-    <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+    <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start space-x-4">
+
       {/* Icône Facebook */}
-      <Link to="/" className="text-gray-500">
-        <span className="flex items-center">
-          <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
-            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-          </svg>
-          <span className="ml-2">Facebook</span>
-        </span>
-      </Link>
-      
+      <a href="https://www.facebook.com/share/1AB81DsvH4/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
+    <span className="flex items-center">
+      <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+      </svg>
+      <span className="ml-2">Facebook</span>
+    </span>
+  </a>
       {/* Icône Twitter */}
-      <Link to="/" className="ml-3 text-gray-500">
-        <span className="flex items-center">
+      <a href="https://x.com/fondationtamki1" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
+       <span className="flex items-center">
           <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
           </svg>
           <span className="ml-2">Twitter</span>
         </span>
-      </Link>
+        </a>
       
       {/* Icône Instagram */}
-      <Link to="/" className="ml-3 text-gray-500">
+      
+      <a href="https://www.instagram.com/fondation_tamkine?igsh=NDdtODN3am9jaTg=" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
+      
         <span className="flex items-center">
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
             <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
@@ -33,10 +35,11 @@ const Footersociallink = () => {
           </svg>
           <span className="ml-2">Instagram</span>
         </span>
-      </Link>
       
+      </a>
       {/* Icône LinkedIn */}
-      <Link to="/" className="ml-3 text-gray-500">
+      <a href=" https://www.linkedin.com/company/la-fondation-tamkine/" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
+     
         <span className="flex items-center">
           <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" className="w-5 h-5" viewBox="0 0 24 24">
             <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
@@ -44,20 +47,21 @@ const Footersociallink = () => {
           </svg>
           <span className="ml-2">LinkedIn</span>
         </span>
-      </Link>
+        </a>
 
       {/* Icône Telegram */}
-      <Link to="/" className="ml-3 text-gray-500">
+      <a href="https://t.me/togetherwewillsucceed" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
+      
         <span className="flex items-center">
           <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M4 12l2 2l5-5l5 5l2-2l-7-7z"></path>
           </svg>
           <span className="ml-2">Telegram</span>
         </span>
-      </Link>
+        </a>
 
       {/* Icône YouTube */}
-      <Link to="/" className="ml-3 text-gray-500">
+      <a href="https://www.youtube.com/@fondationtamkine1993" target="_blank" rel="noopener noreferrer" className="text-gray-500 mr-4">
         <span className="flex items-center">
           <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M10 7L15 12L10 17V7Z"></path>
@@ -65,7 +69,7 @@ const Footersociallink = () => {
           </svg>
           <span className="ml-2">YouTube</span>
         </span>
-      </Link>
+        </a>
     </span>
   )
 }

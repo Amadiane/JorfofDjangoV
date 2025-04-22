@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Received</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2e4f7b;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #2e4f7b;
+            margin-top: 0;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .message-box {
+            background-color: #f5f7fa;
+            border-left: 4px solid #2e4f7b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2e4f7b;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999999;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-icon {
+            display: inline-block;
+            margin: 0 10px;
+            color: #2e4f7b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Your Blog Name</div>
+        </div>
+        
+        <div class="content">
+            <h1>We've Received Your Message</h1>
+            
+            <p>Hello {{ name }},</p>
+            
+            <p>Thank you for reaching out to us! We've received your message and will get back to you as soon as possible, usually within 24-48 hours.</p>
+            
+            <div class="message-box">
+                <p><strong>Message Details:</strong></p>
+                <p><strong>Name:</strong> {{ name }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Subject:</strong> {{ subject }}</p>
+                <p><strong>Message:</strong></p>
+                <p>{{ message }}</p>
+                <p><strong>Sent on:</strong> {{ date }}</p>
+            </div>
+            
+            <p>If you need immediate assistance or have any additional information to share, feel free to reply to this email.</p>
+            
+            <p style="text-align: center; margin: 30px 0;">
+                <a href="https://yourblog.com/faq" class="button">Visit Our FAQ</a>
+            </p>
+            
+            <p>Best regards,</p>
+            <p>The Your Blog Name Team</p>
+        </div>
+        
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://twitter.com/yourblog" class="social-icon">Twitter</a>
+                <a href="https://facebook.com/yourblog" class="social-icon">Facebook</a>
+                <a href="https://instagram.com/yourblog" class="social-icon">Instagram</a>
+            </div>
+            
+            <p>© 2025 Your Blog Name. All rights reserved.</p>
+            
+            <p>This is an automatic response to your contact form submission. Please do not reply to this email if you've already received a response from us.</p>
+        </div>
+    </div>
+</body>
+</html>
