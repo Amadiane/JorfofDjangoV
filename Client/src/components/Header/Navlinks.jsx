@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Search, Bell, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import logo from "../../assets/logo.png";
@@ -9,6 +9,10 @@ const Navlinks = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
+  
+  // Refs for dropdown menus
+  const dropdownRefs = useRef({});
+  const timeoutRef = useRef(null);
 
   // Handle scroll to change header appearance
   useEffect(() => {
@@ -26,11 +30,31 @@ const Navlinks = () => {
   }, [scrolled]);
 
   const handleHover = (section) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
     setActiveSection(section);
   };
 
-  const handleLeave = () => {
-    setActiveSection(null);
+  const handleLeave = (section) => {
+    // Use timeout to prevent immediate closing
+    timeoutRef.current = setTimeout(() => {
+      setActiveSection(null);
+    }, 300); // Add a slight delay before closing
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveSection(null);
+    }, 300);
   };
 
   const toggleMobileMenu = () => {
@@ -53,7 +77,7 @@ const Navlinks = () => {
       id: "tamkine",
       isDropdown: true,
       dropdownItems: [
-        { title: "MOT DU PRÉSIDENT", path: "/motpresi" },
+        { title: "MOT DU PRÉSIDENT", path: "/motPresident" },
         { title: "FONDATION TAMKINE", path: "/fondation" },
         { title: "NOS VALEURS", path: "/nosValeurs" },
         { title: "NOS MISSIONS", path: "/nosMissions" },
@@ -85,9 +109,9 @@ const Navlinks = () => {
       id: "media",
       isDropdown: true,
       dropdownItems: [
-        { title: "Videostheque", path: "/videostheque" },
+        { title: "Videotheque", path: "/videotheque" },
         { title: "Phototèque", path: "/phototheque" },
-        { title: "Téléchargement", path: "/telechargement" }
+        { title: "Téléchargement", path: "/document" }
       ]
     },
     {
@@ -95,14 +119,14 @@ const Navlinks = () => {
       id: "join",
       isDropdown: true,
       dropdownItems: [
-        { title: "Contactez-nous", path: "/contacternous" },
+        { title: "Contactez-nous", path: "/contacter-tamkine" },
         { title: "Communauté", path: "/community" },
         { title: "Devenir Partenaire", path: "/partner" }
       ]
     },
     {
       title: "Partenaires Medias",
-      path: "/partenaires-medias",
+      path: "/mediaPartenaire",
       isDropdown: false
     }
   ];
@@ -111,14 +135,19 @@ const Navlinks = () => {
   const renderDropdown = (item) => {
     if (activeSection === item.id) {
       return (
-        <div className="absolute bg-white shadow-xl rounded-lg mt-2 py-3 px-4 border border-gray-200 transition-all duration-300 ease-in-out opacity-100 w-56 left-0 z-20">
+        <div 
+          ref={el => dropdownRefs.current[item.id] = el}
+          className="absolute bg-white shadow-xl rounded-lg mt-2 py-3 px-4 border border-gray-200 transition-all duration-300 ease-in-out opacity-100 w-64 left-0 z-1000"
+          onMouseEnter={handleDropdownMouseEnter}
+          onMouseLeave={handleDropdownMouseLeave}
+        >
           {item.dropdownItems.map((dropItem, index) => (
             <NavLink 
               key={index}
               to={dropItem.path} 
-              className="block py-2 text-sm text-black hover:text-[#12138B] hover:pl-1 transition-all flex items-center"
+              className="block py-3 text-sm text-black hover:text-[#12138B] hover:bg-gray-50 hover:pl-2 rounded transition-all duration-200 flex items-center group"
             >
-              <ChevronRight size={14} className="mr-1 opacity-0 group-hover:opacity-100" />
+              <ChevronRight size={14} className="mr-1 text-[#12138B] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               {dropItem.title}
             </NavLink>
           ))}
@@ -126,6 +155,11 @@ const Navlinks = () => {
       );
     }
     return null;
+  };
+
+  // Function to handle navigation on click of the bell icon
+  const handleNotificationClick = () => {
+    navigate('/home'); // Redirect to the home page
   };
 
   return (
@@ -194,7 +228,10 @@ const Navlinks = () => {
             </div>
 
             {/* Notifications */}
-            <button className="p-2 rounded-full hover:bg-gray-100 relative">
+            <button 
+              className="p-2 rounded-full hover:bg-gray-100 relative"
+              onClick={handleNotificationClick} // Add the click handler here
+            >
               <Bell size={20} className="text-gray-700" />
               <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
@@ -212,109 +249,34 @@ const Navlinks = () => {
 
         {/* Search bar on mobile when opened */}
         {searchOpen && mobileMenuOpen && (
-          <div className="block md:hidden mb-4">
-            <form className="flex">
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]"
-              />
-              <button className="bg-[#12138B] text-white px-4 rounded-r-lg hover:bg-[#0a0b5e]">
-                <Search size={18} />
-              </button>
-            </form>
+          <div className="block md:hidden absolute left-0 right-0 top-16 z-50 bg-white p-3 shadow-lg rounded-md">
+            <input
+              type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]"
+              placeholder="Rechercher..."
+            />
           </div>
         )}
+      </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200 py-3">
-            {navItems.map((item, index) => (
-              <div key={index} className="border-b border-gray-100 last:border-b-0">
-                {item.isDropdown ? (
-                  <div className="py-2">
-                    <button 
-                      onClick={() => setActiveSection(activeSection === item.id ? null : item.id)}
-                      className="w-full flex justify-between items-center px-4 py-2 text-black font-bold"
-                    >
-                      {item.title}
-                      <ChevronDown 
-                        size={16} 
-                        className={`transition-transform ${activeSection === item.id ? "rotate-180" : ""}`} 
-                      />
-                    </button>
-                    
-                    {activeSection === item.id && (
-                      <div className="bg-gray-50 px-6 py-2">
-                        {item.dropdownItems.map((dropItem, idx) => (
-                          <NavLink 
-                            key={idx}
-                            to={dropItem.path} 
-                            className="block py-2 text-sm text-black hover:text-[#12138B]"
-                            onClick={toggleMobileMenu}
-                          >
-                            {dropItem.title}
-                          </NavLink>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <NavLink
-                    to={item.path}
-                    className="block px-4 py-3 text-black font-bold hover:text-[#12138B]"
-                    onClick={toggleMobileMenu}
-                  >
-                    {item.title}
-                  </NavLink>
-                )}
-              </div>
-            ))}
-            
-            {/* Mobile language switcher */}
-            <div className="flex justify-center space-x-4 mt-4 border-t border-gray-200 pt-4">
-              <button className="text-sm font-medium hover:text-[#12138B]">FR</button>
-              <span className="text-gray-400">|</span>
-              <button className="text-sm font-medium hover:text-[#12138B]">EN</button>
-              <span className="text-gray-400">|</span>
-              <button className="text-sm font-medium hover:text-[#12138B]">AR</button>
-            </div>
-          </div>
-        )}
-
-        {/* Desktop Main Navigation */}
-        <nav className={`hidden md:flex flex-wrap items-center justify-center text-base border-t border-b border-gray-200 py-2 ${
-          scrolled ? 'text-sm' : 'text-base'
-        }`}>
-          {navItems.map((item, index) => (
-            <div 
-              key={index}
-              className="relative mx-3"
-              onMouseEnter={() => item.isDropdown && handleHover(item.id)}
-              onMouseLeave={item.isDropdown ? handleLeave : undefined}
+      {/* Navigation Links */}
+      <div className="hidden md:flex justify-center space-x-8 mt-4">
+        {navItems.map((item, index) => (
+          <div 
+            key={index} 
+            className="relative"
+            onMouseEnter={() => handleHover(item.id)}
+            onMouseLeave={() => handleLeave(item.id)}
+          >
+            <NavLink 
+              to={item.path}
+              className="text-gray-700 hover:text-[#12138B] font-semibold py-3"
             >
-              {item.isDropdown ? (
-                <>
-                  <span className="font-bold text-black hover:text-[#12138B] cursor-pointer flex items-center">
-                    {item.title}
-                    <ChevronDown 
-                      size={16} 
-                      className={`ml-1 transition-transform ${activeSection === item.id ? "rotate-180" : ""}`} 
-                    />
-                  </span>
-                  {renderDropdown(item)}
-                </>
-              ) : (
-                <NavLink
-                  to={item.path}
-                  className="hover:text-[#12138B] text-black font-bold transition-colors"
-                >
-                  {item.title}
-                </NavLink>
-              )}
-            </div>
-          ))}
-        </nav>
+              {item.title}
+            </NavLink>
+            {item.isDropdown && renderDropdown(item)}
+          </div>
+        ))}
       </div>
     </header>
   );

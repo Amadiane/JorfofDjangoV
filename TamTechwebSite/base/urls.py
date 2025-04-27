@@ -3,10 +3,11 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     BlogViewSet, get_todos, CustomTokenObtainPairView, CustomTokenRefreshView,
-    logout, register, is_logged_in, chatbot, ContactAPIView, MotPresiView,
+    logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     get_last_two_missions, create_mission, PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, get_subscribers, platform_links_api, valeurs_api, programs_api  # 👈 ajoute ces deux-là ici
+    PartnerAPIView, get_subscribers, platform_links_api, valeurs_api, fondations_api, mot_president_api,
+    add_video, add_media_content, document_api, partenaire_api, programmes_api # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -25,7 +26,6 @@ urlpatterns = [
     path('authenticated/', is_logged_in),
     path('chatbot/', chatbot, name='chatbot'),
     path('contact/', ContactAPIView.as_view(), name='contact'),
-    path('motpresi/', MotPresiView.as_view(), name='motpresi-view'),
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
     path('newsletter/subscribers/', get_subscribers, name='get_subscribers'),
     path('missions/', get_last_two_missions, name='get_last_two_missions'),
@@ -35,7 +35,13 @@ urlpatterns = [
     path('partners/', PartnerAPIView.as_view(), name='partners'),
     path('platforms/', platform_links_api, name='platform_links_api'),
     path('valeurs/', valeurs_api, name='valeurs_api'),
-    path('programs/', programs_api, name='programs_api'),
+    path('fondations/', fondations_api, name='fondations_api'),
+    path('mot-president/', mot_president_api, name='mot_president_api'),
+    path('add-video/', add_video, name='add_video'),
+    path('media/', add_media_content, name='add_media_content'),
+    path('documents/', document_api, name='document_api'),
+    path('partenaires/', partenaire_api, name='partenaire_api'),
+    path('programmes/', programmes_api, name='programmes_api'),
     
 
     path("", include(router.urls)),

@@ -22,7 +22,7 @@ const Login = () => {
             if (response.access) {
                 localStorage.setItem('accessToken', response.access);
                 localStorage.setItem('refreshToken', response.refresh);
-                navigate('/createpost');
+                navigate('/dashboardAdmin');
             } else {
                 setError(response.detail || 'Identifiants incorrects.');
             }

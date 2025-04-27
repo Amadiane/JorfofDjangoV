@@ -19,15 +19,6 @@ from .models import Todo
 admin.site.register(Todo)
 
 
-
-# admin.py
-from django.contrib import admin
-from .models import MotPresi
-
-admin.site.register(MotPresi)
-
-
-
 # admin.py
 
 from django.contrib import admin

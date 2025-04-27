@@ -128,134 +128,69 @@ const NousRejoindreHeader = () => {
 
               {/* Messages de retour avec animation */}
               {status === "success" && (
-                <div className="mb-8 p-5 bg-green-500 bg-opacity-90 text-white rounded-xl shadow-lg">
-                  <div className="flex items-center">
-                    <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <p className="font-medium">Merci pour votre message ! Nous vous contacterons bientôt.</p>
-                  </div>
+                <div className="mb-6 text-green-500 font-semibold">
+                  Formulaire envoyé avec succès !
                 </div>
               )}
               {status === "error" && (
-                <div className="mb-8 p-5 bg-red-500 bg-opacity-90 text-white rounded-xl shadow-lg">
-                  <div className="flex items-center">
-                    <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <p className="font-medium">Une erreur est survenue. Veuillez réessayer plus tard.</p>
-                  </div>
+                <div className="mb-6 text-red-500 font-semibold">
+                  Une erreur s'est produite, veuillez réessayer.
                 </div>
               )}
 
-              {/* Form with Enhanced UI */}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="w-full md:w-1/2">
-                    <label htmlFor="organization" className="block text-blue-100 mb-2 text-sm font-medium">Nom de l'organisation</label>
+              {/* Formulaire */}
+              <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div>
+                    <label htmlFor="organization" className="block text-sm font-medium mb-2">
+                      Organisation
+                    </label>
                     <input
                       id="organization"
                       type="text"
                       value={organization}
                       onChange={(e) => setOrganization(e.target.value)}
-                      placeholder="Votre organisation"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
                       required
-                      className="px-5 py-4 w-full rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800 bg-white bg-opacity-90"
                     />
                   </div>
-                  <div className="w-full md:w-1/2">
-                    <label htmlFor="email" className="block text-blue-100 mb-2 text-sm font-medium">Adresse e-mail</label>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium mb-2">
+                      Email
+                    </label>
                     <input
                       id="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Email de contact"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
                       required
-                      className="px-5 py-4 w-full rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800 bg-white bg-opacity-90"
                     />
                   </div>
                 </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-blue-100 mb-2 text-sm font-medium">Votre message</label>
+                <div className="mt-6">
+                  <label htmlFor="message" className="block text-sm font-medium mb-2">
+                    Message
+                  </label>
                   <textarea
                     id="message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Parlez-nous de votre organisation et de votre intérêt à devenir partenaire..."
-                    rows="5"
+                    rows="4"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
                     required
-                    className="px-5 py-4 w-full rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800 bg-white bg-opacity-90 resize-none"
-                  ></textarea>
+                  />
                 </div>
-                
-                <div className="pt-2">
+                <div className="mt-6 text-center">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`w-full py-4 px-6 rounded-xl font-medium text-lg transition duration-300 ${
-                      isSubmitting 
-                        ? "bg-blue-400 cursor-not-allowed" 
-                        : "bg-blue-500 hover:bg-blue-600 shadow-lg hover:shadow-xl"
-                    }`}
+                    className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:bg-blue-500 transition-colors duration-300"
                   >
-                    {isSubmitting ? (
-                      <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Envoi en cours...
-                      </span>
-                    ) : (
-                      "Soumettre ma demande"
-                    )}
+                    {isSubmitting ? "Envoi en cours..." : "Envoyer"}
                   </button>
                 </div>
               </form>
-              
-              <p className="text-blue-200 text-sm mt-6 text-center">
-                Vos données sont traitées de manière confidentielle conformément à notre politique de confidentialité.
-              </p>
-            </div>
-          </div>
-          
-          {/* FAQ Section - Optional Addition */}
-          <div className="mt-20">
-            <h2 className="text-2xl md:text-3xl font-semibold text-[#1C1C47] mb-10 text-center">
-              Questions fréquentes
-            </h2>
-            <div className="space-y-6 max-w-3xl mx-auto">
-              <div className="bg-white shadow-lg rounded-xl p-6">
-                <h3 className="font-semibold text-lg text-[#1C1C47] mb-2">
-                  Comment fonctionne le partenariat avec Tamkine ?
-                </h3>
-                <p className="text-gray-600">
-                  Nos partenariats sont adaptés aux besoins et aux capacités de chaque organisation. 
-                  Après avoir reçu votre demande, nous vous contacterons pour discuter des 
-                  différentes opportunités de collaboration.
-                </p>
-              </div>
-              <div className="bg-white shadow-lg rounded-xl p-6">
-                <h3 className="font-semibold text-lg text-[#1C1C47] mb-2">
-                  Quels types d'organisations peuvent devenir partenaires ?
-                </h3>
-                <p className="text-gray-600">
-                  Nous collaborons avec diverses organisations : entreprises, institutions éducatives, 
-                  ONG, organisations gouvernementales et fondations qui partagent notre vision 
-                  d'améliorer l'éducation par la technologie.
-                </p>
-              </div>
-              <div className="bg-white shadow-lg rounded-xl p-6">
-                <h3 className="font-semibold text-lg text-[#1C1C47] mb-2">
-                  Combien de temps dure le processus d'approbation ?
-                </h3>
-                <p className="text-gray-600">
-                  Notre équipe examine toutes les demandes de partenariat dans un délai de 5 à 10 jours 
-                  ouvrables. Nous vous contacterons par email pour planifier une première réunion de discussion.
-                </p>
-              </div>
             </div>
           </div>
         </div>

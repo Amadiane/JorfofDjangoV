@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-const ProgramPost = () => {
-  const [title, setTitle] = useState("");
+const MediaPartenairePost = () => {
+  const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
-  const [photoCouverture, setPhotoCouverture] = useState(null);
+  const [siteUrl, setSiteUrl] = useState("");
+  const [couverture, setCouverture] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -13,29 +14,31 @@ const ProgramPost = () => {
     setMessage("");
 
     const formData = new FormData();
-    formData.append('title', title);
+    formData.append('titre', titre);
     formData.append('description', description);
-    if (photoCouverture) {
-      formData.append('photo_couverture', photoCouverture);
+    formData.append('site_url', siteUrl);
+    if (couverture) {
+      formData.append('couverture', couverture);
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/programmes/', {
+      const response = await fetch('http://127.0.0.1:8000/api/partenaires/', {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur HTTP : ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      await response.json();
-      setMessage("✅ Programme ajouté avec succès !");
-      setTitle("");
+      const data = await response.json();
+      setMessage("✅ Partenaire ajouté avec succès !");
+      setTitre("");
       setDescription("");
-      setPhotoCouverture(null);
+      setSiteUrl("");
+      setCouverture(null);
     } catch (error) {
-      setMessage(`❌ Erreur : ${error.message}`);
+      setMessage(`❌ Erreur: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -62,16 +65,18 @@ const ProgramPost = () => {
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
       }}>
         <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>
-          Publier un nouveau programme
+          Publier un nouveau partenaire
         </h1>
+
         <form onSubmit={handleSubmit}>
+
           {/* Titre */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre du programme</label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre du partenaire</label>
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={titre}
+              onChange={(e) => setTitre(e.target.value)}
               required
               style={{
                 width: '100%',
@@ -102,15 +107,31 @@ const ProgramPost = () => {
             />
           </div>
 
-          {/* Image de couverture */}
+          {/* Lien */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>
-              Photo de couverture (optionnelle)
-            </label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Lien du site</label>
+            <input
+              type="url"
+              value={siteUrl}
+              onChange={(e) => setSiteUrl(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                fontSize: '16px'
+              }}
+            />
+          </div>
+
+          {/* Couverture */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Image de couverture</label>
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setPhotoCouverture(e.target.files[0])}
+              onChange={(e) => setCouverture(e.target.files[0])}
               style={{
                 width: '100%',
                 padding: '12px',
@@ -130,18 +151,14 @@ const ProgramPost = () => {
             cursor: 'pointer',
             width: '100%',
           }}>
-            {loading ? 'Envoi en cours...' : 'Ajouter le programme'}
+            {loading ? 'Envoi en cours...' : 'Ajouter le partenaire'}
           </button>
         </form>
 
-        {message && (
-          <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>
-            {message}
-          </p>
-        )}
+        {message && <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>{message}</p>}
       </section>
     </div>
   );
 };
 
-export default ProgramPost;
+export default MediaPartenairePost;

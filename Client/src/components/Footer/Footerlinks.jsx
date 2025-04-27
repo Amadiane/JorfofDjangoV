@@ -33,7 +33,7 @@ const Footerlinks = ({ links, header }) => {
             return (
               <li key={link}>
                 <NavLink
-                  to="/quisommesnous"  // Redirige directement vers la page Quisommesnous
+                  to="/qui-sommes-nous-"  // Redirige directement vers la page Quisommesnous
                   className={({ isActive }) => `footer-link hover:text-white ${isActive ? "text-orange-500" : "text-white"}`}
                 >
                   {link}
@@ -46,7 +46,7 @@ const Footerlinks = ({ links, header }) => {
             return (
               <li key={link}>
                 <NavLink
-                  to="/contacternous"  // Redirige directement vers la page Contacter Tamkine
+                  to="/contacter-tamkine"  // Redirige directement vers la page Contacter Tamkine
                   className={({ isActive }) => `footer-link hover:text-white ${isActive ? "text-orange-500" : "text-white"}`}
                 >
                   {link}
@@ -59,7 +59,7 @@ const Footerlinks = ({ links, header }) => {
             return (
               <li key={link}>
                 <NavLink
-                  to="/nousrejoindre"  // Redirige directement vers la page Contacter Tamkine
+                  to="/nous-rejoindre"  // Redirige directement vers la page Contacter Tamkine
                   className={({ isActive }) => `footer-link hover:text-white ${isActive ? "text-orange-500" : "text-white"}`}
                 >
                   {link}

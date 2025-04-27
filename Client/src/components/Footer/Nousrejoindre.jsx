@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const NousRejoindre = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +8,17 @@ const NousRejoindre = () => {
   });
   const [responseMessage, setResponseMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+
+  // Détecter la largeur de l'écran pour la responsivité
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,104 +56,124 @@ const NousRejoindre = () => {
     }
   };
 
-  const styles = {
-    pageContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#f9f9f9',
-      padding: '1rem',
-    },
-    container: {
-      maxWidth: '600px',
-      width: '100%',
-      padding: '2rem',
-      border: '1px solid #ddd',
-      borderRadius: '10px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      fontFamily: 'Arial, sans-serif',
-      backgroundColor: '#ffffff',
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '2rem',
-    },
-    title: {
-      fontSize: '1.8rem',
-      color: '#2e4f7b',
-      marginBottom: '0.5rem',
-    },
-    subtitle: {
-      fontSize: '1rem',
-      color: '#666',
-      marginBottom: '1.5rem',
-    },
-    formGroup: {
-      marginBottom: '1.25rem',
-    },
-    label: {
-      display: 'block',
-      marginBottom: '0.5rem',
-      fontSize: '0.9rem',
-      fontWeight: 'bold',
-      color: '#555',
-    },
-    input: {
-      width: '100%',
-      padding: '0.75rem',
-      borderRadius: '8px',
-      border: '1px solid #ccc',
-      fontSize: '1rem',
-      transition: 'border-color 0.3s',
-      boxSizing: 'border-box',
-    },
-    textarea: {
-      width: '100%',
-      padding: '0.75rem',
-      borderRadius: '8px',
-      border: '1px solid #ccc',
-      fontSize: '1rem',
-      resize: 'vertical',
-      minHeight: '120px',
-      boxSizing: 'border-box',
-    },
-    button: {
-      padding: '0.85rem 2rem',
-      backgroundColor: '#2e4f7b',
-      color: 'white',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      fontSize: '1rem',
-      fontWeight: 'bold',
-      transition: 'background-color 0.3s',
-      width: '100%',
-    },
-    message: {
-      marginTop: '1.5rem',
-      padding: '1rem',
-      borderRadius: '8px',
-      backgroundColor: '#e6f7e6',
-      color: '#2c7c2c',
-      fontWeight: '500',
-      textAlign: 'center',
-    },
-    error: {
-      backgroundColor: '#ffebee',
-      color: '#c62828',
-    },
-    requiredMark: {
-      color: '#c62828',
-      marginLeft: '3px',
-    },
-    footer: {
-      marginTop: '2rem',
-      fontSize: '0.85rem',
-      color: '#777',
-      textAlign: 'center',
-    }
+  // Styles adaptés selon la largeur de l'écran et les couleurs de Contacternous
+  const getResponsiveStyles = () => {
+    const isMobile = windowWidth < 640;
+    const isTablet = windowWidth >= 640 && windowWidth < 768;
+    
+    return {
+      pageContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        background: 'linear-gradient(to bottom, #EBF5FF, #FFFFFF)',
+        padding: isMobile ? '1rem' : isTablet ? '1.5rem' : '2rem',
+      },
+      container: {
+        maxWidth: isMobile ? '100%' : isTablet ? '540px' : '600px',
+        width: '100%',
+        padding: isMobile ? '1.5rem' : isTablet ? '1.75rem' : '2rem',
+        borderRadius: isMobile ? '0.75rem' : '1rem',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#ffffff',
+        margin: isMobile ? '0.5rem' : '0',
+      },
+      header: {
+        textAlign: 'center',
+        marginBottom: isMobile ? '1.5rem' : '2rem',
+      },
+      title: {
+        fontSize: isMobile ? '1.5rem' : isTablet ? '1.7rem' : '2rem',
+        color: '#1C1C47', // Couleur principale de Contacternous
+        marginBottom: '0.5rem',
+        fontWeight: 'bold',
+      },
+      subtitle: {
+        fontSize: isMobile ? '0.9rem' : '1rem',
+        color: '#666',
+        marginBottom: isMobile ? '1rem' : '1.5rem',
+      },
+      formGroup: {
+        marginBottom: isMobile ? '1rem' : '1.25rem',
+      },
+      label: {
+        display: 'block',
+        marginBottom: '0.5rem',
+        fontSize: '0.9rem',
+        fontWeight: 'bold',
+        color: '#555',
+      },
+      input: {
+        width: '100%',
+        padding: isMobile ? '0.65rem' : '0.75rem',
+        borderRadius: '0.5rem',
+        border: '1px solid #ccc',
+        fontSize: isMobile ? '0.9rem' : '1rem',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+        boxSizing: 'border-box',
+        outline: 'none',
+        ':focus': {
+          borderColor: '#1C1C47',
+          boxShadow: '0 0 0 3px rgba(28, 28, 71, 0.2)',
+        }
+      },
+      textarea: {
+        width: '100%',
+        padding: isMobile ? '0.65rem' : '0.75rem',
+        borderRadius: '0.5rem',
+        border: '1px solid #ccc',
+        fontSize: isMobile ? '0.9rem' : '1rem',
+        resize: 'vertical',
+        minHeight: isMobile ? '100px' : '120px',
+        boxSizing: 'border-box',
+        outline: 'none',
+        ':focus': {
+          borderColor: '#1C1C47',
+          boxShadow: '0 0 0 3px rgba(28, 28, 71, 0.2)',
+        }
+      },
+      button: {
+        padding: isMobile ? '0.75rem 1.5rem' : '0.85rem 2rem',
+        backgroundColor: '#1C1C47', // Couleur principale de Contacternous
+        color: 'white',
+        border: 'none',
+        borderRadius: '0.5rem',
+        cursor: 'pointer',
+        fontSize: isMobile ? '0.9rem' : '1rem',
+        fontWeight: 'bold',
+        transition: 'background-color 0.3s',
+        width: '100%',
+      },
+      message: {
+        marginTop: '1.5rem',
+        padding: isMobile ? '0.75rem' : '1rem',
+        borderRadius: '0.5rem',
+        backgroundColor: '#e6f7e6',
+        color: '#2c7c2c',
+        fontWeight: '500',
+        textAlign: 'center',
+        fontSize: isMobile ? '0.85rem' : '0.9rem',
+      },
+      error: {
+        backgroundColor: '#ffebee',
+        color: '#c62828',
+      },
+      requiredMark: {
+        color: '#c62828',
+        marginLeft: '3px',
+      },
+      footer: {
+        marginTop: isMobile ? '1.5rem' : '2rem',
+        fontSize: isMobile ? '0.75rem' : '0.85rem',
+        color: '#777',
+        textAlign: 'center',
+      }
+    };
   };
+
+  const styles = getResponsiveStyles();
 
   return (
     <div style={styles.pageContainer}>
@@ -194,7 +225,7 @@ const NousRejoindre = () => {
               required
               style={styles.textarea}
               placeholder="Parlez-nous de votre organisation et pourquoi vous souhaitez nous rejoindre..."
-              rows="6"
+              rows={windowWidth < 640 ? "4" : "6"}
             />
           </div>
 
@@ -202,10 +233,26 @@ const NousRejoindre = () => {
             type="submit"
             style={styles.button}
             disabled={isSubmitting}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1e3a5f'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2e4f7b'}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#161638'} // Version plus foncée comme dans ContacterNous
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#1C1C47'}
           >
-            {isSubmitting ? 'Soumission en cours...' : 'Soumettre la demande'}
+            {isSubmitting ? (
+              <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <svg 
+                  style={{
+                    animation: 'spin 1s linear infinite',
+                    marginRight: '10px',
+                    width: '16px',
+                    height: '16px'
+                  }} 
+                  viewBox="0 0 24 24"
+                >
+                  <circle style={{opacity: 0.25}} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path style={{opacity: 0.75}} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Envoi en cours...
+              </span>
+            ) : 'Soumettre la demande'}
           </button>
         </form>
 

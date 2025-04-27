@@ -75,21 +75,21 @@ const Partner = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-48 bg-gray-50">
-      <div className="w-full max-w-5xl bg-white p-10 rounded-xl shadow-lg">
-        <h1 className="text-4xl font-bold text-[#12138B] text-center mb-8">SOYEZ NOTRE PARTENAIRE</h1>
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 sm:py-16 md:py-48 bg-gray-50">
+      <div className="w-full max-w-3xl bg-white p-6 sm:p-10 md:p-14 rounded-xl shadow-lg">
+        <h1 className="text-3xl sm:text-4xl font-bold text-[#12138B] text-center mb-6 sm:mb-8">SOYEZ NOTRE PARTENAIRE</h1>
 
-        <p className="text-lg text-gray-700 leading-relaxed mb-10">
+        <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 sm:mb-10">
           Bénéficiez de tous les avantages, outils et accompagnements numériques que nous mettrons à votre disposition.<br />
           Remplissez ce formulaire, nos équipes vous contacteront très rapidement.<br />
           En effet, collaborer avec la Fondation Tamkine, c’est bénéficier d’un accompagnement immédiat à tous les niveaux :<br />
           ➤ Formation, certification et encadrement des enseignants sont assurés dans le cadre de ce partenariat.
         </p>
 
-        <h2 className="text-2xl font-semibold text-[#1C1C47] mb-6">Envoyez-nous un message</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold text-[#1C1C47] mb-6">Envoyez-nous un message</h2>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {/* Sélection du rôle */}
             <div className="form-group">
               <label className="text-sm font-medium text-gray-700 mb-2" htmlFor="role">Rôle *</label>
@@ -110,8 +110,7 @@ const Partner = () => {
             </div>
 
             {/* Autres champs du formulaire */}
-            {[
-              { id: 'first_name', label: 'Nom', type: 'text' },
+            {[{ id: 'first_name', label: 'Nom', type: 'text' },
               { id: 'last_name', label: 'Prénom', type: 'text' },
               { id: 'email', label: 'Email', type: 'email' },
               { id: 'organisation', label: 'Société', type: 'text' },

@@ -221,37 +221,6 @@ class ContactAPIView(APIView):
 
 
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import MotPresi
-from .serializers import MotPresiSerializer
-
-class MotPresiView(APIView):
-    # Méthode GET : Récupère le premier mot du président
-    def get(self, request):
-        mot_presi = MotPresi.objects.all().first()  # On prend le premier mot du président
-        serializer = MotPresiSerializer(mot_presi)
-
-        # Ajout du chemin complet pour l'image
-        if mot_presi.image:  # Vérifie si une image est associée
-            mot_presi.image = request.build_absolute_uri(mot_presi.image.url)
-
-        return Response(serializer.data)
-
-    # Méthode POST : Crée un nouveau mot du président
-    def post(self, request):
-        # Sérialiser les données de la requête
-        serializer = MotPresiSerializer(data=request.data)
-
-        # Si les données sont valides, on crée un nouvel article
-        if serializer.is_valid():
-            serializer.save()  # Sauvegarde du nouvel objet dans la base de données
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        # Si les données sont invalides, on renvoie une erreur
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 #newsletter_subscription
@@ -261,23 +230,27 @@ import json
 from django.core.mail import EmailMessage
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-from .models import Subscriber  # Importer ton modèle d'abonnés
+from django.conf import settings  # il manquait aussi cette importation
+from .models import Subscriber
 
-@csrf_exempt  # Si tu utilises la protection CSRF dans le frontend
+@csrf_exempt
 def newsletter_subscription(request):
     if request.method == "POST":
         try:
-            # Récupérer les données de la requête
             data = json.loads(request.body)
             email = data.get("email")
-            
+
             if not email:
                 return JsonResponse({"message": "Email est requis."}, status=400)
 
-            # Enregistrer l'email dans la base de données
+            # Vérifier si l'email existe déjà
+            if Subscriber.objects.filter(email=email).exists():
+                return JsonResponse({"message": "Cet email est déjà abonné."}, status=400)
+
+            # Enregistrer l'email
             subscriber = Subscriber.objects.create(email=email)
 
-            # Envoyer un email de bienvenue
+            # Envoyer l'email de bienvenue
             html_message = render_to_string('emails/abonnement_email.html')
             plain_message = strip_tags(html_message)
             subject = "Welcome to subscription"
@@ -292,9 +265,10 @@ def newsletter_subscription(request):
             email_message.send()
 
             return JsonResponse({"message": "Merci pour votre abonnement !"}, status=200)
-        
+
         except json.JSONDecodeError:
             return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
+
     return JsonResponse({"message": "Méthode non autorisée."}, status=405)
 
 
@@ -552,49 +526,170 @@ class PartnerAPIView(APIView):
 
 
 #PlateformeLink
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import PlatformLink
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.dateparse import parse_datetime
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.views.decorators.http import require_http_methods
 import json
 
+from .models import PlatformLink
+
 @csrf_exempt
+@require_http_methods(["GET", "POST"])
 def platform_links_api(request):
-    if request.method == 'GET':
-        platforms = PlatformLink.objects.all().values('id', 'name', 'description', 'url')
-        return JsonResponse(list(platforms), safe=False)
+    if request.method == "GET":
+        platforms = PlatformLink.objects.all()
+        data = []
+        for platform in platforms:
+            data.append({
+                "id": platform.id,
+                "name": platform.name,
+                "description": platform.description,
+                "url": platform.url,
+                "icon": platform.icon.url if platform.icon else None,
+                "added_at": platform.added_at,
+            })
+        return JsonResponse(data, safe=False)
 
-    if request.method == 'POST':
-        try:
-            # Vérifiez si l'image a été envoyée via le formulaire
-            name = request.POST.get('name')
-            description = request.POST.get('description', '')
-            url = request.POST.get('url')
-            icon = request.FILES.get('icon')  # Récupère le fichier téléchargé
+    elif request.method == "POST":
+        if request.content_type == 'application/json':
+            try:
+                body = json.loads(request.body.decode('utf-8'))
+                name = body.get('name')
+                description = body.get('description')
+                url = body.get('url')
+                added_at = parse_datetime(body.get('added_at')) if body.get('added_at') else None
 
-            if not name or not url:
-                return JsonResponse({"error": "Le nom et l'URL sont requis."}, status=400)
-
-            # Créez l'instance PlatformLink avec l'icône si elle est présente
-            platform = PlatformLink.objects.create(name=name, description=description, url=url, icon=icon)
-            
-            return JsonResponse({
-                "message": "Plateforme enregistrée avec succès.",
-                "platform": {
-                    "id": platform.id,
-                    "name": platform.name,
-                    "description": platform.description,
-                    "url": platform.url,
-                    "icon": platform.icon.url if platform.icon else None,
-                }
-            }, status=201)
+                platform = PlatformLink(
+                    name=name,
+                    description=description,
+                    url=url,
+                    added_at=added_at
+                )
+                platform.save()
+                return JsonResponse({"message": "Plateforme créée avec succès", "id": platform.id}, status=201)
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=400)
         
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+        elif request.FILES:
+            try:
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                url = request.POST.get('url')
+                icon = request.FILES.get('icon')
 
-    return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+                platform = PlatformLink(
+                    name=name,
+                    description=description,
+                    url=url,
+                    icon=icon
+                )
+                platform.save()
+                return JsonResponse({"message": "Plateforme avec image enregistrée", "id": platform.id}, status=201)
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=400)
+
+        else:
+            return JsonResponse({"error": "Type de contenu non supporté"}, status=415)
 
 
 
+#MotDuPresident
+# views.py
+from .models import MotPresident
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def mot_president_api(request):
+    if request.method == "GET":
+        mots = MotPresident.objects.all()
+        data = []
+        for mot in mots:
+            data.append({
+                "id": mot.id,
+                "titre": mot.titre,
+                "description": mot.description,
+                "image": request.build_absolute_uri(mot.image.url)
+            })
+        return JsonResponse(data, safe=False)
+
+    if request.method == "POST":
+        titre = request.POST.get("titre")
+        description = request.POST.get("description")
+        image = request.FILES.get("image")
+
+        if not (titre and description and image):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        mot = MotPresident.objects.create(titre=titre, description=description, image=image)
+        
+        return JsonResponse({
+            "message": "Mot du président ajouté avec succès.",
+            "motPresident": {
+                "id": mot.id,
+                "titre": mot.titre,
+                "description": mot.description,
+                "image": request.build_absolute_uri(mot.image.url)
+            }
+        }, status=201)
+
+
+
+
+
+
+#Fondation Tamkine
+# views.py
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import Fondation
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def fondations_api(request):
+    if request.method == "GET":
+        fondations = Fondation.objects.all()
+        data = []
+        for f in fondations:
+            data.append({
+                "id": f.id,
+                "titre": f.titre,
+                "description": f.description,
+                "image": request.build_absolute_uri(f.image.url)
+            })
+        return JsonResponse(data, safe=False)
+
+    if request.method == "POST":
+        titre = request.POST.get("titre")
+        description = request.POST.get("description")
+        image = request.FILES.get("image")
+
+        if not (titre and description and image):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        fondation = Fondation.objects.create(titre=titre, description=description, image=image)
+
+        return JsonResponse({
+            "message": "Fondation ajoutée avec succès.",
+            "fondation": {
+                "id": fondation.id,
+                "titre": fondation.titre,
+                "description": fondation.description,
+                "image": request.build_absolute_uri(fondation.image.url)
+            }
+        }, status=201)
+
+
+
+
+
+#Valeurs
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -648,36 +743,233 @@ def valeurs_api(request):
 #Programs
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import Program
-import json
+from django.views.decorators.http import require_http_methods
+from .models import Programme
 
 @csrf_exempt
-def programs_api(request):
-    if request.method == 'GET':
-        programs = Program.objects.all().values('id', 'title', 'description')
-        return JsonResponse(list(programs), safe=False)
+@require_http_methods(["GET", "POST"])
+def programmes_api(request):
+    if request.method == "GET":
+        programmes = Programme.objects.all()
+        data = []
 
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            title = data.get('title')
-            description = data.get('description', '')
+        for programme in programmes:
+            data.append({
+                "id": programme.id,
+                "title": programme.title,
+                "description": programme.description,
+                "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
+            })
+        return JsonResponse(data, safe=False)
 
-            if not title:
-                return JsonResponse({"error": "Le titre est requis."}, status=400)
+    elif request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        photo_couverture = request.FILES.get("photo_couverture")
 
-            program = Program.objects.create(title=title, description=description)
+        if not (title and description and photo_couverture):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-            return JsonResponse({
-                "message": "Programme enregistré avec succès.",
-                "program": {
-                    "id": program.id,
-                    "title": program.title,
-                    "description": program.description,
-                }
-            }, status=201)
-        
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+        programme = Programme.objects.create(
+            title=title,
+            description=description,
+            photo_couverture=photo_couverture
+        )
 
-    return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+        return JsonResponse({
+            "message": "Programme ajouté avec succès.",
+            "programme": {
+                "id": programme.id,
+                "title": programme.title,
+                "description": programme.description,
+                "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
+            }
+        }, status=201)
+
+
+#AddVideo
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import Video
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def add_video(request):
+    if request.method == "GET":
+        videos = Video.objects.all()
+        data = []
+        for video in videos:
+            data.append({
+                "id": video.id,
+                "titre": video.titre,
+                "lien": video.lien,
+                "couverture": request.build_absolute_uri(video.couverture.url)
+            })
+        return JsonResponse(data, safe=False)
+
+    if request.method == "POST":
+        titre = request.POST.get("titre")
+        lien = request.POST.get("lien")
+        couverture = request.FILES.get("couverture")
+
+        if not (titre and lien and couverture):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        video = Video.objects.create(titre=titre, lien=lien, couverture=couverture)
+
+        return JsonResponse({
+            "message": "Vidéo ajoutée avec succès.",
+            "video": {
+                "id": video.id,
+                "titre": video.titre,
+                "lien": video.lien,
+                "couverture": request.build_absolute_uri(video.couverture.url)
+            }
+        }, status=201)
+
+
+
+
+
+#addphoto
+
+# views.py
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import MediaContent
+
+@csrf_exempt
+@require_http_methods(["POST", "GET"])
+def add_media_content(request):
+    if request.method == "GET":
+        contenus = MediaContent.objects.all()
+        data = []
+
+        for contenu in contenus:
+            data.append({
+                "id": contenu.id,
+                "titre": contenu.titre,
+                "description": contenu.description,
+                "image": request.build_absolute_uri(contenu.image.url)
+            })
+        return JsonResponse(data, safe=False)
+
+    elif request.method == "POST":
+        titre = request.POST.get("titre")
+        description = request.POST.get("description")
+        image = request.FILES.get("image")
+
+        if not (titre and description and image):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        media = MediaContent.objects.create(titre=titre, description=description, image=image)
+
+        return JsonResponse({
+            "message": "Contenu ajouté avec succès.",
+            "media": {
+                "id": media.id,
+                "titre": media.titre,
+                "description": media.description,
+                "image": request.build_absolute_uri(media.image.url)
+            }
+        }, status=201)
+
+
+#document
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import Document
+
+@csrf_exempt
+@require_http_methods(["POST", "GET"])
+def document_api(request):
+    if request.method == "GET":
+        documents = Document.objects.all()
+        data = []
+
+        for doc in documents:
+            data.append({
+                "id": doc.id,
+                "titre": doc.titre,
+                "couverture": request.build_absolute_uri(doc.couverture.url),
+                "fichier": request.build_absolute_uri(doc.fichier.url)
+            })
+        return JsonResponse(data, safe=False)
+
+    elif request.method == "POST":
+        titre = request.POST.get("titre")
+        couverture = request.FILES.get("couverture")
+        fichier = request.FILES.get("fichier")
+
+        if not (titre and couverture and fichier):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        doc = Document.objects.create(titre=titre, couverture=couverture, fichier=fichier)
+
+        return JsonResponse({
+            "message": "Document ajouté avec succès.",
+            "document": {
+                "id": doc.id,
+                "titre": doc.titre,
+                "couverture": request.build_absolute_uri(doc.couverture.url),
+                "fichier": request.build_absolute_uri(doc.fichier.url)
+            }
+        }, status=201)
+
+
+#mediapartners
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from .models import Partenaire
+
+@csrf_exempt
+@require_http_methods(["POST", "GET"])
+def partenaire_api(request):
+    if request.method == "GET":
+        partenaires = Partenaire.objects.all()
+        data = []
+
+        for partenaire in partenaires:
+            data.append({
+                "id": partenaire.id,
+                "titre": partenaire.titre,
+                "description": partenaire.description,
+                "couverture": request.build_absolute_uri(partenaire.couverture.url),
+                "site_url": partenaire.site_url
+            })
+        return JsonResponse(data, safe=False)
+
+    elif request.method == "POST":
+        titre = request.POST.get("titre")
+        description = request.POST.get("description")
+        couverture = request.FILES.get("couverture")
+        site_url = request.POST.get("site_url")
+
+        if not (titre and description and couverture and site_url):
+            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+        partenaire = Partenaire.objects.create(
+            titre=titre,
+            description=description,
+            couverture=couverture,
+            site_url=site_url
+        )
+
+        return JsonResponse({
+            "message": "Partenaire ajouté avec succès.",
+            "partenaire": {
+                "id": partenaire.id,
+                "titre": partenaire.titre,
+                "description": partenaire.description,
+                "couverture": request.build_absolute_uri(partenaire.couverture.url),
+                "site_url": partenaire.site_url
+            }
+        }, status=201)

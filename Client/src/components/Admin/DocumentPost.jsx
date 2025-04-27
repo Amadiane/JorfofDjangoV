@@ -1,39 +1,36 @@
 import React, { useState } from 'react';
 
-const ProgramPost = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [photoCouverture, setPhotoCouverture] = useState(null);
-  const [loading, setLoading] = useState(false);
+const DocumentPost = () => {
+  const [titre, setTitre] = useState("");
+  const [couverture, setCouverture] = useState(null); // image
+  const [fichier, setFichier] = useState(null);       // pdf/doc/zip
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
+    setLoading(true);
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    if (photoCouverture) {
-      formData.append('photo_couverture', photoCouverture);
-    }
+    formData.append("titre", titre);
+    if (couverture) formData.append("couverture", couverture);
+    if (fichier) formData.append("fichier", fichier);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/programmes/', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:8000/api/documents/", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur HTTP : ${response.status}`);
+        throw new Error(`Erreur serveur: ${response.status}`);
       }
 
-      await response.json();
-      setMessage("✅ Programme ajouté avec succès !");
-      setTitle("");
-      setDescription("");
-      setPhotoCouverture(null);
+      setMessage("✅ Document envoyé avec succès !");
+      setTitre("");
+      setCouverture(null);
+      setFichier(null);
     } catch (error) {
       setMessage(`❌ Erreur : ${error.message}`);
     } finally {
@@ -61,17 +58,17 @@ const ProgramPost = () => {
         padding: '40px',
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
       }}>
-        <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>
-          Publier un nouveau programme
-        </h1>
+        <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>Publier un nouveau document</h1>
+
         <form onSubmit={handleSubmit}>
+
           {/* Titre */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre du programme</label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre du document</label>
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={titre}
+              onChange={(e) => setTitre(e.target.value)}
               required
               style={{
                 width: '100%',
@@ -83,34 +80,31 @@ const ProgramPost = () => {
             />
           </div>
 
-          {/* Description */}
+          {/* Couverture */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Image de couverture</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setCouverture(e.target.files[0])}
               required
               style={{
                 width: '100%',
-                padding: '16px',
+                padding: '12px',
                 border: '1px solid #ddd',
                 borderRadius: '8px',
-                fontSize: '18px',
-                resize: 'vertical',
-                minHeight: '150px',
               }}
             />
           </div>
 
-          {/* Image de couverture */}
+          {/* Fichier */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>
-              Photo de couverture (optionnelle)
-            </label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Fichier PDF / DOC / ZIP</label>
             <input
               type="file"
-              accept="image/*"
-              onChange={(e) => setPhotoCouverture(e.target.files[0])}
+              accept=".pdf,.doc,.docx,.zip"
+              onChange={(e) => setFichier(e.target.files[0])}
+              required
               style={{
                 width: '100%',
                 padding: '12px',
@@ -130,18 +124,14 @@ const ProgramPost = () => {
             cursor: 'pointer',
             width: '100%',
           }}>
-            {loading ? 'Envoi en cours...' : 'Ajouter le programme'}
+            {loading ? 'Envoi en cours...' : 'Ajouter le document'}
           </button>
         </form>
 
-        {message && (
-          <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>
-            {message}
-          </p>
-        )}
+        {message && <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>{message}</p>}
       </section>
     </div>
   );
 };
 
-export default ProgramPost;
+export default DocumentPost;

@@ -4,6 +4,7 @@ const Platforms = () => {
   const [platforms, setPlatforms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedDescription, setExpandedDescription] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -23,25 +24,46 @@ const Platforms = () => {
       });
   }, []);
 
+  // Correction du problème d'affichage des images avec méthode similaire à Actualites
+  const getImageUrl = (iconPath) => {
+    if (!iconPath) return null;
+    
+    // Si l'URL est déjà complète
+    if (iconPath.startsWith('http')) {
+      return iconPath;
+    }
+    
+    // Si c'est un chemin relatif
+    return `http://127.0.0.1:8000${iconPath.startsWith('/') ? '' : '/'}${iconPath}`;
+  };
+
+  const toggleDescription = (id) => {
+    setExpandedDescription(expandedDescription === id ? null : id);
+  };
+
   if (loading) {
     return (
-      <div className="min-h-[300px] flex items-center justify-center">
-        <div className="animate-pulse text-[#1C1C47] text-lg">Chargement de nos plateformes...</div>
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-[200px] flex items-center justify-center">
-        <div className="text-red-600 text-center">{error}</div>
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <p>Erreur lors du chargement des plateformes: {error}</p>
       </div>
     );
   }
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-gray-100 min-h-screen">
+      {/* Ajout d'un espacement comme dans Actualites pour assurer que le titre est visible */}
+      <div className="h-16"></div>
+      <div className="pt-8"></div>
+
+      <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#1C1C47]">
             Notre écosystème de plateformes
@@ -52,78 +74,93 @@ const Platforms = () => {
         </header>
 
         {platforms.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            Aucune plateforme n'est disponible pour le moment.
+          <div className="text-center py-8 text-gray-500 bg-white rounded-xl p-8 shadow-md">
+            <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p className="text-lg font-medium">Aucune plateforme n'est disponible pour le moment.</p>
           </div>
         ) : (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {platforms.map(platform => {
-              console.log('Date received:', platform.added_at);  // Ajout du log pour déboguer
-              const date = new Date(platform.added_at);
-              const dateString = !isNaN(date) 
-                ? date.toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })
-                : "Date invalide";
+              // Formatage de la date similaire à Actualites
+              let formattedDate = "Date non disponible";
+              try {
+                if (platform.added_at) {
+                  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                  formattedDate = new Date(platform.added_at).toLocaleDateString('fr-FR', options);
+                }
+              } catch (e) {
+                console.error('Erreur lors du formatage de la date:', e);
+              }
 
               return (
-                <div key={platform.id} className="bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] border border-gray-100">
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      {platform.icon ? (
-                        <img 
-                          src={`http://127.0.0.1:8000${platform.icon}`}
-                          alt={`${platform.name} icon`}
-                          className="w-12 h-12 object-contain rounded-lg mr-4"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 bg-[#1C1C47]/10 flex items-center justify-center rounded-lg mr-4">
-                          <svg className="w-6 h-6 text-[#1C1C47]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                          </svg>
-                        </div>
-                      )}
-                      <h2 className="text-xl font-bold text-[#1C1C47]">{platform.name}</h2>
+                <div key={platform.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  {/* Bloc d'image inspiré du composant Actualites */}
+                  {platform.icon ? (
+                    <div className="h-48 w-full relative">
+                      <img 
+                        src={getImageUrl(platform.icon)}
+                        alt={`${platform.name} icon`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log('Image non chargée:', e.target.src);
+                          e.target.onerror = null;
+                          e.target.parentNode.innerHTML = `
+                            <div class="h-full w-full bg-gray-200 flex items-center justify-center">
+                              <p class="text-gray-500">Image non disponible</p>
+                            </div>
+                          `;
+                        }}
+                      />
                     </div>
+                  ) : (
+                    <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
+                      <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                      </svg>
+                      <p className="text-gray-500 ml-2">Image non disponible</p>
+                    </div>
+                  )}
 
-                    <div className="mb-6">
-                      {platform.description ? (
-                        <p className="text-gray-600 text-sm line-clamp-3">
+                  <div className="p-4">
+                    <h2 className="text-xl font-bold text-[#1C1C47] mb-2">{platform.name || "Plateforme sans nom"}</h2>
+                    
+                    {platform.description ? (
+                      <div className="mb-4">
+                        <p className={`text-gray-600 text-sm ${expandedDescription === platform.id ? '' : 'line-clamp-3'}`}>
                           {platform.description}
                         </p>
-                      ) : (
-                        <p className="text-gray-400 text-sm italic">Pas de description disponible</p>
-                      )}
-                    </div>
+                        {platform.description.length > 120 && (
+                          <button
+                            className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
+                            onClick={() => toggleDescription(platform.id)}
+                          >
+                            {expandedDescription === platform.id ? "Voir moins" : "Voir plus"}
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 text-sm italic mb-4">Pas de description disponible</p>
+                    )}
 
-                    <div className="flex flex-col space-y-3">
-                      {platform.description && platform.description.length > 120 && (
-                        <button
-                          className="text-[#1C1C47] text-sm font-medium hover:text-[#3b3b82] transition-colors"
-                          onClick={() => alert(platform.description)}
-                        >
-                          Voir la description complète
-                        </button>
-                      )}
-
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-500">
+                        Ajouté le {formattedDate}
+                      </span>
+                      
                       <a
                         href={platform.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-4 py-2 bg-[#1C1C47] text-white rounded-lg hover:bg-[#3b3b82] transition-colors font-medium"
+                        className="inline-flex items-center px-4 py-2 bg-[#1C1C47] text-white rounded-md hover:bg-[#3b3b82] transition-colors text-sm font-medium"
                       >
-                        Visiter la plateforme
+                        Visiter
                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </a>
                     </div>
-                  </div>
-
-                  <div className="px-6 py-2 bg-gray-50 text-xs text-gray-500 flex justify-end">
-                    Ajouté le {dateString}
                   </div>
                 </div>
               );

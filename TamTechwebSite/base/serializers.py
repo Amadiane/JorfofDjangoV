@@ -43,15 +43,7 @@ class TodoSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'completed']
 
 
-# serializers.py
-from rest_framework import serializers
-from .models import MotPresi
 
-class MotPresiSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MotPresi
-        fields = ['titre', 'texte', 'auteur']
-        # Vous pouvez ajouter une validation personnalisée ici si nécessaire
 
 
 

@@ -1,16 +1,20 @@
+///A rendre responsive
+
+
 import React, { useEffect, useState } from 'react';
 
-const Fondation = () => {
-  const [fondations, setFondations] = useState([]);
+const MotPresident = () => {
+  const [motPresidents, setMotPresidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [draggingImage, setDraggingImage] = useState(null);
   const [imagePositions, setImagePositions] = useState({});
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   useEffect(() => {
-    const fetchFondations = async () => {
+    const fetchMotPresidents = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/fondations/");
+        const response = await fetch("http://127.0.0.1:8000/api/mot-president/");
         if (!response.ok) throw new Error("Erreur lors du chargement des données.");
         const data = await response.json();
 
@@ -20,7 +24,7 @@ const Fondation = () => {
         });
         setImagePositions(initialPositions);
 
-        setFondations(data);
+        setMotPresidents(data);
       } catch (err) {
         console.error("Erreur de fetch:", err);
         setError(err.message);
@@ -29,12 +33,16 @@ const Fondation = () => {
       }
     };
 
-    fetchFondations();
+    fetchMotPresidents();
   }, []);
 
   const handleMouseDown = (index, e) => {
     setDraggingImage(index);
     e.preventDefault();
+  };
+
+  const handleTouchStart = (index, e) => {
+    setDraggingImage(index);
   };
 
   const handleMouseMove = (e) => {
@@ -43,14 +51,38 @@ const Fondation = () => {
       setImagePositions(prev => ({
         ...prev,
         [draggingImage]: {
-          x: prev[draggingImage].x + e.movementX,
-          y: prev[draggingImage].y + e.movementY
+          x: (prev[draggingImage]?.x || 0) + e.movementX,
+          y: (prev[draggingImage]?.y || 0) + e.movementY
+        }
+      }));
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (draggingImage !== null && e.touches && e.touches[0]) {
+      const touch = e.touches[0];
+      const previousTouch = e.target.previousTouch || { clientX: touch.clientX, clientY: touch.clientY };
+      
+      const movementX = touch.clientX - previousTouch.clientX;
+      const movementY = touch.clientY - previousTouch.clientY;
+      
+      e.target.previousTouch = { clientX: touch.clientX, clientY: touch.clientY };
+      
+      setImagePositions(prev => ({
+        ...prev,
+        [draggingImage]: {
+          x: (prev[draggingImage]?.x || 0) + movementX,
+          y: (prev[draggingImage]?.y || 0) + movementY
         }
       }));
     }
   };
 
   const handleMouseUp = () => {
+    setDraggingImage(null);
+  };
+
+  const handleTouchEnd = () => {
     setDraggingImage(null);
   };
 
@@ -62,24 +94,35 @@ const Fondation = () => {
     }));
   };
 
+  const toggleDescription = (index) => {
+    setExpandedDescriptions(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   useEffect(() => {
     if (draggingImage !== null) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleTouchEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [draggingImage]);
 
-  const getImageSrc = (fondation) => {
+  const getImageSrc = (motPresident) => {
     let imageUrl = '/image_indispo.png';
-    if (fondation.image) {
-      if (fondation.image.startsWith("http")) {
-        imageUrl = fondation.image;
+    if (motPresident.image) {
+      if (motPresident.image.startsWith("http")) {
+        imageUrl = motPresident.image;
       } else {
-        imageUrl = `http://127.0.0.1:8000${fondation.image}`;
+        imageUrl = `http://127.0.0.1:8000${motPresident.image}`;
       }
     }
     return imageUrl;
@@ -87,35 +130,70 @@ const Fondation = () => {
 
   const splitDescription = (description) => {
     if (!description) return { intro: '', main: '' };
+    
+    // Pour les petits écrans, on retourne tout dans intro pour afficher plus tard avec le bouton "Voir plus"
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      return { intro: description.substring(0, 150) + '...', main: description };
+    }
+    
     if (description.length < 300) {
       return { intro: description, main: '' };
     }
+
     const cutIndex = description.lastIndexOf(" ", 300);
     const intro = description.substring(0, cutIndex);
     const main = description.substring(cutIndex).trim();
     return { intro, main };
   };
 
+  const containerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    padding: '20px',
+    backgroundColor: '#f4f7f6',
+    minHeight: '100vh',
+  };
+
+  const contentStyle = {
+    width: '100%',
+    maxWidth: '1200px',
+    backgroundColor: '#ffffff',
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+  };
+
+  const messageItemStyle = {
+    backgroundColor: '#fff',
+    borderRadius: '12px',
+    overflow: 'visible',
+    marginBottom: '50px',
+  };
+
+  const titleStyle = {
+    fontSize: '28px',
+    marginBottom: '20px',
+    color: '#1C1C47',
+    fontWeight: '700',
+    textAlign: 'center',
+  };
+
+  const textStyle = {
+    fontSize: '16px',
+    color: '#555',
+    lineHeight: '1.8',
+  };
+
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column',
-      padding: '40px',
-      paddingTop: '100px',
-      backgroundColor: '#f4f7f6',
-      minHeight: '100vh',
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '1200px',
-        backgroundColor: '#ffffff',
-        padding: '40px',
-        borderRadius: '12px',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-      }}>
-        {loading && <p style={{ textAlign: 'center', fontSize: '18px' }}>Chargement des fondations...</p>}
+    <div style={containerStyle}>
+      <div style={contentStyle}>
+        <h1 style={{...titleStyle, fontSize: '32px', marginBottom: '30px'}}>Messages du Président</h1>
+        
+        {loading && <p style={{ textAlign: 'center', fontSize: '18px' }}>Chargement des messages du président...</p>}
+        
         {error && (
           <div style={{ color: 'red', textAlign: 'center', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', marginBottom: '20px' }}>
             <p style={{ fontSize: '18px', marginBottom: '10px' }}><strong>Erreur:</strong> {error}</p>
@@ -123,23 +201,21 @@ const Fondation = () => {
           </div>
         )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
-          {fondations.length > 0 ? fondations.map((fondation, index) => {
-            const { intro, main } = splitDescription(fondation.description);
-
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '50px',
+        }}>
+          {motPresidents.length > 0 ? motPresidents.map((motPresident, index) => {
+            const { intro, main } = splitDescription(motPresident.description);
             const isMobile = window.innerWidth <= 768;
-
+            
             return (
-              <div key={index} style={{
-                backgroundColor: '#fff',
-                borderRadius: '12px',
-                overflow: 'visible',
-              }}>
+              <div key={index} style={messageItemStyle}>
                 <div style={{
                   display: 'flex',
                   flexDirection: isMobile ? 'column' : (index % 2 === 0 ? 'row' : 'row-reverse'),
-                  marginBottom: '30px',
-                  alignItems: 'center',
+                  marginBottom: '15px',
                 }}>
                   <div style={{
                     width: isMobile ? '100%' : '45%',
@@ -149,9 +225,9 @@ const Fondation = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '20px',
-                    minHeight: '300px',
+                    minHeight: isMobile ? '200px' : '300px',
                     borderRadius: '12px',
-                    margin: isMobile ? '0 0 20px 0' : '0 15px',
+                    margin: isMobile ? '0 0 15px 0' : '0 15px',
                   }}>
                     <div style={{
                       position: 'relative',
@@ -162,11 +238,11 @@ const Fondation = () => {
                       alignItems: 'center',
                     }}>
                       <img
-                        src={getImageSrc(fondation)}
-                        alt={`Image de ${fondation.titre}`}
+                        src={getImageSrc(motPresident)}
+                        alt={`Image de ${motPresident.titre}`}
                         style={{
                           maxWidth: '100%',
-                          maxHeight: '300px',
+                          maxHeight: isMobile ? '200px' : '300px',
                           objectFit: 'contain',
                           cursor: draggingImage === index ? 'grabbing' : 'grab',
                           position: 'relative',
@@ -178,6 +254,7 @@ const Fondation = () => {
                           borderRadius: '8px',
                         }}
                         onMouseDown={(e) => handleMouseDown(index, e)}
+                        onTouchStart={(e) => handleTouchStart(index, e)}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = '/image_indispo.png';
@@ -220,44 +297,52 @@ const Fondation = () => {
                       </div>
                     )}
                   </div>
-
+                  
                   <div style={{
                     width: isMobile ? '100%' : '55%',
                     padding: '20px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    textAlign: isMobile ? 'center' : 'left',
                   }}>
-                    <h2 style={{
-                      fontSize: isMobile ? '24px' : '32px',
-                      marginBottom: '20px',
-                      color: '#1C1C47',
-                      fontWeight: '700',
-                    }}>{fondation.titre}</h2>
-                    <p style={{
-                      fontSize: '18px',
-                      color: '#555',
-                      lineHeight: '1.8',
-                    }}>{intro}</p>
+                    <h2 style={titleStyle}>{motPresident.titre}</h2>
+                    <p style={textStyle}>
+                      {isMobile ? (expandedDescriptions[index] ? motPresident.description : intro) : intro}
+                    </p>
+                    
+                    {isMobile && motPresident.description && motPresident.description.length > 150 && (
+                      <button
+                        onClick={() => toggleDescription(index)}
+                        style={{
+                          backgroundColor: '#1C1C47',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '8px 15px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          marginTop: '15px',
+                          alignSelf: 'flex-start',
+                        }}
+                      >
+                        {expandedDescriptions[index] ? 'Voir moins' : 'Voir plus'}
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {main && (
-                  <div style={{ padding: isMobile ? '0 10px 20px 10px' : '0 30px 30px 30px' }}>
-                    <p style={{
-                      fontSize: '18px',
-                      color: '#555',
-                      lineHeight: '1.8',
-                      marginBottom: '20px',
-                    }}>{main}</p>
+                {!isMobile && main && (
+                  <div style={{
+                    padding: '0 30px 30px 30px',
+                  }}>
+                    <p style={textStyle}>{main}</p>
                   </div>
                 )}
               </div>
             );
           }) : !loading && (
             <div style={{ textAlign: 'center', padding: '30px' }}>
-              <p>Aucune fondation trouvée. Veuillez en ajouter dans votre système.</p>
+              <p>Aucun message du président trouvé. Veuillez en ajouter dans votre système.</p>
             </div>
           )}
         </div>
@@ -266,4 +351,4 @@ const Fondation = () => {
   );
 };
 
-export default Fondation;
+export default MotPresident;

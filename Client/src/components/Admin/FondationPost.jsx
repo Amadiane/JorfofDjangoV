@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-const ProgramPost = () => {
+const FondationPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [photoCouverture, setPhotoCouverture] = useState(null);
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -13,29 +13,29 @@ const ProgramPost = () => {
     setMessage("");
 
     const formData = new FormData();
-    formData.append('title', title);
+    formData.append('titre', title);
     formData.append('description', description);
-    if (photoCouverture) {
-      formData.append('photo_couverture', photoCouverture);
+    if (image) {
+      formData.append('image', image);
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/programmes/', {
+      const response = await fetch('http://localhost:8000/api/fondations/', {
         method: 'POST',
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur HTTP : ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      await response.json();
-      setMessage("✅ Programme ajouté avec succès !");
+      const data = await response.json();
+      setMessage("✅ Fondation ajoutée avec succès !");
       setTitle("");
       setDescription("");
-      setPhotoCouverture(null);
+      setImage(null);
     } catch (error) {
-      setMessage(`❌ Erreur : ${error.message}`);
+      setMessage(`❌ Erreur: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -61,18 +61,16 @@ const ProgramPost = () => {
         padding: '40px',
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
       }}>
-        <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>
-          Publier un nouveau programme
-        </h1>
+        <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>Publier une fondation</h1>
         <form onSubmit={handleSubmit}>
-          {/* Titre */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre du programme</label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }} aria-label="Titre de la fondation">Titre</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              aria-label="Titre de la fondation"
               style={{
                 width: '100%',
                 padding: '12px',
@@ -83,13 +81,13 @@ const ProgramPost = () => {
             />
           </div>
 
-          {/* Description */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Description</label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }} aria-label="Description de la fondation">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              aria-label="Description de la fondation"
               style={{
                 width: '100%',
                 padding: '16px',
@@ -102,15 +100,13 @@ const ProgramPost = () => {
             />
           </div>
 
-          {/* Image de couverture */}
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>
-              Photo de couverture (optionnelle)
-            </label>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }} aria-label="Image de la fondation">Image</label>
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setPhotoCouverture(e.target.files[0])}
+              onChange={(e) => setImage(e.target.files[0])}
+              aria-label="Image de la fondation"
               style={{
                 width: '100%',
                 padding: '12px',
@@ -118,6 +114,11 @@ const ProgramPost = () => {
                 borderRadius: '8px',
               }}
             />
+            {image && (
+              <div style={{ marginTop: '10px' }}>
+                <img src={URL.createObjectURL(image)} alt="Prévisualisation" style={{ maxWidth: '200px', maxHeight: '200px' }} />
+              </div>
+            )}
           </div>
 
           <button type="submit" disabled={loading} style={{
@@ -130,18 +131,14 @@ const ProgramPost = () => {
             cursor: 'pointer',
             width: '100%',
           }}>
-            {loading ? 'Envoi en cours...' : 'Ajouter le programme'}
+            {loading ? 'Envoi en cours...' : 'Ajouter la fondation'}
           </button>
         </form>
 
-        {message && (
-          <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>
-            {message}
-          </p>
-        )}
+        {message && <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>{message}</p>}
       </section>
     </div>
   );
 };
 
-export default ProgramPost;
+export default FondationPost;

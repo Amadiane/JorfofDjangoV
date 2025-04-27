@@ -60,25 +60,25 @@ const Quisommesnous = () => {
       <ChatBot />
 
       <section className="text-gray-600 body-font overflow-hidden w-full">
-        <div className="container px-12 pb-32 pt-16 mx-auto">
-          <div className="main-bl space-y-16">
+        <div className="container px-4 sm:px-8 md:px-12 pb-16 sm:pb-24 md:pb-32 pt-8 sm:pt-12 md:pt-16 mx-auto">
+          <div className="main-bl space-y-8 md:space-y-16">
             {/* Titre centré avec plus d'espace au-dessus */}
-            <h2 className="text-5xl font-bold text-center text-gray-800 mb-12">NOTRE MISSION & VISION</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-800 mb-6 sm:mb-8 md:mb-12">NOTRE MISSION & VISION</h2>
 
             {/* Grille réactive avec plus d'espace autour des cartes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
               {missions.length === 0 ? (
                 <p className="text-center text-gray-600">Aucune mission disponible pour l'instant.</p>
               ) : (
                 missions.map((mission, index) => (
                   <div
                     key={index}
-                    className="bg-white p-12 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105 relative overflow-hidden"
+                    className="bg-white p-6 sm:p-8 md:p-12 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105 relative overflow-hidden"
                   >
                     {/* Image de fond ou icône */}
                     <div className="absolute inset-0 bg-gray-200 opacity-30 z-0"></div>
-                    <h3 className="text-3xl font-semibold text-gray-800 mb-6 relative z-10">{mission.title}</h3>
-                    <p className="text-lg text-gray-700 text-justify whitespace-pre-line relative z-10">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-4 sm:mb-6 relative z-10">{mission.title}</h3>
+                    <p className="text-base sm:text-lg text-gray-700 text-justify whitespace-pre-line relative z-10">
                       {mission.content}
                     </p>
                   </div>

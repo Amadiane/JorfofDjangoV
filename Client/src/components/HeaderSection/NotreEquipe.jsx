@@ -62,12 +62,12 @@ const NotreEquipe = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <ChatBot /> {/* Affichage du chatbot */}
 
-      <section className="text-gray-600 body-font overflow-hidden">
-        <div className="container px-8 pb-32 pt-16 mx-auto">
+      <section className="text-gray-600 body-font overflow-hidden w-full px-4 sm:px-6 lg:px-8">
+        <div className="container pb-32 pt-16 mx-auto">
           <div className="main-bl pb-10">
-            <div className="bg-white p-10 rounded-lg shadow-lg max-w-5xl w-full text-center">
-              <h2 className="text-4xl font-bold text-gray-800 mb-8">ÉQUIPE FONDATION TAMKINE</h2>
-              <p className="text-xl text-gray-700 text-justify whitespace-pre-line">{message}</p>
+            <div className="bg-white p-8 sm:p-10 rounded-lg shadow-lg max-w-5xl mx-auto text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 sm:mb-8">ÉQUIPE FONDATION TAMKINE</h2>
+              <p className="text-base sm:text-xl text-gray-700 text-justify whitespace-pre-line">{message}</p>
             </div>
           </div>
         </div>

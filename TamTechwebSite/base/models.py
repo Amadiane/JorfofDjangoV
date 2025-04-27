@@ -38,16 +38,7 @@ class Todo(models.Model):
         return self.name
 
 
-# Modèle MotPresi
-class MotPresi(models.Model):
-    titre = models.CharField(max_length=255)
-    texte = models.TextField()
-    auteur = models.CharField(max_length=255)
-    date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)  # Ajout du champ image
 
-    def __str__(self):
-        return self.titre
 
 
 # Modèle TeamMessage
@@ -189,6 +180,30 @@ class PlatformLink(models.Model):
     def __str__(self):
         return self.name
 
+#MotDuPresident
+# models.py
+class MotPresident(models.Model):
+    titre = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
+
+    def __str__(self):
+        return self.titre
+
+
+#Fondation Tamkine
+# models.py
+from django.db import models
+
+class Fondation(models.Model):
+    titre = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='fondations')  # Stockée dans media/fondations/
+
+    def __str__(self):
+        return self.titre
+
+
 
 
 #NosValeurs
@@ -206,10 +221,70 @@ class Valeur(models.Model):
 #Programs
 from django.db import models
 
-class Program(models.Model):
+class Programme(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.TextField()
+    photo_couverture = models.ImageField(upload_to='programmes/')
 
     def __str__(self):
         return self.title
+
+
+
+
+#AddVideos
+# models.py
+from django.db import models
+
+class Video(models.Model):
+    titre = models.CharField(max_length=255)
+    lien = models.URLField()
+    couverture = models.ImageField(upload_to='videos_couvertures/')
+
+    def __str__(self):
+        return self.titre
+
+
+
+# addphoto
+
+# models.py
+from django.db import models
+
+class MediaContent(models.Model):
+    titre = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='media_content/')  # Les images seront enregistrées dans media/media_content/
+
+    def __str__(self):
+        return self.titre
+
+
+#Document
+
+from django.db import models
+
+class Document(models.Model):
+    titre = models.CharField(max_length=255)
+    couverture = models.ImageField(upload_to='couvertures/')
+    fichier = models.FileField(upload_to='documents/')
+
+    def __str__(self):
+        return self.titre
+
+
+#mediapartners
+
+from django.db import models
+
+class Partenaire(models.Model):
+    titre = models.CharField(max_length=255)
+    description = models.TextField()
+    couverture = models.ImageField(upload_to='partenaires/')
+    site_url = models.URLField()
+
+    def __str__(self):
+        return self.titre
+
+
 

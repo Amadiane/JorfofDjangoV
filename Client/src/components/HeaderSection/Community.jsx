@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-
-
 const Community = () => {
   const [form, setForm] = useState({
     nom: '',
@@ -22,7 +20,7 @@ const Community = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch("http://localhost:8000/api/community/", {
         method: "POST",
@@ -31,9 +29,9 @@ const Community = () => {
         },
         body: JSON.stringify(form),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         alert("Votre demande d'adhésion a été envoyée avec succès !");
         setForm({
@@ -52,7 +50,7 @@ const Community = () => {
       alert("Une erreur est survenue lors de l'envoi du formulaire.");
     }
   };
-  
+
   return (
     <div style={styles.root}>
       <header style={styles.header}>
@@ -96,7 +94,7 @@ const Community = () => {
         <div style={styles.formContainer}>
           <h2 style={styles.h2}>Rejoignez la Communauté Tamkine</h2>
           <form onSubmit={handleSubmit}>
-            <div style={styles.twoColumns}>
+            <div style={styles.responsiveTwoColumns}>
               <div style={styles.formGroup}>
                 <label style={styles.label} htmlFor="nom">Nom *</label>
                 <input style={styles.input} id="nom" name="nom" value={form.nom} onChange={handleChange} required />
@@ -119,7 +117,7 @@ const Community = () => {
               </select>
             </div>
 
-            <div style={styles.twoColumns}>
+            <div style={styles.responsiveTwoColumns}>
               <div style={styles.formGroup}>
                 <label style={styles.label} htmlFor="tel">Téléphone *</label>
                 <input style={styles.input} id="tel" name="tel" type="tel" value={form.tel} onChange={handleChange} required />
@@ -150,9 +148,9 @@ const Community = () => {
 
 const styles = {
   root: {
-    '--primary-color': '#1C1C47', // Bleu foncé
-    '--secondary-color': '#1C1C47', // Bleu foncé
-    '--accent-color': '#1C1C47', // Bleu foncé
+    '--primary-color': '#1C1C47',
+    '--secondary-color': '#1C1C47',
+    '--accent-color': '#1C1C47',
     '--text-color': '#333',
     '--light-color': '#f5f5f5',
     '--dark-color': '#262626',
@@ -163,7 +161,7 @@ const styles = {
     lineHeight: '1.6',
   },
   header: {
-    background: 'linear-gradient(135deg, #1C1C47, #1C1C47)', // Bleu foncé
+    background: 'linear-gradient(135deg, #1C1C47, #1C1C47)',
     color: 'white',
     padding: '2rem 1rem',
     textAlign: 'center',
@@ -190,7 +188,7 @@ const styles = {
     marginBottom: '1rem',
   },
   h2: {
-    color: '#1C1C47', // Bleu foncé
+    color: '#1C1C47',
     marginBottom: '1rem',
     fontSize: '1.8rem',
   },
@@ -206,14 +204,14 @@ const styles = {
   },
   highlight: {
     fontWeight: 'bold',
-    color: '#1C1C47', // Bleu foncé
+    color: '#1C1C47',
   },
   quote: {
     fontStyle: 'italic',
     textAlign: 'center',
     fontSize: '1.2rem',
     margin: '2rem 0',
-    color: '#1C1C47', // Bleu foncé
+    color: '#1C1C47',
   },
   formContainer: {
     backgroundColor: 'white',
@@ -250,7 +248,7 @@ const styles = {
     marginTop: '1rem',
   },
   button: {
-    backgroundColor: '#1C1C47', // Bleu foncé
+    backgroundColor: '#1C1C47',
     color: 'white',
     border: 'none',
     padding: '1rem 2rem',
@@ -261,7 +259,7 @@ const styles = {
     transition: 'background-color 0.3s ease',
   },
   buttonHover: {
-    backgroundColor: '#1C1C47', // Bleu foncé
+    backgroundColor: '#1C1C47',
   },
   footer: {
     backgroundColor: '#262626',
@@ -270,10 +268,14 @@ const styles = {
     padding: '2rem 1rem',
     marginTop: '2rem',
   },
-  twoColumns: {
+  responsiveTwoColumns: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: '2rem',
+    // Adaptation mobile
+    '@media (max-width: 768px)': {
+      gridTemplateColumns: '1fr',
+    },
   },
 };
 
