@@ -8,13 +8,13 @@ const Navlinks = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [language, setLanguage] = useState('fr'); // Ajout de la langue sélectionnée
   const navigate = useNavigate();
   
   // Refs for dropdown menus
   const dropdownRefs = useRef({});
   const timeoutRef = useRef(null);
 
-  // Handle scroll to change header appearance
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 20;
@@ -22,7 +22,6 @@ const Navlinks = () => {
         setScrolled(isScrolled);
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -38,10 +37,9 @@ const Navlinks = () => {
   };
 
   const handleLeave = (section) => {
-    // Use timeout to prevent immediate closing
     timeoutRef.current = setTimeout(() => {
       setActiveSection(null);
-    }, 300); // Add a slight delay before closing
+    }, 300);
   };
 
   const handleDropdownMouseEnter = () => {
@@ -65,10 +63,15 @@ const Navlinks = () => {
     setSearchOpen(!searchOpen);
   };
 
-  // Navigation menu items with their dropdowns
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+    // Ici tu pourras ajouter l'intégration réelle avec un système de traduction
+    // comme i18next pour vraiment changer les textes
+  };
+
   const navItems = [
     {
-      title: "À LA UNE",
+      title: language === 'fr' ? "À LA UNE" : language === 'en' ? "HIGHLIGHTS" : "الأخبار",
       path: "/home",
       isDropdown: false
     },
@@ -77,61 +80,60 @@ const Navlinks = () => {
       id: "tamkine",
       isDropdown: true,
       dropdownItems: [
-        { title: "MOT DU PRÉSIDENT", path: "/motPresident" },
-        { title: "FONDATION TAMKINE", path: "/fondation" },
-        { title: "NOS VALEURS", path: "/nosValeurs" },
-        { title: "NOS MISSIONS", path: "/nosMissions" },
-        { title: "NOTRE ÉQUIPE", path: "/notreEquipe" }
+        { title: language === 'fr' ? "MOT DU PRÉSIDENT" : language === 'en' ? "PRESIDENT'S WORD" : "كلمة الرئيس", path: "/motPresident" },
+        { title: language === 'fr' ? "FONDATION TAMKINE" : language === 'en' ? "TAMKINE FOUNDATION" : "مؤسسة تمكين", path: "/fondation" },
+        { title: language === 'fr' ? "NOS VALEURS" : language === 'en' ? "OUR VALUES" : "قيمنا", path: "/nosValeurs" },
+        { title: language === 'fr' ? "NOS MISSIONS" : language === 'en' ? "OUR MISSIONS" : "مهامنا", path: "/nosMissions" },
+        { title: language === 'fr' ? "NOTRE ÉQUIPE" : language === 'en' ? "OUR TEAM" : "فريقنا", path: "/notreEquipe" }
       ]
     },
     {
-      title: "Programmes",
+      title: language === 'fr' ? "Programmes" : language === 'en' ? "Programs" : "البرامج",
       path: "/programs",
       isDropdown: false
     },
     {
-      title: "Actualités",
+      title: language === 'fr' ? "Actualités" : language === 'en' ? "News" : "الأخبار",
       path: "/actualites",
       isDropdown: false
     },
     {
-      title: "Plateformes",
+      title: language === 'fr' ? "Plateformes" : language === 'en' ? "Platforms" : "المنصات",
       path: "/Plateforms",
       isDropdown: false
     },
     {
-      title: "Activités Partenaires",
+      title: language === 'fr' ? "Activités Partenaires" : language === 'en' ? "Partner Activities" : "أنشطة الشركاء",
       path: "/partners-activities",
       isDropdown: false
     },
     {
-      title: "Communication & Médias",
+      title: language === 'fr' ? "Communication & Médias" : language === 'en' ? "Communication & Media" : "الإعلام والاتصال",
       id: "media",
       isDropdown: true,
       dropdownItems: [
-        { title: "Videotheque", path: "/videotheque" },
-        { title: "Phototèque", path: "/phototheque" },
-        { title: "Téléchargement", path: "/document" }
+        { title: language === 'fr' ? "Videotheque" : language === 'en' ? "Video Library" : "مكتبة الفيديو", path: "/videotheque" },
+        { title: language === 'fr' ? "Phototèque" : language === 'en' ? "Photo Library" : "مكتبة الصور", path: "/phototheque" },
+        { title: language === 'fr' ? "Téléchargement" : language === 'en' ? "Downloads" : "التنزيلات", path: "/document" }
       ]
     },
     {
-      title: "Nous rejoindre",
+      title: language === 'fr' ? "Nous rejoindre" : language === 'en' ? "Join Us" : "انضم إلينا",
       id: "join",
       isDropdown: true,
       dropdownItems: [
-        { title: "Contactez-nous", path: "/contacter-tamkine" },
-        { title: "Communauté", path: "/community" },
-        { title: "Devenir Partenaire", path: "/partner" }
+        { title: language === 'fr' ? "Contactez-nous" : language === 'en' ? "Contact Us" : "اتصل بنا", path: "/contacter-tamkine" },
+        { title: language === 'fr' ? "Communauté" : language === 'en' ? "Community" : "مجتمع", path: "/community" },
+        { title: language === 'fr' ? "Devenir Partenaire" : language === 'en' ? "Become a Partner" : "كن شريكًا" , path: "/partner" }
       ]
     },
     {
-      title: "Partenaires Medias",
+      title: language === 'fr' ? "Partenaires Medias" : language === 'en' ? "Media Partners" : "شركاء الإعلام",
       path: "/mediaPartenaire",
       isDropdown: false
     }
   ];
 
-  // Render dropdown menu
   const renderDropdown = (item) => {
     if (activeSection === item.id) {
       return (
@@ -157,9 +159,8 @@ const Navlinks = () => {
     return null;
   };
 
-  // Function to handle navigation on click of the bell icon
   const handleNotificationClick = () => {
-    navigate('/home'); // Redirect to the home page
+    navigate('/home');
   };
 
   return (
@@ -167,10 +168,8 @@ const Navlinks = () => {
       scrolled ? 'bg-white shadow-md py-2' : 'bg-white/90 backdrop-blur-sm py-4'
     }`}>
       <div className="container mx-auto px-4">
-        {/* Top Bar - Logo, Search, Lang Switcher */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
-            {/* Logo */}
             <NavLink to="/home" className="flex items-center">
               <img src={logo} alt="Fondation Tamkine" className="h-12 mr-3" />
               <div>
@@ -180,7 +179,6 @@ const Navlinks = () => {
             </NavLink>
           </div>
 
-          {/* Mobile Toggle */}
           <div className="md:hidden flex items-center">
             <button 
               onClick={toggleSearch}
@@ -200,9 +198,7 @@ const Navlinks = () => {
             </button>
           </div>
 
-          {/* Desktop Right Side Actions */}
           <div className="hidden md:flex items-center space-x-6">
-            {/* Search */}
             <div className="relative">
               <button 
                 onClick={toggleSearch}
@@ -210,7 +206,6 @@ const Navlinks = () => {
               >
                 <Search size={20} className="text-gray-700" />
               </button>
-              
               {searchOpen && (
                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg p-3 border border-gray-200">
                   <form className="flex">
@@ -227,27 +222,24 @@ const Navlinks = () => {
               )}
             </div>
 
-            {/* Notifications */}
             <button 
               className="p-2 rounded-full hover:bg-gray-100 relative"
-              onClick={handleNotificationClick} // Add the click handler here
+              onClick={handleNotificationClick}
             >
               <Bell size={20} className="text-gray-700" />
               <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
 
-            {/* Language Switcher */}
             <div className="flex space-x-2 items-center border-l pl-4 border-gray-300">
-              <button className="text-sm font-medium hover:text-[#12138B]">FR</button>
+              <button onClick={() => changeLanguage('fr')} className={`text-sm font-medium ${language === 'fr' ? 'text-[#12138B]' : ''} hover:text-[#12138B]`}>FR</button>
               <span className="text-gray-400">|</span>
-              <button className="text-sm font-medium hover:text-[#12138B]">EN</button>
+              <button onClick={() => changeLanguage('en')} className={`text-sm font-medium ${language === 'en' ? 'text-[#12138B]' : ''} hover:text-[#12138B]`}>EN</button>
               <span className="text-gray-400">|</span>
-              <button className="text-sm font-medium hover:text-[#12138B]">AR</button>
+              <button onClick={() => changeLanguage('ar')} className={`text-sm font-medium ${language === 'ar' ? 'text-[#12138B]' : ''} hover:text-[#12138B]`}>AR</button>
             </div>
           </div>
         </div>
 
-        {/* Search bar on mobile when opened */}
         {searchOpen && mobileMenuOpen && (
           <div className="block md:hidden absolute left-0 right-0 top-16 z-50 bg-white p-3 shadow-lg rounded-md">
             <input
@@ -259,7 +251,6 @@ const Navlinks = () => {
         )}
       </div>
 
-      {/* Navigation Links */}
       <div className="hidden md:flex justify-center space-x-8 mt-4">
         {navItems.map((item, index) => (
           <div 

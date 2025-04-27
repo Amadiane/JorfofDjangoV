@@ -1,7 +1,8 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom"; 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import NavAdmin from "./components/Header/NavAdmin";
+import { LanguageProvider } from './contexts/LanguageContext'; // Ajout du LanguageProvider
 
 const App = () => {
   // Récupérer la localisation actuelle
@@ -31,30 +32,32 @@ const App = () => {
   const isAdminPage = adminPaths.includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Afficher le Header si ce n'est pas une page admin */}
-      {!isAdminPage && <Header />}
+    <LanguageProvider> {/* Envelopper l'application avec le LanguageProvider */}
+      <div className="flex flex-col min-h-screen">
+        {/* Afficher le Header si ce n'est pas une page admin */}
+        {!isAdminPage && <Header />}
 
-      {/* Afficher le NavAdmin uniquement pour les pages admin */}
-      {isAdminPage && (
-        <div className="w-[250px] bg-white text-gray-900 p-5 fixed h-full">
-          <NavAdmin />
-        </div>
-      )}
+        {/* Afficher le NavAdmin uniquement pour les pages admin */}
+        {isAdminPage && (
+          <div className="w-[250px] bg-white text-gray-900 p-5 fixed h-full">
+            <NavAdmin />
+          </div>
+        )}
 
-      {/* Contenu principal */}
-      <div className="flex flex-grow">
-        {/* Le contenu principal du site avec un espace réservé si c'est une page admin */}
-        <div
-          className={`flex-1 p-5 ${isAdminPage ? "ml-[250px]" : ""} overflow-auto`}
-        >
-          <Outlet />
+        {/* Contenu principal */}
+        <div className="flex flex-grow">
+          {/* Le contenu principal du site avec un espace réservé si c'est une page admin */}
+          <div
+            className={`flex-1 p-5 ${isAdminPage ? "ml-[250px]" : ""} overflow-auto`}
+          >
+            <Outlet />
+          </div>
         </div>
+
+        {/* Afficher le Footer si ce n'est pas une page admin */}
+        {!isAdminPage && <Footer />}
       </div>
-
-      {/* Afficher le Footer si ce n'est pas une page admin */}
-      {!isAdminPage && <Footer />}
-    </div>
+    </LanguageProvider>
   );
 };
 

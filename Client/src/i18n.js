@@ -1,21 +1,27 @@
-import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import en from './locales/en.json';
-import ar from './locales/ar.json';
-import fr from './locales/fr.json';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-export const languageResources = {
-  en: { translation: en },
-  ar: { translation: ar },
-  fr: { translation: fr },
+import translationEN from "./components/locales/en/translation.json";
+import translationFR from "./components/locales/fr/translation.json";
+import translationAR from "./components/locales/ar/translation.json";
+
+
+const resources = {
+  en: { translation: translationEN },
+  fr: { translation: translationFR },
+  ar: { translation: translationAR }
 };
 
-i18next.use(initReactI18next).init({
-  compatibilityJSON: 'v3',
-  lng: 'fr', // Langue par défaut
-  fallbackLng: 'en', // Langue de secours
-  fallbackLng: 'ar', // Langue de secours
-  resources: languageResources, // Ressources de traduction
-});
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: "fr", // langue par défaut
+    fallbackLng: "fr",
 
-export default i18next;
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;

@@ -13,7 +13,7 @@ from .views import (
 # Définir le routeur
 router = DefaultRouter()
 router.register(r"blog", BlogViewSet)
-router.register(r"team-message", TeamMessageViewSet, basename='team-message')
+router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 router.register(r'platforms', PlatformViewSet)
 
 # URL Patterns

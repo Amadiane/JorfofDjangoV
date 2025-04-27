@@ -17,7 +17,7 @@ const NotreEquipe = () => {
 
     const fetchMessage = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/team-message/');
+        const response = await fetch('http://localhost:8000/api/team-messages/');
         if (!response.ok) {
           throw new Error(`Erreur HTTP! statut: ${response.status}`);
         }
@@ -28,7 +28,7 @@ const NotreEquipe = () => {
           const sortedMessages = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           
           // Récupérer uniquement le dernier message (le plus récent)
-          setMessage(sortedMessages[0].content); 
+          setMessage(sortedMessages[0].content_fr); // On peut aussi choisir la langue préférée
         } else {
           setMessage("Aucun message disponible pour l'instant.");
         }

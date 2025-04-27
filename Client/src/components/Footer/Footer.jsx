@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footerlastpart from './Footerlastpart';
 import logo from '../../assets/logoblanc.png';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const Footer = () => {
+  const { i18n } = useTranslation();  // Utilisation de i18n
   const [showMapModal, setShowMapModal] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -65,14 +67,13 @@ const Footer = () => {
               Nos Plateformes
             </h4>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-3 w-full">
-              {[
-                { name: "Tutoring", url: "https://tutoring.tamkine.org/" },
+              {[{ name: "Tutoring", url: "https://tutoring.tamkine.org/" },
                 { name: "Workplace", url: "https://connect.tamtechsolution.com/" },
                 { name: "Orientation", url: "https://orientation.tamkine.org/" },
                 { name: "JPOV", url: "https://complexe.tamkine.org/" },
                 { name: "Séminaires", url: "https://seminars.tamtechsolution.com/" },
-                { name: "Bourses", url: "https://scholarship.tamkine.org/" }
-              ].map((platform, idx) => (
+                { name: "Bourses", url: "https://scholarship.tamkine.org/" }]
+                .map((platform, idx) => (
                 <li key={idx} className="transition-all">
                   <a 
                     href={platform.url} 
@@ -93,11 +94,10 @@ const Footer = () => {
               À Propos
             </h4>
             <ul className="space-y-4">
-              {[
-                { name: "Qui sommes-nous ?", path: "/qui-sommes-nous-" },
+              {[{ name: "Qui sommes-nous ?", path: "/qui-sommes-nous-" },
                 { name: "Contacter Tamkine", path: "/contacter-tamkine" },
-                { name: "Nous rejoindre", path: "/nous-rejoindre" }
-              ].map((item, idx) => (
+                { name: "Nous rejoindre", path: "/nous-rejoindre" }]
+                .map((item, idx) => (
                 <li key={idx} className="transition-all">
                   <div 
                     onClick={() => handleNavigation(item.path)}
@@ -178,39 +178,33 @@ const Footer = () => {
       {/* Footer bas */}
       <Footerlastpart />
 
+      {/* Changement de langue */}
+      <div className="flex justify-center gap-4 mt-6 mb-4">
+        <button onClick={() => i18n.changeLanguage('ar')} className="text-white">عربي</button>
+        <button onClick={() => i18n.changeLanguage('fr')} className="text-white">Français</button>
+        <button onClick={() => i18n.changeLanguage('en')} className="text-white">English</button>
+      </div>
+
       {/* MODALE Agrandir la carte */}
       {showMapModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 backdrop-blur-sm transition-all">
-          <div className="bg-[#1C1C47] text-white rounded-xl p-5 max-w-5xl w-full h-[80vh] flex flex-col border border-blue-500/30 shadow-2xl animate-fadeIn">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                Fondation Tamkine
-              </h2>
+          <div className="bg-[#1C1C47] text-white p-8 rounded-xl shadow-2xl w-full sm:w-1/2 lg:w-1/3">
+            <div className="relative">
+              <iframe
+                title="Google Maps - Tamkine"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.102556349996!2d-7.620292684799703!3d33.59222784904713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7d28f3467c6b9%3A0xa1bc20ec633387f6!2sTamkine%20Foundation!5e0!3m2!1sfr!2sma!4v1616782002584!5m2!1sfr!2sma"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+              ></iframe>
               <button
                 onClick={() => setShowMapModal(false)}
-                className="text-white bg-red-500/80 hover:bg-red-600 rounded-full p-1 transition-colors"
+                className="absolute top-3 right-3 bg-red-600 text-white px-3 py-2 rounded-full text-sm"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                Fermer
               </button>
-            </div>
-            <iframe
-              title="Localisation Tamkine Grande"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.102556349996!2d-7.620292684799703!3d33.59222784904713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7d28f3467c6b9%3A0xa1bc20ec633387f6!2sTamkine%20Foundation!5e0!3m2!1sfr!2sma!4v1616782002584!5m2!1sfr!2sma"
-              width="100%"
-              height="100%"
-              style={{ border: 0, flexGrow: 1 }}
-              className="rounded-lg"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-            <div className="mt-4 text-gray-300 text-sm">
-              <p>26 Avenue Mers Sultan, Casablanca, Maroc</p>
             </div>
           </div>
         </div>

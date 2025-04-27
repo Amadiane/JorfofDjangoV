@@ -291,15 +291,14 @@ def get_subscribers(request):
 
 
 
-
+#Mot d'équipe
 from rest_framework import viewsets
 from .models import TeamMessage
 from .serializers import TeamMessageSerializer
 
 class TeamMessageViewSet(viewsets.ModelViewSet):
-    queryset = TeamMessage.objects.all()
+    queryset = TeamMessage.objects.all().order_by('-created_at')  # on trie du plus récent au plus ancien
     serializer_class = TeamMessageSerializer
-
 
 
 
