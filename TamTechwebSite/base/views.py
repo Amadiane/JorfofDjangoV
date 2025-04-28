@@ -1027,3 +1027,18 @@ class AggregatedContentAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+# views.py
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]  # Seulement les utilisateurs authentifiés peuvent accéder à cette vue
+
+    def get(self, request):
+        return Response({"message": "Vous avez accès à cette vue protégée !"})

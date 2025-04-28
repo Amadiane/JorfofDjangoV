@@ -1,0 +1,21 @@
+import axios from 'axios';
+
+const fetchProtectedData = async () => {
+    const token = localStorage.getItem('accessToken');
+
+    if (!token) {
+        // Rediriger vers la page de login si le token est absent
+        return;
+    }
+
+    try {
+        const response = await axios.get('http://localhost:8000/api/protected/', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log(response.data);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données protégées', error);
+    }
+};

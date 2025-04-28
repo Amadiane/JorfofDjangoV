@@ -1,20 +1,25 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Logoutbutton = ({ text, className }) => {
-  const navigate = useNavigate(); // Permet de rediriger l'utilisateur
+const LogoutButton = ({ text, className }) => {
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:8000/logout/", {
-        method: "POST",  // Méthode POST pour la déconnexion
-        credentials: "include",  // Garde les cookies de session
+        method: "POST",
+        credentials: "include", // Si vous utilisez des cookies pour la session
       });
 
       if (response.ok) {
         console.log("Déconnexion réussie !");
-        localStorage.removeItem("token"); // Supprimer le token si utilisé
-        navigate("/login"); // Rediriger vers la page de connexion
+        
+        // Suppression des tokens du localStorage
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        // Rediriger immédiatement vers la page de login
+        navigate("/login");
       } else {
         console.error("Erreur lors de la déconnexion.");
       }
@@ -24,10 +29,10 @@ const Logoutbutton = ({ text, className }) => {
   };
 
   return (
-    <button onClick={handleLogout} className={` ${className}`}>
+    <button onClick={handleLogout} className={`${className}`}>
       {text}
     </button>
   );
 };
 
-export default Logoutbutton;
+export default LogoutButton;

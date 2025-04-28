@@ -37,6 +37,14 @@ const App = () => {
   // Vérifier si la page actuelle est une page admin
   const isAdminPage = adminPaths.includes(location.pathname);
 
+  // Vérifier si l'utilisateur est authentifié
+  const token = localStorage.getItem("accessToken");
+
+  // Si l'utilisateur n'est pas authentifié et essaie d'accéder à une page admin, le rediriger vers la page de connexion
+  if (isAdminPage && !token) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <I18nextProvider i18n={i18n}>  {/* Envelopper l'application avec I18nextProvider */}
       <div className="flex flex-col min-h-screen">

@@ -7,7 +7,8 @@ from .views import (
     newsletter_subscription, TeamMessageViewSet,
     get_last_two_missions, create_mission, PlatformViewSet, RejoindreAPIView, CommunityView,
     PartnerAPIView, get_subscribers, platform_links_api, valeurs_api, fondations_api, mot_president_api,
-    add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView # 👈 ajoute ces deux-là ici
+    add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
+    ProtectedView # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -43,6 +44,7 @@ urlpatterns = [
     path('partenaires/', partenaire_api, name='partenaire_api'),
     path('programmes/', programmes_api, name='programmes_api'),
     path('aggregated-content/', AggregatedContentAPIView.as_view(), name='aggregated-content'),
+    path('protected/', ProtectedView.as_view(), name='protected_view'),
     
 
     path("", include(router.urls)),
