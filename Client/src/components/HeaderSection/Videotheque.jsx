@@ -244,7 +244,7 @@ const Videotheque = () => {
               )}
             </div>
             
-            {filteredVideos.length > 0 && (
+           {/* {filteredVideos.length > 0 && (
               <div className="mt-6 text-gray-600 text-center">
                 <button
                   onClick={() => setSearchTerm('')}
@@ -253,7 +253,7 @@ const Videotheque = () => {
                   Réinitialiser la recherche
                 </button>
               </div>
-            )}
+            )}*/}
           </>
         )}
       </div>

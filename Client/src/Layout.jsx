@@ -2,8 +2,12 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import NavAdmin from "./components/Header/NavAdmin";
-import { LanguageProvider } from './contexts/LanguageContext'; // Ajout du LanguageProvider
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n'; // Assurez-vous que la configuration i18n est bien importée
 
+import React from 'react';
+
+// Application principale
 const App = () => {
   // Récupérer la localisation actuelle
   const location = useLocation();
@@ -26,13 +30,15 @@ const App = () => {
     "/mediaPartenairePost",
     "/programPost",
     "/dashboardAdmin",
+    "/teamMessage",
+    "/missionPost",
   ];
 
   // Vérifier si la page actuelle est une page admin
   const isAdminPage = adminPaths.includes(location.pathname);
 
   return (
-    <LanguageProvider> {/* Envelopper l'application avec le LanguageProvider */}
+    <I18nextProvider i18n={i18n}>  {/* Envelopper l'application avec I18nextProvider */}
       <div className="flex flex-col min-h-screen">
         {/* Afficher le Header si ce n'est pas une page admin */}
         {!isAdminPage && <Header />}
@@ -47,9 +53,7 @@ const App = () => {
         {/* Contenu principal */}
         <div className="flex flex-grow">
           {/* Le contenu principal du site avec un espace réservé si c'est une page admin */}
-          <div
-            className={`flex-1 p-5 ${isAdminPage ? "ml-[250px]" : ""} overflow-auto`}
-          >
+          <div className={`flex-1 p-5 ${isAdminPage ? "ml-[250px]" : ""} overflow-auto`}>
             <Outlet />
           </div>
         </div>
@@ -57,7 +61,7 @@ const App = () => {
         {/* Afficher le Footer si ce n'est pas une page admin */}
         {!isAdminPage && <Footer />}
       </div>
-    </LanguageProvider>
+    </I18nextProvider>
   );
 };
 

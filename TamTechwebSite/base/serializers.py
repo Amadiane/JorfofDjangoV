@@ -55,6 +55,13 @@ class TeamMessageSerializer(serializers.ModelSerializer):
         model = TeamMessage
         fields = '__all__'
 
+from .models import Fondation
+
+class FondationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fondation
+        fields = '__all__'
+
 
 
 # serializers.py
@@ -129,3 +136,34 @@ class PartnerSerializer(serializers.ModelSerializer):
         model = Partner
         fields = ['id', 'first_name', 'last_name', 'email', 'role', 'organisation', 'website_url', 'phone', 'accept_terms', 'created_at']
 
+
+
+
+
+from rest_framework import serializers
+from .models import Blog, Fondation, Video, Programme, Platform
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = '__all__'
+
+class FondationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fondation
+        fields = '__all__'
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = '__all__'
+
+class ProgrammeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Programme
+        fields = '__all__'
+
+class PlatformSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Platform
+        fields = '__all__'

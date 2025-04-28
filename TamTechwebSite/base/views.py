@@ -972,3 +972,58 @@ def partenaire_api(request):
                 "site_url": partenaire.site_url
             }
         }, status=201)
+
+
+
+
+#API AGREG2
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .models import Blog, Fondation, Video, Programme, Platform
+from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformSerializer
+
+class AggregatedContentAPIView(APIView):
+
+    def get(self, request):
+        blogs = Blog.objects.all()
+        fondations = Fondation.objects.all()
+        videos = Video.objects.all()
+        programmes = Programme.objects.all()
+        platforms = Platform.objects.all()
+
+        data = {
+            "blogs": BlogSerializer(blogs, many=True).data,
+            "fondations": FondationSerializer(fondations, many=True).data,
+            "videos": VideoSerializer(videos, many=True).data,
+            "programmes": ProgrammeSerializer(programmes, many=True).data,
+            "platforms": PlatformSerializer(platforms, many=True).data,
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """
+        Tu dois préciser dans le body 'type' pour savoir où poster (ex: 'blog', 'fondation', etc)
+        """
+        content_type = request.data.get('type')
+
+        if content_type == "blog":
+            serializer = BlogSerializer(data=request.data)
+        elif content_type == "fondation":
+            serializer = FondationSerializer(data=request.data)
+        elif content_type == "video":
+            serializer = VideoSerializer(data=request.data)
+        elif content_type == "programme":
+            serializer = ProgrammeSerializer(data=request.data)
+        elif content_type == "platform":
+            serializer = PlatformSerializer(data=request.data)
+        else:
+            return Response({"error": "Type invalide ou manquant."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

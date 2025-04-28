@@ -1,68 +1,91 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import Blogdetailheading from './Blogdetailheading'
-import BlogdetailImage from './BlogdetailImage'
-import Blogdetaildescription from './Blogdetaildescription'
-import Blogdetailuser from './Blogdetailuser'
-import Blogcard2 from '../Home/Blogcard2'
-import Home from '../Home/Home'
-const Blogdetail = () => {
-  const params = useParams()
-console.log(params);
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Clock } from 'lucide-react';
 
-  const [blogs, setBlogs] = useState(null);
+const BlogDetail = () => {
+  const { id } = useParams();  // Récupération de l'ID du blog à partir de l'URL
+  const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const id = params.blogid.split("_")
-
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    if (!id) {
+      setError('L\'ID du blog est manquant.');
+      setLoading(false);
+      return;
+    }
+  
+    const fetchBlog = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/blog/${id[1]}/`);
+        const response = await fetch(`http://localhost:8000/api/blog/${id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setBlogs(data);
-        
+        setBlog(data);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
+  
+    fetchBlog();
+  }, [id]);
+  
 
-    fetchBlogs();
-  }, []); 
-  console.log(blogs)
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleDateString('fr-FR', options);
+  };
+
   return (
-   
+    <div className="bg-gray-100 min-h-screen">
+      <div className="h-16"></div>
+      <div className="pt-8"></div>
 
-    <main className="mt-10 px-10 pt-5 pb-10">
+      <main className="container mx-auto px-4 py-8">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : error ? (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <p>Erreur lors du chargement du blog: {error}</p>
+          </div>
+        ) : blog ? (
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2">
+                {blog.image ? (
+                  <img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-64 sm:h-80 md:h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-64 sm:h-80 md:h-full bg-gray-200 flex items-center justify-center">
+                    <p className="text-gray-500">Image non disponible</p>
+                  </div>
+                )}
+              </div>
+              <div className="p-6 flex flex-col justify-between w-full md:w-1/2">
+                <h3 className="text-3xl font-bold mb-3">{blog.title}</h3>
+                <div className="text-sm text-gray-500 flex items-center mb-4">
+                  <Clock size={16} className="mr-1" />
+                  <span>{formatDate(blog.created_at)}</span>
+                </div>
+                <p className="text-gray-600 text-lg">{blog.content}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p>Le blog demandé n'existe pas.</p>
+        )}
+      </main>
+    </div>
+  );
+};
 
-      <div className="mb-4 md:mb-0 w-full mx-auto relative ">
-        {/* change param to title  */}
-        <Blogdetailheading title = {blogs?.title} />
-
-        <BlogdetailImage blogimage={blogs?.image} />
-      </div>
-
-      <div className="flex flex-col lg:flex-row lg:space-x-16">
-
-<Blogdetaildescription discriptions= {blogs?.content} />
-  <div className="sidebox ">
-  <Blogdetailuser />
-  {/* <Blogcard2 />
-  <Blogcard2 /> */}
-  </div>
-
-      </div>
-    </main>
-
-  )
-}
-
-export default Blogdetail
+export default BlogDetail;

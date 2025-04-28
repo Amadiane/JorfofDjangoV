@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ChatBot from '../ChatBot/ChatBot';
 import { useNavigate } from 'react-router-dom';
-import { Clock } from 'lucide-react';
+import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import Blogdetail from '../Blogdetail/Blogdetail';
 
 const Actualites = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,7 +10,8 @@ const Actualites = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showFullContent, setShowFullContent] = useState(false);
+  const [expandedCards, setExpandedCards] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,12 +50,23 @@ const Actualites = () => {
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
+  const toggleFullContent = () => {
+    setShowFullContent(!showFullContent);
+  };
+
+  const toggleCardContent = (id) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="h-16"></div>
-      <div className="pt-16"></div>
+      <div className="pt-8"></div>
 
-      <main className="container mx-auto px-4 py-8 mt-6">
+      <main className="container mx-auto px-4 py-8">
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -64,9 +77,16 @@ const Actualites = () => {
           </div>
         ) : (
           <>
+            <div className="text-center mb-12">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 inline-block relative">
+                Actualités
+                <div className="h-1 w-24 bg-blue-600 mx-auto mt-2"></div>
+              </h1>
+            </div>
+
             {latestPost && (
               <div className="mb-12">
-                <h2 className="text-2xl font-bold mb-6 flex flex-wrap items-center">
+                <h2 className="text-2xl font-bold mb-6 flex flex-wrap items-center justify-center md:justify-start">
                   <span className="bg-red-600 text-white px-3 py-1 mr-3 mb-2 rounded">À LA UNE</span>
                   L'actualité du moment
                 </h2>
@@ -86,9 +106,17 @@ const Actualites = () => {
                       )}
                     </div>
                     <div className="p-6 flex flex-col justify-between w-full md:w-1/2">
-                      <div>
+                      <div className="flex flex-col h-full">
                         <h3 className="text-xl font-bold mb-3">{latestPost.title}</h3>
-                        <p className="text-gray-600 mb-4">{latestPost.content}</p>
+                        <div className="flex-grow overflow-hidden">
+                          <p className={`text-gray-600 ${showFullContent ? '' : 'line-clamp-6 md:line-clamp-8 lg:text-base xl:text-lg'}`} 
+                             style={{
+                               fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+                               lineHeight: '1.6'
+                             }}>
+                            {latestPost.content}
+                          </p>
+                        </div>
                       </div>
                       <div className="mt-4">
                         <div className="flex items-center text-sm text-gray-500 mb-4">
@@ -96,10 +124,20 @@ const Actualites = () => {
                           <span>{formatDate(latestPost.created_at)}</span>
                         </div>
                         <button
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full md:w-auto"
-                          onClick={() => navigate(`/blog/${latestPost.id}`)}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center w-full md:w-auto transition-colors duration-300"
+                          onClick={toggleFullContent}
                         >
-                          Lire l'article complet
+                          {showFullContent ? (
+                            <>
+                              Réduire l'article
+                              <ChevronUp size={16} className="ml-2" />
+                            </>
+                          ) : (
+                            <>
+                              Lire l'article complet
+                              <ChevronDown size={16} className="ml-2" />
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
@@ -109,13 +147,13 @@ const Actualites = () => {
             )}
 
             <div className="mb-12">
-              <h2 className="text-xl font-bold mb-6">Actualités récentes</h2>
+              <h2 className="text-2xl font-bold mb-6 text-center md:text-left">Actualités récentes</h2>
               {filteredBlogs.length === 0 ? (
                 <p className="text-gray-600">Aucun article ne correspond à votre recherche.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredBlogs.slice(1).map((blog) => (
-                    <div key={blog.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
+                    <div key={blog.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
                       {blog.image ? (
                         <img
                           src={blog.image}
@@ -128,18 +166,32 @@ const Actualites = () => {
                         </div>
                       )}
                       <div className="p-4 flex flex-col flex-grow">
-                        <h3 className="font-bold mb-2 line-clamp-2">{blog.title}</h3>
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{blog.content}</p>
+                        <h3 className="font-bold mb-2 text-lg">{blog.title}</h3>
+                        <div className="flex-grow">
+                          <p className={`text-gray-600 text-sm mb-3 ${expandedCards[blog.id] ? '' : 'line-clamp-3'}`}>
+                            {blog.content}
+                          </p>
+                        </div>
                         <div className="flex justify-between items-center mt-2">
                           <span className="text-xs text-gray-500 flex items-center">
                             <Clock size={14} className="mr-1" />
                             {formatDate(blog.created_at)}
                           </span>
                           <button
-                            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                            onClick={() => navigate(`/blog/${blog.id}`)}
+                            className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
+                            onClick={() => toggleCardContent(blog.id)}
                           >
-                            Lire plus
+                            {expandedCards[blog.id] ? (
+                              <>
+                                Réduire
+                                <ChevronUp size={14} className="ml-1" />
+                              </>
+                            ) : (
+                              <>
+                                Lire plus
+                                <ChevronDown size={14} className="ml-1" />
+                              </>
+                            )}
                           </button>
                         </div>
                       </div>

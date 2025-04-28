@@ -664,14 +664,14 @@ const Phototheque = () => {
               <p style={styles.cardDescription}>
                 {expandedDescriptions[index] ? photo.description : intro}
               </p>
-              {photo.description && photo.description.length > 150 && (
+              {/*{photo.description && photo.description.length > 150 && (
                 <button
                   onClick={() => toggleDescription(index)}
                   style={styles.readMoreButton}
                 >
                   {expandedDescriptions[index] ? 'Voir moins' : 'Voir plus'} {expandedDescriptions[index] ? '↑' : '↓'}
                 </button>
-              )}
+              )}*/}
             </div>
           </div>
         );
@@ -762,14 +762,21 @@ const Phototheque = () => {
   return (
     <div style={styles.container}>
       {/* En-tête avec titre bien visible */}
-      <div style={styles.header}>
-        <div style={styles.headerContent}>
-          <h1 style={styles.title}>Photothèque</h1>
-          <p style={styles.subtitle}>
-            Découvrez notre collection de photos illustrant les activités et événements de notre fondation
-          </p>
-        </div>
-      </div>
+      <div style={{ ...styles.header, backgroundColor: '#1C1C47' }}> {/* Couleur de fond modifiée */}
+  <div style={styles.headerContent}>
+    <h1 style={{ ...styles.title, paddingTop: '50px', color: '#f0f0f0' }}> {/* Augmenter le padding-top ici */}
+      Photothèque
+    </h1>
+    <p style={{ ...styles.subtitle, color: '#d1d1d1' }}> {/* Changer la couleur du sous-titre */}
+      Découvrez notre collection de photos illustrant les activités et événements de notre fondation
+    </p>
+  </div>
+</div>
+
+
+
+
+
 
       <div style={styles.content}>
         {/* Barre d'outils simplifiée avec uniquement la recherche */}

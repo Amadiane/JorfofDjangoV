@@ -24,16 +24,13 @@ const Platforms = () => {
       });
   }, []);
 
-  // Correction du problème d'affichage des images avec méthode similaire à Actualites
   const getImageUrl = (iconPath) => {
     if (!iconPath) return null;
     
-    // Si l'URL est déjà complète
     if (iconPath.startsWith('http')) {
       return iconPath;
     }
     
-    // Si c'est un chemin relatif
     return `http://127.0.0.1:8000${iconPath.startsWith('/') ? '' : '/'}${iconPath}`;
   };
 
@@ -58,23 +55,31 @@ const Platforms = () => {
   }
 
   return (
-    <section className="bg-gray-100 min-h-screen">
-      {/* Ajout d'un espacement comme dans Actualites pour assurer que le titre est visible */}
+    <section className="bg-gray-50 min-h-screen">
+      {/* Espacement pour navigation fixe */}
       <div className="h-16"></div>
-      <div className="pt-8"></div>
 
-      <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#1C1C47]">
-            Notre écosystème de plateformes
-          </h1>
-          <p className="text-gray-600 max-w-3xl mx-auto">
-            Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.
-          </p>
-        </header>
+      {/* En-tête amélioré dans le style de Community */}
+      <div className="relative bg-gradient-to-r from-[#1C1C47] to-[#2d2d69] text-white py-16 md:py-24">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('/img/pattern.svg')] bg-center"></div>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+              Notre écosystème de plateformes
+            </h1>
+            <div className="w-20 h-1 bg-yellow-400 mx-auto mb-6"></div>
+            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+              Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.
+            </p>
+          </div>
+        </div>
+      </div>
 
+      <div className="container mx-auto px-4 py-12 md:py-16">
         {platforms.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 bg-white rounded-xl p-8 shadow-md">
+          <div className="text-center py-12 text-gray-500 bg-white rounded-xl p-8 shadow-md">
             <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -83,7 +88,6 @@ const Platforms = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {platforms.map(platform => {
-              // Formatage de la date similaire à Actualites
               let formattedDate = "Date non disponible";
               try {
                 if (platform.added_at) {
@@ -95,14 +99,13 @@ const Platforms = () => {
               }
 
               return (
-                <div key={platform.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                  {/* Bloc d'image inspiré du composant Actualites */}
+                <div key={platform.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                   {platform.icon ? (
-                    <div className="h-48 w-full relative">
+                    <div className="h-48 w-full relative overflow-hidden">
                       <img 
                         src={getImageUrl(platform.icon)}
                         alt={`${platform.name} icon`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         onError={(e) => {
                           console.log('Image non chargée:', e.target.src);
                           e.target.onerror = null;
@@ -123,28 +126,31 @@ const Platforms = () => {
                     </div>
                   )}
 
-                  <div className="p-4">
-                    <h2 className="text-xl font-bold text-[#1C1C47] mb-2">{platform.name || "Plateforme sans nom"}</h2>
+                  <div className="p-6">
+                    <div className="flex items-center mb-3">
+                      <div className="w-1 h-8 bg-[#1C1C47] mr-3"></div>
+                      <h2 className="text-xl font-bold text-[#1C1C47]">{platform.name || "Plateforme sans nom"}</h2>
+                    </div>
                     
                     {platform.description ? (
-                      <div className="mb-4">
-                        <p className={`text-gray-600 text-sm ${expandedDescription === platform.id ? '' : 'line-clamp-3'}`}>
+                      <div className="mb-6">
+                        <p className={`text-gray-600 ${expandedDescription === platform.id ? '' : 'line-clamp-3'}`}>
                           {platform.description}
                         </p>
-                        {platform.description.length > 120 && (
+                         {/*{platform.description.length > 120 && (
                           <button
-                            className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
+                            className="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2 focus:outline-none"
                             onClick={() => toggleDescription(platform.id)}
                           >
                             {expandedDescription === platform.id ? "Voir moins" : "Voir plus"}
                           </button>
-                        )}
+                        )}*/}
                       </div>
                     ) : (
-                      <p className="text-gray-400 text-sm italic mb-4">Pas de description disponible</p>
+                      <p className="text-gray-400 italic mb-6">Pas de description disponible</p>
                     )}
 
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center border-t pt-4 mt-2">
                       <span className="text-xs text-gray-500">
                         Ajouté le {formattedDate}
                       </span>
@@ -153,7 +159,7 @@ const Platforms = () => {
                         href={platform.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-[#1C1C47] text-white rounded-md hover:bg-[#3b3b82] transition-colors text-sm font-medium"
+                        className="inline-flex items-center px-4 py-2 bg-[#1C1C47] text-white rounded-md hover:bg-[#3b3b82] transition-colors text-sm font-medium shadow-md hover:shadow-lg"
                       >
                         Visiter
                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

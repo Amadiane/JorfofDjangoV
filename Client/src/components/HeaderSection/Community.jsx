@@ -163,9 +163,11 @@ const styles = {
   header: {
     background: 'linear-gradient(135deg, #1C1C47, #1C1C47)',
     color: 'white',
-    padding: '2rem 1rem',
+    padding: '3rem 1rem', // Augmentation du padding pour descendre encore le titre
     textAlign: 'center',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    paddingTop: '6rem',  // <-- augmenté
+    paddingBottom: '3rem', // <-- augmenté
   },
   container: {
     maxWidth: '1200px',
@@ -184,8 +186,9 @@ const styles = {
     transform: 'translateY(-5px)',
   },
   h1: {
-    fontSize: '2.5rem',
+    fontSize: '2.8rem',
     marginBottom: '1rem',
+    marginTop: '1.5rem', // Ajustement du margin top pour pousser encore plus bas
   },
   h2: {
     color: '#1C1C47',
@@ -275,6 +278,17 @@ const styles = {
     // Adaptation mobile
     '@media (max-width: 768px)': {
       gridTemplateColumns: '1fr',
+    },
+  },
+  '@media (max-width: 768px)': {
+    h1: {
+      fontSize: '2rem',
+    },
+    h2: {
+      fontSize: '1.5rem',
+    },
+    p: {
+      fontSize: '1rem',
     },
   },
 };

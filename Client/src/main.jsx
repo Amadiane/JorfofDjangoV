@@ -4,9 +4,6 @@ import { I18nextProvider } from 'react-i18next';
 import i18next from './i18n.js';
 import './index.css';
 
-
-
-
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import App from './Layout.jsx';
 import Home from './components/Home/Home.jsx';
@@ -15,7 +12,7 @@ import Createpost from './components/Createpost/Createpost.jsx';
 import Login from './components/Login/Login.jsx';
 import Signup from './components/Signup/Signup.jsx';
 import Forgetpassword from './components/Forgotpassword/Forgotpassword.jsx';
-import Blogdetail from './components/Blogdetail/Blogdetail.jsx';
+import Blogdetail from './components/Blogdetail/Blogdetail.jsx';  // Import de Blogdetail
 import PrivateRoute from './components/Routes/PrivateRoute';
 
 import DashboardAdmin from './components/Admin/DashboardAdmin.jsx';
@@ -65,12 +62,11 @@ const router = createBrowserRouter(
           <Route path="/createpost" element={<Createpost />} />
         </Route>
         <Route element={<PrivateRoute />}>
-        <Route path="/dashboardAdmin" element={<DashboardAdmin />} />
+          <Route path="/dashboardAdmin" element={<DashboardAdmin />} />
         </Route>
         <Route path="/signup" element={<Signup />} />
-       
         <Route path="/forgotpassword" element={<Forgetpassword />} />
-        <Route path="/blogdetail/:blogid" element={<Blogdetail />} />
+        <Route path="/blogdetail/:blogid" element={<Blogdetail />} /> {/* Route ajoutée pour Blogdetail */}
         <Route path="qui-sommes-nous-" element={<Quisommesnous />} />
         <Route path="contacter-tamkine" element={<Contacternous />} />
         <Route path="nous-rejoindre" element={<NousRejoindre />} />

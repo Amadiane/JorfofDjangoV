@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Search, Bell, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import logo from "../../assets/logo.png";
+import { useTranslation } from 'react-i18next'; // Importation de useTranslation
+
 
 const Navlinks = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -9,6 +11,7 @@ const Navlinks = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [language, setLanguage] = useState('fr'); // Ajout de la langue sélectionnée
+   const { t, i18n } = useTranslation(); // Utilisation du hook useTranslation
   const navigate = useNavigate();
   
   // Refs for dropdown menus
@@ -241,33 +244,51 @@ const Navlinks = () => {
         </div>
 
         {searchOpen && mobileMenuOpen && (
-          <div className="block md:hidden absolute left-0 right-0 top-16 z-50 bg-white p-3 shadow-lg rounded-md">
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]"
-              placeholder="Rechercher..."
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="hidden md:flex justify-center space-x-8 mt-4">
-        {navItems.map((item, index) => (
-          <div 
-            key={index} 
-            className="relative"
-            onMouseEnter={() => handleHover(item.id)}
-            onMouseLeave={() => handleLeave(item.id)}
-          >
+  <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-md z-50">
+    <nav className="flex flex-col p-4 space-y-4">
+      {navItems.map((item, index) => (
+        <div key={index}>
+          {item.isDropdown ? (
+            <>
+              <button 
+                onClick={() => setActiveSection(activeSection === item.id ? null : item.id)}
+                className="flex items-center justify-between w-full py-2 text-gray-800 hover:text-[#12138B] font-semibold"
+              >
+                {item.title}
+                <ChevronDown size={18} />
+              </button>
+              {activeSection === item.id && (
+                <div className="pl-4">
+                  {item.dropdownItems.map((dropItem, idx) => (
+                    <NavLink
+                      key={idx}
+                      to={dropItem.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-1 text-gray-700 hover:text-[#12138B]"
+                    >
+                      {dropItem.title}
+                    </NavLink>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
             <NavLink 
-              to={item.path}
-              className="text-gray-700 hover:text-[#12138B] font-semibold py-3"
+              to={item.path} 
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-2 text-gray-800 hover:text-[#12138B] font-semibold block"
             >
               {item.title}
             </NavLink>
-            {item.isDropdown && renderDropdown(item)}
-          </div>
-        ))}
+          )}
+        </div>
+      ))}
+    </nav>
+  </div>
+)}
+
+
+
       </div>
     </header>
   );

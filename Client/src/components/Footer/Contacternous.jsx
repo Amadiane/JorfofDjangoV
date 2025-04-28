@@ -22,7 +22,7 @@ const Contacternous = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     try {
       const res = await fetch('http://localhost:8000/api/contact/', {
         method: 'POST',
@@ -31,9 +31,9 @@ const Contacternous = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await res.json();
-
+  
       if (res.ok) {
         setResponseMessage('Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
         setFormData({ name: '', email: '', subject: '', category: 'general', message: '' });
@@ -46,7 +46,7 @@ const Contacternous = () => {
       setIsSubmitting(false);
     }
   };
-
+  
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
       {/* Spacer div responsive */}
