@@ -11,7 +11,7 @@ const Navlinks = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [language, setLanguage] = useState('fr'); // Ajout de la langue sélectionnée
-   const { t, i18n } = useTranslation(); // Utilisation du hook useTranslation
+   const { t, i18n } = useTranslation("home"); // Utilisation du hook useTranslation
   const navigate = useNavigate();
   
   // Refs for dropdown menus
@@ -177,7 +177,7 @@ const Navlinks = () => {
             <NavLink to="/home" className="flex items-center">
               <img src={logo} alt="Fondation Tamkine" className="h-12 mr-3" />
               <div>
-                <h1 className="text-[#12138B] font-bold text-xl">FONDATION TAMKINE</h1>
+                <h1 className="text-[#12138B] font-bold text-xl">{t("TAMKINE FONDATION")}</h1>
                 <p className="text-gray-600 text-xs">Actualités et informations</p>
               </div>
             </NavLink>

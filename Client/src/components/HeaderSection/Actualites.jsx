@@ -15,10 +15,10 @@ const Actualites = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login');
-      return;
-    }
+    // if (!localStorage.getItem('accessToken')) {
+    //   navigate('/login');
+    //   return;
+    // }
 
     const fetchBlogs = async () => {
       try {

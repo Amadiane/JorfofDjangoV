@@ -78,7 +78,7 @@ const BlogForm = ({ onPostCreated }) => {
       setSuccessMessage("✅ Article publié avec succès !");
 
     // Redirection vers la page home en cas d'erreur
-    setTimeout(() => navigate("/home"), 2000);
+    setTimeout(() => navigate("/"), 2000);
     } finally {
       setLoading(false);
     }

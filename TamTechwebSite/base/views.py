@@ -107,22 +107,38 @@ class CustomTokenRefreshView(TokenRefreshView):
             return Response({'refreshed': False})
 
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import PermissionDenied
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
-
     try:
+        # Vérification si l'utilisateur est authentifié
+        if not request.user.is_authenticated:
+            raise PermissionDenied("You must be authenticated to logout.")
 
-        res = Response()
-        res.data = {'success':True}
+        # Suppression des cookies (access_token et refresh_token)
+        res = Response({'success': True})
         res.delete_cookie('access_token', path='/', samesite='None')
         res.delete_cookie('response_token', path='/', samesite='None')
 
         return res
-
     except Exception as e:
-        print(e)
-        return Response({'success':False})
+        print("Error during logout:", e)
+        return Response({'success': False, 'error': str(e)}, status=500)
+
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -980,53 +996,54 @@ def partenaire_api(request):
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import AllowAny
 
+from .models import Blog, Fondation, Video, Programme, PlatformLink
+from .serializers import (
+    BlogSerializer,
+    FondationSerializer,
+    VideoSerializer,
+    ProgrammeSerializer,
+    PlatformLinkSerializer
+)
+
+
+# views.py
+from itertools import chain
+from operator import itemgetter
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import Blog, Fondation, Video, Programme, Platform
 from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformSerializer
 
 class AggregatedContentAPIView(APIView):
-
     def get(self, request):
-        blogs = Blog.objects.all()
-        fondations = Fondation.objects.all()
-        videos = Video.objects.all()
-        programmes = Programme.objects.all()
-        platforms = Platform.objects.all()
+        # Sérialiser chaque modèle
+        blogs = BlogSerializer(Blog.objects.all(), many=True).data
+        for item in blogs:
+            item["type"] = "blog"
 
-        data = {
-            "blogs": BlogSerializer(blogs, many=True).data,
-            "fondations": FondationSerializer(fondations, many=True).data,
-            "videos": VideoSerializer(videos, many=True).data,
-            "programmes": ProgrammeSerializer(programmes, many=True).data,
-            "platforms": PlatformSerializer(platforms, many=True).data,
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        fondations = FondationSerializer(Fondation.objects.all(), many=True).data
+        for item in fondations:
+            item["type"] = "fondation"
 
-    def post(self, request):
-        """
-        Tu dois préciser dans le body 'type' pour savoir où poster (ex: 'blog', 'fondation', etc)
-        """
-        content_type = request.data.get('type')
+        videos = VideoSerializer(Video.objects.all(), many=True).data
+        for item in videos:
+            item["type"] = "video"
 
-        if content_type == "blog":
-            serializer = BlogSerializer(data=request.data)
-        elif content_type == "fondation":
-            serializer = FondationSerializer(data=request.data)
-        elif content_type == "video":
-            serializer = VideoSerializer(data=request.data)
-        elif content_type == "programme":
-            serializer = ProgrammeSerializer(data=request.data)
-        elif content_type == "platform":
-            serializer = PlatformSerializer(data=request.data)
-        else:
-            return Response({"error": "Type invalide ou manquant."}, status=status.HTTP_400_BAD_REQUEST)
+        programmes = ProgrammeSerializer(Programme.objects.all(), many=True).data
+        for item in programmes:
+            item["type"] = "programme"
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        platforms = PlatformSerializer(Platform.objects.all(), many=True).data
+        for item in platforms:
+            item["type"] = "platform"
+
+        # Fusionner les résultats dans une seule liste et trier par date
+        all_items = list(chain(blogs, fondations, videos, programmes, platforms))
+        all_items_sorted = sorted(all_items, key=itemgetter('created_at'), reverse=True)
+
+        return Response(all_items_sorted)
 
 
 

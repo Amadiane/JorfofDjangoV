@@ -1,5 +1,7 @@
 {
-    "home": "Home",
-      "categories": "Categories",
-      "createpost": "Create Post"
-    }
+  "home": {
+    "categories": "Categories",
+    "createpost": "Create Post",
+    "tamkine_title":"tamkine english"
+  }
+}

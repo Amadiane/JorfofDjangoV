@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom"; 
+import { Outlet, useLocation,Navigate } from "react-router-dom"; 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import NavAdmin from "./components/Header/NavAdmin";
@@ -38,7 +38,7 @@ const App = () => {
   const isAdminPage = adminPaths.includes(location.pathname);
 
   // Vérifier si l'utilisateur est authentifié
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("access");
 
   // Si l'utilisateur n'est pas authentifié et essaie d'accéder à une page admin, le rediriger vers la page de connexion
   if (isAdminPage && !token) {

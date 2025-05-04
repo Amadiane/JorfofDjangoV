@@ -22,9 +22,11 @@ const Login = () => {
             const response = await login(username, password);
             
             if (response.success) {
-                localStorage.setItem('access', response.access); // Sauvegarde du token d'accès
-                navigate('/dashboardAdmin'); // Redirection vers le dashboard admin après connexion réussie
-            } else {
+                localStorage.setItem('access', response.access); // pour API
+                localStorage.setItem('user', JSON.stringify({ username })); // pour PrivateRoute
+                navigate('/dashboardAdmin');
+            }
+             else {
                 setError('Nom d\'utilisateur ou mot de passe incorrect'); // Gère l'échec de la connexion
             }
         } catch (err) {

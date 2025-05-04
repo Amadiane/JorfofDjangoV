@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavAdmin from '../header/NavAdmin'; // Chemin du NavAdmin adapté à ton projet
+// import NavAdmin from '../header/NavAdmin'; // Chemin du NavAdmin adapté à ton projet
 
 const DashboardAdmin = () => {
     const navigate = useNavigate();
-
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            navigate('/login'); // Redirige vers la page de login si l'utilisateur n'est pas connecté
+        const accessToken = localStorage.getItem("access");
+    
+        // Si le token est absent, rediriger vers la page de connexion
+        if (!accessToken) {
+          navigate("/login");
         }
-    }, [navigate]);
+      }, [navigate]); // Cette logique s'exécutera chaque fois que l'utilisateur essaie d'accéder à la page
+   
+    
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
