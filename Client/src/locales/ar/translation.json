@@ -190,7 +190,107 @@
                                     "Nom de votre organisation": "اسم منظمتك",
                                     "www.votresite.com": "https://www.موقعك.com",
                                     "Votre numéro de téléphone": "رقم هاتفك",
-                                    "Décrivez votre projet ou vos besoins en détail": "وصف مشروعك أو احتياجاتك بالتفصيل"
+                                    "Décrivez votre projet ou vos besoins en détail": "وصف مشروعك أو احتياجاتك بالتفصيل",
+
+
+                                    
+                                    
+                                        "Vidéothèque": "مكتبة الفيديو",
+                                        "Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage.": "اكتشف مجموعتنا من مقاطع الفيديو التعليمية لتعزيز تجربتك التعليمية.",
+                                        "Rechercher une vidéo...": "ابحث عن فيديو...",
+                                        "Actualiser": "تحديث",
+                                        "Chargement des vidéos...": "تحميل الفيديوهات...",
+                                        "Réessayer": "إعادة المحاولة",
+                                        "Autres vidéos": "فيديوهات أخرى",
+                                        "Toutes les vidéos": "جميع الفيديوهات",
+                                        "Voir la vidéo": "مشاهدة الفيديو",
+                                        "Plein écran": "وضع ملء الشاشة",
+                                        "Aucun résultat trouvé pour": "لم يتم العثور على نتائج لـ",
+                                        "Effacer la recherche": "مسح البحث",
+                                        "Aucune vidéo disponible.": "لا توجد فيديوهات متاحة.",
+                                        "Explorez notre collection de vidéos": "استكشف مجموعتنا من مقاطع الفيديو",
+                                        "Découvrez des contenus éducatifs innovants pour enrichir votre expérience d'apprentissage et développer de nouvelles compétences.": "اكتشف محتوى تعليمي مبتكر لتعزيز تجربتك التعليمية وتطوير مهاراتك الجديدة.",
+                                        "Découvrir les vidéos": "اكتشاف الفيديوهات",
+
+
+
+                                        
+                                            "Phototheque": "معرض الصور",
+                                            "Découvrez notre collection de photos illustrant les activités et événements de notre fondation": "اكتشف مجموعتنا من الصور التي توضح أنشطة وفعاليات مؤسستنا",
+                                            "Rechercher des photos...": "ابحث عن الصور...",
+                                            "Vue grille": "عرض شبكي",
+                                            "Vue chronologique": "عرض زمني",
+                                            "Agrandir l'image": "تكبير الصورة",
+                                            "Réinitialiser la position": "إعادة تعيين الموضع",
+                                            "Voir plus": "عرض المزيد",
+                                            "Voir moins": "عرض أقل",
+                                            "Fermer": "إغلاق",
+
+
+                                            
+                                                "FONDATION DOCUMENTS": "وثائق المؤسسة",
+                                                "Centre de documentation officiel": "مركز التوثيق الرسمي",
+                                                "Documents disponibles": "الوثائق المتوفرة",
+                                                "Vue Liste": "عرض القائمة",
+                                                "Vue Grille": "عرض الشبكة",
+                                                "Rechercher un document...": "ابحث عن وثيقة...",
+                                                "Télécharger": "تنزيل",
+
+
+                                                
+                                                    "Erreur lors du chargement des plateformes": "خطأ في تحميل المنصات",
+                                                    "Notre écosystème de plateformes": "نظام منصاتنا",
+                                                    "Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.": "اكتشف المنصات والمبادرات المختلفة لمؤسستنا لزيادة تأثيرنا الجماعي.",
+                                                    "Aucune plateforme n'est disponible pour le moment.": "لا توجد منصات متاحة في الوقت الحالي.",
+                                                    "Image non disponible": "الصورة غير متوفرة",
+                                                    "Pas de description disponible": "لا توجد وصف متاح",
+                                                    "Ajouté le ": "تم الإضافة في ",
+                                                    "Visiter": "زيارة",
+
+
+                                                    
+                                                        "Nos Programmes": "برامجنا",
+                                                        "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.": "اكتشف البرامج والمبادرات المختلفة لمؤسستنا لتعظيم تأثيرنا الجماعي.",
+                                                        "Rechercher un programme...": "ابحث عن برنامج...",
+                                                        "Rechercher un programme": "ابحث عن برنامج",
+                                                        "Chargement des programmes...": "جاري تحميل البرامج...",
+                                                        "Erreur": "خطأ",
+                                                        "Aucun programme ne correspond à votre recherche.": "لا يوجد برنامج يطابق بحثك.",
+                                                        "Effacer la recherche": "مسح البحث",
+                                                        "Réduire": "تقليص",
+                                                        "Lire plus": "قراءة المزيد",
+                                                        "Intéressé par nos programmes ?": "مهتم ببرامجنا؟",
+                                                        "Rejoignez nos initiatives et contribuez à transformer l'éducation numérique avec la Fondation Tamkine.": "انضم إلى مبادراتنا وساهم في تحويل التعليم الرقمي مع مؤسسة تمكين.",
+                                                        "Nous contacter": "اتصل بنا",
+                                                        "Erreur lors du chargement des programmes.": "حدث خطأ أثناء تحميل البرامج.",
+
+
+                                                        
+                                                            "Actualités": "الأخبار",
+                                                            "Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine": "اكتشف آخر الأخبار والتحديثات من مؤسسة تمكين",
+                    
+                                                            "Chargement des actualités...": "جاري تحميل الأخبار...",
+                                                        
+                                                            "Erreur lors du chargement": "خطأ أثناء التحميل",
+                                                           
+                                                            "Pas d'image disponible": "لا توجد صورة متاحة",
+                                                            
+                                                            "Aucune actualité ne correspond à votre recherche.": "لا توجد أخبار تطابق بحثك.",
+                                                            "Aucune actualité disponible pour le moment.": "لا توجد أخبار متاحة في الوقت الحالي.",
+                                                            "Lire moins": "قراءة أقل"
+                                                          
+                                                          
+                                                      
+                                                      
+                                                  
+                                                  
+                                              
+                                              
+                                          
+                                        
+                                      
+                                      
+                                      
                                   
                                   
                               

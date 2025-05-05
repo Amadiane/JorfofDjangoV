@@ -1,7 +1,10 @@
 //A rendre responsive
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
+
 
 const Phototheque = () => {
+  const { t } = useTranslation();  // Initialisation du hook de traduction
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -644,7 +647,7 @@ const Phototheque = () => {
                   transform: `scale(${draggingImage === index ? '0.9' : '1'})`,
                 }}
                 onClick={(e) => handleZoomImage(index, e)}
-                title="Agrandir l'image"
+                title={('Agrandir l\'image')}
                 onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                 onMouseLeave={(e) => e.currentTarget.style.transform = `scale(${draggingImage === index ? '0.9' : '1'})`}
               >
@@ -654,7 +657,7 @@ const Phototheque = () => {
               <button 
                 style={styles.resetButton}
                 onClick={(e) => resetImagePosition(index, e)}
-                title="Réinitialiser la position"
+                title={('Réinitialiser la position')}
               >
                 <span>↺</span>
               </button>
@@ -720,7 +723,7 @@ const Phototheque = () => {
                     transform: `scale(${draggingImage === index ? '0.9' : '1'})`,
                   }}
                   onClick={(e) => handleZoomImage(index, e)}
-                  title="Agrandir l'image"
+                  title={('Agrandir l\'image')}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = `scale(${draggingImage === index ? '0.9' : '1'})`}
                 >
@@ -730,7 +733,7 @@ const Phototheque = () => {
                 <button 
                   style={styles.resetButton}
                   onClick={(e) => resetImagePosition(index, e)}
-                  title="Réinitialiser la position"
+                  title={('Réinitialiser la position')}
                 >
                   <span>↺</span>
                 </button>
@@ -762,22 +765,16 @@ const Phototheque = () => {
   return (
     <div style={styles.container}>
       {/* En-tête avec titre bien visible */}
-      <div style={{ ...styles.header, backgroundColor: '#1C1C47' }}> {/* Couleur de fond modifiée */}
+      <div style={{ ...styles.header, backgroundColor: '#1C1C47' }}>
   <div style={styles.headerContent}>
-    <h1 style={{ ...styles.title, paddingTop: '50px', color: '#f0f0f0' }}> {/* Augmenter le padding-top ici */}
-      Photothèque
+    <h1 style={{ ...styles.title, paddingTop: '80px', color: '#f0f0f0' }}> {/* Augmenter le padding-top pour plus d'espacement */}
+      {t('Phototheque')}
     </h1>
-    <p style={{ ...styles.subtitle, color: '#d1d1d1' }}> {/* Changer la couleur du sous-titre */}
-      Découvrez notre collection de photos illustrant les activités et événements de notre fondation
+    <p style={{ ...styles.subtitle, color: '#d1d1d1' }}>
+    {t('Découvrez notre collection de photos illustrant les activités et événements de notre fondation')}
     </p>
   </div>
 </div>
-
-
-
-
-
-
       <div style={styles.content}>
         {/* Barre d'outils simplifiée avec uniquement la recherche */}
         <div style={styles.toolbar}>
@@ -785,7 +782,7 @@ const Phototheque = () => {
             <span style={styles.searchIcon}>🔍</span>
             <input
               type="text"
-              placeholder="Rechercher des photos..."
+              placeholder={t('Rechercher des photos...')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={styles.searchInput}
@@ -799,7 +796,7 @@ const Phototheque = () => {
                 ...styles.viewModeButton,
                 ...(viewMode === "grid" ? styles.activeViewMode : {})
               }}
-              title="Vue grille"
+              title={('Vue grille')}
             >
               {/* Icône grille */}
               <span style={{ fontSize: '18px' }}>⊞</span>
@@ -810,7 +807,7 @@ const Phototheque = () => {
                 ...styles.viewModeButton,
                 ...(viewMode === "timeline" ? styles.activeViewMode : {})
               }}
-              title="Vue chronologique"
+              title={('Vue chronologique')}
             >
               {/* Icône chronologique */}
               <span style={{ fontSize: '18px' }}>≡</span>
@@ -842,7 +839,7 @@ const Phototheque = () => {
               <button 
                 style={styles.closeZoomButton}
                 onClick={closeZoomedImage}
-                title="Fermer"
+                title={('Fermer')}
               >
                 ✖
               </button>

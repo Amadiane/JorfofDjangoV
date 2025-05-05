@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Video, Search, RefreshCw, AlertCircle, X, Play } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Videotheque = () => {
+  const { t } = useTranslation();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -84,38 +86,40 @@ const Videotheque = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* En-tête avec barre de recherche */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-              <Video className="mr-2 text-blue-600" />
-              Vidéothèque
-            </h1>
-            
-            <div className="w-full md:w-auto flex space-x-2">
-              <div className="relative flex-grow">
-                <input
-                  type="text"
-                  placeholder="Rechercher une vidéo..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
-              </div>
-              
-              <button 
-                onClick={fetchVideos}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-200"
-              >
-                <RefreshCw size={18} className="mr-1" />
-                <span className="hidden sm:inline">Actualiser</span>
-              </button>
+      {/* En-tête avec barre de recherche - style centré inspiré de Partner */}
+      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white py-4 px-4 md:py-8 lg:py-12 shadow-md">
+        <div className="max-w-7xl mx-auto pt-16 text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex items-center justify-center">
+            <Video className="mr-3 text-white" />
+            {t('Vidéothèque')}
+          </h1>
+          <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90 mb-8">
+            {t('Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d\'apprentissage.')}
+          </p>
+          
+          {/* Barre de recherche centré en position responsive */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xl mx-auto">
+            <div className="relative w-full sm:flex-grow">
+              <input
+                type="text"
+                placeholder={t('Rechercher une vidéo...')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full py-3 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <Search className="absolute left-3 top-3.5 text-gray-400" size={18} />
             </div>
+            
+            <button 
+              onClick={fetchVideos}
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-200"
+            >
+              <RefreshCw size={18} className="mr-2" />
+              <span>{t('Actualiser')}</span>
+            </button>
           </div>
         </div>
-      </div>
+      </header>
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Vidéo sélectionnée */}
@@ -136,14 +140,14 @@ const Videotheque = () => {
               </div>
               
               <div className="p-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <h3 className="text-lg font-medium text-gray-800">{selectedVideo.titre}</h3>
                   <button
                     onClick={() => handlePlayVideo(selectedVideo)}
                     className="bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded flex items-center"
                   >
                     <Play size={16} className="mr-1" />
-                    Plein écran
+                    {t('Plein écran')}
                   </button>
                 </div>
               </div>
@@ -155,13 +159,13 @@ const Videotheque = () => {
 
         <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
           <Video className="mr-2 text-blue-600" />
-          {selectedVideo ? "Autres vidéos" : "Toutes les vidéos"}
+          {selectedVideo ? t("Autres vidéos") : t("Toutes les vidéos")}
         </h3>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-            <p className="text-gray-600 font-medium">Chargement des vidéos...</p>
+            <p className="text-gray-600 font-medium">{t('Chargement des vidéos...')}</p>
           </div>
         ) : error ? (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
@@ -174,7 +178,7 @@ const Videotheque = () => {
               className="mt-4 text-red-600 hover:text-red-800 font-medium flex items-center"
             >
               <RefreshCw size={16} className="mr-1" />
-              Réessayer
+              {t('Réessayer')}
             </button>
           </div>
         ) : (
@@ -204,22 +208,22 @@ const Videotheque = () => {
                       </div>
                     </div>
                     
-                    <div className="p-4 flex justify-between items-center">
+                    <div className="p-4 flex flex-col sm:flex-row justify-between items-center gap-2">
                       <button 
                         onClick={() => handleVideoSelect(video)}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center w-full sm:w-auto justify-center sm:justify-start"
                       >
-                        Voir la vidéo
+                        {t('Voir la vidéo')}
                       </button>
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
                           handlePlayVideo(video);
                         }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 px-3 rounded flex items-center"
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 px-3 rounded flex items-center w-full sm:w-auto justify-center"
                       >
                         <Play size={14} className="mr-1" />
-                        Plein écran
+                        {t('Plein écran')}
                       </button>
                     </div>
                   </div>
@@ -229,40 +233,29 @@ const Videotheque = () => {
                   <Search size={48} className="mb-4 opacity-30" />
                   {searchTerm ? (
                     <>
-                      <p className="text-lg font-medium mb-2">Aucun résultat trouvé pour "{searchTerm}"</p>
+                      <p className="text-lg font-medium mb-2">{t('Aucun résultat trouvé pour ')}"{searchTerm}"</p>
                       <button 
                         onClick={() => setSearchTerm('')}
                         className="text-blue-600 hover:text-blue-800 font-medium mt-2"
                       >
-                        Effacer la recherche
+                        {t('Effacer la recherche')}
                       </button>
                     </>
                   ) : (
-                    <p className="text-lg font-medium">Aucune vidéo disponible.</p>
+                    <p className="text-lg font-medium">{t('Aucune vidéo disponible.')}</p>
                   )}
                 </div>
               )}
             </div>
-            
-           {/* {filteredVideos.length > 0 && (
-              <div className="mt-6 text-gray-600 text-center">
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Réinitialiser la recherche
-                </button>
-              </div>
-            )}*/}
           </>
         )}
       </div>
 
       {/* Modal vidéo */}
       {showModal && selectedVideo && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-3xl p-6 relative">
-            <button onClick={closeModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-3xl p-4 sm:p-6 relative">
+            <button onClick={closeModal} className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-600 hover:text-gray-800 bg-white rounded-full p-1">
               <X size={20} />
             </button>
             <div className="aspect-w-16 aspect-h-9 w-full">
@@ -282,6 +275,24 @@ const Videotheque = () => {
           </div>
         </div>
       )}
+
+      {/* Footer CTA */}
+      <div className="bg-white py-16 text-black">
+        <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            {t('Explorez notre collection de vidéos')}
+          </h2>
+          <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+            {t('Découvrez des contenus éducatifs innovants pour enrichir votre expérience d\'apprentissage et développer de nouvelles compétences.')}
+          </p>
+          <button
+            onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
+            className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white hover:opacity-90 transition px-8 py-4 rounded-full font-semibold text-lg"
+          >
+            {t('Découvrir les vidéos')}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

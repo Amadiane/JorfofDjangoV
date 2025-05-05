@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const Document = () => {
+  const { t } = useTranslation();  // Initialisation du hook de traduction
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -170,38 +172,18 @@ const Document = () => {
         boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
         background: 'linear-gradient(135deg, #1C1C47 0%, #1C1C47 100%)',
       }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto', // Centrer
-        }}>
-          {/* Titre extrêmement visible */}
-          <h1 style={{
-            fontSize: windowWidth <= 768 ? '40px' : '56px',
-            fontWeight: '800',
-            margin: '0 0 15px 0',
-            textShadow: '0 2px 10px rgba(0,0,0,0.3)',
-            letterSpacing: '1px',
-            lineHeight: '1.2',
-          }}>
-            FONDATION DOCUMENTS
-          </h1>
-          <div style={{
-            width: '80px',
-            height: '4px',
-            backgroundColor: 'white',
-            margin: '0 auto 20px',
-            borderRadius: '2px',
-          }}></div>
-          <p style={{
-            fontSize: windowWidth <= 768 ? '18px' : '20px',
-            opacity: '0.9',
-            maxWidth: '800px',
-            margin: '0 auto', // Centrer
-            fontWeight: '400',
-          }}>
-            Centre de documentation officiel
-          </p>
-        </div>
+        <div className="pt-16">
+    {/* Titre principal très visible */}
+    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-wide text-shadow-xl">{t('FONDATION DOCUMENTS')}</h1>
+
+    {/* Barre sous le titre */}
+    <div className="w-24 h-1 bg-white mx-auto mb-6 rounded-full"></div>
+
+    {/* Description */}
+    <p className="max-w-3xl mx-auto text-base md:text-lg opacity-90 font-light">
+      {t('Centre de documentation officiel')}
+    </p>
+  </div>
       </header>
 
             {/* Zone principale */}
@@ -232,7 +214,7 @@ const Document = () => {
               fontWeight: '600',
               margin: windowWidth <= 768 ? '0 0 15px 0' : '0',
             }}>
-              Documents disponibles
+              {t('Documents disponibles')}
             </h2>
             
             <div style={{ 
@@ -261,7 +243,7 @@ const Document = () => {
                   width: windowWidth <= 768 ? '100%' : 'auto',
                 }}
               >
-                {viewMode === 'grid' ? '📱 Vue Liste' : '📊 Vue Grille'}
+                {viewMode === 'grid' ? `📱 ${t('Vue Liste')}` : `📊 ${t('Vue Grille')}`}
               </button>
             </div>
           </div>
@@ -272,7 +254,7 @@ const Document = () => {
           }}>
             <input 
               type="text" 
-              placeholder="Rechercher un document..."
+              placeholder={t('Rechercher un document...')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
@@ -321,7 +303,7 @@ const Document = () => {
                   animation: 'spin 1s linear infinite',
                   marginBottom: '15px',
                 }}></div>
-                <p style={{ fontSize: '17px', color: '#666' }}>Chargement des documents...</p>
+                <p style={{ fontSize: '17px', color: '#666' }}>{t('Chargement des documents...')}</p>
               </div>
               <style>
                 {`
@@ -360,8 +342,8 @@ const Document = () => {
               border: '1px dashed #ccc',
             }}>
               <div>
-                <p style={{ fontSize: '18px', color: '#555', margin: '0 0 10px 0' }}>Aucun document trouvé</p>
-                <p style={{ fontSize: '16px', color: '#777', margin: '0' }}>Essayez de modifier votre recherche</p>
+                <p style={{ fontSize: '18px', color: '#555', margin: '0 0 10px 0' }}>{t('Aucun document trouvé')}</p>
+                <p style={{ fontSize: '16px', color: '#777', margin: '0' }}>{t('Essayez de modifier votre recherche')}</p>
               </div>
             </div>
           )}
@@ -543,7 +525,7 @@ const Document = () => {
                         }}
                       >
                         <span style={{ marginRight: '8px' }}>📄</span>
-                        Télécharger
+                        {t('Télécharger')}
                       </a>
                     </div>
                   </div>

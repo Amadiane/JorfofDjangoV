@@ -10,10 +10,10 @@ const NotreEquipe = () => {
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté avant de récupérer le message
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-      return;
-    }
+    // if (!localStorage.getItem('accessToken')) {
+    //   navigate('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    //   return;
+    // }
 
     const fetchMessage = async () => {
       try {

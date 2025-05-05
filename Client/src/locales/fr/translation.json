@@ -182,7 +182,113 @@
                                 "Nom de votre organisation": "Nom de votre organisation",
                                 "www.votresite.com": "https://www.votresite.com",
                                 "Votre numéro de téléphone": "Votre numéro de téléphone",
-                                "Décrivez votre projet ou vos besoins en détail": "Décrivez votre projet ou vos besoins en détail"
+                                "Décrivez votre projet ou vos besoins en détail": "Décrivez votre projet ou vos besoins en détail",
+
+
+                                
+                                    "Vidéothèque": "Vidéothèque",
+                                    "Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage.": "Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage.",
+                                    "Rechercher une vidéo...": "Rechercher une vidéo...",
+                                    "Actualiser": "Actualiser",
+                                    "Chargement des vidéos...": "Chargement des vidéos...",
+                                    "Réessayer": "Réessayer",
+                                    "Autres vidéos": "Autres vidéos",
+                                    "Toutes les vidéos": "Toutes les vidéos",
+                                    "Voir la vidéo": "Voir la vidéo",
+                                    "Plein écran": "Plein écran",
+                                    "Aucun résultat trouvé pour": "Aucun résultat trouvé pour",
+                                    "Effacer la recherche": "Effacer la recherche",
+                                    "Aucune vidéo disponible.": "Aucune vidéo disponible.",
+                                    "Explorez notre collection de vidéos": "Explorez notre collection de vidéos",
+                                    "Découvrez des contenus éducatifs innovants pour enrichir votre expérience d'apprentissage et développer de nouvelles compétences.": "Découvrez des contenus éducatifs innovants pour enrichir votre expérience d'apprentissage et développer de nouvelles compétences.",
+                                    "Découvrir les vidéos": "Découvrir les vidéos",
+
+
+                                    
+                                        
+                                            "Phototheque":"Phototheque",
+                                            "Découvrez notre collection de photos illustrant les activités et événements de notre fondation": "Découvrez notre collection de photos illustrant les activités et événements de notre fondation",
+                                            "Rechercher des photos...": "Rechercher des photos...",
+                                            "Vue grille": "Vue grille",
+                                            "Vue chronologique": "Vue chronologique",
+                                            "Agrandir l'image": "Agrandir l'image",
+                                            "Réinitialiser la position": "Réinitialiser la position",
+                                            "Voir plus": "Voir plus",
+                                            "Voir moins": "Voir moins",
+                                            "Fermer": "Fermer",
+                                          
+
+
+
+                                            
+                                                "FONDATION DOCUMENTS": "FONDATION DOCUMENTS",
+                                                "Centre de documentation officiel": "Centre de documentation officiel",
+                                                "Documents disponibles": "Documents disponibles",
+                                                "Vue Liste": "Vue Liste",
+                                                "Vue Grille": "Vue Grille",
+                                                "Rechercher un document...": "Rechercher un document...",
+                                                "Télécharger": "Télécharger", 
+
+
+                                                
+                                                    "Erreur lors du chargement des plateformes": "Erreur lors du chargement des plateformes",
+                                                    "Notre écosystème de plateformes": "Notre écosystème de plateformes",
+                                                    "Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.": "Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.",
+                                                    "Aucune plateforme n'est disponible pour le moment.": "Aucune plateforme n'est disponible pour le moment.",
+                                                    "Image non disponible": "Image non disponible",
+                                                    "Pas de description disponible": "Pas de description disponible",
+                                                    "Ajouté le ": "Ajouté le ",
+                                                    "Visiter": "Visiter",
+
+
+                                                    
+                                                        "Nos Programmes": "Nos Programmes",
+                                                        "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.": "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.",
+                                                        "Rechercher un programme...": "Rechercher un programme...",
+                                                        "Rechercher un programme": "Rechercher un programme",
+                                                        "Chargement des programmes...": "Chargement des programmes...",
+                                                        "Erreur": "Erreur",
+                                                        "Aucun programme ne correspond à votre recherche.": "Aucun programme ne correspond à votre recherche.",
+                                                        "Effacer la recherche": "Effacer la recherche",
+                                                        "Réduire": "Réduire",
+                                                        "Lire plus": "Lire plus",
+                                                        "Intéressé par nos programmes ?": "Intéressé par nos programmes ?",
+                                                        "Rejoignez nos initiatives et contribuez à transformer l'éducation numérique avec la Fondation Tamkine.": "Rejoignez nos initiatives et contribuez à transformer l'éducation numérique avec la Fondation Tamkine.",
+                                                        "Nous contacter": "Nous contacter",
+                                                        "Erreur lors du chargement des programmes.": "Erreur lors du chargement des programmes.",
+
+
+
+                                                        
+                                                            "Actualités": "Actualités",
+                                                            "Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine": "Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine",
+                                                            "Rechercher un programme...": "Rechercher un programme...",
+                                                            "Effacer la recherche": "Effacer la recherche",
+                                                            "Chargement des actualités...": "Chargement des actualités...",
+                                                            "Erreur": "Erreur",
+                                                            "Erreur lors du chargement": "Erreur lors du chargement",
+                                                            "À LA UNE": "À LA UNE",
+                                                            "Dernière nouvelle": "Dernière nouvelle",
+                                                            "Pas d'image disponible": "Pas d'image disponible",
+                                                            "Réduire": "Réduire",
+                                                            "Lire plus": "Lire plus",
+                                                            "Nouvelles récentes": "Nouvelles récentes",
+                                                            "Aucune actualité ne correspond à votre recherche.": "Aucune actualité ne correspond à votre recherche.",
+                                                            "Aucune actualité disponible pour le moment.": "Aucune actualité disponible pour le moment.",
+                                                            "Lire moins": "Lire moins"
+                                                          
+                                                          
+                                                      
+                                                      
+                                                  
+                                                  
+                                              
+                                              
+                                      
+                                      
+                                  
+                                  
+                                  
                             
                               
                           

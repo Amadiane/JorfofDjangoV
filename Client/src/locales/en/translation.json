@@ -186,7 +186,114 @@
                 "Nom de votre organisation": "Your organization name",
                 "www.votresite.com": "https://www.yoursite.com",
                 "Votre numéro de téléphone": "Your phone number",
-                "Décrivez votre projet ou vos besoins en détail": "Describe your project or needs in detail"
+                "Décrivez votre projet ou vos besoins en détail": "Describe your project or needs in detail",
+
+
+                
+                
+                  "Vidéothèque": "Video Library",
+                  "Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage.": "Discover our collection of educational videos to enhance your learning experience.",
+                  "Rechercher une vidéo...": "Search for a video...",
+                  "Actualiser": "Refresh",
+                  "Chargement des vidéos...": "Loading videos...",
+                  "Réessayer": "Retry",
+                  "Autres vidéos": "Other videos",
+                  "Toutes les vidéos": "All videos",
+                  "Voir la vidéo": "Watch video",
+                  "Plein écran": "Full screen",
+                  "Aucun résultat trouvé pour": "No results found for",
+                  "Effacer la recherche": "Clear search",
+                  "Aucune vidéo disponible.": "No videos available.",
+                  "Explorez notre collection de vidéos": "Explore our collection of videos",
+                  "Découvrez des contenus éducatifs innovants pour enrichir votre expérience d'apprentissage et développer de nouvelles compétences.": "Discover innovative educational content to enhance your learning experience and develop new skills.",
+                  "Découvrir les vidéos": "Discover the videos",
+
+
+                  
+                    "Phototheque":"Photo Library",
+                    "Découvrez notre collection de photos illustrant les activités et événements de notre fondation": "Discover our collection of photos illustrating the foundation's activities and events",
+                    "Rechercher des photos...": "Search photos...",
+                    "Vue grille": "Grid view",
+                    "Vue chronologique": "Timeline view",
+                    "Agrandir l'image": "Enlarge image",
+                    "Réinitialiser la position": "Reset position",
+                    "Voir plus": "Show more",
+                    "Voir moins": "Show less",
+                    "Fermer": "Close",
+
+
+                    
+                      "FONDATION DOCUMENTS": "FOUNDATION DOCUMENTS",
+                      "Centre de documentation officiel": "Official documentation center",
+                      "Documents disponibles": "Available documents",
+                      "Vue Liste": "List View",
+                      "Vue Grille": "Grid View",
+                      "Rechercher un document...": "Search a document...",
+                       "Télécharger": "Download",
+
+
+
+                       
+                        "Erreur lors du chargement des plateformes": "Error loading platforms",
+                        "Notre écosystème de plateformes": "Our platform ecosystem",
+                        "Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.": "Discover the various platforms and initiatives of our foundation to maximize our collective impact.",
+                        "Aucune plateforme n'est disponible pour le moment.": "No platforms are available at the moment.",
+                        "Image non disponible": "Image unavailable",
+                        "Pas de description disponible": "No description available",
+                        "Ajouté le ": "Added on ",
+                        "Visiter": "Visit",
+
+
+                        
+                          "Nos Programmes": "Our Programs",
+                          "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.": "Discover the different programs and initiatives of our foundation to maximize our collective impact.",
+                          "Rechercher un programme...": "Search for a program...",
+                          "Rechercher un programme": "Search for a program",
+                          "Chargement des programmes...": "Loading programs...",
+                          "Erreur": "Error",
+                          "Aucun programme ne correspond à votre recherche.": "No program matches your search.",
+                          "Effacer la recherche": "Clear search",
+                          "Réduire": "Collapse",
+                          "Lire plus": "Read more",
+                          "Intéressé par nos programmes ?": "Interested in our programs?",
+                          "Rejoignez nos initiatives et contribuez à transformer l'éducation numérique avec la Fondation Tamkine.": "Join our initiatives and help transform digital education with the Tamkine Foundation.",
+                          "Nous contacter": "Contact us",
+                          "Erreur lors du chargement des programmes.": "Error loading programs.",
+
+
+                          
+                            "Actualités": "News",
+                            "Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine": "Discover the latest news and updates from the Tamkine Foundation",
+                            "Rechercher un programme...": "Search for a program...",
+                            "Effacer la recherche": "Clear search",
+                            "Chargement des actualités...": "Loading news...",
+                            "Erreur": "Error",
+                            "Erreur lors du chargement": "Error while loading",
+                            "À LA UNE": "FEATURED",
+                            "Dernière nouvelle": "Latest news",
+                            "Pas d'image disponible": "No image available",
+                            "Réduire": "Collapse",
+                            "Lire plus": "Read more",
+                            "Nouvelles récentes": "Recent news",
+                            "Aucune actualité ne correspond à votre recherche.": "No news matches your search.",
+                            "Aucune actualité disponible pour le moment.": "No news available at the moment.",
+                            "Lire moins": "Read less"
+                          
+                          
+                        
+                        
+                      
+                      
+                      
+                    
+                    
+                
+                  
+                  
+
+
+                  
+                
 
 
             

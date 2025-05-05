@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
+
 
 const Platforms = () => {
+  const { t } = useTranslation();  // Initialisation du hook de traduction
   const [platforms, setPlatforms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,7 +52,7 @@ const Platforms = () => {
   if (error) {
     return (
       <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        <p>Erreur lors du chargement des plateformes: {error}</p>
+        <p> {t('Erreur lors du chargement des plateformes:')} {error}</p>
       </div>
     );
   }
@@ -67,11 +70,11 @@ const Platforms = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Notre écosystème de plateformes
+              {t('Notre écosystème de plateformes')}
             </h1>
             <div className="w-20 h-1 bg-yellow-400 mx-auto mb-6"></div>
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
-              Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.
+              {t('Découvrez les différentes plateformes et initiatives de notre fondation pour maximiser notre impact collectif.')}
             </p>
           </div>
         </div>
@@ -83,7 +86,7 @@ const Platforms = () => {
             <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <p className="text-lg font-medium">Aucune plateforme n'est disponible pour le moment.</p>
+            <p className="text-lg font-medium">{t('Aucune plateforme n\'est disponible pour le moment.')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -122,7 +125,7 @@ const Platforms = () => {
                       <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                       </svg>
-                      <p className="text-gray-500 ml-2">Image non disponible</p>
+                      <p className="text-gray-500 ml-2">{t('Image non disponible')}</p>
                     </div>
                   )}
 
@@ -147,12 +150,12 @@ const Platforms = () => {
                         )}*/}
                       </div>
                     ) : (
-                      <p className="text-gray-400 italic mb-6">Pas de description disponible</p>
+                      <p className="text-gray-400 italic mb-6">{t('Pas de description disponible')}</p>
                     )}
 
                     <div className="flex justify-between items-center border-t pt-4 mt-2">
                       <span className="text-xs text-gray-500">
-                        Ajouté le {formattedDate}
+                        {t('Ajouté le ')}{formattedDate}
                       </span>
                       
                       <a
@@ -161,7 +164,7 @@ const Platforms = () => {
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-4 py-2 bg-[#1C1C47] text-white rounded-md hover:bg-[#3b3b82] transition-colors text-sm font-medium shadow-md hover:shadow-lg"
                       >
-                        Visiter
+                       {t('Visiter')}
                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>

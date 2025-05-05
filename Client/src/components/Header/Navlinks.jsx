@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Search, Bell, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import logo from "../../assets/logo.png";
-import { useTranslation } from 'react-i18next'; // Importation de useTranslation
-
+import { useTranslation } from 'react-i18next';
 
 const Navlinks = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -12,14 +11,11 @@ const Navlinks = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const { i18n, t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language || 'fr');
- // Ajout de la langue sélectionnée
-  // const { t, i18n } = useTranslation("home"); // Utilisation du hook useTranslation
   const navigate = useNavigate();
 
   useEffect(() => {
     setLanguage(i18n.language);
   }, [i18n.language]);
-  
   
   // Refs for dropdown menus
   const dropdownRefs = useRef({});
@@ -49,7 +45,7 @@ const Navlinks = () => {
   const handleLeave = (section) => {
     timeoutRef.current = setTimeout(() => {
       setActiveSection(null);
-    }, 300);
+    }, 800); // Temps augmenté à 800ms pour donner plus de temps à l'utilisateur
   };
 
   const handleDropdownMouseEnter = () => {
@@ -62,7 +58,7 @@ const Navlinks = () => {
   const handleDropdownMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveSection(null);
-    }, 300);
+    }, 800); // Temps augmenté à 800ms pour plus de temps de réaction
   };
 
   const toggleSearch = () => {
@@ -73,13 +69,11 @@ const Navlinks = () => {
     setMobileMenuOpen(prev => !prev);
   };
 
-
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     setLanguage(lang);
   };
   
-
   const navItems = [
     {
       title: t("home"),
@@ -150,7 +144,7 @@ const Navlinks = () => {
       return (
         <div 
           ref={el => dropdownRefs.current[item.id] = el}
-          className="absolute bg-white shadow-xl rounded-lg mt-2 py-3 px-4 border border-gray-200 transition-all duration-300 ease-in-out opacity-100 w-64 left-0 z-1000"
+          className="absolute bg-white shadow-xl rounded-lg mt-2 py-3 px-4 border border-gray-200 transition-all duration-300 ease-in-out opacity-100 w-64 transform -translate-x-1/2 left-1/2 z-50 text-base font-normal"
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
         >
@@ -158,7 +152,7 @@ const Navlinks = () => {
             <NavLink 
               key={index}
               to={dropItem.path} 
-              className="block py-3 text-sm text-black hover:text-[#12138B] hover:bg-gray-50 hover:pl-2 rounded transition-all duration-200 flex items-center group"
+              className="block py-3 text-base text-black hover:text-[#12138B] hover:bg-gray-50 hover:pl-2 rounded transition-all duration-200 flex items-center group font-medium"
             >
               <ChevronRight size={14} className="mr-1 text-[#12138B] opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               {dropItem.title}
@@ -269,6 +263,7 @@ const Navlinks = () => {
             className="relative"
             onMouseEnter={() => handleHover(item.id)}
             onMouseLeave={() => handleLeave(item.id)}
+            onClick={() => handleHover(item.id)} // Ajout d'un gestionnaire de clic pour les appareils tactiles
           >
             <NavLink 
               to={item.path}
@@ -280,6 +275,58 @@ const Navlinks = () => {
           </div>
         ))}
       </div>
+      
+      {/* Menu mobile */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-lg absolute left-0 right-0 top-16 z-40 border-t border-gray-200">
+          <div className="py-3 px-4">
+            {navItems.map((item, index) => (
+              <div key={index} className="border-b border-gray-100 last:border-b-0">
+                {item.isDropdown ? (
+                  <div className="py-3">
+                    <div 
+                      className="flex justify-between items-center text-gray-700 font-medium" 
+                      onClick={() => setActiveSection(activeSection === item.id ? null : item.id)}
+                    >
+                      <span>{item.title}</span>
+                      <ChevronDown size={16} className={`transform transition-transform ${activeSection === item.id ? 'rotate-180' : ''}`} />
+                    </div>
+                    
+                    {activeSection === item.id && (
+                      <div className="mt-2 pl-4 space-y-2">
+                        {item.dropdownItems.map((dropItem, idx) => (
+                          <NavLink 
+                            key={idx} 
+                            to={dropItem.path}
+                            className="block py-2 text-sm text-gray-600 hover:text-[#12138B]"
+                          >
+                            {dropItem.title}
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <NavLink 
+                    to={item.path}
+                    className="block py-3 text-gray-700 font-medium hover:text-[#12138B]"
+                  >
+                    {item.title}
+                  </NavLink>
+                )}
+              </div>
+            ))}
+            
+            <div className="mt-4 pt-3 border-t border-gray-200">
+              <div className="flex justify-center space-x-4">
+                <button onClick={() => changeLanguage('fr')} className={`px-3 py-1 rounded ${language === 'fr' ? 'bg-[#12138B] text-white' : 'bg-gray-100'}`}>FR</button>
+                <button onClick={() => changeLanguage('en')} className={`px-3 py-1 rounded ${language === 'en' ? 'bg-[#12138B] text-white' : 'bg-gray-100'}`}>EN</button>
+                <button onClick={() => changeLanguage('ar')} className={`px-3 py-1 rounded ${language === 'ar' ? 'bg-[#12138B] text-white' : 'bg-gray-100'}`}>AR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
