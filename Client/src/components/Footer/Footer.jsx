@@ -38,6 +38,10 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openGoogleMaps = () => {
+    window.open('https://www.google.com/maps/place/Fondation+Tamkine/@33.987616,-6.870142,13z/data=!4m6!3m5!1s0xda76b87cf228b79:0x10fae9b6f53ca782!8m2!3d33.9876158!4d-6.8701418!16s%2Fg%2F11g726s4z7?hl=fr&entry=ttu', '_blank');
+  };
+
   return (
     <footer className="bg-gradient-to-b from-[#1C1C47] to-[#15152E] text-white relative">
       <div className="container mx-auto px-4 lg:px-16 pt-12 pb-8">
@@ -108,10 +112,13 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-5 pb-2 border-b-2 border-blue-400 inline-block">
               {t("Notre Localisation")}
             </h4>
-            <div className="w-full rounded-lg overflow-hidden shadow-xl border border-gray-700 relative group">
+            <div 
+              className="w-full rounded-lg overflow-hidden shadow-xl border border-gray-700 relative group cursor-pointer"
+              onClick={openGoogleMaps}
+            >
               <iframe
                 title="Tamkine Location"
-                src="https://www.google.com/maps/embed?pb=..."
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma&markers=color:red%7C33.9876158,-6.8701418"
                 width="100%"
                 height="200"
                 style={{ border: 0 }}
@@ -119,8 +126,16 @@ const Footer = () => {
                 loading="lazy"
                 className="filter grayscale hover:grayscale-0 transition-all duration-500"
               ></iframe>
+              <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                <span className="text-white font-medium text-sm bg-blue-600 px-3 py-1 rounded-md shadow-lg">
+                  {t("Voir sur Google Maps")}
+                </span>
+              </div>
               <button
-                onClick={() => setShowMapModal(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMapModal(true);
+                }}
                 className="absolute bottom-3 right-3 bg-blue-600 text-white text-sm font-semibold px-3 py-1 rounded-md 
                 hover:bg-blue-500 transition duration-300 opacity-90 hover:opacity-100 shadow-md transform hover:scale-105"
               >
@@ -169,22 +184,49 @@ const Footer = () => {
 
       <Footerlastpart />
 
-          {/* MODALE Agrandir la carte */}
-          {showMapModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 backdrop-blur-sm transition-all">
-          <div className="bg-[#1C1C47] text-white p-8 rounded-xl shadow-2xl w-full sm:w-1/2 lg:w-1/3">
-            <div className="relative">
-            <iframe
-  title="Tamkine Location"
-  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma"
-  width="100%"
-  height="200"
-  style={{ border: 0 }}
-  allowFullScreen=""
-  loading="lazy"
-  className="filter grayscale hover:grayscale-0 transition-all duration-500"
-/>
-
+      {/* MODALE Agrandir la carte */}
+      {showMapModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4 backdrop-blur-sm transition-all"
+          onClick={() => setShowMapModal(false)}
+        >
+          <div 
+            className="bg-[#1C1C47] text-white p-6 rounded-xl shadow-2xl w-full sm:w-4/5 md:w-3/4 lg:w-2/3 max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">{t("Fondation Tamkine")}</h3>
+              <button 
+                onClick={() => setShowMapModal(false)}
+                className="text-gray-300 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="relative rounded-lg overflow-hidden">
+              <iframe
+                title="Tamkine Location"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma&markers=color:red%7C33.9876158,-6.8701418"
+                width="100%"
+                height="500"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                className="transition-all duration-500"
+              ></iframe>
+            </div>
+            <div className="mt-4 flex justify-between">
+              <div>
+                <p className="text-gray-300 text-sm">
+                  <strong>{t("Adresse")}:</strong> Rabat, Maroc
+                </p>
+              </div>
+              <button
+                onClick={openGoogleMaps}
+                className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-md transition-all duration-300"
+              >
+                {t("Ouvrir dans Google Maps")}
+              </button>
             </div>
           </div>
         </div>
