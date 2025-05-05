@@ -10,10 +10,10 @@ const ListePostulantsCommunity = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login');
-      return;
-    }
+    // if (!localStorage.getItem('accessToken')) {
+    //   navigate('/login');
+    //   return;
+    // }
 
     const fetchPostulants = async () => {
       try {

@@ -10,10 +10,10 @@ const ListPartners = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login');
-      return;
-    }
+    // if (!localStorage.getItem('accessToken')) {
+    //   navigate('/login');
+    //   return;
+    // }
 
     const fetchPartenaires = async () => {
       try {

@@ -10,10 +10,10 @@ const ListeContacts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login');
-      return;
-    }
+    // if (!localStorage.getItem('accessToken')) {
+    //   navigate('/login');
+    //   return;
+    // }
 
     const fetchContacts = async () => {
       try {
