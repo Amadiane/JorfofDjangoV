@@ -3,8 +3,10 @@ import ChatBot from '../ChatBot/ChatBot';
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import Blogdetail from '../Blogdetail/Blogdetail';
+import { useTranslation } from 'react-i18next';
 
 const Actualites = () => {
+  const { t } = useTranslation();
   const [blogs, setBlogs] = useState([]);
   const [latestPost, setLatestPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,17 +17,10 @@ const Actualites = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!localStorage.getItem('accessToken')) {
-    //   navigate('/login');
-    //   return;
-    // }
-
     const fetchBlogs = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/blog/');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         const sortedBlogs = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setBlogs(sortedBlogs);
@@ -50,15 +45,10 @@ const Actualites = () => {
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
-  const toggleFullContent = () => {
-    setShowFullContent(!showFullContent);
-  };
+  const toggleFullContent = () => setShowFullContent(!showFullContent);
 
   const toggleCardContent = (id) => {
-    setExpandedCards(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -73,13 +63,13 @@ const Actualites = () => {
           </div>
         ) : error ? (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-            <p>Erreur lors du chargement des actualités: {error}</p>
+            <p>{t('error_loading')} {error}</p>
           </div>
         ) : (
           <>
             <div className="text-center mb-12">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 inline-block relative">
-                Actualités
+                {t('news')}
                 <div className="h-1 w-24 bg-blue-600 mx-auto mt-2"></div>
               </h1>
             </div>
@@ -87,21 +77,17 @@ const Actualites = () => {
             {latestPost && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold mb-6 flex flex-wrap items-center justify-center md:justify-start">
-                  <span className="bg-red-600 text-white px-3 py-1 mr-3 mb-2 rounded">À LA UNE</span>
-                  L'actualité du moment
+                  <span className="bg-red-600 text-white px-3 py-1 mr-3 mb-2 rounded">{t('À LA UNE')}</span>
+                  {t('Dernière nouvelle')}
                 </h2>
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div className="flex flex-col md:flex-row">
                     <div className="w-full md:w-1/2">
                       {latestPost.image ? (
-                        <img
-                          src={latestPost.image}
-                          alt={latestPost.title}
-                          className="w-full h-64 sm:h-80 md:h-full object-cover"
-                        />
+                        <img src={latestPost.image} alt={latestPost.title} className="w-full h-64 sm:h-80 md:h-full object-cover" />
                       ) : (
                         <div className="w-full h-64 sm:h-80 md:h-full bg-gray-200 flex items-center justify-center">
-                          <p className="text-gray-500">Image non disponible</p>
+                          <p className="text-gray-500">{t('no_image')}</p>
                         </div>
                       )}
                     </div>
@@ -109,11 +95,7 @@ const Actualites = () => {
                       <div className="flex flex-col h-full">
                         <h3 className="text-xl font-bold mb-3">{latestPost.title}</h3>
                         <div className="flex-grow overflow-hidden">
-                          <p className={`text-gray-600 ${showFullContent ? '' : 'line-clamp-6 md:line-clamp-8 lg:text-base xl:text-lg'}`} 
-                             style={{
-                               fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-                               lineHeight: '1.6'
-                             }}>
+                          <p className={`text-gray-600 ${showFullContent ? '' : 'line-clamp-6 md:line-clamp-8 lg:text-base xl:text-lg'}`} style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', lineHeight: '1.6' }}>
                             {latestPost.content}
                           </p>
                         </div>
@@ -129,12 +111,12 @@ const Actualites = () => {
                         >
                           {showFullContent ? (
                             <>
-                              Réduire l'article
+                              {t('read_less')}
                               <ChevronUp size={16} className="ml-2" />
                             </>
                           ) : (
                             <>
-                              Lire l'article complet
+                              {t('read_more')}
                               <ChevronDown size={16} className="ml-2" />
                             </>
                           )}
@@ -147,22 +129,18 @@ const Actualites = () => {
             )}
 
             <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 text-center md:text-left">Actualités récentes</h2>
+              <h2 className="text-2xl font-bold mb-6 text-center md:text-left">{t('Nouvelles récentes')}</h2>
               {filteredBlogs.length === 0 ? (
-                <p className="text-gray-600">Aucun article ne correspond à votre recherche.</p>
+                <p className="text-gray-600">{t('no_match')}</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredBlogs.slice(1).map((blog) => (
                     <div key={blog.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
                       {blog.image ? (
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          className="h-48 w-full object-cover"
-                        />
+                        <img src={blog.image} alt={blog.title} className="h-48 w-full object-cover" />
                       ) : (
                         <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-                          <p className="text-gray-500">Image non disponible</p>
+                          <p className="text-gray-500">{t('no_image')}</p>
                         </div>
                       )}
                       <div className="p-4 flex flex-col flex-grow">
@@ -183,12 +161,12 @@ const Actualites = () => {
                           >
                             {expandedCards[blog.id] ? (
                               <>
-                                Réduire
+                                {t('collapse')}
                                 <ChevronUp size={14} className="ml-1" />
                               </>
                             ) : (
                               <>
-                                Lire plus
+                                {t('read')}
                                 <ChevronDown size={14} className="ml-1" />
                               </>
                             )}

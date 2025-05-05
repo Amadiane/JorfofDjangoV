@@ -1,0 +1,215 @@
+{
+    "home": "الرئيسية",
+    "tamkine": "تامكين",
+    "president_word": "كلمة الرئيس",
+    "foundation": "مؤسسة تامكين",
+    "values": "قيمنا",
+    "missions": "مهماتنا",
+    "team": "فريقنا",
+    "programs": "البرامج",
+    "news": "الأخبار",
+    "platforms": "المنصات",
+    "partner_activities": "أنشطة الشركاء",
+    "media": "الاتصال والإعلام",
+    "videotheque": "مكتبة الفيديو",
+    "phototheque": "مكتبة الصور",
+    "downloads": "التنزيلات",
+    "join_us": "انضم إلينا",
+    "contact_us": "اتصل بنا",
+    "community": "المجتمع",
+    "become_partner": "كن شريكاً",
+    "media_partners": "شركاء الإعلام",
+    "Nouvelles récentes": "الأخبار الحديثة",
+    "À LA UNE": "أهم الأخبار",
+    "Dernière nouvelle": "أحدث الأخبار",
+
+
+    "title": "الأخبار",
+    "featuredLabel": "الأبرز",
+    "featuredSubtitle": "العنوان الحالي",
+    "imageNotAvailable": "الصورة غير متوفرة",
+    "readFullArticle": "اقرأ المقال الكامل",
+    "collapseArticle": "إخفاء المقال",
+    "recentNews": "الأخبار الأخيرة",
+    "noMatch": "لا توجد مقالات مطابقة لبحثك.",
+    "readMore": "اقرأ المزيد",
+    "readLess": "إخفاء",
+    "loadError": "حدث خطأ أثناء تحميل الأخبار",
+
+    
+        "Nos Plateformes": "منصاتنا",
+        "Tutoring": "الدروس الخصوصية",
+        "Orientation": "التوجيه",
+        "Séminaires": "الندوات",
+        "Tamtech Connect": "تمكين الاتصال",
+        "JPOV": "JPOV",
+        "Bourses": "المنح الدراسية",
+        "À Propos": "عنّا",
+        "Qui sommes-nous ?": "من نحن؟",
+        "Contacter Tamkine": "اتصل بـ تمكين",
+        "Nous rejoindre": "انضم إلينا",
+        "Notre Localisation": "موقعنا",
+        "Agrandir": "تكبير",
+        "Restez informé": "ابقَ على اطلاع",
+        "Recevez les dernières actualités de la Fondation Tamkine": "احصل على آخر الأخبار من مؤسسة تمكين",
+        "S'abonner": "اشترك",
+        "Votre email": "بريدك الإلكتروني",
+        "Merci pour votre abonnement !": "شكرًا على اشتراكك!",
+        "Une erreur est survenue.": "حدث خطأ.",
+        "Erreur serveur, veuillez réessayer plus tard.": "خطأ في الخادم، يرجى المحاولة لاحقًا.",
+        "Fondation dédiée à l'éducation et au développement des compétences": "مؤسسة مكرسة للتعليم وتطوير المهارات",
+
+
+
+        
+        
+            "Contactez-nous": "اتصل بنا",
+            "Nous sommes à votre écoute et vous répondrons dans les meilleurs délais. N'hésitez pas à nous faire part de vos questions ou commentaires.": "نحن هنا للاستماع إليكم وسنرد في أقرب وقت ممكن. لا تترددوا في إخبارنا بأسئلتكم أو تعليقاتكم.",
+            "Nom complet": "الاسم الكامل",
+            "Votre nom et prénom": "اسمك الكامل",
+            "Email": "البريد الإلكتروني",
+            "votre.email@exemple.com": "البريد الإلكتروني@مثال.كوم",
+            "Sujet": "الموضوع",
+            "Objet de votre message": "موضوع رسالتك",
+            "Catégorie": "الفئة",
+            "Question générale": "استفسار عام",
+            "Support technique": "الدعم الفني",
+            "Facturation": "الفوترة",
+            "Partenariat": "الشراكة",
+            "Commentaires et suggestions": "التعليقات والاقتراحات",
+            "Message": "الرسالة",
+            "Détaillez votre demande ici...": "قم بتفصيل طلبك هنا...",
+            "Envoyer le message": "إرسال الرسالة",
+            "Envoi en cours...": "إرسال جاري...",
+            "Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.": "تم إرسال رسالتك بنجاح. سنرد عليك في أقرب وقت ممكن.",
+            "Une erreur est survenue lors de l'envoi du message.": "حدث خطأ أثناء إرسال الرسالة.",
+            "Erreur de connexion au serveur, veuillez réessayer plus tard.": "خطأ في الاتصال بالخادم، يرجى المحاولة مرة أخرى لاحقًا.",
+            "Vos données personnelles ne seront utilisées que pour répondre à votre demande et ne seront pas partagées avec des tiers.": "سيتم استخدام بياناتك الشخصية فقط للرد على طلبك ولن يتم مشاركتها مع أطراف ثالثة.",
+            "contact@tamkine.org": "contact@tamkine.org", 
+                "Téléphone": "الهاتف",
+                "Heures d'ouverture": "ساعات العمل",
+                "Lun - Ven: 9h - 18h": "الاثنين - الجمعة: 9 صباحًا - 6 مساءً",
+
+
+
+
+                
+                    "Nos Partenaires Médias": "شركاؤنا الإعلاميون",
+                    "Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.": "اكتشف المنظمات الإعلامية التي تدعم مهمة ومبادرات مؤسسة تمكين.",
+                    "Filtrer par catégorie": "تصفية حسب الفئة",
+                    "Chargement des partenaires...": "جارٍ تحميل الشركاء...",
+                    "Réessayer": "إعادة المحاولة",
+                    "Aucun partenaire trouvé pour cette catégorie.": "لم يتم العثور على شريك لهذه الفئة.",
+                    "Aucune image": "لا توجد صورة",
+                    "Localisation:": "الموقع:",
+                    "Établi:": "تأسس:",
+                    " Visiter le site": "زيارة الموقع",
+                    " Site non disponible": "الموقع غير متوفر",
+
+
+
+                    
+                        "Communauté Tamkine": "مجتمع تمكين",
+                        "Ensemble pour une éducation de qualité pour tous": "معاً من أجل تعليم عالي الجودة للجميع",
+                        "Notre Communauté": "مجتمعنا",
+                        "Le nombre des membres de la Communauté Tamkine connait une multiplication continue": "عدد أعضاء مجتمع تمكين في تزايد مستمر ",
+                        "La Communauté Tamkine regroupe :": "يضم مجتمع تمكين:",
+                        "Les élèves de toutes origines [...]": "الطلاب من جميع الخلفيات [...]",
+                        "Les parents de ces élèves ;": "أولياء أمور هؤلاء الطلاب؛",
+                        "Les instituteurs, enseignants, inspecteurs [...]": "المعلمين والمفتشين [...]",
+                        "Les entités de gestion et d'administration éducative ;": "الجهات المسؤولة عن الإدارة التعليمية؛",
+                        "La Société Civile ;": "المجتمع المدني؛",
+                        "Des citoyens du monde entier.": "مواطنون من جميع أنحاء العالم.",
+                        "Bénéficier de la carte de membre de la Communauté Tamkine": "الاستفادة من بطاقة عضوية مجتمع تمكين تمنحك الوصول إلى العديد من المزايا.",
+                        "Être membre de la Famille Tamkine, c'est tout d'abord et avant tout démontrer [...]": "أن تكون عضواً في عائلة تمكين يعني أولاً وقبل كل شيء إظهار [...]",
+                        "N'attendez plus, venez nous rejoindre [...]": "لا تنتظر أكثر، انضم إلينا [...]",
+                        "L'éducation est la pierre angulaire du développement [...] ": "التعليم هو حجر الأساس للتنمية [...]",
+                        "Rejoignez la Communauté Tamkine": "انضم إلى مجتمع تمكين",
+                        "Nom *": "الاسم العائلي *",
+                        "Prénom *": "الاسم الشخصي *",
+                        "Rôle *": "الدور *",
+                        "-- Sélectionnez votre rôle --": "-- اختر دورك --",
+                        "Enseignant": "مدرس",
+                        "Parent d'élève": "ولي أمر",
+                        "Élève": "طالب",
+                        "Autre": "آخر",
+                        "Téléphone * ": "الهاتف *",
+                        "J'accepte les conditions générales CNDP": "أوافق على الشروط العامة للمركز الوطني للنشر والتوثيق",
+                        "Envoyer": "إرسال",
+                        "Votre demande d'adhésion a été envoyée avec succès !": "تم إرسال طلب الانضمام بنجاح!",
+                        "Erreur :": "خطأ:",
+                        "Vérifiez les champs du formulaire.": "تحقق من الحقول في النموذج.",
+                        "Une erreur est survenue lors de l'envoi du formulaire.": "حدث خطأ أثناء إرسال النموذج.",
+
+
+
+                        
+                            "Prêt à rejoindre notre communauté ?": "هل أنتم مستعدون للانضمام إلى مجتمعنا؟",
+                            "Transformez votre approche éducative et bénéficiez d'un accompagnement personnalisé pour intégrer efficacement les solutions numériques.": "حوّلوا نهجكم التعليمي واستفيدوا من الدعم المخصص لدمج الحلول الرقمية بشكل فعال.",
+                            "Devenir partenaire": "كن شريكًا",
+                            "Nos Partenaires Médias": "شركاؤنا الإعلاميون",
+                            "Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.": "اكتشفوا المنظمات الإعلامية التي تدعم مهمة ومبادرات مؤسسة تمكين.",
+                            "Les avantages de notre partenariat": "مزايا شراكتنا",
+                            "Formation & Certification": "التدريب والشهادات",
+                            "Formation complète et certification des enseignants assurées dans le cadre du partenariat.": "تدريب كامل وشهادات للمعلمين يتم توفيرها كجزء من الشراكة.",
+                            "Encadrement pédagogique": "الدعم التربوي",
+                            "Bénéficiez d'un accompagnement personnalisé par nos experts en éducation numérique.": "احصلوا على الدعم المخصص من خبرائنا في التعليم الرقمي.",
+                            "Outils numériques": "الأدوات الرقمية",
+                            "Accès à des outils et ressources numériques innovants pour transformer l'expérience d'apprentissage.": "الوصول إلى الأدوات والموارد الرقمية المبتكرة لتحويل تجربة التعلم.",
+                            "Réseau professionnel": "الشبكة المهنية",
+                            "Intégrez un réseau dynamique de partenaires et participez à des événements exclusifs.": "انضموا إلى شبكة ديناميكية من الشركاء وشاركوا في أحداث حصرية.",
+                            "Visibilité médiatique": "الرؤية الإعلامية",
+                            "Opportunités de promotion via nos canaux de communication et médias partenaires.": "فرص الترويج من خلال قنوات الاتصال ووسائل الإعلام الشريكة لدينا.",
+                            "Support technique": "الدعم الفني",
+                            "Assistance technique et maintenance continue pour tous vos projets numériques.": "الدعم الفني والصيانة المستمرة لجميع مشاريعكم الرقمية.",
+                            "Devenez notre partenaire": "كن شريكًا معنا",
+                            "Bénéficiez de tous les avantages, outils et accompagnements numériques que nous mettrons à votre disposition.": "استفيدوا من جميع المزايا والأدوات والدعم الرقمي الذي سنوفره لكم.",
+                            "En effet, collaborer avec la Fondation Tamkine, c'est bénéficier d'un accompagnement immédiat à tous les niveaux :": "بالفعل، التعاون مع مؤسسة تمكين يعني الحصول على دعم فوري على جميع المستويات:",
+                            "Formation, certification et encadrement des enseignants sont assurés dans le cadre de ce partenariat.": "يتم توفير التدريب والشهادات ودعم المعلمين كجزء من هذه الشراكة.",
+                            "Votre demande a été envoyée avec succès. Nos équipes vous contacteront très prochainement.": "تم إرسال طلبكم بنجاح. سيتواصل معكم فريقنا قريبًا.",
+                            "Rôle": "الدور",
+                            "Sélectionnez votre rôle": "اختر دورك",
+                            "Enseignant": "معلم",
+                            "Parent d'élève": "ولي أمر",
+                            "Élève": "طالب",
+                            "Autre": "آخر",
+                            "Nom": "الاسم الأخير",
+                            "Votre nom": "اسمك الأخير",
+                            "Prénom": "الاسم الأول",
+                            "Votre prénom": "اسمك الأول",
+                            "Organisation": "المنظمة *",
+                            "En effet, collaborer avec la Fondation Tamkine, c'est bénéficier d'un accompagnement immédiat à tous les niveaux :": "بالفعل، التعاون مع مؤسسة تمكين يعني الحصول على دعم فوري على جميع المستويات:",
+                            "Prénom *": "الاسم الأول *",
+                            "Organisation": "المنظمة",
+                            "Site web": "الموقع الإلكتروني",
+                            
+                                "Envoi en cours...": "جاري الإرسال...",
+                                "Envoyer ma demande": "إرسال طلبي", 
+                                
+                                    "votre@email.com": "بريدك@الإلكتروني.com",
+                                    "Nom de votre organisation": "اسم منظمتك",
+                                    "www.votresite.com": "https://www.موقعك.com",
+                                    "Votre numéro de téléphone": "رقم هاتفك",
+                                    "Décrivez votre projet ou vos besoins en détail": "وصف مشروعك أو احتياجاتك بالتفصيل"
+                                  
+                                  
+                              
+                              
+                          
+                          
+              
+              
+          
+          
+          
+          
+          
+          
+          
+      
+      
+      
+        
+      
+  }
+  

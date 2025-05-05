@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const Partner = () => {
+  const { t } = useTranslation();  // Initialisation du hook de traduction
   // État initial du formulaire
   const [form, setForm] = useState({
     first_name: '',
@@ -115,9 +117,9 @@ const Partner = () => {
     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
       <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-4 px-4 md:py-8 lg:py-12 shadow-md">
   <div className="pt-16">
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Nos Partenaires Médias</h1>
+    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Nos Partenaires Médias')}</h1>
     <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90">
-      Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.
+      {t('Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.')}
     </p>
   </div>
 </header>
@@ -125,39 +127,39 @@ const Partner = () => {
       {/* Avantages section */}
       <div className="container mx-auto px-4 md:px-8 max-w-6xl py-16">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-[#12138B] mb-12">
-          Les avantages de notre partenariat
+          {t('Les avantages de notre partenariat')}
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
-              title: "Formation & Certification",
-              description: "Formation complète et certification des enseignants assurées dans le cadre du partenariat.",
+              title: t('Formation & Certification'),
+              description: t('Formation complète et certification des enseignants assurées dans le cadre du partenariat.'),
               icon: "🎓"
             },
             {
-              title: "Encadrement pédagogique",
-              description: "Bénéficiez d'un accompagnement personnalisé par nos experts en éducation numérique.",
+              title: t('Encadrement pédagogique'),
+              description: t('Bénéficiez d\'un accompagnement personnalisé par nos experts en éducation numérique.'),
               icon: "👨‍🏫"
             },
             {
-              title: "Outils numériques",
-              description: "Accès à des outils et ressources numériques innovants pour transformer l'expérience d'apprentissage.",
+              title: t('Outils numériques'),
+              description: t('Accès à des outils et ressources numériques innovants pour transformer l\'expérience d\'apprentissage.'),
               icon: "💻"
             },
             {
-              title: "Réseau professionnel",
-              description: "Intégrez un réseau dynamique de partenaires et participez à des événements exclusifs.",
+              title: t('Réseau professionnel'),
+              description: t('Intégrez un réseau dynamique de partenaires et participez à des événements exclusifs.'),
               icon: "🤝"
             },
             {
-              title: "Visibilité médiatique",
-              description: "Opportunités de promotion via nos canaux de communication et médias partenaires.",
+              title: t('Visibilité médiatique'),
+              description: t('Opportunités de promotion via nos canaux de communication et médias partenaires.'),
               icon: "📱"
             },
             {
-              title: "Support technique",
-              description: "Assistance technique et maintenance continue pour tous vos projets numériques.",
+              title: t('Support technique'),
+              description: t('Assistance technique et maintenance continue pour tous vos projets numériques.'),
               icon: "🛠️"
             }
           ].map((item, index) => (
@@ -212,17 +214,20 @@ const Partner = () => {
       <div id="partnerForm" className="container mx-auto px-4 md:px-8 max-w-6xl py-16 md:py-24">
         <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl">
           <h2 className="text-3xl md:text-4xl font-bold text-[#12138B] text-center mb-10">
-            Devenez notre partenaire
+          {t('Devenez notre partenaire')}
           </h2>
 
           <p className="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-            Bénéficiez de tous les avantages, outils et accompagnements numériques que nous mettrons à votre disposition.
-            Remplissez ce formulaire, nos équipes vous contacteront très rapidement.<br /><br />
-            En effet, collaborer avec la Fondation Tamkine, c'est bénéficier d'un accompagnement immédiat à tous les niveaux :<br />
-            <span className="block pl-4 border-l-4 border-blue-400 my-4">
-              Formation, certification et encadrement des enseignants sont assurés dans le cadre de ce partenariat.
-            </span>
-          </p>
+  {t('Bénéficiez de tous les avantages, outils et accompagnements numériques que nous mettrons à votre disposition.')}
+  <br /><br />
+  {t('En effet, collaborer avec la Fondation Tamkine, c\'est bénéficier d\'un accompagnement immédiat à tous les niveaux :')}
+  <br />
+  <span className="block pl-4 border-l-4 border-blue-400 my-4">
+    {t('Formation, certification et encadrement des enseignants sont assurés dans le cadre de ce partenariat.')}
+  </span>
+</p>
+
+
 
           {showSuccess && (
             <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-8 rounded-md">
@@ -234,7 +239,7 @@ const Partner = () => {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-green-700">
-                    Votre demande a été envoyée avec succès. Nos équipes vous contacteront très prochainement.
+                  t('Votre demande a été envoyée avec succès. Nos équipes vous contacteront très prochainement.')
                   </p>
                 </div>
               </div>
@@ -246,7 +251,7 @@ const Partner = () => {
               {/* Sélection du rôle */}
               <div className="form-group">
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="role">
-                  Rôle <span className="text-red-500">*</span>
+                {t('Rôle')}  <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="role"
@@ -256,11 +261,11 @@ const Partner = () => {
                   className={`w-full p-3 border ${formErrors.role ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B] bg-white`}
                   required
                 >
-                  <option value="">-- Sélectionnez votre rôle --</option>
-                  <option value="enseignant">Enseignant</option>
-                  <option value="parent">Parent d'élève</option>
-                  <option value="eleve">Élève</option>
-                  <option value="autre">Autre</option>
+                  <option value=""> -- {t('Sélectionnez votre rôle')} --</option>
+                  <option value="enseignant"> {t('Enseignant')}</option>
+                  <option value="parent"> {t('Parent d\'élève')}</option>
+                  <option value="eleve"> {t('Élève')}</option>
+                  <option value="autre"> {t('Autre')}</option>
                 </select>
                 {formErrors.role && <p className="mt-1 text-sm text-red-500">{formErrors.role}</p>}
               </div>
@@ -268,7 +273,7 @@ const Partner = () => {
               {/* Nom */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="first_name">
-                  Nom <span className="text-red-500">*</span>
+                {t('Nom')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -278,7 +283,7 @@ const Partner = () => {
                   onChange={handleChange}
                   required
                   className={`w-full p-3 border ${formErrors.first_name ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                  placeholder="Votre nom"
+                  placeholder= {t('Votre nom')}
                 />
                 {formErrors.first_name && <p className="mt-1 text-sm text-red-500">{formErrors.first_name}</p>}
               </div>
@@ -286,7 +291,7 @@ const Partner = () => {
               {/* Prénom */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="last_name">
-                  Prénom <span className="text-red-500">*</span>
+                {t('Prénom')}<span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -296,7 +301,7 @@ const Partner = () => {
                   onChange={handleChange}
                   required
                   className={`w-full p-3 border ${formErrors.last_name ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                  placeholder="Votre prénom"
+                  placeholder= {t('Votre prénom')}
                 />
                 {formErrors.last_name && <p className="mt-1 text-sm text-red-500">{formErrors.last_name}</p>}
               </div>
@@ -304,7 +309,7 @@ const Partner = () => {
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="email">
-                  Email <span className="text-red-500">*</span>
+                {t('Email')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -314,7 +319,7 @@ const Partner = () => {
                   onChange={handleChange}
                   required
                   className={`w-full p-3 border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                  placeholder="votre@email.com"
+                  placeholder= {t('votre@email.com')}
                 />
                 {formErrors.email && <p className="mt-1 text-sm text-red-500">{formErrors.email}</p>}
               </div>
@@ -322,7 +327,7 @@ const Partner = () => {
               {/* Organisation */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="organisation">
-                  Organisation <span className="text-red-500">*</span>
+                   {t('Organisation')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -332,7 +337,7 @@ const Partner = () => {
                   onChange={handleChange}
                   required
                   className={`w-full p-3 border ${formErrors.organisation ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                  placeholder="Nom de votre organisation"
+                  placeholder= {t('Nom de votre organisation')}
                 />
                 {formErrors.organisation && <p className="mt-1 text-sm text-red-500">{formErrors.organisation}</p>}
               </div>
@@ -340,7 +345,7 @@ const Partner = () => {
               {/* Site web */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="website_url">
-                  Site web
+                  {t('Site web')}
                 </label>
                 <input
                   type="url"
@@ -349,14 +354,14 @@ const Partner = () => {
                   value={form.website_url}
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]"
-                  placeholder="https://www.votresite.com"
+                  placeholder= {t('www.votresite.com')}
                 />
               </div>
 
               {/* Téléphone */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="phone">
-                  Téléphone <span className="text-red-500">*</span>
+                  {t('Téléphone')}<span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -366,7 +371,7 @@ const Partner = () => {
                   onChange={handleChange}
                   required
                   className={`w-full p-3 border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                  placeholder="Votre numéro de téléphone"
+                  placeholder= {t('Votre numéro de téléphone')}
                 />
                 {formErrors.phone && <p className="mt-1 text-sm text-red-500">{formErrors.phone}</p>}
               </div>
@@ -375,7 +380,7 @@ const Partner = () => {
             {/* Message */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="message">
-                Message <span className="text-red-500">*</span>
+                 {t('Message')}<span className="text-red-500">*</span>
               </label>
               <textarea
                 id="message"
@@ -385,7 +390,7 @@ const Partner = () => {
                 required
                 rows="6"
                 className={`w-full p-3 border ${formErrors.message ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#12138B]`}
-                placeholder="Décrivez votre projet ou vos besoins en détail"
+                placeholder= {t('Décrivez votre projet ou vos besoins en détail')}
               ></textarea>
               {formErrors.message && <p className="mt-1 text-sm text-red-500">{formErrors.message}</p>}
             </div>
@@ -405,7 +410,7 @@ const Partner = () => {
               </div>
               <div className="ml-3 text-sm">
                 <label htmlFor="accept_terms" className="font-medium text-gray-700">
-                  J'accepte les conditions générales CNDP <span className="text-red-500">*</span>
+                {t('J\'accepte les conditions générales CNDP')}<span className="text-red-500">*</span>
                 </label>
                 {formErrors.accept_terms && <p className="mt-1 text-sm text-red-500">{formErrors.accept_terms}</p>}
               </div>
@@ -417,7 +422,7 @@ const Partner = () => {
                 disabled={isSubmitting}
                 className={`bg-[#12138B] text-white px-10 py-4 rounded-lg font-medium text-lg hover:bg-[#1e1fab] transition-all transform hover:scale-105 shadow-md ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
-                {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'}
+                {isSubmitting ?  t('Envoi en cours...') : t('Envoyer ma demande')}
               </button>
               
             </div>
@@ -454,17 +459,16 @@ const Partner = () => {
       <div className="bg-white py-16 text-black">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Prêt à rejoindre notre communauté ?
+         {t('Prêt à rejoindre notre communauté ?')}
           </h2>
           <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-            Transformez votre approche éducative et bénéficiez d'un accompagnement personnalisé
-            pour intégrer efficacement les solutions numériques.
+          {t('Transformez votre approche éducative et bénéficiez d\'un accompagnement personnalisé pour intégrer efficacement les solutions numériques.')}
           </p>
           <button
             onClick={() => document.getElementById('partnerForm').scrollIntoView({behavior: 'smooth'})}
             className="bg-white text-[#12138B] hover:bg-blue-100 transition px-8 py-4 rounded-full font-semibold text-lg"
           >
-            Devenir partenaire
+           {t('Devenir partenaire')}
           </button>
         </div>
       </div>

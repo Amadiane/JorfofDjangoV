@@ -1,0 +1,208 @@
+{
+  "home": "HEADLINE",
+  "tamkine": "Tamkine",
+  "president_word": "PRESIDENT'S WORD",
+  "foundation": "TAMKINE FOUNDATION",
+  "values": "OUR VALUES",
+  "missions": "OUR MISSIONS",
+  "team": "OUR TEAM",
+  "programs": "Programs",
+  "news": "News",
+  "platforms": "Platforms",
+  "partner_activities": "Partner Activities",
+  "media": "Communication & Media",
+  "videotheque": "Videotheque",
+  "phototheque": "Phototheque",
+  "downloads": "Downloads",
+  "join_us": "Join Us",
+  "contact_us": "Contact Us",
+  "community": "Community",
+  "become_partner": "Become a Partner",
+  "media_partners": "Media Partners",
+  "Nouvelles récentes": "Recent News",
+  "À LA UNE": "Featured",
+  "Dernière nouvelle": "Latest News",
+
+
+  "title": "News",
+  "featuredLabel": "HIGHLIGHT",
+  "featuredSubtitle": "Current headline",
+  "imageNotAvailable": "Image not available",
+  "readFullArticle": "Read full article",
+  "collapseArticle": "Collapse article",
+  "recentNews": "Recent news",
+  "noMatch": "No articles match your search.",
+  "readMore": "Read more",
+  "readLess": "Read less",
+  "loadError": "Error loading news",
+
+
+  
+  
+    "Nos Plateformes": "Our Platforms",
+    "Tutoring": "Tutoring",
+    "Orientation": "Orientation",
+    "Séminaires": "Seminars",
+    "Tamtech Connect": "Tamtech Connect",
+    "JPOV": "JPOV",
+    "Bourses": "Scholarships",
+    "À Propos": "About Us",
+    "Qui sommes-nous ?": "Who Are We?",
+    "Contacter Tamkine": "Contact Tamkine",
+    "Nous rejoindre": "Join Us",
+    "Notre Localisation": "Our Location",
+    "Agrandir": "Enlarge",
+    "Restez informé": "Stay Informed",
+    "Recevez les dernières actualités de la Fondation Tamkine": "Receive the latest news from Tamkine Foundation",
+    "S'abonner": "Subscribe",
+    "Votre email": "Your email",
+    "Merci pour votre abonnement !": "Thank you for your subscription!",
+    "Une erreur est survenue.": "An error occurred.",
+    "Erreur serveur, veuillez réessayer plus tard.": "Server error, please try again later.",
+    "Fondation dédiée à l'éducation et au développement des compétences": "Foundation dedicated to education and skill development", 
+
+    
+    
+      "Contactez-nous": "Contact Us",
+      "Nous sommes à votre écoute et vous répondrons dans les meilleurs délais. N'hésitez pas à nous faire part de vos questions ou commentaires.": "We are here to assist you and will respond as soon as possible. Feel free to share any questions or comments.",
+      "Nom complet": "Full Name",
+      "Votre nom et prénom": "Your full name",
+      "Email": "Email",
+      "votre.email@exemple.com": "your.email@example.com",
+      "Sujet": "Subject",
+      "Objet de votre message": "Your message's subject",
+      "Catégorie": "Category",
+      "Question générale": "General inquiry",
+      "Support technique": "Technical support",
+      "Facturation": "Billing",
+      "Partenariat": "Partnership",
+      "Commentaires et suggestions": "Feedback and suggestions",
+      "Message": "Message",
+      "Détaillez votre demande ici...": "Detail your request here...",
+      "Envoyer le message": "Send Message",
+      "Envoi en cours...": "Sending in progress...",
+      "Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.": "Your message has been sent successfully. We will respond as soon as possible.",
+      "Une erreur est survenue lors de l'envoi du message.": "An error occurred while sending the message.",
+      "Erreur de connexion au serveur, veuillez réessayer plus tard.": "Server connection error, please try again later.",
+      "Vos données personnelles ne seront utilisées que pour répondre à votre demande et ne seront pas partagées avec des tiers.": "Your personal data will only be used to respond to your request and will not be shared with third parties.",
+      "contact@tamkine.org": "contact@tamkine.org", 
+      
+        "Téléphone": "Phone",
+        "Heures d'ouverture": "Opening Hours",
+        "Lun - Ven: 9h - 18h": "Mon - Fri: 9 AM - 6 PM",
+
+
+        
+          "Nos Partenaires Médias": "Our Media Partners",
+          "Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.": "Discover the media organizations supporting the mission and initiatives of the Tamkine Foundation.",
+          "Filtrer par catégorie": "Filter by category",
+          "Chargement des partenaires...": "Loading partners...",
+          "Réessayer": "Retry",
+          "Aucun partenaire trouvé pour cette catégorie.": "No partner found for this category.",
+          "Aucune image": "No image",
+          "Localisation:": "Location:",
+          "Établi:": "Established:",
+          " Visiter le site": "Visit website",
+          " Site non disponible": "Website not available",
+
+
+          
+            "Communauté Tamkine": "Tamkine Community",
+            "Ensemble pour une éducation de qualité pour tous": "Together for quality education for all",
+            "Notre Communauté": "Our Community",
+            "Le nombre des membres de la Communauté Tamkine connait une multiplication continue": "The number of Tamkine Community members is continuously growing",
+            "La Communauté Tamkine regroupe :": "The Tamkine Community includes:",
+            "Les élèves de toutes origines [...]": "Students from all backgrounds [...]",
+            "Les parents de ces élèves ;": "Their parents;",
+            "Les instituteurs, enseignants, inspecteurs [...]": "Teachers, instructors, and inspectors [...]",
+            "Les entités de gestion et d'administration éducative ;": "Educational management and administrative entities;",
+            "La Société Civile ;": "Civil Society;",
+            "Des citoyens du monde entier.": "Citizens from all over the world.",
+            "Bénéficier de la carte de membre de la Communauté Tamkine [...]": "Enjoying the Tamkine Community membership card gives you access to many benefits.",
+            "Être membre de la Famille Tamkine, c'est tout d'abord et avant tout démontrer [...]": "Being a member of the Tamkine Family means first and foremost showing [...]",
+            "N'attendez plus, venez nous rejoindre [...]": "Don’t wait any longer, come join us [...]",
+            "L'éducation est la pierre angulaire du développement [...] ": "Education is the cornerstone of development [...]",
+            "Rejoignez la Communauté Tamkine": "Join the Tamkine Community",
+            "Nom *": "Last Name *",
+            "Prénom *": "First Name *",
+            "Rôle *": "Role *",
+            "-- Sélectionnez votre rôle --": "-- Select your role --",
+            "Enseignant": "Teacher",
+            "Parent d'élève": "Parent",
+            "Élève": "Student",
+            "Autre": "Other",
+            "Téléphone * ": "Phone * ",
+            "J'accepte les conditions générales CNDP": "I accept the CNDP general conditions",
+            "Envoyer": "Submit",
+            "Votre demande d'adhésion a été envoyée avec succès !": "Your membership request was successfully sent!",
+            "Erreur :": "Error:",
+            "Vérifiez les champs du formulaire.": "Check the form fields.",
+            "Une erreur est survenue lors de l'envoi du formulaire.": "An error occurred while submitting the form.",
+
+
+
+            
+              "Prêt à rejoindre notre communauté ?": "Ready to join our community?",
+              "Transformez votre approche éducative et bénéficiez d'un accompagnement personnalisé pour intégrer efficacement les solutions numériques.": "Transform your educational approach and receive personalized support to effectively integrate digital solutions.",
+              "Devenir partenaire": "Become a partner",
+              "Nos Partenaires Médias": "Our Media Partners",
+              "Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.": "Discover the media organizations supporting the mission and initiatives of the Tamkine Foundation.",
+              "Les avantages de notre partenariat": "The benefits of our partnership",
+              "Formation & Certification": "Training & Certification",
+              "Formation complète et certification des enseignants assurées dans le cadre du partenariat.": "Complete training and certification of teachers are provided as part of the partnership.",
+              "Encadrement pédagogique": "Pedagogical Support",
+              "Bénéficiez d'un accompagnement personnalisé par nos experts en éducation numérique.": "Receive personalized support from our digital education experts.",
+              "Outils numériques": "Digital Tools",
+              "Accès à des outils et ressources numériques innovants pour transformer l'expérience d'apprentissage.": "Access to innovative digital tools and resources to transform the learning experience.",
+              "Réseau professionnel": "Professional Network",
+              "Intégrez un réseau dynamique de partenaires et participez à des événements exclusifs.": "Join a dynamic network of partners and participate in exclusive events.",
+              "Visibilité médiatique": "Media Visibility",
+              "Opportunités de promotion via nos canaux de communication et médias partenaires.": "Opportunities for promotion through our communication channels and partner media.",
+              "Support technique": "Technical Support",
+              "Assistance technique et maintenance continue pour tous vos projets numériques.": "Technical support and ongoing maintenance for all your digital projects.",
+              "Devenez notre partenaire": "Become our partner",
+              "Bénéficiez de tous les avantages, outils et accompagnements numériques que nous mettrons à votre disposition.": "Benefit from all the advantages, tools, and digital support we will provide.",
+              "En effet, collaborer avec la Fondation Tamkine, c'est bénéficier d'un accompagnement immédiat à tous les niveaux :": "Indeed, partnering with the Tamkine Foundation means immediate support at all levels:",
+              "Formation, certification et encadrement des enseignants sont assurés dans le cadre de ce partenariat.": "Training, certification, and teacher support are ensured as part of this partnership.",
+              "Votre demande a été envoyée avec succès. Nos équipes vous contacteront très prochainement.": "Your request has been successfully submitted. Our teams will contact you shortly.",
+              "Rôle": "Role",
+              "Sélectionnez votre rôle": "Select your role",
+              "Enseignant": "Teacher",
+              "Parent d'élève": "Parent",
+              "Élève": "Student",
+              "Autre": "Other",
+              "Nom": "Last Name",
+              "Votre nom": "Your last name",
+              "Prénom": "First Name",
+              "Votre prénom": "Your first name",
+              "Organisation": "Organization",
+              "En effet, collaborer avec la Fondation Tamkine, c'est bénéficier d'un accompagnement immédiat à tous les niveaux :": "Indeed, partnering with the Tamkine Foundation means immediate support at all levels:",
+              "Prénom *": "First Name",
+              "Organisation *": "Organization",
+              "Site web": "Website",
+              "Envoyer ma demande": "Submit my request",
+              "Envoi en cours...": "Sending in progress...",
+                "email": "your@email.com",
+                "Nom de votre organisation": "Your organization name",
+                "www.votresite.com": "https://www.yoursite.com",
+                "Votre numéro de téléphone": "Your phone number",
+                "Décrivez votre projet ou vos besoins en détail": "Describe your project or needs in detail"
+
+
+            
+          
+        
+        
+      
+      
+    
+    
+    
+    
+    
+  
+  
+    
+
+  
+}

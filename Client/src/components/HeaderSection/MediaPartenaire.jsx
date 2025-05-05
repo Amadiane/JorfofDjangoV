@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ExternalLink, Loader, ChevronRight } from "lucide-react";
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const MediaPartenaire = () => {
   const [partenaires, setPartenaires] = useState([]);
@@ -7,6 +8,7 @@ const MediaPartenaire = () => {
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState('tous');
   const [categories, setCategories] = useState(['tous']);
+  const { t } = useTranslation();  // Initialisation du hook de traduction
 
   useEffect(() => {
     const fetchPartenaires = async () => {
@@ -42,9 +44,9 @@ const MediaPartenaire = () => {
       {/* En-tête avec gradient comme dans Community */}
       <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-8 px-4 md:py-12 lg:py-16 shadow-md">
   <div className="pt-16">
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Nos Partenaires Médias</h1>
+    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Nos Partenaires Médias')}</h1>
     <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90">
-      Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.
+      {t('Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.')}
     </p>
   </div>
 </header>
@@ -55,7 +57,7 @@ const MediaPartenaire = () => {
         {/* Filtres de navigation */}
         {categories.length > 1 && !loading && !error && (
           <div className="mb-10">
-            <h2 className="text-xl font-semibold text-[#1C1C47] mb-4">Filtrer par catégorie</h2>
+            <h2 className="text-xl font-semibold text-[#1C1C47] mb-4">{t('Filtrer par catégorie')}</h2>
             <div className="flex flex-wrap gap-2">
               {categories.map(cat => (
                 <button
@@ -77,7 +79,7 @@ const MediaPartenaire = () => {
         {loading ? (
           <div className="flex flex-col justify-center items-center h-64">
             <Loader className="animate-spin text-[#1C1C47]" size={40} />
-            <p className="mt-4 text-gray-600">Chargement des partenaires...</p>
+            <p className="mt-4 text-gray-600">{t('Chargement des partenaires...')}</p>
           </div>
         ) : error ? (
           <div className="bg-white border border-red-200 rounded-lg p-8 text-center shadow-md">
@@ -86,12 +88,12 @@ const MediaPartenaire = () => {
               onClick={() => window.location.reload()}
               className="bg-[#1C1C47] hover:bg-[#15154b] text-white px-6 py-3 rounded-md transition"
             >
-              Réessayer
+              {t('Réessayer')}
             </button>
           </div>
         ) : filteredPartenaires.length === 0 ? (
           <div className="text-center py-10">
-            <p className="text-gray-600">Aucun partenaire trouvé pour cette catégorie.</p>
+            <p className="text-gray-600">{t('Aucun partenaire trouvé pour cette catégorie.')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -107,6 +109,7 @@ const MediaPartenaire = () => {
 
 const PartenaireCard = ({ partenaire }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useTranslation();  // Initialisation du hook de traduction
 
   return (
     <div 
@@ -129,7 +132,7 @@ const PartenaireCard = ({ partenaire }) => {
           />
         ) : (
           <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-            <span className="text-gray-400 font-medium">Aucune image</span>
+            <span className="text-gray-400 font-medium">{t('Aucune image')}</span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -154,13 +157,13 @@ const PartenaireCard = ({ partenaire }) => {
           <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
             {partenaire.ville && (
               <div className="flex items-center">
-                <span className="font-medium">Localisation:</span>
+                <span className="font-medium">{t('Localisation:')}</span>
                 <span className="ml-2">{partenaire.ville}</span>
               </div>
             )}
             {partenaire.date_creation && (
               <div className="flex items-center">
-                <span className="font-medium">Établi:</span>
+                <span className="font-medium">{t('Établi:')}</span>
                 <span className="ml-2">{new Date(partenaire.date_creation).getFullYear()}</span>
               </div>
             )}
@@ -176,12 +179,12 @@ const PartenaireCard = ({ partenaire }) => {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-[#1C1C47] hover:bg-[#15154b] text-white py-3 px-6 rounded-lg transition-colors duration-300 w-full text-center group"
             >
-              Visiter le site
+             {t(' Visiter le site')}
               <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />
             </a>
           ) : (
             <button className="bg-gray-200 text-gray-500 py-3 px-6 rounded-lg w-full cursor-not-allowed">
-              Site non disponible
+             {t(' Site non disponible')}
             </button>
           )}
         </div>

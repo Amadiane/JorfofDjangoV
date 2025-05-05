@@ -10,9 +10,16 @@ const Navlinks = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [language, setLanguage] = useState('fr'); // Ajout de la langue sélectionnée
-   const { t, i18n } = useTranslation("home"); // Utilisation du hook useTranslation
+  const { i18n, t } = useTranslation();
+  const [language, setLanguage] = useState(i18n.language || 'fr');
+ // Ajout de la langue sélectionnée
+  // const { t, i18n } = useTranslation("home"); // Utilisation du hook useTranslation
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setLanguage(i18n.language);
+  }, [i18n.language]);
+  
   
   // Refs for dropdown menus
   const dropdownRefs = useRef({});
@@ -68,76 +75,76 @@ const Navlinks = () => {
 
 
   const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
     setLanguage(lang);
-    // Ici tu pourras ajouter l'intégration réelle avec un système de traduction
-    // comme i18next pour vraiment changer les textes
   };
+  
 
   const navItems = [
     {
-      title: language === 'fr' ? "À LA UNE" : language === 'en' ? "HIGHLIGHTS" : "الأخبار",
+      title: t("home"),
       path: "/home",
       isDropdown: false
     },
     {
-      title: "Tamkine",
+      title: t("tamkine"),
       id: "tamkine",
       isDropdown: true,
       dropdownItems: [
-        { title: language === 'fr' ? "MOT DU PRÉSIDENT" : language === 'en' ? "PRESIDENT'S WORD" : "كلمة الرئيس", path: "/motPresident" },
-        { title: language === 'fr' ? "FONDATION TAMKINE" : language === 'en' ? "TAMKINE FOUNDATION" : "مؤسسة تمكين", path: "/fondation" },
-        { title: language === 'fr' ? "NOS VALEURS" : language === 'en' ? "OUR VALUES" : "قيمنا", path: "/nosValeurs" },
-        { title: language === 'fr' ? "NOS MISSIONS" : language === 'en' ? "OUR MISSIONS" : "مهامنا", path: "/nosMissions" },
-        { title: language === 'fr' ? "NOTRE ÉQUIPE" : language === 'en' ? "OUR TEAM" : "فريقنا", path: "/notreEquipe" }
+        { title: t("president_word"), path: "/motPresident" },
+        { title: t("foundation"), path: "/fondation" },
+        { title: t("values"), path: "/nosValeurs" },
+        { title: t("missions"), path: "/nosMissions" },
+        { title: t("team"), path: "/notreEquipe" }
       ]
     },
     {
-      title: language === 'fr' ? "Programmes" : language === 'en' ? "Programs" : "البرامج",
+      title: t("programs"),
       path: "/programs",
       isDropdown: false
     },
     {
-      title: language === 'fr' ? "Actualités" : language === 'en' ? "News" : "الأخبار",
+      title: t("news"),
       path: "/actualites",
       isDropdown: false
     },
     {
-      title: language === 'fr' ? "Plateformes" : language === 'en' ? "Platforms" : "المنصات",
+      title: t("platforms"),
       path: "/Plateforms",
       isDropdown: false
     },
     {
-      title: language === 'fr' ? "Activités Partenaires" : language === 'en' ? "Partner Activities" : "أنشطة الشركاء",
+      title: t("partner_activities"),
       path: "/partners-activities",
       isDropdown: false
     },
     {
-      title: language === 'fr' ? "Communication & Médias" : language === 'en' ? "Communication & Media" : "الإعلام والاتصال",
+      title: t("media"),
       id: "media",
       isDropdown: true,
       dropdownItems: [
-        { title: language === 'fr' ? "Videotheque" : language === 'en' ? "Video Library" : "مكتبة الفيديو", path: "/videotheque" },
-        { title: language === 'fr' ? "Phototèque" : language === 'en' ? "Photo Library" : "مكتبة الصور", path: "/phototheque" },
-        { title: language === 'fr' ? "Téléchargement" : language === 'en' ? "Downloads" : "التنزيلات", path: "/document" }
+        { title: t("videotheque"), path: "/videotheque" },
+        { title: t("phototheque"), path: "/phototheque" },
+        { title: t("downloads"), path: "/document" }
       ]
     },
     {
-      title: language === 'fr' ? "Nous rejoindre" : language === 'en' ? "Join Us" : "انضم إلينا",
+      title: t("join_us"),
       id: "join",
       isDropdown: true,
       dropdownItems: [
-        { title: language === 'fr' ? "Contactez-nous" : language === 'en' ? "Contact Us" : "اتصل بنا", path: "/contacter-tamkine" },
-        { title: language === 'fr' ? "Communauté" : language === 'en' ? "Community" : "مجتمع", path: "/community" },
-        { title: language === 'fr' ? "Devenir Partenaire" : language === 'en' ? "Become a Partner" : "كن شريكًا" , path: "/partner" }
+        { title: t("contact_us"), path: "/contacter-tamkine" },
+        { title: t("community"), path: "/community" },
+        { title: t("become_partner"), path: "/partner" }
       ]
     },
     {
-      title: language === 'fr' ? "Partenaires Medias" : language === 'en' ? "Media Partners" : "شركاء الإعلام",
+      title: t("media_partners"),
       path: "/mediaPartenaire",
       isDropdown: false
     }
   ];
-
+  
   const renderDropdown = (item) => {
     if (activeSection === item.id) {
       return (

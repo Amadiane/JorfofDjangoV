@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const Community = () => {
+  const { t } = useTranslation();  // Initialisation du hook de traduction
   const [form, setForm] = useState({
     nom: '',
     prenom: '',
@@ -54,77 +56,77 @@ const Community = () => {
   return (
     <div style={styles.root}>
       <header style={styles.header}>
-        <h1 style={styles.h1}>Communauté Tamkine</h1>
-        <p>Ensemble pour une éducation de qualité pour tous</p>
+        <h1 style={styles.h1}>{t('Communauté Tamkine')}</h1>
+        <p>{t('Ensemble pour une éducation de qualité pour tous')}</p>
       </header>
 
       <div style={styles.container}>
         <div style={styles.card}>
-          <h2 style={styles.h2}>Notre Communauté</h2>
+          <h2 style={styles.h2}>{t('Notre Communauté')}</h2>
           <p style={styles.p}>
-            Le nombre des membres de la Communauté Tamkine connait une multiplication continue [...]
+           {t('Le nombre des membres de la Communauté Tamkine connait une multiplication continue')} [...]
           </p>
 
-          <h2 style={styles.h2}>La Communauté Tamkine regroupe :</h2>
+          <h2 style={styles.h2}>{t('La Communauté Tamkine regroupe :')}</h2>
           <ul style={styles.ul}>
-            <li style={styles.li}>Les élèves de toutes origines [...]</li>
-            <li style={styles.li}>Les parents de ces élèves ;</li>
-            <li style={styles.li}>Les instituteurs, enseignants, inspecteurs [...]</li>
-            <li style={styles.li}>Les entités de gestion et d'administration éducative ;</li>
-            <li style={styles.li}>La Société Civile ;</li>
-            <li style={styles.li}>Des citoyens du monde entier.</li>
+            <li style={styles.li}>{t('Les élèves de toutes origines [...]')}</li>
+            <li style={styles.li}>{t('Les parents de ces élèves ;')}</li>
+            <li style={styles.li}>{t('Les instituteurs, enseignants, inspecteurs [...]')}</li>
+            <li style={styles.li}>{t('Les entités de gestion et d\'administration éducative ;')}</li>
+            <li style={styles.li}>{t('La Société Civile ;')}</li>
+            <li style={styles.li}>{t('Des citoyens du monde entier.')}</li>
           </ul>
 
           <p style={styles.p}>
-            Bénéficier de la carte de membre de la Communauté Tamkine [...]
+           {t('Bénéficier de la carte de membre de la Communauté Tamkine')} [...]
           </p>
 
           <p style={styles.highlight}>
-            Être membre de la Famille Tamkine, c'est tout d'abord et avant tout démontrer [...]
+            {t('Être membre de la Famille Tamkine, c\'est tout d\'abord et avant tout démontrer [...]')}
           </p>
         </div>
 
         <div className="call-to-action">
-          <h2 style={styles.h2}>N'attendez plus, venez nous rejoindre [...]</h2>
+          <h2 style={styles.h2}>{t('N\'attendez plus, venez nous rejoindre [...]')}</h2>
           <p style={styles.quote}>
-            L'éducation est la pierre angulaire du développement [...]
+            {t('L\'éducation est la pierre angulaire du développement [...] ')}
           </p>
         </div>
 
         <div style={styles.formContainer}>
-          <h2 style={styles.h2}>Rejoignez la Communauté Tamkine</h2>
+          <h2 style={styles.h2}>{t('Rejoignez la Communauté Tamkine')}</h2>
           <form onSubmit={handleSubmit}>
             <div style={styles.responsiveTwoColumns}>
               <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="nom">Nom *</label>
+                <label style={styles.label} htmlFor="nom">{t('Nom *')}</label>
                 <input style={styles.input} id="nom" name="nom" value={form.nom} onChange={handleChange} required />
               </div>
 
               <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="prenom">Prénom *</label>
+                <label style={styles.label} htmlFor="prenom">{t('Prénom *')}</label>
                 <input style={styles.input} id="prenom" name="prenom" value={form.prenom} onChange={handleChange} required />
               </div>
             </div>
 
             <div style={styles.formGroup}>
-              <label style={styles.label} htmlFor="role">Rôle *</label>
+              <label style={styles.label} htmlFor="role">{t('Rôle *')}</label>
               <select style={styles.select} id="role" name="role" value={form.role} onChange={handleChange} required>
-                <option value="">-- Sélectionnez votre rôle --</option>
-                <option value="enseignant">Enseignant</option>
-                <option value="parent">Parent d'élève</option>
-                <option value="eleve">Élève</option>
-                <option value="autre">Autre</option>
+                <option value="">{t('-- Sélectionnez votre rôle --')}</option>
+                <option value="enseignant">{t('Enseignant')}</option>
+                <option value="parent">{t('Parent d\'élève')}</option>
+                <option value="eleve">{t('Élève')}</option>
+                <option value="autre">{t('Autre')}</option>
               </select>
             </div>
 
             <div style={styles.responsiveTwoColumns}>
               <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="tel">Téléphone *</label>
+                <label style={styles.label} htmlFor="tel">{t('Téléphone * ')}</label>
                 <input style={styles.input} id="tel" name="tel" type="tel" value={form.tel} onChange={handleChange} required />
               </div>
 
               <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="email">Email *</label>
+                <label style={styles.label} htmlFor="email">{t('Email')} *</label>
                 <input style={styles.input} id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
               </div>
             </div>
@@ -132,12 +134,12 @@ const Community = () => {
             <div style={styles.formGroup}>
               <div style={styles.checkboxGroup}>
                 <input type="checkbox" id="conditions" name="conditions" checked={form.conditions} onChange={handleChange} required />
-                <label htmlFor="conditions">J'accepte les conditions générales CNDP</label>
+                <label htmlFor="conditions">{t('J\'accepte les conditions générales CNDP')}</label>
               </div>
             </div>
 
             <div style={{ textAlign: 'center' }}>
-              <button style={styles.button} type="submit">Envoyer</button>
+              <button style={styles.button} type="submit">{t('Envoyer')}</button>
             </div>
           </form>
         </div>
