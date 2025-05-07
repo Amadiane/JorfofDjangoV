@@ -34,6 +34,7 @@ urlpatterns = [
     path('missions/', get_last_two_missions, name='get_last_two_missions'),
     path('missions/create/', create_mission, name='create_mission'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
+    path('rejoindre/<int:id>/', RejoindreAPIView.as_view(), name='rejoindre-delete'),
     path('community/', CommunityView.as_view(), name='community'),
     # Route pour DELETE (supprimer un contact) avec un id
     path('community/<int:id>/', CommunityView.as_view()),

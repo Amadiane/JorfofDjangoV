@@ -434,7 +434,7 @@ const ListeContacts = () => {
         
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Fondation. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} Fondation Tamkine. Tous droits réservés.</p>
         </div>
       </div>
     </div>

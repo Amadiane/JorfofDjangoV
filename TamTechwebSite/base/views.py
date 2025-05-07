@@ -417,6 +417,12 @@ class RejoindreAPIView(APIView):
         serializer = ContactMessageSerializer(messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def delete(self, request, id, *args, **kwargs):
+        # Récupérer le message de contact par son ID
+        contact_message = get_object_or_404(ContactMessage, id=id)
+        # Supprimer le message
+        contact_message.delete()
+        return Response({'message': 'Message supprimé avec succès.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
