@@ -27,12 +27,16 @@ urlpatterns = [
     path('authenticated/', is_logged_in),
     path('chatbot/', chatbot, name='chatbot'),
     path('contact/', ContactAPIView.as_view(), name='contact'),
+    # Route pour DELETE (supprimer un contact) avec un id
+    path('contact/<int:id>/', ContactAPIView.as_view(), name='contact-detail'),
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
     path('newsletter/subscribers/', get_subscribers, name='get_subscribers'),
     path('missions/', get_last_two_missions, name='get_last_two_missions'),
     path('missions/create/', create_mission, name='create_mission'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
     path('community/', CommunityView.as_view(), name='community'),
+    # Route pour DELETE (supprimer un contact) avec un id
+    path('community/<int:id>/', CommunityView.as_view()),
     path('partners/', PartnerAPIView.as_view(), name='partners'),
     path('platforms/', platform_links_api, name='platform_links_api'),
     path('valeurs/', valeurs_api, name='valeurs_api'),

@@ -236,6 +236,17 @@ class ContactAPIView(APIView):
         return Response({'message': 'Message envoyé avec succès.'}, status=status.HTTP_201_CREATED)
 
 
+        # DELETE : Supprimer un message de contact via son ID dans les paramètres
+    def delete(self, request, id, *args, **kwargs):
+        try:
+            contact = Contact.objects.get(id=id)
+            contact.delete()
+            return Response({'message': 'Message supprimé avec succès.'}, status=status.HTTP_204_NO_CONTENT)
+        except Contact.DoesNotExist:
+            return Response({'error': 'Message introuvable.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 
 
 
@@ -408,15 +419,6 @@ class RejoindreAPIView(APIView):
 
 
 
-# views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import CommunityContact
-from .serializers import CommunityContactSerializer
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from django.conf import settings
 
 
 
@@ -429,6 +431,9 @@ from rest_framework import status
 from .models import CommunityContact
 from .serializers import CommunityContactSerializer
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from .models import CommunityContact
+
 
 class CommunityView(APIView):
     def get(self, request):
@@ -486,6 +491,11 @@ class CommunityView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+    def delete(self, request, id, *args, **kwargs):
+        # Remplacer Community par CommunityContact
+        community_contact = get_object_or_404(CommunityContact, id=id)
+        community_contact.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 #ComminityPartner

@@ -7,40 +7,97 @@ const ListePostulantsCommunity = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
+  const [expandedPostulant, setExpandedPostulant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postulantsPerPage] = useState(6);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+
+  const fetchPostulants = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://127.0.0.1:8000/api/community/', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP! statut: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      setPostulants(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     // if (!localStorage.getItem('accessToken')) {
     //   navigate('/login');
     //   return;
     // }
-
-    const fetchPostulants = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/community/', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP! statut: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setPostulants(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPostulants();
   }, [navigate]);
 
+  // Réinitialiser les états de notification après 3 secondes
+  useEffect(() => {
+    if (deleteSuccess || deleteError) {
+      const timer = setTimeout(() => {
+        setDeleteSuccess(false);
+        setDeleteError(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [deleteSuccess, deleteError]);
+
+  // Fonction pour supprimer un postulant
+  const handleDeletePostulant = async (id) => {
+    try {
+      setDeleteLoading(true);
+      const response = await fetch(`http://127.0.0.1:8000/api/community/${id}/`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP! statut: ${response.status}`);
+      }
+      
+      // Mise à jour réussie - mettre à jour l'état de succès
+      setDeleteSuccess(true);
+      setDeleteError(null);
+      setDeleteConfirmId(null);
+      
+      // Mise à jour de la liste des postulants
+      setPostulants(prevPostulants => prevPostulants.filter(postulant => postulant.id !== id));
+      
+      // Vérifier si après suppression la page actuelle est vide, revenir à la page précédente
+      const remainingPostulants = filteredPostulants.filter(postulant => postulant.id !== id);
+      const maxPage = Math.max(1, Math.ceil(remainingPostulants.length / postulantsPerPage));
+      if (currentPage > maxPage) {
+        setCurrentPage(maxPage);
+      }
+      
+    } catch (err) {
+      setDeleteError(err.message);
+      setDeleteSuccess(false);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const safeString = (value) => (value ? value.toLowerCase() : '');
 
+  // Fonctions pour filtrer et trier les postulants
   const filteredPostulants = postulants.filter((p) =>
     safeString(p.name).includes(searchTerm.toLowerCase()) ||
     safeString(p.email).includes(searchTerm.toLowerCase()) ||
@@ -58,11 +115,26 @@ const ListePostulantsCommunity = () => {
     return 0;
   });
 
+  // Pagination
+  const indexOfLastPostulant = currentPage * postulantsPerPage;
+  const indexOfFirstPostulant = indexOfLastPostulant - postulantsPerPage;
+  const currentPostulants = sortedPostulants.slice(indexOfFirstPostulant, indexOfLastPostulant);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const toggleExpand = (id) => {
+    if (expandedPostulant === id) {
+      setExpandedPostulant(null);
+    } else {
+      setExpandedPostulant(id);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
+      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-blue-50 to-white">
         <div className="text-center">
-          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin mx-auto"></div>
+          <div className="w-16 h-16 border-t-4 border-blue-600 border-solid rounded-full animate-spin mx-auto"></div>
           <p className="mt-4 text-lg text-gray-700">Chargement des postulants...</p>
         </div>
       </div>
@@ -71,63 +143,99 @@ const ListePostulantsCommunity = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-lg w-full">
-          <h2 className="font-bold text-lg">Erreur</h2>
-          <p>{error}</p>
-          <button
-            className="mt-3 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-            onClick={() => window.location.reload()}
-          >
-            Réessayer
-          </button>
+      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-blue-50 to-white">
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded shadow-md max-w-lg w-full">
+          <div className="flex items-center">
+            <div className="py-1">
+              <svg className="w-6 h-6 mr-4 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="font-semibold text-lg">Une erreur est survenue</h2>
+              <p className="text-sm">{error}</p>
+              <button 
+                className="mt-3 bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-3 rounded text-sm transition duration-150"
+                onClick={() => window.location.reload()}
+              >
+                Réessayer
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-          <div className="border-b border-gray-200 bg-gray-800 text-white px-6 py-4">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Notifications de succès/erreur */}
+        {deleteSuccess && (
+          <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md z-50 flex items-center">
+            <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Postulant supprimé avec succès</span>
+          </div>
+        )}
+        
+        {deleteError && (
+          <div className="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-md z-50 flex items-center">
+            <svg className="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Erreur lors de la suppression: {deleteError}</span>
+          </div>
+        )}
+
+        <div className="bg-white shadow-xl rounded-xl overflow-hidden">
+          {/* En-tête */}
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-              <h1 className="text-2xl font-bold">Postulations reçues</h1>
-              <div className="flex items-center space-x-4 mt-4 md:mt-0">
-                <span className="text-sm text-gray-300">
+              <div>
+                <h1 className="text-2xl font-bold text-white">Postulations reçues</h1>
+                <p className="text-blue-100 mt-1">
                   {filteredPostulants.length} {filteredPostulants.length > 1 ? 'postulants' : 'postulant'}
-                </span>
-                <button
+                </p>
+              </div>
+              <div className="flex items-center space-x-4 mt-4 md:mt-0">
+                <button 
                   onClick={() => navigate('/dashboard')}
-                  className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md text-sm transition duration-150"
+                  className="bg-white hover:bg-blue-50 text-blue-700 font-medium py-2 px-4 rounded-md text-sm transition duration-150 shadow-sm flex items-center"
                 >
-                  Retour
+                  <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Tableau de bord
                 </button>
               </div>
             </div>
           </div>
 
+          {/* Barre de recherche et filtres */}
           <div className="bg-white px-6 py-4 border-b border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="relative flex-grow">
                 <input
                   type="text"
                   placeholder="Rechercher par nom, email ou contenu..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1); // Reset to page 1 when searching
+                  }}
                 />
-                <svg className="w-5 h-5 text-gray-400 absolute right-3 top-2.5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <div className="flex-shrink-0">
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white"
                 >
                   <option value="newest">Plus récents</option>
                   <option value="oldest">Plus anciens</option>
@@ -137,52 +245,194 @@ const ListePostulantsCommunity = () => {
             </div>
           </div>
 
+          {/* Liste des postulants */}
           <div className="px-6 py-4">
             {sortedPostulants.length === 0 ? (
               <div className="text-center py-16">
-                <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                <svg className="mx-auto h-16 w-16 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
-                <h3 className="mt-2 text-lg font-medium text-gray-900">Aucune postulation trouvée</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  {searchTerm ? 'Essayez d’ajuster votre recherche.' : 'Aucun postulant pour le moment.'}
+                <h3 className="mt-4 text-lg font-medium text-gray-900">Aucune postulation trouvée</h3>
+                <p className="mt-2 text-gray-500">
+                  {searchTerm ? 'Essayez de modifier vos critères de recherche.' : 'Aucun postulant pour le moment.'}
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sortedPostulants.map((p) => (
-                  <div key={p.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                    <div className="p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <h2 className="text-xl font-semibold text-gray-800">{p.name || 'Nom inconnu'}</h2>
-                          <a href={`mailto:${p.email}`} className="text-blue-600 hover:underline">{p.email}</a>
+              <div className="space-y-4">
+                {currentPostulants.map((postulant) => (
+                  <div key={postulant.id} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                    <div 
+                      className={`px-6 py-4 cursor-pointer flex justify-between items-center hover:bg-blue-50 transition-colors ${expandedPostulant === postulant.id ? 'bg-blue-50' : ''}`}
+                      onClick={() => toggleExpand(postulant.id)}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="bg-blue-100 text-blue-700 rounded-full w-10 h-10 flex items-center justify-center font-medium">
+                          {(postulant.name || 'A').charAt(0).toUpperCase()}
                         </div>
-                        <span className="text-xs text-gray-500">
-                          {p.created_at ? new Date(p.created_at).toLocaleDateString() : 'Date inconnue'}
+                        <div>
+                          <h2 className="text-lg font-semibold text-gray-800">{postulant.name || 'Nom inconnu'}</h2>
+                          <p className="text-sm text-gray-600">{postulant.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-xs text-gray-500 hidden md:block">
+                          {postulant.created_at ? new Date(postulant.created_at).toLocaleDateString() : 'Date inconnue'}
                         </span>
-                      </div>
-                      <div className="border-t border-gray-100 pt-4">
-                        <p className="text-gray-700 whitespace-pre-line">{p.message || 'Pas de message fourni.'}</p>
-                      </div>
-                      <div className="flex justify-end mt-4 pt-3 border-t border-gray-100">
-                        <button
-                          className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-                          onClick={() => {
-                            window.open(`mailto:${p.email}?subject=Re: Votre postulation&body=Bonjour ${p.name || ''},`);
-                          }}
-                        >
-                          Répondre
-                        </button>
+                        <div className={`transform transition-transform ${expandedPostulant === postulant.id ? 'rotate-180' : ''}`}>
+                          <svg className="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
+                    
+                    {expandedPostulant === postulant.id && (
+                      <div className="p-6 border-t border-gray-100 bg-white">
+                        <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                          <p className="text-gray-700 whitespace-pre-line">{postulant.message || 'Pas de message fourni.'}</p>
+                        </div>
+                        <div className="flex justify-between items-center flex-wrap gap-3">
+                          <span className="text-sm text-gray-500 md:hidden">
+                            {postulant.created_at ? new Date(postulant.created_at).toLocaleDateString() : 'Date inconnue'}
+                          </span>
+                          <div className="flex items-center space-x-4">
+                            <button
+                              className="flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(`mailto:${postulant.email}?subject=Re: Votre postulation&body=Bonjour ${postulant.name || ''},`);
+                              }}
+                            >
+                              <svg className="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                              </svg>
+                              Répondre par email
+                            </button>
+                            
+                            {deleteConfirmId === postulant.id ? (
+                              <div className="flex items-center space-x-2">
+                                <button
+                                  disabled={deleteLoading}
+                                  className="flex items-center text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeletePostulant(postulant.id);
+                                  }}
+                                >
+                                  {deleteLoading ? (
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                  ) : (
+                                    <svg className="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  )}
+                                  Confirmer
+                                </button>
+                                <button
+                                  className="flex items-center text-sm text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDeleteConfirmId(null);
+                                  }}
+                                >
+                                  <svg className="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                  Annuler
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                className="flex items-center text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteConfirmId(postulant.id);
+                                }}
+                              >
+                                <svg className="w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Supprimer
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Pagination */}
+            {sortedPostulants.length > postulantsPerPage && (
+              <div className="flex justify-center mt-8">
+                <nav className="flex items-center">
+                  <button
+                    onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded-l-md border ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-blue-50 text-blue-600'}`}
+                  >
+                    <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  
+                  {[...Array(Math.ceil(sortedPostulants.length / postulantsPerPage))].map((_, index) => {
+                    const pageNumber = index + 1;
+                    // Display limited page numbers with ellipsis
+                    if (
+                      pageNumber === 1 || 
+                      pageNumber === Math.ceil(sortedPostulants.length / postulantsPerPage) ||
+                      (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={pageNumber}
+                          onClick={() => paginate(pageNumber)}
+                          className={`px-3 py-1 border-t border-b ${
+                            currentPage === pageNumber
+                              ? 'bg-blue-600 text-white font-medium'
+                              : 'bg-white text-blue-600 hover:bg-blue-50'
+                          }`}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    } else if (
+                      pageNumber === currentPage - 2 ||
+                      pageNumber === currentPage + 2
+                    ) {
+                      return (
+                        <span key={pageNumber} className="px-2 py-1 border-t border-b text-gray-500">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  })}
+                  
+                  <button
+                    onClick={() => paginate(currentPage < Math.ceil(sortedPostulants.length / postulantsPerPage) ? currentPage + 1 : currentPage)}
+                    disabled={currentPage === Math.ceil(sortedPostulants.length / postulantsPerPage)}
+                    className={`px-3 py-1 rounded-r-md border ${currentPage === Math.ceil(sortedPostulants.length / postulantsPerPage) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-blue-50 text-blue-600'}`}
+                  >
+                    <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </nav>
+              </div>
+            )}
           </div>
+        </div>
+        
+        {/* Footer */}
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>© {new Date().getFullYear()} Fondation. Tous droits réservés.</p>
         </div>
       </div>
     </div>

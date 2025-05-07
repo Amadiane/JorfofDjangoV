@@ -137,7 +137,7 @@ class CommunityContact(models.Model):
 
 
 
-#ComminityParter
+
 # partners/models.py
 from django.db import models
 
