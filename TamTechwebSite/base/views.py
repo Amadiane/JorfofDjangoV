@@ -249,16 +249,14 @@ class ContactAPIView(APIView):
 
 
 
-
-#newsletter_subscription
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.core.mail import EmailMessage
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-from django.conf import settings  # il manquait aussi cette importation
+from django.conf import settings
 from .models import Subscriber
+import json
 
 @csrf_exempt
 def newsletter_subscription(request):
@@ -270,16 +268,12 @@ def newsletter_subscription(request):
             if not email:
                 return JsonResponse({"message": "Email est requis."}, status=400)
 
-            # Vérifier si l'email existe déjà
             if Subscriber.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Cet email est déjà abonné."}, status=400)
 
-            # Enregistrer l'email
             subscriber = Subscriber.objects.create(email=email)
 
-            # Envoyer l'email de bienvenue
             html_message = render_to_string('emails/abonnement_email.html')
-            plain_message = strip_tags(html_message)
             subject = "Welcome to subscription"
             email_message = EmailMessage(
                 subject=subject,
@@ -292,25 +286,28 @@ def newsletter_subscription(request):
             email_message.send()
 
             return JsonResponse({"message": "Merci pour votre abonnement !"}, status=200)
-
         except json.JSONDecodeError:
             return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
 
-    return JsonResponse({"message": "Méthode non autorisée."}, status=405)
-
-
-
-
-from django.http import JsonResponse
-from .models import Subscriber
-
-def get_subscribers(request):
-    if request.method == "GET":
-        # Récupérer tous les abonnés
+    elif request.method == "GET":
         subscribers = Subscriber.objects.all()
-        # Créer une liste d'emails
-        subscriber_list = [{"email": subscriber.email} for subscriber in subscribers]
-        return JsonResponse(subscriber_list, safe=False)
+        data = [{"id": s.id, "email": s.email} for s in subscribers]
+        return JsonResponse(data, safe=False)
+
+    elif request.method == "DELETE":
+        try:
+            data = json.loads(request.body)
+            subscriber_id = data.get("id")
+            if not subscriber_id:
+                return JsonResponse({"message": "ID requis pour supprimer."}, status=400)
+            subscriber = Subscriber.objects.get(id=subscriber_id)
+            subscriber.delete()
+            return JsonResponse({"message": "Abonné supprimé avec succès."}, status=200)
+        except Subscriber.DoesNotExist:
+            return JsonResponse({"message": "Abonné non trouvé."}, status=404)
+        except Exception as e:
+            return JsonResponse({"message": str(e)}, status=400)
+
     return JsonResponse({"message": "Méthode non autorisée."}, status=405)
 
 
@@ -553,8 +550,37 @@ class PartnerAPIView(APIView):
             return Response({'message': 'Partenaire ajouté et confirmation envoyée.'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # DELETE : Supprimer un partenaire spécifique
+    def delete(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            partner_id = data.get("id")
+            if not partner_id:
+                return JsonResponse({"message": "ID requis pour supprimer."}, status=400)
+            
+            partner = Partner.objects.get(id=partner_id)
+            partner.delete()
+            return JsonResponse({"message": "Partenaire supprimé avec succès."}, status=200)
+        
+        except Partner.DoesNotExist:
+            return JsonResponse({"message": "Partenaire non trouvé."}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
+        except Exception as e:
+            return JsonResponse({"message": str(e)}, status=400)
 
 
+
+
+
+
+
+
+
+
+
+            
 
 #PlateformeLink
 from django.http import JsonResponse

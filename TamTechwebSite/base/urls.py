@@ -6,9 +6,9 @@ from .views import (
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     get_last_two_missions, create_mission, PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, get_subscribers, platform_links_api, valeurs_api, fondations_api, mot_president_api,
+    PartnerAPIView, platform_links_api, valeurs_api, fondations_api, mot_president_api,
     add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
-    ProtectedView, logout  # 👈 ajoute ces deux-là ici
+    ProtectedView, logout, newsletter_subscription   # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -30,7 +30,6 @@ urlpatterns = [
     # Route pour DELETE (supprimer un contact) avec un id
     path('contact/<int:id>/', ContactAPIView.as_view(), name='contact-detail'),
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
-    path('newsletter/subscribers/', get_subscribers, name='get_subscribers'),
     path('missions/', get_last_two_missions, name='get_last_two_missions'),
     path('missions/create/', create_mission, name='create_mission'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
