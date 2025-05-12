@@ -58,6 +58,8 @@ import PhotoPost from './components/Admin/PhotoPost.jsx';
 import DocumentPost from './components/Admin/DocumentPost.jsx';
 import MediaPartenairePost from './components/Admin/MediaPartenairePost.jsx';
 import ProgramPost from './components/Admin/ProgramPost.jsx';
+import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
+import Activities from './components/HeaderSection/Activies.jsx';
 
 // Définir les routes avec `createBrowserRouter`
 const router = createBrowserRouter(
@@ -107,6 +109,8 @@ const router = createBrowserRouter(
         <Route path="documentPost" element={<DocumentPost />} />
         <Route path="mediaPartenairePost" element={<MediaPartenairePost />} />
         <Route path="programPost" element={<ProgramPost />} />
+        <Route path="activitiesPost" element={<ActivitiesPost />} />
+        <Route path="activities" element={<Activities />} />
       </Route>
 
       <Route path="login" element={<Login />} />

@@ -17,4 +17,9 @@ export default defineConfig({
   json: {
     namedExports: true,
   },
+  server: {
+    hmr: {
+      overlay: false, // Désactive l'overlay d'erreur pour éviter les erreurs visuelles sur le navigateur
+    },
+  },
 });

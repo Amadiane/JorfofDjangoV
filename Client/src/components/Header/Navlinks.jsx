@@ -149,7 +149,7 @@ const Navlinks = () => {
     },
     {
       title: t("partner_activities"),
-      path: "/partners-activities",
+      path: "/activities",
       isDropdown: false
     },
     {

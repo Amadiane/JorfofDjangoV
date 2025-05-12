@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ChatBot from '../ChatBot/ChatBot';
+import ChatBot from "../ChatBot/ChatBot.jsx";
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
-import Blogdetail from '../Blogdetail/Blogdetail';
 import { useTranslation } from 'react-i18next';
 
 const Actualites = () => {

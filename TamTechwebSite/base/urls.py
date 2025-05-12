@@ -8,7 +8,7 @@ from .views import (
     get_last_two_missions, create_mission, PlatformViewSet, RejoindreAPIView, CommunityView,
     PartnerAPIView, platform_links_api, valeurs_api, fondations_api, mot_president_api,
     add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription   # 👈 ajoute ces deux-là ici
+    ProtectedView, logout, newsletter_subscription, ActivityViewSet  # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -16,7 +16,7 @@ router = DefaultRouter()
 router.register(r"blog", BlogViewSet)
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 router.register(r'platforms', PlatformViewSet)
-
+router.register(r'activities', ActivityViewSet, basename='activity')
 # URL Patterns
 urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

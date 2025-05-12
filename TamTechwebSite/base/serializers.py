@@ -200,3 +200,16 @@ class PlatformLinkSerializer(serializers.ModelSerializer):
     def get_icon(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url) if obj.icon else None
+
+
+
+from rest_framework import serializers
+from .models import Activity
+
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = '__all__'
+        extra_kwargs = {
+            'cover_photo': {'required': False, 'allow_null': True},
+        }

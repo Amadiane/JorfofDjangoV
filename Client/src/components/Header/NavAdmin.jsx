@@ -159,6 +159,7 @@ const NavAdmin = () => {
         { path: "/videoPost", label: "Vidéos" },
         { path: "/photoPost", label: "Photothèque" },
         { path: "/documentPost", label: "Téléchargements" },
+        { path: "/activitiesPost", label: "Activities" },
       ]
     },
     {
