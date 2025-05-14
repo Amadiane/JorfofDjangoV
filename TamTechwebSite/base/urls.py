@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from . import views
 from .views import (
     BlogViewSet, get_todos, CustomTokenObtainPairView, CustomTokenRefreshView,
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
-    get_last_two_missions, create_mission, PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, platform_links_api, valeurs_api, fondations_api, mot_president_api,
+    PlatformViewSet, RejoindreAPIView, CommunityView,
+    PartnerAPIView, platform_links_api, fondations_api, mot_president_api,
     add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet  # 👈 ajoute ces deux-là ici
 )
@@ -30,8 +31,10 @@ urlpatterns = [
     # Route pour DELETE (supprimer un contact) avec un id
     path('contact/<int:id>/', ContactAPIView.as_view(), name='contact-detail'),
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
-    path('missions/', get_last_two_missions, name='get_last_two_missions'),
-    path('missions/create/', create_mission, name='create_mission'),
+    # path('missions/', get_last_two_missions, name='get_last_two_missions'),
+    # path('missions/create/', create_mission, name='create_mission'),
+    path('missions/', views.mission_list_create, name='mission_list_create'),
+    path('missions/<int:pk>/', views.mission_detail, name='mission_detail'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
     path('rejoindre/<int:id>/', RejoindreAPIView.as_view(), name='rejoindre-delete'),
     path('community/', CommunityView.as_view(), name='community'),
@@ -39,7 +42,11 @@ urlpatterns = [
     path('community/<int:id>/', CommunityView.as_view()),
     path('partners/', PartnerAPIView.as_view(), name='partners'),
     path('platforms/', platform_links_api, name='platform_links_api'),
-    path('valeurs/', valeurs_api, name='valeurs_api'),
+    # path('valeurs/', valeurs_api, name='valeurs_api'),
+    # path('valeurs/', views.valeurs_api, name='valeurs_api'),
+    # path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
+    path('valeurs/', views.valeurs_list, name='valeurs_list'),
+    path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
     path('fondations/', fondations_api, name='fondations_api'),
     path('mot-president/', mot_president_api, name='mot_president_api'),
     path('add-video/', add_video, name='add_video'),

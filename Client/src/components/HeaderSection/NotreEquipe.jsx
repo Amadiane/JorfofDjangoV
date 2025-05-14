@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Pour la redirection
-import ChatBot from '../ChatBot/ChatBot'; // Chemin d'importation du chatbot
+import { useNavigate } from 'react-router-dom'; 
+import ChatBot from '../ChatBot/ChatBot'; 
+import { useTranslation } from 'react-i18next';
 
 const NotreEquipe = () => {
+  const { t, i18n } = useTranslation();  // Utilisation de useTranslation pour gérer la langue
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Pour la redirection si nécessaire
+  const navigate = useNavigate();
+  const [language, setLanguage] = useState('fr'); // Par défaut, la langue est le français
+  const [title, setTitle] = useState(""); // État pour stocker le titre dynamique
 
-  useEffect(() => {
-    // Vérifier si l'utilisateur est connecté avant de récupérer le message
-    // if (!localStorage.getItem('accessToken')) {
-    //   navigate('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    //   return;
-    // }
 
+useEffect(() => {
+    // Fonction pour récupérer le titre et le contenu en fonction de la langue
     const fetchMessage = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/team-messages/');
@@ -24,23 +24,24 @@ const NotreEquipe = () => {
         const data = await response.json();
         
         if (data.length > 0) {
-          // Trier les messages par date (si l'API renvoie des timestamps ou une date)
           const sortedMessages = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           
-          // Récupérer uniquement le dernier message (le plus récent)
-          setMessage(sortedMessages[0].content_fr); // On peut aussi choisir la langue préférée
+          // Utiliser les données dynamiques pour récupérer le titre et le message en fonction de la langue active
+          const messageData = sortedMessages[0]; // Message le plus récent
+          setTitle(messageData[`title_${i18n.language}`] || "Titre non disponible");
+          setMessage(messageData[`content_${i18n.language}`] || "Message non disponible dans cette langue.");
         } else {
           setMessage("Aucun message disponible pour l'instant.");
         }
       } catch (error) {
-        setError(error.message); // Gestion des erreurs
+        setError(error.message);
       } finally {
-        setLoading(false); // Fin du chargement
+        setLoading(false);
       }
     };
 
-    fetchMessage(); // Appeler la fonction pour récupérer le message
-  }, [navigate]);
+    fetchMessage();
+  }, [i18n.language]); // Met à jour lorsque la langue change
 
   if (loading) {
     return (
@@ -60,13 +61,13 @@ const NotreEquipe = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <ChatBot /> {/* Affichage du chatbot */}
+      {/* <ChatBot /> Affichage du chatbot */}
 
       <section className="text-gray-600 body-font overflow-hidden w-full px-4 sm:px-6 lg:px-8">
         <div className="container pb-32 pt-16 mx-auto">
           <div className="main-bl pb-10">
             <div className="bg-white p-8 sm:p-10 rounded-lg shadow-lg max-w-5xl mx-auto text-center">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 sm:mb-8">ÉQUIPE FONDATION TAMKINE</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6 sm:mb-8"> {title}  {/* Titre dynamique */}</h2>
               <p className="text-base sm:text-xl text-gray-700 text-justify whitespace-pre-line">{message}</p>
             </div>
           </div>

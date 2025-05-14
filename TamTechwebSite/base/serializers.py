@@ -64,14 +64,17 @@ class FondationSerializer(serializers.ModelSerializer):
 
 
 
-# serializers.py
+# # serializers.py
 from rest_framework import serializers
 from .models import Mission
 
 class MissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mission
-        fields = ['id', 'title', 'content', 'created_at']  # ou sans 'title' si tu ne veux pas l'utiliser
+        fields = ['id', 'title_fr', 'title_en', 'title_ar', 
+                  'content_fr', 'content_en', 'content_ar', 
+                  'created_at']
+ # ou sans 'title' si tu ne veux pas l'utiliser
 
 
 
@@ -213,3 +216,13 @@ class ActivitySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'cover_photo': {'required': False, 'allow_null': True},
         }
+
+
+
+from rest_framework import serializers
+from .models import Valeur  # Assurez-vous que le modèle Valeur existe dans models.py
+
+class ValeurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Valeur
+        fields = '__all__'  # ou liste de champs spécifiques si nécessaire

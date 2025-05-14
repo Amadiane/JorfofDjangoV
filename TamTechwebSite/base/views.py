@@ -327,25 +327,73 @@ class TeamMessageViewSet(viewsets.ModelViewSet):
 
 
 # views.py
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from rest_framework import status
+# from .models import Mission
+# from .serializers import MissionSerializer
+
+# @api_view(['GET'])
+# def get_last_two_missions(request):
+#     missions = Mission.objects.order_by('-created_at')[:2]
+#     serializer = MissionSerializer(missions, many=True)
+#     return Response(serializer.data)
+
+# @api_view(['POST'])
+# def create_mission(request):
+#     serializer = MissionSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Mission
 from .serializers import MissionSerializer
 
-@api_view(['GET'])
-def get_last_two_missions(request):
-    missions = Mission.objects.order_by('-created_at')[:2]
-    serializer = MissionSerializer(missions, many=True)
-    return Response(serializer.data)
+@api_view(['GET', 'POST'])
+def mission_list_create(request):
+    if request.method == 'GET':
+        missions = Mission.objects.all().order_by('-created_at')
+        serializer = MissionSerializer(missions, many=True)
+        return Response(serializer.data)
 
-@api_view(['POST'])
-def create_mission(request):
-    serializer = MissionSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'POST':
+        serializer = MissionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def mission_detail(request, pk):
+    try:
+        mission = Mission.objects.get(pk=pk)
+    except Mission.DoesNotExist:
+        return Response({'error': 'Mission not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MissionSerializer(mission)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = MissionSerializer(mission, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        mission.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+
+
 
 
 
@@ -700,100 +748,108 @@ def mot_president_api(request):
 
 
 
-#Fondation Tamkine
-# views.py
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from .models import Fondation
-
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def fondations_api(request):
-    if request.method == "GET":
-        fondations = Fondation.objects.all()
-        data = []
-        for f in fondations:
-            data.append({
-                "id": f.id,
-                "titre": f.titre,
-                "description": f.description,
-                "image": request.build_absolute_uri(f.image.url)
-            })
-        return JsonResponse(data, safe=False)
-
-    if request.method == "POST":
-        titre = request.POST.get("titre")
-        description = request.POST.get("description")
-        image = request.FILES.get("image")
-
-        if not (titre and description and image):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
-
-        fondation = Fondation.objects.create(titre=titre, description=description, image=image)
-
-        return JsonResponse({
-            "message": "Fondation ajoutée avec succès.",
-            "fondation": {
-                "id": fondation.id,
-                "titre": fondation.titre,
-                "description": fondation.description,
-                "image": request.build_absolute_uri(fondation.image.url)
-            }
-        }, status=201)
 
 
 
 
 
-#Valeurs
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from .models import Valeur
-from django.core.files.storage import default_storage
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def valeurs_api(request):
-    if request.method == "GET":
-        # Récupérer toutes les valeurs avec leurs informations
-        valeurs = Valeur.objects.all()
+# #Valeurs
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse
+# from django.views.decorators.http import require_http_methods
+# from .models import Valeur
+# from django.core.files.storage import default_storage
+
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def valeurs_api(request):
+#     if request.method == "GET":
+#         # Récupérer toutes les valeurs avec leurs informations
+#         valeurs = Valeur.objects.all()
         
-        # Convertir les objets en dictionnaires
-        data = []
-        for valeur in valeurs:
-            data.append({
-                "id": valeur.id,
-                "titre": valeur.titre,
-                "description": valeur.description,
-                "image": request.build_absolute_uri(valeur.image.url)
+#         # Convertir les objets en dictionnaires
+#         data = []
+#         for valeur in valeurs:
+#             data.append({
+#                 "id": valeur.id,
+#                 "titre": valeur.titre,
+#                 "description": valeur.description,
+#                 "image": request.build_absolute_uri(valeur.image.url)
 
-            })
+#             })
 
-        return JsonResponse(data, safe=False)
+#         return JsonResponse(data, safe=False)
 
-    if request.method == "POST":
-        titre = request.POST.get("titre")
-        description = request.POST.get("description")
-        image = request.FILES.get("image")
+#     if request.method == "POST":
+#         titre = request.POST.get("titre")
+#         description = request.POST.get("description")
+#         image = request.FILES.get("image")
 
-        if not (titre and description and image):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+#         if not (titre and description and image):
+#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-        # Créer une nouvelle instance de Valeur avec l'image
-        valeur = Valeur.objects.create(titre=titre, description=description, image=image)
+#         # Créer une nouvelle instance de Valeur avec l'image
+#         valeur = Valeur.objects.create(titre=titre, description=description, image=image)
 
-        # Retourner une réponse JSON avec l'URL complète de l'image
-        return JsonResponse({
-            "message": "Valeur ajoutée avec succès.",
-            "valeur": {
-                "id": valeur.id,
-                "titre": valeur.titre,
-                "description": valeur.description,
-                "image": request.build_absolute_uri(valeur.image.url)  # Assure l'URL absolue de l'image
-            }
-        }, status=201)
+#         # Retourner une réponse JSON avec l'URL complète de l'image
+#         return JsonResponse({
+#             "message": "Valeur ajoutée avec succès.",
+#             "valeur": {
+#                 "id": valeur.id,
+#                 "titre": valeur.titre,
+#                 "description": valeur.description,
+#                 "image": request.build_absolute_uri(valeur.image.url)  # Assure l'URL absolue de l'image
+#             }
+#         }, status=201)
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Valeur
+from .serializers import ValeurSerializer
+
+@api_view(['GET', 'POST'])
+def valeurs_list(request):
+    if request.method == 'GET':
+        valeurs = Valeur.objects.all()
+        serializer = ValeurSerializer(valeurs, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = ValeurSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def valeurs_detail(request, id):
+    try:
+        valeur = Valeur.objects.get(id=id)
+    except Valeur.DoesNotExist:
+        return Response({"error": "Valeur non trouvée."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ValeurSerializer(valeur, context={'request': request})
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = ValeurSerializer(valeur, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        valeur.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
 
 
 
@@ -1040,10 +1096,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Blog, Fondation, Video, Programme, PlatformLink
+from .models import Blog, Video, Programme, PlatformLink
 from .serializers import (
     BlogSerializer,
-    FondationSerializer,
     VideoSerializer,
     ProgrammeSerializer,
     PlatformLinkSerializer
@@ -1055,7 +1110,7 @@ from itertools import chain
 from operator import itemgetter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Blog, Fondation, Video, Programme, Platform
+from .models import Blog, Video, Programme, Platform
 from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformSerializer
 
 class AggregatedContentAPIView(APIView):
@@ -1112,3 +1167,15 @@ from .serializers import ActivitySerializer
 class ActivityViewSet(viewsets.ModelViewSet):
     queryset = Activity.objects.all().order_by('-created_at')
     serializer_class = ActivitySerializer
+
+
+from django.http import JsonResponse
+from .models import FondationTamkine
+
+def fondations_api(request):
+    # Exemple de traitement de données et de réponse JSON
+    fondations = FondationTamkine.objects.all()
+    data = {
+        "fondations": list(fondations.values("title_fr", "description_fr"))  # Ajoutez d'autres champs si nécessaire
+    }
+    return JsonResponse(data)

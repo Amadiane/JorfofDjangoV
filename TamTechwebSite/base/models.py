@@ -60,15 +60,32 @@ class TeamMessage(models.Model):
 
 
 # models.py
+# from django.db import models
+
+# class Mission(models.Model):
+#     title = models.CharField(max_length=255, blank=True, null=True)
+#     content = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.title
 from django.db import models
 
 class Mission(models.Model):
-    title = models.CharField(max_length=255, blank=True, null=True)
-    content = models.TextField()
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    content_ar = models.TextField()
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return self.title_fr
+
+
 
 
 
@@ -212,18 +229,46 @@ class Fondation(models.Model):
         return self.titre
 
 
+from django.db import models
+
+class FondationTamkine(models.Model):
+    title_fr = models.CharField(max_length=100)
+    description_fr = models.TextField()
+
+    def __str__(self):
+        return self.title_fr
 
 
-#NosValeurs
+
+
+
+# #NosValeurs
+# from django.db import models
+
+# class Valeur(models.Model):
+#     titre = models.CharField(max_length=255)
+#     description = models.TextField()
+#     image = models.ImageField(upload_to='valeurs')  # L'image sera stockée dans media/valeurs/
+
+#     def __str__(self):
+#         return self.titre
 from django.db import models
 
 class Valeur(models.Model):
-    titre = models.CharField(max_length=255)
-    description = models.TextField()
-    image = models.ImageField(upload_to='valeurs')  # L'image sera stockée dans media/valeurs/
+    titre_fr = models.CharField(max_length=255)
+    titre_en = models.CharField(max_length=255, blank=True, null=True)
+    titre_ar = models.CharField(max_length=255, blank=True, null=True)
+
+    description_fr = models.TextField()
+    description_en = models.TextField(blank=True, null=True)
+    description_ar = models.TextField(blank=True, null=True)
+
+    image = models.ImageField(upload_to='valeurs/')  # dans media/valeurs
 
     def __str__(self):
-        return self.titre
+        return self.titre_fr
+
+
 
 
 #Programs

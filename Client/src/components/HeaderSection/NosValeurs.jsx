@@ -1,7 +1,8 @@
-//A rendre responsive
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const NosValeurs = () => {
+  const { i18n, t } = useTranslation(); // Using useTranslation for language management
   const [values, setValues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -12,7 +13,7 @@ const NosValeurs = () => {
     const fetchValues = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/valeurs/");
-        if (!response.ok) throw new Error("Erreur lors du chargement des données.");
+        if (!response.ok) throw new Error(t('errors.loading_data'));
         const data = await response.json();
 
         const initialPositions = {};
@@ -23,7 +24,7 @@ const NosValeurs = () => {
 
         setValues(data);
       } catch (err) {
-        console.error("Erreur de fetch:", err);
+        console.error(t('errors.fetch_error'), err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -31,7 +32,7 @@ const NosValeurs = () => {
     };
 
     fetchValues();
-  }, []);
+  }, [t]);
 
   const handleMouseDown = (index, e) => {
     setDraggingImage(index);
@@ -78,69 +79,31 @@ const NosValeurs = () => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column',
-      padding: '40px',
-      backgroundColor: '#f4f7f6',
-      minHeight: '100vh',
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '1200px',
-        backgroundColor: '#ffffff',
-        padding: '40px',
-        borderRadius: '12px',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-      }}>
-      
+    <div className="flex justify-center items-center flex-col p-4 md:p-10 bg-gray-100 min-h-screen">
+      <div className="w-full max-w-6xl bg-white p-4 md:p-10 rounded-lg shadow-lg">
+        {/* <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-blue-900">
+          {t('nos_valeurs.title')}
+        </h1> */}
 
-        {loading && <p style={{ textAlign: 'center', fontSize: '18px' }}>Chargement des valeurs...</p>}
+        {loading && <p className="text-center text-lg">{t('common.loading')}</p>}
         {error && (
-          <div style={{ color: 'red', textAlign: 'center', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', marginBottom: '20px' }}>
-            <p style={{ fontSize: '18px', marginBottom: '10px' }}><strong>Erreur:</strong> {error}</p>
-            <p>Vérifiez que votre serveur Django est bien lancé sur http://127.0.0.1:8000</p>
+          <div className="text-red-600 text-center p-5 bg-white rounded-lg mb-5">
+            <p className="text-lg mb-2"><strong>{t('common.error')}:</strong> {error}</p>
+            <p>{t('errors.check_server')}</p>
           </div>
         )}
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '30px',
-        }}>
+        <div className="flex flex-col gap-8">
           {values.length > 0 ? values.map((valeur, index) => (
-            <div key={index} style={{
-              backgroundColor: '#fff',
-              borderRadius: '12px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
-            }}>
-              <div style={{
-                width: '40%',
-                position: 'relative',
-                backgroundColor: '#f0f0f0',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '20px',
-                overflow: 'hidden',
-              }}>
+            <div key={index} className={`bg-white rounded-lg shadow-md overflow-hidden flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+              <div className="w-full md:w-2/5 relative bg-gray-100 flex justify-center items-center p-4 overflow-hidden">
                 <img
                   src={getImageSrc(valeur)}
-                  alt={`Image de ${valeur.titre}`}
+                  alt={`${t('nos_valeurs.image_of')} ${valeur[`titre_${i18n.language}`] || valeur.titre}`}
+                  className="max-w-full max-h-72 object-contain cursor-grab select-none"
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '300px',
-                    objectFit: 'contain',
-                    cursor: 'grab',
-                    position: 'relative',
                     transform: `translate(${imagePositions[index]?.x || 0}px, ${imagePositions[index]?.y || 0}px)`,
                     transition: draggingImage === index ? 'none' : 'transform 0.2s ease',
-                    userSelect: 'none',
                   }}
                   onMouseDown={(e) => handleMouseDown(index, e)}
                   onError={(e) => {
@@ -149,45 +112,23 @@ const NosValeurs = () => {
                   }}
                 />
                 {draggingImage === index && (
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '10px',
-                    right: '10px',
-                    backgroundColor: 'rgba(0,0,0,0.7)',
-                    color: 'white',
-                    padding: '5px 10px',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                  }}>
-                    Déplacement en cours...
+                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white p-1 px-2 rounded text-xs">
+                    {t('nos_valeurs.moving')}
                   </div>
                 )}
               </div>
-              <div style={{
-                width: '60%',
-                padding: '30px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}>
-                <h2 style={{
-                  fontSize: '36px',
-                  marginBottom: '15px',
-                  color: '#1C1C47',
-                  borderLeft: '4px solid #1C1C47',
-                  paddingLeft: '15px',
-                  fontWeight: '600',
-                }}>{valeur.titre}</h2>
-                <p style={{
-                  fontSize: '18px',
-                  color: '#555',
-                  lineHeight: '1.6',
-                }}>{valeur.description}</p>
+              <div className="w-full md:w-3/5 p-4 md:p-8 flex flex-col justify-center">
+                <h2 className="text-2xl md:text-3xl mb-4 text-blue-900 border-l-4 border-blue-900 pl-3 font-semibold">
+                  {valeur[`titre_${i18n.language}`] || valeur.titre || t('common.title_unavailable')}
+                </h2>
+                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+                  {valeur[`description_${i18n.language}`] || valeur.description || t('common.description_unavailable')}
+                </p>
               </div>
             </div>
           )) : !loading && (
-            <div style={{ textAlign: 'center', padding: '30px' }}>
-              <p>Aucune valeur trouvée. Veuillez ajouter des valeurs dans votre système.</p>
+            <div className="text-center py-8">
+              <p>{t('nos_valeurs.no_values')}</p>
             </div>
           )}
         </div>
