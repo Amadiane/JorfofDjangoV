@@ -207,13 +207,32 @@ class PlatformLink(models.Model):
 
 #MotDuPresident
 # models.py
+# class MotPresident(models.Model):
+#     titre = models.CharField(max_length=255)
+#     description = models.TextField()
+#     image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
+
+#     def __str__(self):
+#         return self.titre
+# models.py
+# models.py
+from django.db import models
+
 class MotPresident(models.Model):
-    titre = models.CharField(max_length=255)
-    description = models.TextField()
+    titre_fr = models.CharField(max_length=255)
+    titre_en = models.CharField(max_length=255)
+    titre_ar = models.CharField(max_length=255)
+
+    description_fr = models.TextField()
+    description_en = models.TextField()
+    description_ar = models.TextField()
+
     image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
 
     def __str__(self):
-        return self.titre
+        return self.titre_fr
+
+
 
 
 #Fondation Tamkine

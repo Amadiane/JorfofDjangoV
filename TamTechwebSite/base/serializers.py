@@ -73,6 +73,15 @@ class FondationTamkineSerializer(serializers.ModelSerializer):
                   'image']
 
 
+# serializers.py
+from rest_framework import serializers
+from .models import MotPresident
+
+class MotPresidentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MotPresident
+        fields = '__all__'
+
 
 
 

@@ -7,9 +7,10 @@ from .views import (
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, platform_links_api, mot_president_api,
+    PartnerAPIView, platform_links_api,
     add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail  # 👈 ajoute ces deux-là ici
+    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
+    mot_president_list_create, mot_president_detail  # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -51,7 +52,8 @@ urlpatterns = [
     # path('fondations/', fondations_api, name='fondations_api'),
     path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
     path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),
-    path('mot-president/', mot_president_api, name='mot_president_api'),
+    path('motpresident/', mot_president_list_create, name='motpresident-list-create'),
+    path('motpresident/<int:pk>/', mot_president_detail, name='motpresident-detail'),
     path('add-video/', add_video, name='add_video'),
     path('media/', add_media_content, name='add_media_content'),
     path('documents/', document_api, name='document_api'),

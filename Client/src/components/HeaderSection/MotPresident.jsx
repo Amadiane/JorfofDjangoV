@@ -1,21 +1,19 @@
-///A rendre responsive
-
-
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const MotPresident = () => {
+  const { i18n, t } = useTranslation(); // Utilisation de useTranslation pour la gestion des langues
   const [motPresidents, setMotPresidents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [draggingImage, setDraggingImage] = useState(null);
   const [imagePositions, setImagePositions] = useState({});
-  const [expandedDescriptions, setExpandedDescriptions] = useState({});
 
   useEffect(() => {
     const fetchMotPresidents = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/mot-president/");
-        if (!response.ok) throw new Error("Erreur lors du chargement des données.");
+        const response = await fetch("http://127.0.0.1:8000/api/motpresident/");
+        if (!response.ok) throw new Error(t('errors.loading_data'));
         const data = await response.json();
 
         const initialPositions = {};
@@ -26,7 +24,7 @@ const MotPresident = () => {
 
         setMotPresidents(data);
       } catch (err) {
-        console.error("Erreur de fetch:", err);
+        console.error(t('errors.fetch_error'), err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -34,7 +32,7 @@ const MotPresident = () => {
     };
 
     fetchMotPresidents();
-  }, []);
+  }, [t]);
 
   const handleMouseDown = (index, e) => {
     setDraggingImage(index);
@@ -51,8 +49,8 @@ const MotPresident = () => {
       setImagePositions(prev => ({
         ...prev,
         [draggingImage]: {
-          x: (prev[draggingImage]?.x || 0) + e.movementX,
-          y: (prev[draggingImage]?.y || 0) + e.movementY
+          x: prev[draggingImage].x + e.movementX,
+          y: prev[draggingImage].y + e.movementY
         }
       }));
     }
@@ -94,13 +92,6 @@ const MotPresident = () => {
     }));
   };
 
-  const toggleDescription = (index) => {
-    setExpandedDescriptions(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
-  };
-
   useEffect(() => {
     if (draggingImage !== null) {
       window.addEventListener('mousemove', handleMouseMove);
@@ -128,130 +119,70 @@ const MotPresident = () => {
     return imageUrl;
   };
 
+  // Fonction améliorée pour découper le texte de manière plus intelligente
   const splitDescription = (description) => {
     if (!description) return { intro: '', main: '' };
-    
-    // Pour les petits écrans, on retourne tout dans intro pour afficher plus tard avec le bouton "Voir plus"
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      return { intro: description.substring(0, 150) + '...', main: description };
-    }
-    
     if (description.length < 300) {
       return { intro: description, main: '' };
     }
-
-    const cutIndex = description.lastIndexOf(" ", 300);
-    const intro = description.substring(0, cutIndex);
-    const main = description.substring(cutIndex).trim();
+    
+    // Recherche la fin d'une phrase proche de 300 caractères
+    const sentences = description.match(/[^.!?]+[.!?]+/g) || [];
+    let intro = '';
+    let sentenceCount = 0;
+    let charCount = 0;
+    
+    for (const sentence of sentences) {
+      if (charCount + sentence.length > 350) break;
+      intro += sentence;
+      charCount += sentence.length;
+      sentenceCount++;
+    }
+    
+    // Si aucune phrase complète n'a été trouvée, utiliser la méthode classique
+    if (sentenceCount === 0) {
+      const cutIndex = description.lastIndexOf(" ", 300);
+      intro = description.substring(0, cutIndex);
+      const main = description.substring(cutIndex).trim();
+      return { intro, main };
+    }
+    
+    const main = description.substring(intro.length).trim();
     return { intro, main };
   };
 
-  const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    padding: '20px',
-    backgroundColor: '#f4f7f6',
-    minHeight: '100vh',
-  };
-
-  const contentStyle = {
-    width: '100%',
-    maxWidth: '1200px',
-    backgroundColor: '#ffffff',
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-  };
-
-  const messageItemStyle = {
-    backgroundColor: '#fff',
-    borderRadius: '12px',
-    overflow: 'visible',
-    marginBottom: '50px',
-  };
-
-  const titleStyle = {
-    fontSize: '28px',
-    marginBottom: '20px',
-    color: '#1C1C47',
-    fontWeight: '700',
-    textAlign: 'center',
-  };
-
-  const textStyle = {
-    fontSize: '16px',
-    color: '#555',
-    lineHeight: '1.8',
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={contentStyle}>
-        <h1 style={{...titleStyle, fontSize: '32px', marginBottom: '30px'}}>Messages du Président</h1>
+    // Centrage vertical amélioré avec plus d'espace en haut pour éviter la navbar
+    <div className="flex justify-center items-center flex-col p-4 md:p-10 pt-32 md:pt-40 bg-gray-100 min-h-screen">
+      <div className="w-full max-w-5xl mx-auto bg-white p-6 md:p-10 rounded-lg shadow-lg">
+        {/* <h1 className="text-3xl md:text-4xl text-center mb-10 text-blue-900 font-bold">{t('president.title')}</h1> */}
         
-        {loading && <p style={{ textAlign: 'center', fontSize: '18px' }}>Chargement des messages du président...</p>}
-        
+        {loading && <p className="text-center text-lg">{t('common.loading')}</p>}
         {error && (
-          <div style={{ color: 'red', textAlign: 'center', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', marginBottom: '20px' }}>
-            <p style={{ fontSize: '18px', marginBottom: '10px' }}><strong>Erreur:</strong> {error}</p>
-            <p>Vérifiez que votre serveur Django est bien lancé sur http://127.0.0.1:8000</p>
+          <div className="text-red-600 text-center p-5 bg-white rounded-lg mb-5">
+            <p className="text-lg mb-2"><strong>{t('common.error')}:</strong> {error}</p>
+            <p>{t('errors.check_server')}</p>
           </div>
         )}
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '50px',
-        }}>
+        <div className="flex flex-col gap-12">
           {motPresidents.length > 0 ? motPresidents.map((motPresident, index) => {
-            const { intro, main } = splitDescription(motPresident.description);
-            const isMobile = window.innerWidth <= 768;
-            
+            const { intro, main } = splitDescription(motPresident[`description_${i18n.language}`] || motPresident.description_fr);
+
             return (
-              <div key={index} style={messageItemStyle}>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: isMobile ? 'column' : (index % 2 === 0 ? 'row' : 'row-reverse'),
-                  marginBottom: '15px',
-                }}>
-                  <div style={{
-                    width: isMobile ? '100%' : '45%',
-                    position: 'relative',
-                    backgroundColor: '#f0f0f0',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '20px',
-                    minHeight: isMobile ? '200px' : '300px',
-                    borderRadius: '12px',
-                    margin: isMobile ? '0 0 15px 0' : '0 15px',
-                  }}>
-                    <div style={{
-                      position: 'relative',
-                      width: '100%',
-                      height: '100%',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-visible">
+                <div className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} mb-8 items-center`}>
+                  <div className="w-full md:w-2/5 relative bg-gray-100 flex justify-center items-center p-6 min-h-64 rounded-lg mx-0 md:mx-4 mb-6 md:mb-0">
+                    <div className="relative w-full h-full flex justify-center items-center">
                       <img
                         src={getImageSrc(motPresident)}
-                        alt={`Image de ${motPresident.titre}`}
+                        alt={`${t('president.image_of')} ${motPresident[`titre_${i18n.language}`] || motPresident.titre_fr || t('common.title_unavailable')}`}
+                        className="max-w-full max-h-72 object-contain select-none rounded-lg shadow-md"
                         style={{
-                          maxWidth: '100%',
-                          maxHeight: isMobile ? '200px' : '300px',
-                          objectFit: 'contain',
                           cursor: draggingImage === index ? 'grabbing' : 'grab',
-                          position: 'relative',
                           transform: `translate(${imagePositions[index]?.x || 0}px, ${imagePositions[index]?.y || 0}px)`,
                           transition: draggingImage === index ? 'none' : 'transform 0.2s ease',
-                          userSelect: 'none',
                           zIndex: draggingImage === index ? 10 : 1,
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                          borderRadius: '8px',
                         }}
                         onMouseDown={(e) => handleMouseDown(index, e)}
                         onTouchStart={(e) => handleTouchStart(index, e)}
@@ -263,86 +194,42 @@ const MotPresident = () => {
                       {(imagePositions[index]?.x !== 0 || imagePositions[index]?.y !== 0) && (
                         <button
                           onClick={(e) => resetImagePosition(index, e)}
-                          style={{
-                            position: 'absolute',
-                            bottom: '10px',
-                            right: '10px',
-                            backgroundColor: '#1C1C47',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '5px 10px',
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                            zIndex: 5,
-                          }}
+                          className="absolute bottom-2 right-2 bg-blue-900 text-white border-none rounded px-3 py-1 cursor-pointer text-xs z-10 hover:bg-blue-800 transition-colors"
                         >
-                          Réinitialiser
+                          {t('common.reset')}
                         </button>
                       )}
                     </div>
                     {draggingImage === index && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        backgroundColor: 'rgba(0,0,0,0.7)',
-                        color: 'white',
-                        padding: '5px 10px',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        zIndex: 11,
-                      }}>
-                        Déplacement en cours...
+                      <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white p-1 px-3 rounded text-xs z-20">
+                        {t('president.moving')}
                       </div>
                     )}
                   </div>
-                  
-                  <div style={{
-                    width: isMobile ? '100%' : '55%',
-                    padding: '20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                  }}>
-                    <h2 style={titleStyle}>{motPresident.titre}</h2>
-                    <p style={textStyle}>
-                      {isMobile ? (expandedDescriptions[index] ? motPresident.description : intro) : intro}
+
+                  <div className="w-full md:w-3/5 p-6 flex flex-col justify-center">
+                    <h2 className="text-2xl md:text-3xl mb-5 text-blue-900 border-l-4 border-blue-900 pl-4 font-semibold">
+                      {motPresident[`titre_${i18n.language}`] || motPresident.titre_fr || t('common.title_unavailable')}
+                    </h2>
+
+                    <p className="text-base md:text-lg text-gray-700 leading-relaxed hyphens-auto" style={{ hyphens: 'auto', textAlign: 'justify' }}>
+                      {intro}
                     </p>
-                    
-                    {isMobile && motPresident.description && motPresident.description.length > 150 && (
-                      <button
-                        onClick={() => toggleDescription(index)}
-                        style={{
-                          backgroundColor: '#1C1C47',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          padding: '8px 15px',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          marginTop: '15px',
-                          alignSelf: 'flex-start',
-                        }}
-                      >
-                        {expandedDescriptions[index] ? 'Voir moins' : 'Voir plus'}
-                      </button>
-                    )}
                   </div>
                 </div>
 
-                {!isMobile && main && (
-                  <div style={{
-                    padding: '0 30px 30px 30px',
-                  }}>
-                    <p style={textStyle}>{main}</p>
+                {main && (
+                  <div className="px-4 md:px-10 pb-8">
+                    <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-4 hyphens-auto" style={{ hyphens: 'auto', textAlign: 'justify' }}>
+                      {main}
+                    </p>
                   </div>
                 )}
               </div>
             );
           }) : !loading && (
-            <div style={{ textAlign: 'center', padding: '30px' }}>
-              <p>Aucun message du président trouvé. Veuillez en ajouter dans votre système.</p>
+            <div className="text-center py-8">
+              <p>{t('president.no_messages')}</p>
             </div>
           )}
         </div>

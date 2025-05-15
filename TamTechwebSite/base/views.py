@@ -703,45 +703,89 @@ def platform_links_api(request):
 
 #MotDuPresident
 # views.py
-from .models import MotPresident
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
+# from .models import MotPresident
+# from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.http import require_http_methods
+# from django.http import JsonResponse
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def mot_president_api(request):
-    if request.method == "GET":
-        mots = MotPresident.objects.all()
-        data = []
-        for mot in mots:
-            data.append({
-                "id": mot.id,
-                "titre": mot.titre,
-                "description": mot.description,
-                "image": request.build_absolute_uri(mot.image.url)
-            })
-        return JsonResponse(data, safe=False)
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def mot_president_api(request):
+#     if request.method == "GET":
+#         mots = MotPresident.objects.all()
+#         data = []
+#         for mot in mots:
+#             data.append({
+#                 "id": mot.id,
+#                 "titre": mot.titre,
+#                 "description": mot.description,
+#                 "image": request.build_absolute_uri(mot.image.url)
+#             })
+#         return JsonResponse(data, safe=False)
 
-    if request.method == "POST":
-        titre = request.POST.get("titre")
-        description = request.POST.get("description")
-        image = request.FILES.get("image")
+#     if request.method == "POST":
+#         titre = request.POST.get("titre")
+#         description = request.POST.get("description")
+#         image = request.FILES.get("image")
 
-        if not (titre and description and image):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+#         if not (titre and description and image):
+#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-        mot = MotPresident.objects.create(titre=titre, description=description, image=image)
+#         mot = MotPresident.objects.create(titre=titre, description=description, image=image)
         
-        return JsonResponse({
-            "message": "Mot du président ajouté avec succès.",
-            "motPresident": {
-                "id": mot.id,
-                "titre": mot.titre,
-                "description": mot.description,
-                "image": request.build_absolute_uri(mot.image.url)
-            }
-        }, status=201)
+#         return JsonResponse({
+#             "message": "Mot du président ajouté avec succès.",
+#             "motPresident": {
+#                 "id": mot.id,
+#                 "titre": mot.titre,
+#                 "description": mot.description,
+#                 "image": request.build_absolute_uri(mot.image.url)
+#             }
+#         }, status=201)
+# views.py
+# views.py
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import MotPresident
+from .serializers import MotPresidentSerializer
+
+@api_view(['GET', 'POST'])
+def mot_president_list_create(request):
+    if request.method == 'GET':
+        mots = MotPresident.objects.all()
+        serializer = MotPresidentSerializer(mots, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = MotPresidentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def mot_president_detail(request, pk):
+    try:
+        mot = MotPresident.objects.get(pk=pk)
+    except MotPresident.DoesNotExist:
+        return Response({'error': 'Mot du président non trouvé.'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MotPresidentSerializer(mot, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = MotPresidentSerializer(mot, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        mot.delete()
+        return Response({'message': 'Supprimé avec succès.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
