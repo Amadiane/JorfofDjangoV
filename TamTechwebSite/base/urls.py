@@ -7,9 +7,9 @@ from .views import (
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, platform_links_api, fondations_api, mot_president_api,
+    PartnerAPIView, platform_links_api, mot_president_api,
     add_video, add_media_content, document_api, partenaire_api, programmes_api, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription, ActivityViewSet  # 👈 ajoute ces deux-là ici
+    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail  # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -18,6 +18,7 @@ router.register(r"blog", BlogViewSet)
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
+
 # URL Patterns
 urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -47,7 +48,9 @@ urlpatterns = [
     # path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
     path('valeurs/', views.valeurs_list, name='valeurs_list'),
     path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
-    path('fondations/', fondations_api, name='fondations_api'),
+    # path('fondations/', fondations_api, name='fondations_api'),
+    path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
+    path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),
     path('mot-president/', mot_president_api, name='mot_president_api'),
     path('add-video/', add_video, name='add_video'),
     path('media/', add_media_content, name='add_media_content'),

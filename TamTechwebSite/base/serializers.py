@@ -62,6 +62,18 @@ class FondationSerializer(serializers.ModelSerializer):
         model = Fondation
         fields = '__all__'
 
+from rest_framework import serializers
+from .models import FondationTamkine
+
+class FondationTamkineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FondationTamkine
+        fields = ['id', 'title_fr', 'title_en', 'title_ar', 
+                  'description_fr', 'description_en', 'description_ar', 
+                  'image']
+
+
+
 
 
 # # serializers.py
@@ -157,12 +169,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
 
 
-class FondationSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Fondation
-        fields = ['id', 'titre', 'description', 'image']
 
     def get_image(self, obj):
         request = self.context.get('request')

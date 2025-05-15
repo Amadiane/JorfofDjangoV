@@ -1169,13 +1169,50 @@ class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
 
 
-from django.http import JsonResponse
-from .models import FondationTamkine
 
-def fondations_api(request):
-    # Exemple de traitement de données et de réponse JSON
-    fondations = FondationTamkine.objects.all()
-    data = {
-        "fondations": list(fondations.values("title_fr", "description_fr"))  # Ajoutez d'autres champs si nécessaire
-    }
-    return JsonResponse(data)
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import FondationTamkine
+from .serializers import FondationTamkineSerializer
+
+@api_view(['GET', 'POST'])
+def fondation_list_create(request):
+    if request.method == 'GET':
+        # Récupérer toutes les fondations et les retourner
+        fondations = FondationTamkine.objects.all()
+        serializer = FondationTamkineSerializer(fondations, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        # Créer une nouvelle fondation
+        serializer = FondationTamkineSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def fondation_detail(request, pk):
+    try:
+        fondation = FondationTamkine.objects.get(pk=pk)
+    except FondationTamkine.DoesNotExist:
+        return Response({'error': 'Fondation not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        # Récupérer les détails d'une fondation
+        serializer = FondationTamkineSerializer(fondation)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        # Mettre à jour les informations d'une fondation
+        serializer = FondationTamkineSerializer(fondation, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        # Supprimer une fondation
+        fondation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

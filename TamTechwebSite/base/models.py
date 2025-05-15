@@ -228,15 +228,26 @@ class Fondation(models.Model):
     def __str__(self):
         return self.titre
 
-
 from django.db import models
 
 class FondationTamkine(models.Model):
     title_fr = models.CharField(max_length=100)
+    title_en = models.CharField(max_length=100)
+    title_ar = models.CharField(max_length=100)
+
     description_fr = models.TextField()
+    description_en = models.TextField()
+    description_ar = models.TextField()
+
+    image = models.ImageField(upload_to='fondation_images/', null=True, blank=True)  # Ajout du champ image
 
     def __str__(self):
         return self.title_fr
+
+
+
+
+
 
 
 
