@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ChatBot from "../ChatBot/ChatBot.jsx";
+import ChatBotNew from "../ChatBot/ChatbotNew";
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -181,9 +181,9 @@ const Actualites = () => {
         )}
       </main>
 
-      {/* <div className="fixed bottom-6 right-6 z-50">
-        <ChatBot />
-      </div> */}
+       <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };

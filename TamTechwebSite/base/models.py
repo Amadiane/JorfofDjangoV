@@ -205,17 +205,7 @@ class PlatformLink(models.Model):
     def __str__(self):
         return self.name
 
-#MotDuPresident
-# models.py
-# class MotPresident(models.Model):
-#     titre = models.CharField(max_length=255)
-#     description = models.TextField()
-#     image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
 
-#     def __str__(self):
-#         return self.titre
-# models.py
-# models.py
 from django.db import models
 
 class MotPresident(models.Model):
@@ -301,16 +291,34 @@ class Valeur(models.Model):
 
 
 
-#Programs
+# #Programs
+# from django.db import models
+
+# class Programme(models.Model):
+#     title = models.CharField(max_length=255)
+#     description = models.TextField()
+#     photo_couverture = models.ImageField(upload_to='programmes/')
+
+#     def __str__(self):
+#         return self.title
+# models.py
+# models.py
 from django.db import models
 
 class Programme(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+
+    description_fr = models.TextField()
+    description_en = models.TextField()
+    description_ar = models.TextField()
+
     photo_couverture = models.ImageField(upload_to='programmes/')
 
     def __str__(self):
-        return self.title
+        return self.title_fr
+
 
 
 

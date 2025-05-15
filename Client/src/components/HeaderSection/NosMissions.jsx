@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ChatBot from '../ChatBot/ChatBot';
+// import ChatBot from '../ChatBot/ChatBot';
 import { useTranslation } from 'react-i18next';
 
 const NosMissions = () => {

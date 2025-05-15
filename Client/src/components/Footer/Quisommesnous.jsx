@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ChatBot from '../ChatBot/ChatBot';
+// import ChatBot from '../ChatBot/ChatBot';
 
 const Quisommesnous = () => {
   const [missions, setMissions] = useState([]); // Plusieurs missions

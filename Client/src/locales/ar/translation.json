@@ -6,7 +6,7 @@
     "values": "قيمنا",
     "missions": "مهماتنا",
     "team": "فريقنا",
-    "programs": "البرامج",
+    "programms": "البرامج",
     "news": "الأخبار",
     "platforms": "المنصات",
     "partner_activities": "أنشطة الشركاء",
@@ -278,7 +278,18 @@
                                                             "Aucune actualité ne correspond à votre recherche.": "لا توجد أخبار تطابق بحثك.",
                                                             "Aucune actualité disponible pour le moment.": "لا توجد أخبار متاحة في الوقت الحالي.",
                                                             "Lire moins": "قراءة أقل",
-                                                            "Mission & Vision": "رسالتنا ورؤيتنا"
+                                                            "Mission & Vision": "رسالتنا ورؤيتنا",
+                                                            "programs": {
+    "cta_title": "انضم إلى ثورة التعليم الرقمي",
+    "cta_description": "معًا، لنبنِ مستقبلًا يتيح لكل متعلم الوصول إلى الأدوات الرقمية التي ستحول رحلته التعليمية. مشاركتك يمكن أن تحدث فرقًا.",
+    "show_less": "عرض أقل",
+    "read_more": "اقرأ المزيد",
+    "search_placeholder": "ابحث عن برنامج...",
+    "title": "برامجنا",
+    "subtitle": "اكتشف عروضنا التعليمية المصممة لتلبية احتياجاتك."
+    
+
+  }
                                                           
                                                           
                                                       

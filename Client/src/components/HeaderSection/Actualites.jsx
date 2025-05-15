@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ChatBot from '../ChatBot/ChatBot';
+// import ChatBot from '../ChatBot/ChatBot';
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

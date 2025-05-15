@@ -6,7 +6,7 @@
   "values": "OUR VALUES",
   "missions": "OUR MISSIONS",
   "team": "OUR TEAM",
-  "programs": "Programs",
+  "programms": "Programs",
   "news": "News",
   "platforms": "Platforms",
   "partner_activities": "Partner Activities",
@@ -278,7 +278,18 @@
                             "Aucune actualité ne correspond à votre recherche.": "No news matches your search.",
                             "Aucune actualité disponible pour le moment.": "No news available at the moment.",
                             "Lire moins": "Read less",
-                            "Mission & Vision": "MISSION&VISION"
+                            "Mission & Vision": "MISSION&VISION",
+
+                            "programs": {
+    "cta_title": "Join the digital education revolution",
+    "cta_description": "Together, let's build a future where every learner has access to digital tools that will transform their educational journey. Your involvement can make a difference.",
+    "show_less": "Show less",
+     "read_more": "Read more",
+     "search_placeholder": "Search for a program...",
+     "title": "Our programs",
+     "subtitle": "Discover our educational offerings tailored to your needs."
+
+  }
                           
                           
                         

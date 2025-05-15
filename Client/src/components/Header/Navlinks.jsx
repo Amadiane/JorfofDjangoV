@@ -133,7 +133,7 @@ const Navlinks = () => {
       ]
     },
     {
-      title: t("programs"),
+      title: t("programms"),
       path: "/programs",
       isDropdown: false
     },

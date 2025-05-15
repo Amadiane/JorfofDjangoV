@@ -6,7 +6,7 @@
     "values": "NOS VALEURS",
     "missions": "NOS MISSIONS",
     "team": "NOTRE ÉQUIPE",
-    "programs": "Programmes",
+    "programms": "Programmes",
     "news": "Actualités",
     "platforms": "Plateformes",
     "partner_activities": "Activités Partenaires",
@@ -276,7 +276,22 @@
                                                             "Aucune actualité ne correspond à votre recherche.": "Aucune actualité ne correspond à votre recherche.",
                                                             "Aucune actualité disponible pour le moment.": "Aucune actualité disponible pour le moment.",
                                                             "Lire moins": "Lire moins",
-                                                            "Mission & Vision": "NOTRE MISSION & VISION"
+                                                            "Mission & Vision": "NOTRE MISSION & VISION",
+
+                                                            "programs": {
+    "cta_title": "Rejoignez la révolution éducative numérique",
+    "cta_description": "Ensemble, construisons un avenir où chaque apprenant a accès aux outils numériques qui transformeront son parcours éducatif. Votre implication peut faire la différence.",
+    "show_less": "Afficher moins",
+    "read_more": "Lire la suite",
+    "search_placeholder": "Rechercher un programme...",
+    "title": "Nos programmes",
+    "subtitle": "Découvrez nos offres éducatives adaptées à vos besoins."
+      
+    
+
+
+    
+  }
                                                           
                                                           
                                                       

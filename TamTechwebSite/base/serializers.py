@@ -220,7 +220,7 @@ class PlatformLinkSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.icon.url) if obj.icon else None
 
-
+##########################################################################
 
 from rest_framework import serializers
 from .models import Activity
@@ -242,3 +242,14 @@ class ValeurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Valeur
         fields = '__all__'  # ou liste de champs spécifiques si nécessaire
+
+
+
+# serializers.py
+from rest_framework import serializers
+from .models import Programme
+
+class ProgrammeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Programme
+        fields = '__all__'

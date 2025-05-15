@@ -898,50 +898,104 @@ def valeurs_detail(request, id):
 
 
 #Programs
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse
+# from django.views.decorators.http import require_http_methods
+# from .models import Programme
+
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def programmes_api(request):
+#     if request.method == "GET":
+#         programmes = Programme.objects.all()
+#         data = []
+
+#         for programme in programmes:
+#             data.append({
+#                 "id": programme.id,
+#                 "title": programme.title,
+#                 "description": programme.description,
+#                 "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
+#             })
+#         return JsonResponse(data, safe=False)
+
+#     elif request.method == "POST":
+#         title = request.POST.get("title")
+#         description = request.POST.get("description")
+#         photo_couverture = request.FILES.get("photo_couverture")
+
+#         if not (title and description and photo_couverture):
+#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+
+#         programme = Programme.objects.create(
+#             title=title,
+#             description=description,
+#             photo_couverture=photo_couverture
+#         )
+
+#         return JsonResponse({
+#             "message": "Programme ajouté avec succès.",
+#             "programme": {
+#                 "id": programme.id,
+#                 "title": programme.title,
+#                 "description": programme.description,
+#                 "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
+#             }
+#         }, status=201)
+
+
+
+# views.py
+# views.py
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Programme
+from .serializers import ProgrammeSerializer
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def programmes_api(request):
-    if request.method == "GET":
+@api_view(['GET', 'POST'])
+@parser_classes([MultiPartParser, FormParser])
+def programme_list_create(request):
+    if request.method == 'GET':
         programmes = Programme.objects.all()
-        data = []
+        serializer = ProgrammeSerializer(programmes, many=True, context={"request": request})
+        return Response(serializer.data)
 
-        for programme in programmes:
-            data.append({
-                "id": programme.id,
-                "title": programme.title,
-                "description": programme.description,
-                "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
-            })
-        return JsonResponse(data, safe=False)
+    elif request.method == 'POST':
+        serializer = ProgrammeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "POST":
-        title = request.POST.get("title")
-        description = request.POST.get("description")
-        photo_couverture = request.FILES.get("photo_couverture")
 
-        if not (title and description and photo_couverture):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+@api_view(['GET', 'PUT', 'DELETE'])
+@parser_classes([MultiPartParser, FormParser])
+def programme_detail(request, pk):
+    try:
+        programme = Programme.objects.get(pk=pk)
+    except Programme.DoesNotExist:
+        return Response({'error': 'Programme non trouvé.'}, status=status.HTTP_404_NOT_FOUND)
 
-        programme = Programme.objects.create(
-            title=title,
-            description=description,
-            photo_couverture=photo_couverture
-        )
+    if request.method == 'GET':
+        serializer = ProgrammeSerializer(programme, context={"request": request})
+        return Response(serializer.data)
 
-        return JsonResponse({
-            "message": "Programme ajouté avec succès.",
-            "programme": {
-                "id": programme.id,
-                "title": programme.title,
-                "description": programme.description,
-                "photo_couverture": request.build_absolute_uri(programme.photo_couverture.url),
-            }
-        }, status=201)
+    elif request.method == 'PUT':
+        serializer = ProgrammeSerializer(programme, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        programme.delete()
+        return Response({'message': 'Programme supprimé avec succès.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
 
 
 #AddVideo
