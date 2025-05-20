@@ -118,7 +118,7 @@ const Partner = () => {
     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
       <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-4 px-4 md:py-8 lg:py-12 shadow-md">
   <div className="pt-16">
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Nos Partenaires Médias')}</h1>
+    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Nos Partenaires et Sponsors')}</h1>
     <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90">
       {t('Découvrez les organisations médiatiques qui soutiennent la mission et les initiatives de la Fondation Tamkine.')}
     </p>
