@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const NousRejoindreHeader = () => {
   const [organization, setOrganization] = useState("");
@@ -194,6 +195,9 @@ const NousRejoindreHeader = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </div>
   );

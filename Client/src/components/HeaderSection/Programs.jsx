@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Programs = () => {
   const navigate = useNavigate();
@@ -176,6 +177,9 @@ const Programs = () => {
           </button>
         </div>
       </div>
+      <div className="fixed bottom-6 right-6 z-50">
+              <ChatBotNew />
+            </div>
     </div>
   );
 };

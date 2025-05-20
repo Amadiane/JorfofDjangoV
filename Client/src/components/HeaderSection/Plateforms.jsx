@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 
 const Platforms = () => {
@@ -176,6 +177,9 @@ const Platforms = () => {
             })}
           </div>
         )}
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </section>
   );

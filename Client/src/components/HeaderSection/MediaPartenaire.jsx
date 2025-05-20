@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ExternalLink, Loader, ChevronRight } from "lucide-react";
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const MediaPartenaire = () => {
   const [partenaires, setPartenaires] = useState([]);
@@ -103,6 +104,9 @@ const MediaPartenaire = () => {
           </div>
         )}
       </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };
@@ -189,6 +193,7 @@ const PartenaireCard = ({ partenaire }) => {
           )}
         </div>
       </div>
+    
     </div>
   );
 };

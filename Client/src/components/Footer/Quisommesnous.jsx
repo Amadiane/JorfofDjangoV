@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import ChatBot from '../ChatBot/ChatBot';
+import { useTranslation } from 'react-i18next';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Quisommesnous = () => {
-  const [missions, setMissions] = useState([]); // Plusieurs missions
+  const { i18n } = useTranslation();  // Utilisation de useTranslation pour gérer la langue
+  const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('accessToken')) {
-      navigate('/login');
-      return;
-    }
-
     const fetchMissions = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/missions/');
@@ -24,7 +21,7 @@ const Quisommesnous = () => {
 
         if (data.length > 0) {
           const sortedMessages = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-          const lastTwo = sortedMessages.slice(0, 2); // On garde les 2 plus récents
+          const lastTwo = sortedMessages.slice(0, 2);
           setMissions(lastTwo);
         } else {
           setMissions([]);
@@ -41,45 +38,46 @@ const Quisommesnous = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-lg text-gray-600">Chargement...</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+        <p className="text-lg text-gray-600 text-center">Chargement...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-lg text-red-500">{error}</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+        <p className="text-lg text-red-500 text-center">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <ChatBot />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
+      {/* <ChatBot /> */}
 
       <section className="text-gray-600 body-font overflow-hidden w-full">
-        <div className="container px-4 sm:px-8 md:px-12 pb-16 sm:pb-24 md:pb-32 pt-8 sm:pt-12 md:pt-16 mx-auto">
-          <div className="main-bl space-y-8 md:space-y-16">
-            {/* Titre centré avec plus d'espace au-dessus */}
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-800 mb-6 sm:mb-8 md:mb-12">NOTRE MISSION & VISION</h2>
+        <div className="container mx-auto pt-16 pb-32 px-4 sm:px-6 lg:px-8">
+          <div className="space-y-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-800 mb-12">
+              {i18n.t('Mission & Vision')}
+            </h2>
 
-            {/* Grille réactive avec plus d'espace autour des cartes */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
               {missions.length === 0 ? (
-                <p className="text-center text-gray-600">Aucune mission disponible pour l'instant.</p>
+                <p className="text-center text-gray-600 col-span-full">{i18n.t('notre_mission_vision.no_mission')}</p>
               ) : (
                 missions.map((mission, index) => (
                   <div
                     key={index}
                     className="bg-white p-6 sm:p-8 md:p-12 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105 relative overflow-hidden"
                   >
-                    {/* Image de fond ou icône */}
                     <div className="absolute inset-0 bg-gray-200 opacity-30 z-0"></div>
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-4 sm:mb-6 relative z-10">{mission.title}</h3>
+                    <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 sm:mb-6 relative z-10">
+                      {mission[`title_${i18n.language}`] || 'Titre non disponible'}
+                    </h3>
                     <p className="text-base sm:text-lg text-gray-700 text-justify whitespace-pre-line relative z-10">
-                      {mission.content}
+                      {mission[`content_${i18n.language}`] || 'Contenu non disponible'}
                     </p>
                   </div>
                 ))
@@ -88,6 +86,9 @@ const Quisommesnous = () => {
           </div>
         </div>
       </section>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };

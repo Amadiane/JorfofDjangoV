@@ -1,6 +1,7 @@
 //A rendre responsive
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 
 const Phototheque = () => {
@@ -852,6 +853,9 @@ const Phototheque = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Video, Search, RefreshCw, AlertCircle, X, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Videotheque = () => {
   const { t } = useTranslation();
@@ -293,6 +294,9 @@ const Videotheque = () => {
           </button>
         </div>
       </div>
+      <div className="fixed bottom-6 right-6 z-50">
+              <ChatBotNew />
+            </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import ChatBot from '../ChatBot/ChatBot';
 import { useTranslation } from 'react-i18next';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const NosMissions = () => {
   const { i18n } = useTranslation();  // Utilisation de useTranslation pour gérer la langue
@@ -86,6 +86,9 @@ const NosMissions = () => {
           </div>
         </div>
       </section>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };

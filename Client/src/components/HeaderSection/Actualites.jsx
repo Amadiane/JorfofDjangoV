@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Actualites = () => {
   const { t } = useTranslation();
@@ -222,6 +223,9 @@ const Actualites = () => {
           </>
         )}
       </main>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };

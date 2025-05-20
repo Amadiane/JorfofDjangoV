@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ChatBotNew from "../ChatBot/ChatbotNew";
+
 
 const NousRejoindre = () => {
   const [formData, setFormData] = useState({
@@ -265,6 +267,9 @@ const NousRejoindre = () => {
         <div style={styles.footer}>
           <p>En soumettant ce formulaire, vous acceptez d'être contacté concernant votre demande d'adhésion.</p>
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink, Loader, ChevronRight } from "lucide-react";
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Activities = () => {
   const { t } = useTranslation();
@@ -101,6 +102,9 @@ const Activities = () => {
           </div>
         )}
       </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
+      </div>
     </div>
   );
 };
@@ -181,8 +185,11 @@ const ActivityCard = ({ activity }) => {
             </button>
           )}
         </div>
+        
       </div>
+      
     </div>
+    
   );
 };
 

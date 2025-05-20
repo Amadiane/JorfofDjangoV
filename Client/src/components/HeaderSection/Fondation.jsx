@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const FondationPost = () => {
   const { i18n, t } = useTranslation(); // Utilisation de useTranslation pour la gestion des langues
@@ -198,6 +199,9 @@ const FondationPost = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </div>
   );

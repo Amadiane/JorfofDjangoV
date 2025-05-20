@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
+import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Community = () => {
   const { t } = useTranslation();  // Initialisation du hook de traduction
@@ -143,6 +144,9 @@ const Community = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatBotNew />
       </div>
     </div>
   );
