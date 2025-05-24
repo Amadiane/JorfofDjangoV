@@ -228,12 +228,12 @@ const Platforms = () => {
       {/* Footer CTA */}
       <div className="bg-white py-16 text-black">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          {/* <h2 className="text-3xl md:text-4xl font-bold mb-6">
             {t('platforms.cta_title')}
           </h2>
           <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">
             {t('platforms.cta_description')}
-          </p>
+          </p> */}
           <button
             onClick={handleClick}
             className="bg-[#12138B] text-white hover:bg-[#1e1fab] transition px-8 py-4 rounded-full font-semibold text-lg shadow-md"

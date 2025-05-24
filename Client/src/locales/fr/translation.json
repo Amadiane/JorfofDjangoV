@@ -8,7 +8,7 @@
     "team": "NOTRE ÉQUIPE",
     "programms": "Programmes",
     "news": "Actualités",
-    "platforms": "Plateformes",
+    "platformss": "Plateformes",
     "partner_activities": "Activités Partenaires",
     "media": "Communication & Médias",
     "videotheque": "Videothèque",
@@ -285,14 +285,31 @@
     "read_more": "Lire la suite",
     "search_placeholder": "Rechercher un programme...",
     "title": "Nos programmes",
-    "subtitle": "Découvrez nos offres éducatives adaptées à vos besoins."
-      
-    
-
-
-    
-  }
-                                                          
+    "subtitle": "Découvrez nos offres éducatives adaptées à vos besoins." 
+  },
+  
+    "platforms": {
+      "title": "Nos plateformes",
+      "subtitle": "Explorez les plateformes disponibles pour vous accompagner.",
+      "search_placeholder": "Rechercher une plateforme...",
+      "search_aria_label": "Champ de recherche de plateforme",
+      "no_platforms": "Aucune plateforme trouvée.",
+      "clear_search": "Effacer la recherche",
+      "date_unavailable": "Date non disponible",
+      "image_unavailable": "Image non disponible",
+      "untitled": "Sans titre",
+      "no_description": "Aucune description disponible"
+    },
+    "common": {
+      "loading": "Chargement...",
+      "error": "Une erreur est survenue"
+    },
+    "errors": {
+      "loading_platforms": "Impossible de charger les plateformes.",
+      "fetch_error": "Erreur lors de la récupération des données:"
+    }
+  
+                                                
                                                           
                                                       
                                                       

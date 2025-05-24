@@ -8,7 +8,7 @@
   "team": "OUR TEAM",
   "programms": "Programs",
   "news": "News",
-  "platforms": "Platforms",
+  "platformss": "Platforms",
   "partner_activities": "Partner Activities",
   "media": "Communication & Media",
   "videotheque": "Videotheque",
@@ -289,7 +289,30 @@
      "title": "Our programs",
      "subtitle": "Discover our educational offerings tailored to your needs."
 
-  }
+  },
+  
+    "platforms": {
+      "title": "Our Platforms",
+      "subtitle": "Explore the available platforms to support you.",
+      "search_placeholder": "Search a platform...",
+      "search_aria_label": "Platform search input",
+      "no_platforms": "No platforms found.",
+      "clear_search": "Clear search",
+      "date_unavailable": "Date unavailable",
+      "image_unavailable": "Image unavailable",
+      "untitled": "Untitled",
+      "no_description": "No description available"
+    },
+    "common": {
+      "loading": "Loading...",
+      "error": "An error occurred"
+    },
+    "errors": {
+      "loading_platforms": "Failed to load platforms.",
+      "fetch_error": "Error fetching data:"
+    }
+  
+  
                           
                           
                         

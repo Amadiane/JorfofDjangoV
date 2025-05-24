@@ -8,7 +8,7 @@
     "team": "فريقنا",
     "programms": "البرامج",
     "news": "الأخبار",
-    "platforms": "المنصات",
+    "platformss": "المنصات",
     "partner_activities": "أنشطة الشركاء",
     "media": "الاتصال والإعلام",
     "videotheque": "مكتبة الفيديو",
@@ -289,7 +289,30 @@
     "subtitle": "اكتشف عروضنا التعليمية المصممة لتلبية احتياجاتك."
     
 
-  }
+  },
+  
+    "platforms": {
+      "title": "منصاتنا",
+      "subtitle": "استكشف المنصات المتاحة لدعمك.",
+      "search_placeholder": "ابحث عن منصة...",
+      "search_aria_label": "حقل البحث عن المنصة",
+      "no_platforms": "لم يتم العثور على منصات.",
+      "clear_search": "مسح البحث",
+      "date_unavailable": "التاريخ غير متوفر",
+      "image_unavailable": "الصورة غير متوفرة",
+      "untitled": "بدون عنوان",
+      "no_description": "لا يوجد وصف متاح"
+    },
+    "common": {
+      "loading": "جارٍ التحميل...",
+      "error": "حدث خطأ"
+    },
+    "errors": {
+      "loading_platforms": "فشل في تحميل المنصات.",
+      "fetch_error": "خطأ أثناء جلب البيانات:"
+    }
+  
+  
                                                           
                                                           
                                                       
