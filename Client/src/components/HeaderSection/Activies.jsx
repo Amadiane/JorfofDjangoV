@@ -1,107 +1,157 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExternalLink, Loader, ChevronRight } from "lucide-react";
+import { ExternalLink, Loader, ChevronRight, Search } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Activities = () => {
-  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { i18n, t } = useTranslation();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('tous');
-  const [categories, setCategories] = useState(['tous']);
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         setLoading(true);
         const response = await fetch('http://127.0.0.1:8000/api/activities/');
-        if (!response.ok) throw new Error("Erreur lors du chargement des données");
+        if (!response.ok) throw new Error(t("errors.loading_activities"));
         const data = await response.json();
         
-        // Extraire les catégories uniques des activités (si elles ont une propriété catégorie)
-        const uniqueCategories = [...new Set(data.map(a => a.categorie).filter(Boolean))];
-        setCategories(['tous', ...uniqueCategories]);
-        
         setActivities(data);
-        setError(null);
+        setError("");
       } catch (err) {
-        console.error("Erreur lors du chargement des activités:", err);
-        setError("Impossible de charger les activités. Veuillez réessayer plus tard.");
+        console.error(t("errors.fetch_error"), err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchActivities();
-  }, []);
+  }, [t]);
 
-  const filteredActivities = activeFilter === 'tous' 
-    ? activities 
-    : activities.filter(a => a.categorie === activeFilter);
+  // Filtrage multilingue des activités
+  const filteredActivities = activities.filter(activity =>
+    (activity[`title_${i18n.language}`] || activity.title_fr || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ((activity[`comment_${i18n.language}`] || activity.comment_fr || "").toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    return `http://127.0.0.1:8000${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+  };
+
+  const handleClick = () => {
+    navigate('/contacter-tamkine');
+  };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* En-tête avec gradient comme dans MediaPartenaire */}
-      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-8 px-4 md:py-12 lg:py-16 shadow-md">
+    <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+      {/* En-tête */}
+      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-4 px-4 md:py-8 lg:py-12 shadow-md">
         <div className="pt-16">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Nos Activités')}</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('activities.title')}</h1>
           <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90">
-            {t('Découvrez les activités et initiatives de la Fondation Tamkine.')}
+            {t('activities.subtitle')}
           </p>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Filtres de navigation (si des catégories existent) */}
-        {categories.length > 1 && !loading && !error && (
-          <div className="mb-10">
-            <h2 className="text-xl font-semibold text-[#1C1C47] mb-4">{t('Filtrer par catégorie')}</h2>
-            <div className="flex flex-wrap gap-2">
-              {categories.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`px-4 py-2 rounded-full transition-all ${
-                    activeFilter === cat 
-                      ? 'bg-[#1C1C47] text-white shadow-md' 
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                  }`}
-                >
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </button>
-              ))}
-            </div>
+      <div className="container mx-auto px-4 py-8 md:py-16 max-w-6xl">
+        {/* Barre de recherche */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className={`relative transition-all duration-300 ${isSearchFocused ? 'scale-105' : ''}`}>
+            <input
+              type="text"
+              placeholder={t("activities.search_placeholder")}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C1C47] focus:border-transparent shadow-sm"
+              aria-label={t("activities.search_aria_label")}
+            />
           </div>
-        )}
+        </div>
 
         {loading ? (
-          <div className="flex flex-col justify-center items-center h-64">
-            <Loader className="animate-spin text-[#1C1C47]" size={40} />
-            <p className="mt-4 text-gray-600">{t('Chargement des activités...')}</p>
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#1C1C47]"></div>
+            <span className="ml-3 text-gray-600 text-sm sm:text-base">{t("common.loading")}</span>
           </div>
         ) : error ? (
-          <div className="bg-white border border-red-200 rounded-lg p-8 text-center shadow-md">
-            <p className="text-red-600 mb-4">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-[#1C1C47] hover:bg-[#15154b] text-white px-6 py-3 rounded-md transition"
-            >
-              {t('Réessayer')}
-            </button>
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md my-4 text-sm sm:text-base" role="alert">
+            <p className="font-bold">{t("common.error")}</p>
+            <p>{error}</p>
           </div>
         ) : filteredActivities.length === 0 ? (
-          <div className="text-center py-10">
-            <p className="text-gray-600">{t('Aucune activité trouvée pour cette catégorie.')}</p>
+          <div className="text-center py-10 bg-white rounded-lg shadow-md px-4">
+            <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="mt-3 text-base sm:text-lg text-gray-600">{t("activities.no_activities")}</p>
+            {searchTerm && (
+              <button 
+                onClick={() => setSearchTerm("")}
+                className="mt-2 text-[#1C1C47] hover:text-[#3b3b82] transition-colors"
+              >
+                {t("activities.clear_search")}
+              </button>
+            )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredActivities.map((activity, index) => (
-              <ActivityCard key={index} activity={activity} />
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            {filteredActivities.map((activity, index) => {
+              let formattedDate = t("activities.date_unavailable");
+              try {
+                if (activity.created_at) {
+                  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                  formattedDate = new Date(activity.created_at).toLocaleDateString(
+                    i18n.language === 'fr' ? 'fr-FR' : 
+                    i18n.language === 'ar' ? 'ar-MA' : 'en-US', 
+                    options
+                  );
+                }
+              } catch (e) {
+                console.error('Erreur lors du formatage de la date:', e);
+              }
+
+              return (
+                <ActivityCard 
+                  key={activity.id} 
+                  activity={activity} 
+                  formattedDate={formattedDate}
+                  getImageUrl={getImageUrl}
+                  i18n={i18n}
+                  t={t}
+                />
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Footer CTA */}
+      <div className="bg-white py-16 text-black">
+        <div className="container mx-auto px-4 md:px-8 max-w-6xl text-center">
+          <button
+            onClick={handleClick}
+            className="bg-[#12138B] text-white hover:bg-[#1e1fab] transition px-8 py-4 rounded-full font-semibold text-lg shadow-md"
+          >
+            {t('contact_us')}
+          </button>
+        </div>
+      </div>
+
       <div className="fixed bottom-6 right-6 z-50">
         <ChatBotNew />
       </div>
@@ -109,87 +159,73 @@ const Activities = () => {
   );
 };
 
-const ActivityCard = ({ activity }) => {
+const ActivityCard = ({ activity, formattedDate, getImageUrl, i18n, t }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { t } = useTranslation();
 
   return (
     <div 
-      className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full transition-all duration-300 transform hover:-translate-y-2"
-      style={{
-        boxShadow: isHovered ? '0 12px 24px rgba(0, 0, 0, 0.15)' : '0 4px 6px rgba(0, 0, 0, 0.1)',
-      }}
+      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image de l'activité */}
-      <div className="relative h-72 overflow-hidden">
-        {activity.cover_photo ? (
+      {activity.cover_photo ? (
+        <div className="relative h-48 sm:h-56 overflow-hidden">
           <img
-            src={activity.cover_photo}
-            alt={activity.title}
-            className={`w-full h-full object-cover transition-transform duration-700 ${
-              isHovered ? 'scale-105' : 'scale-100'
-            }`}
+            src={getImageUrl(activity.cover_photo)}
+            alt={`${activity[`title_${i18n.language}`] || activity.title_fr} cover`}
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            loading="lazy"
+            onError={(e) => {
+              console.log('Image non chargée:', e.target.src);
+              e.target.onerror = null;
+              e.target.parentNode.innerHTML = `
+                <div class="h-full w-full bg-gray-200 flex items-center justify-center">
+                  <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p class="text-gray-500 ml-2">${t('activities.image_unavailable')}</p>
+                </div>
+              `;
+            }}
           />
-        ) : (
-          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-            <span className="text-gray-400 font-medium">{t('Aucune image')}</span>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-        
-        {activity.categorie && (
-          <div className="absolute top-4 right-4 bg-[#1C1C47]/80 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
-            {activity.categorie}
-          </div>
-        )}
-      </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      ) : (
+        <div className="h-48 sm:h-56 w-full bg-gray-200 flex items-center justify-center">
+          <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p className="text-gray-500 ml-2">{t('activities.image_unavailable')}</p>
+        </div>
+      )}
 
       {/* Contenu */}
-      <div className="p-6 flex-grow flex flex-col">
-        <h2 className="text-2xl font-semibold text-[#1C1C47] mb-3">{activity.title}</h2>
+      <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-grow">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1C1C47] mb-2 sm:mb-3">
+          {activity[`title_${i18n.language}`] || activity.title_fr || t("activities.untitled")}
+        </h2>
         
-        <p className="text-gray-700 mb-6 flex-grow">
-          {activity.comment || t("Aucune description disponible pour cette activité.")}
-        </p>
-
-        {/* Date de l'activité (si disponible) */}
-        {activity.date && (
-          <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
-            <div className="flex items-center">
-              <span className="font-medium">{t('Date:')}</span>
-              <span className="ml-2">{new Date(activity.date).toLocaleDateString()}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Bouton pour plus de détails ou site web */}
-        <div className="mt-auto">
-          {activity.site_url ? (
-            <a
-              href={activity.site_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-[#1C1C47] hover:bg-[#15154b] text-white py-3 px-6 rounded-lg transition-colors duration-300 w-full text-center group"
-            >
-              {t('En savoir plus')}
-              <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-          ) : (
-            <button 
-              className="flex items-center justify-center gap-2 bg-[#1C1C47] hover:bg-[#15154b] text-white py-3 px-6 rounded-lg transition-colors duration-300 w-full text-center group"
-            >
-              {t('Voir les détails')}
-              <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          )}
+        <div className="flex-grow mb-4">
+          <p className="text-gray-600 text-sm sm:text-base">
+            {activity[`comment_${i18n.language}`] || activity.comment_fr || t('activities.no_description')}
+          </p>
         </div>
-        
+
+        <div className="flex justify-between items-center border-t pt-4 mt-auto">
+          <span className="text-xs text-gray-500">
+            {t('activities.created_on')} {formattedDate}
+          </span>
+          
+          <button 
+            className="inline-flex items-center px-4 py-2 bg-[#1C1C47] text-white rounded-md hover:bg-[#3b3b82] transition-colors text-sm font-medium shadow-md hover:shadow-lg group"
+          >
+            {t('activities.view_details')}
+            <ChevronRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
       </div>
-      
     </div>
-    
   );
 };
 

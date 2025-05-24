@@ -310,7 +310,29 @@
     "errors": {
       "loading_platforms": "Failed to load platforms.",
       "fetch_error": "Error fetching data:"
-    }
+    },
+    
+      "activities": {
+        "title": "Our Activities",
+        "subtitle": "Discover the latest initiatives, workshops, and events we have organized.",
+        "search_placeholder": "Search for an activity...",
+        "search_aria_label": "Activity search field",
+        "no_activities": "No activities found.",
+        "clear_search": "Clear search",
+        "date_unavailable": "Date not available",
+        "image_unavailable": "Image not available"
+      },
+      "common": {
+        "loading": "Loading...",
+        "error": "An error occurred"
+      },
+      "errors": {
+        "loading_activities": "Error loading activities",
+        "fetch_error": "Data fetch error"
+      },
+      "contact_us": "Contact us"
+    
+    
   
   
                           

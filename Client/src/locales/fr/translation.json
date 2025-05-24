@@ -307,8 +307,30 @@
     "errors": {
       "loading_platforms": "Impossible de charger les plateformes.",
       "fetch_error": "Erreur lors de la récupération des données:"
-    }
-  
+    },
+
+    
+      "activities": {
+        "title": "Nos Activités",
+        "subtitle": "Découvrez les dernières initiatives, ateliers et événements que nous avons organisés.",
+        "search_placeholder": "Rechercher une activité...",
+        "search_aria_label": "Champ de recherche d’activités",
+        "no_activities": "Aucune activité trouvée.",
+        "clear_search": "Réinitialiser la recherche",
+        "date_unavailable": "Date non disponible",
+        "image_unavailable": "Image non disponible"
+      },
+      "common": {
+        "loading": "Chargement...",
+        "error": "Une erreur est survenue"
+      },
+      "errors": {
+        "loading_activities": "Erreur lors du chargement des activités",
+        "fetch_error": "Erreur de récupération des données"
+      },
+      "contact_us": "Nous contacter"
+    
+    
                                                 
                                                           
                                                       

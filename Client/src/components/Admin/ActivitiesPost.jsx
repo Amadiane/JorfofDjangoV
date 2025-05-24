@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 
 const ActivitiesPost = () => {
-  const [title, setTitle] = useState("");
+  // États pour les champs multilingues
+  const [titleFr, setTitleFr] = useState("");
+  const [titleEn, setTitleEn] = useState("");
+  const [titleAr, setTitleAr] = useState("");
+  const [commentFr, setCommentFr] = useState("");
+  const [commentEn, setCommentEn] = useState("");
+  const [commentAr, setCommentAr] = useState("");
+  
   const [coverPhoto, setCoverPhoto] = useState(null);
-  const [comment, setComment] = useState("");
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [expanded, setExpanded] = useState(null);
+  const [activeLanguage, setActiveLanguage] = useState('fr'); // Langue active pour l'affichage
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,14 +36,29 @@ const ActivitiesPost = () => {
     fetchActivities();
   }, []);
 
+  const resetForm = () => {
+    setTitleFr("");
+    setTitleEn("");
+    setTitleAr("");
+    setCommentFr("");
+    setCommentEn("");
+    setCommentAr("");
+    setCoverPhoto(null);
+    setEditingId(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('comment', comment);
+    formData.append('title_fr', titleFr);
+    formData.append('title_en', titleEn);
+    formData.append('title_ar', titleAr);
+    formData.append('comment_fr', commentFr);
+    formData.append('comment_en', commentEn);
+    formData.append('comment_ar', commentAr);
     if (coverPhoto) formData.append('cover_photo', coverPhoto);
 
     const method = editingId ? 'PATCH' : 'POST';
@@ -53,10 +75,7 @@ const ActivitiesPost = () => {
       if (!response.ok) throw new Error("Erreur HTTP: " + response.status);
 
       setMessage(editingId ? "✅ Activité modifiée avec succès!" : "✅ Activité ajoutée avec succès!");
-      setTitle("");
-      setComment("");
-      setCoverPhoto(null);
-      setEditingId(null);
+      resetForm();
       fetchActivities();
       setShowForm(false);
     } catch (error) {
@@ -67,8 +86,12 @@ const ActivitiesPost = () => {
   };
 
   const handleEdit = (activity) => {
-    setTitle(activity.title);
-    setComment(activity.comment);
+    setTitleFr(activity.title_fr || "");
+    setTitleEn(activity.title_en || "");
+    setTitleAr(activity.title_ar || "");
+    setCommentFr(activity.comment_fr || "");
+    setCommentEn(activity.comment_en || "");
+    setCommentAr(activity.comment_ar || "");
     setEditingId(activity.id);
     setCoverPhoto(null);
     setShowForm(true);
@@ -91,6 +114,12 @@ const ActivitiesPost = () => {
 
   const toggleExpand = (id) => {
     setExpanded(expanded === id ? null : id);
+  };
+
+  // Fonction pour obtenir le contenu dans la langue active
+  const getLocalizedContent = (activity, field) => {
+    const content = activity[`${field}_${activeLanguage}`];
+    return content || activity[`${field}_fr`] || activity[`${field}_en`] || activity[`${field}_ar`] || "";
   };
 
   // Pagination logic
@@ -129,6 +158,25 @@ const ActivitiesPost = () => {
       cursor: 'pointer',
       transition: 'background-color 0.3s',
     },
+    languageSelector: {
+      display: 'flex',
+      gap: '10px',
+      marginBottom: '20px',
+      alignItems: 'center',
+    },
+    languageButton: {
+      padding: '5px 12px',
+      border: '1px solid #ddd',
+      borderRadius: '5px',
+      backgroundColor: '#fff',
+      cursor: 'pointer',
+      fontSize: '14px',
+    },
+    activeLanguageButton: {
+      backgroundColor: '#1C1C47',
+      color: 'white',
+      border: '1px solid #1C1C47',
+    },
     formContainer: {
       backgroundColor: '#f9f9f9',
       padding: '20px',
@@ -162,6 +210,27 @@ const ActivitiesPost = () => {
       minHeight: '100px',
       fontSize: '16px',
       fontFamily: 'inherit',
+      direction: 'ltr',
+    },
+    textareaAr: {
+      direction: 'rtl',
+      textAlign: 'right',
+    },
+    inputAr: {
+      direction: 'rtl',
+      textAlign: 'right',
+    },
+    multilingualSection: {
+      border: '1px solid #e0e0e0',
+      borderRadius: '8px',
+      padding: '15px',
+      marginBottom: '10px',
+    },
+    sectionTitle: {
+      fontSize: '16px',
+      fontWeight: '600',
+      marginBottom: '10px',
+      color: '#333',
     },
     submitButton: {
       padding: '12px',
@@ -201,12 +270,16 @@ const ActivitiesPost = () => {
       margin: 0,
       fontSize: '18px',
       fontWeight: '500',
+      direction: activeLanguage === 'ar' ? 'rtl' : 'ltr',
+      textAlign: activeLanguage === 'ar' ? 'right' : 'left',
     },
     activityContent: {
       padding: '15px',
     },
     activityInfo: {
       margin: '8px 0',
+      direction: activeLanguage === 'ar' ? 'rtl' : 'ltr',
+      textAlign: activeLanguage === 'ar' ? 'right' : 'left',
     },
     activityActions: {
       display: 'flex',
@@ -267,29 +340,99 @@ const ActivitiesPost = () => {
         </button>
       </div>
 
+      {/* Sélecteur de langue pour l'affichage */}
+      <div style={styles.languageSelector}>
+        <span style={{ fontWeight: '500' }}>Langue d'affichage:</span>
+        {[
+          { code: 'fr', label: 'Français' },
+          { code: 'en', label: 'English' },
+          { code: 'ar', label: 'العربية' }
+        ].map(lang => (
+          <button
+            key={lang.code}
+            onClick={() => setActiveLanguage(lang.code)}
+            style={{
+              ...styles.languageButton,
+              ...(activeLanguage === lang.code ? styles.activeLanguageButton : {})
+            }}
+          >
+            {lang.label}
+          </button>
+        ))}
+      </div>
+
       {showForm && (
         <section style={styles.formContainer}>
           <h2 style={styles.title}>{editingId ? 'Modifier une activité' : 'Publier une nouvelle activité'}</h2>
           <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Titre</label>
-              <input 
-                type="text" 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
-                required 
-                style={styles.input} 
-              />
+            
+            {/* Section Titres */}
+            <div style={styles.multilingualSection}>
+              <div style={styles.sectionTitle}>Titres</div>
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Titre (Français) *</label>
+                <input 
+                  type="text" 
+                  value={titleFr} 
+                  onChange={(e) => setTitleFr(e.target.value)} 
+                  required 
+                  style={styles.input} 
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Title (English)</label>
+                <input 
+                  type="text" 
+                  value={titleEn} 
+                  onChange={(e) => setTitleEn(e.target.value)} 
+                  style={styles.input} 
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>العنوان (العربية)</label>
+                <input 
+                  type="text" 
+                  value={titleAr} 
+                  onChange={(e) => setTitleAr(e.target.value)} 
+                  style={{...styles.input, ...styles.inputAr}} 
+                />
+              </div>
             </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Commentaire</label>
-              <textarea 
-                value={comment} 
-                onChange={(e) => setComment(e.target.value)} 
-                required 
-                style={styles.textarea} 
-              />
+            {/* Section Commentaires */}
+            <div style={styles.multilingualSection}>
+              <div style={styles.sectionTitle}>Commentaires</div>
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Commentaire (Français) *</label>
+                <textarea 
+                  value={commentFr} 
+                  onChange={(e) => setCommentFr(e.target.value)} 
+                  required 
+                  style={styles.textarea} 
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Comment (English)</label>
+                <textarea 
+                  value={commentEn} 
+                  onChange={(e) => setCommentEn(e.target.value)} 
+                  style={styles.textarea} 
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>التعليق (العربية)</label>
+                <textarea 
+                  value={commentAr} 
+                  onChange={(e) => setCommentAr(e.target.value)} 
+                  style={{...styles.textarea, ...styles.textareaAr}} 
+                />
+              </div>
             </div>
 
             <div style={styles.formGroup}>
@@ -346,7 +489,9 @@ const ActivitiesPost = () => {
                 onClick={() => toggleExpand(activity.id)}
                 style={styles.activityHeader}
               >
-                <h3 style={styles.activityTitle}>{activity.title}</h3>
+                <h3 style={styles.activityTitle}>
+                  {getLocalizedContent(activity, 'title')}
+                </h3>
                 <span>{expanded === activity.id ? '−' : '+'}</span>
               </div>
 
@@ -355,11 +500,29 @@ const ActivitiesPost = () => {
                   {activity.cover_photo && (
                     <img 
                       src={activity.cover_photo} 
-                      alt={activity.title} 
+                      alt={getLocalizedContent(activity, 'title')} 
                       style={styles.coverPhoto} 
                     />
                   )}
-                  <p style={styles.activityInfo}><strong>Commentaire:</strong> {activity.comment}</p>
+                  <p style={styles.activityInfo}>
+                    <strong>Commentaire:</strong> {getLocalizedContent(activity, 'comment')}
+                  </p>
+                  <p style={styles.activityInfo}>
+                    <strong>Créé le:</strong> {new Date(activity.created_at).toLocaleDateString('fr-FR')}
+                  </p>
+                  
+                  {/* Affichage des autres langues disponibles */}
+                  <div style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
+                    <strong>Langues disponibles:</strong>{' '}
+                    {['fr', 'en', 'ar'].filter(lang => 
+                      activity[`title_${lang}`] && activity[`title_${lang}`].trim()
+                    ).map(lang => (
+                      <span key={lang} style={{ marginRight: '10px' }}>
+                        {lang === 'fr' ? '🇫🇷 FR' : lang === 'en' ? '🇬🇧 EN' : '🇸🇦 AR'}
+                      </span>
+                    ))}
+                  </div>
+
                   <div style={styles.activityActions}>
                     <button 
                       onClick={() => handleEdit(activity)} 

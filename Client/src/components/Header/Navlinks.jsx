@@ -143,7 +143,7 @@ const Navlinks = () => {
       isDropdown: false
     },
     {
-      title: t("platforms"),
+      title: t("platformss"),
       path: "/Plateforms",
       isDropdown: false
     },

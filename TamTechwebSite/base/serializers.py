@@ -231,6 +231,16 @@ class PlatformLinkSerializer(serializers.ModelSerializer):
 
 ##########################################################################
 
+# from rest_framework import serializers
+# from .models import Activity
+
+# class ActivitySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Activity
+#         fields = '__all__'
+#         extra_kwargs = {
+#             'cover_photo': {'required': False, 'allow_null': True},
+#         }
 from rest_framework import serializers
 from .models import Activity
 
@@ -241,6 +251,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'cover_photo': {'required': False, 'allow_null': True},
         }
+
 
 
 

@@ -399,14 +399,28 @@ class Partenaire(models.Model):
 
 
 
+
+# class Activity(models.Model):
+#     title = models.CharField(max_length=255)
+#     cover_photo = models.ImageField(upload_to='activity_covers/')
+#     comment = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.title
+
 from django.db import models
 
 class Activity(models.Model):
-    title = models.CharField(max_length=255)
-    cover_photo = models.ImageField(upload_to='activity_covers/')
-    comment = models.TextField()
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+    comment_fr = models.TextField(blank=True)
+    comment_en = models.TextField(blank=True)
+    comment_ar = models.TextField(blank=True)
+    cover_photo = models.ImageField(upload_to='activity_covers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return self.title_fr
 

@@ -310,7 +310,30 @@
     "errors": {
       "loading_platforms": "فشل في تحميل المنصات.",
       "fetch_error": "خطأ أثناء جلب البيانات:"
-    }
+    },
+
+    
+      "activities": {
+        "title": "أنشطتنا",
+        "subtitle": "اكتشف أحدث المبادرات وورش العمل والفعاليات التي نظمناها.",
+        "search_placeholder": "ابحث عن نشاط...",
+        "search_aria_label": "حقل البحث عن الأنشطة",
+        "no_activities": "لم يتم العثور على أنشطة.",
+        "clear_search": "إلغاء البحث",
+        "date_unavailable": "التاريخ غير متوفر",
+        "image_unavailable": "الصورة غير متوفرة"
+      },
+      "common": {
+        "loading": "جاري التحميل...",
+        "error": "حدث خطأ"
+      },
+      "errors": {
+        "loading_activities": "خطأ في تحميل الأنشطة",
+        "fetch_error": "خطأ في جلب البيانات"
+      },
+      "contact_us": "اتصل بنا"
+    
+    
   
   
                                                           
