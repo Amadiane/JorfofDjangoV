@@ -92,16 +92,16 @@ class Mission(models.Model):
 
 # models.py
 
-from django.db import models
+# from django.db import models
 
-class Platform(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    link = models.URLField()
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Platform(models.Model):
+#     title = models.CharField(max_length=255)
+#     description = models.TextField()
+#     link = models.URLField()
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
+#     def __str__(self):
+#         return self.title
 
 #Pour l'admin pour GET les clients qui ont rempli le formulaire en ligne
 
@@ -193,17 +193,37 @@ class Subscriber(models.Model):
 
 
 #PlateformeLink
+# from django.db import models
+
+# class PlatformLink(models.Model):
+#     name = models.CharField(max_length=100)
+#     description = models.TextField(blank=True)
+#     url = models.URLField()
+#     icon = models.ImageField(upload_to='platform_icons/', blank=True, null=True)  # optionnel
+#     added_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.name
+
 from django.db import models
 
 class PlatformLink(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    title_fr = models.CharField(max_length=100)
+    title_en = models.CharField(max_length=100)
+    title_ar = models.CharField(max_length=100)
+
+    description_fr = models.TextField(blank=True)
+    description_en = models.TextField(blank=True)
+    description_ar = models.TextField(blank=True)
+
     url = models.URLField()
-    icon = models.ImageField(upload_to='platform_icons/', blank=True, null=True)  # optionnel
+    icon = models.ImageField(upload_to='platform_icons/', blank=True, null=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.title_fr  # ou autre selon ta préférence
+
+
 
 
 from django.db import models

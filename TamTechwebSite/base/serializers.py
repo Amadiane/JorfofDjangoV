@@ -102,13 +102,23 @@ class MissionSerializer(serializers.ModelSerializer):
 
 # serializers.py
 
-from rest_framework import serializers
-from .models import Platform
+# from rest_framework import serializers
+# from .models import Platform
 
-class PlatformSerializer(serializers.ModelSerializer):
+# class PlatformSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Platform
+#         fields = ['id', 'title', 'description', 'link', 'created_at']
+from rest_framework import serializers
+from .models import PlatformLink
+
+class PlatformLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Platform
-        fields = ['id', 'title', 'description', 'link', 'created_at']
+        model = PlatformLink
+        fields = '__all__'  # OU liste exacte : ['title_fr', 'title_en', ..., 'icon']
+
+
+
 
 
 
@@ -210,11 +220,10 @@ class ProgrammeSerializer(serializers.ModelSerializer):
 
 
 class PlatformLinkSerializer(serializers.ModelSerializer):
-    icon = serializers.SerializerMethodField()
-
     class Meta:
         model = PlatformLink
-        fields = ['id', 'name', 'description', 'url', 'icon', 'added_at']
+        fields = '__all__'  # OU liste exacte : ['title_fr', 'title_en', ..., 'icon']
+
 
     def get_icon(self, obj):
         request = self.context.get('request')

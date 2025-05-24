@@ -6,18 +6,19 @@ from .views import (
     BlogViewSet, get_todos, CustomTokenObtainPairView, CustomTokenRefreshView,
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
-    PlatformViewSet, RejoindreAPIView, CommunityView,
-    PartnerAPIView, platform_links_api,
+    RejoindreAPIView, CommunityView,
+    PartnerAPIView, 
     add_video, add_media_content, document_api, partenaire_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    mot_president_list_create, mot_president_detail, programme_list_create, programme_detail  # 👈 ajoute ces deux-là ici
+    mot_president_list_create, mot_president_detail, programme_list_create, programme_detail, platform_link_list_create_api, platform_link_detail_api
+ # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
 router = DefaultRouter()
 router.register(r"blog", BlogViewSet)
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
-router.register(r'platforms', PlatformViewSet)
+# router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
 
 # URL Patterns
@@ -43,7 +44,9 @@ urlpatterns = [
     # Route pour DELETE (supprimer un contact) avec un id
     path('community/<int:id>/', CommunityView.as_view()),
     path('partners/', PartnerAPIView.as_view(), name='partners'),
-    path('platforms/', platform_links_api, name='platform_links_api'),
+    # path('platforms/', platform_links_api, name='platform_links_api'),
+    path('platformlinks/', platform_link_list_create_api, name='platform_link_list_create_api'),  # GET liste + POST création
+    path('platformlinks/<int:pk>/', platform_link_detail_api, name='platform_link_detail_api'),  # GET, PUT, DELETE détails
     # path('valeurs/', valeurs_api, name='valeurs_api'),
     # path('valeurs/', views.valeurs_api, name='valeurs_api'),
     # path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),

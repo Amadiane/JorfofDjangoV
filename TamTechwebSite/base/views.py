@@ -399,13 +399,13 @@ def mission_detail(request, pk):
 
 # views.py
 
-from rest_framework import viewsets
-from .models import Platform
-from .serializers import PlatformSerializer
+# from rest_framework import viewsets
+# from .models import Platform
+# from .serializers import PlatformSerializer
 
-class PlatformViewSet(viewsets.ModelViewSet):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
+# class PlatformViewSet(viewsets.ModelViewSet):
+#     queryset = Platform.objects.all()
+#     serializer_class = PlatformSerializer
 
 
 
@@ -631,73 +631,121 @@ class PartnerAPIView(APIView):
             
 
 #PlateformeLink
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.dateparse import parse_datetime
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-from django.views.decorators.http import require_http_methods
-import json
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# from django.utils.dateparse import parse_datetime
+# from django.core.files.storage import default_storage
+# from django.core.files.base import ContentFile
+# from django.views.decorators.http import require_http_methods
+# import json
 
-from .models import PlatformLink
+# from .models import PlatformLink
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def platform_links_api(request):
-    if request.method == "GET":
-        platforms = PlatformLink.objects.all()
-        data = []
-        for platform in platforms:
-            data.append({
-                "id": platform.id,
-                "name": platform.name,
-                "description": platform.description,
-                "url": platform.url,
-                "icon": platform.icon.url if platform.icon else None,
-                "added_at": platform.added_at,
-            })
-        return JsonResponse(data, safe=False)
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def platform_links_api(request):
+#     if request.method == "GET":
+#         platforms = PlatformLink.objects.all()
+#         data = []
+#         for platform in platforms:
+#             data.append({
+#                 "id": platform.id,
+#                 "name": platform.name,
+#                 "description": platform.description,
+#                 "url": platform.url,
+#                 "icon": platform.icon.url if platform.icon else None,
+#                 "added_at": platform.added_at,
+#             })
+#         return JsonResponse(data, safe=False)
 
-    elif request.method == "POST":
-        if request.content_type == 'application/json':
-            try:
-                body = json.loads(request.body.decode('utf-8'))
-                name = body.get('name')
-                description = body.get('description')
-                url = body.get('url')
-                added_at = parse_datetime(body.get('added_at')) if body.get('added_at') else None
+#     elif request.method == "POST":
+#         if request.content_type == 'application/json':
+#             try:
+#                 body = json.loads(request.body.decode('utf-8'))
+#                 name = body.get('name')
+#                 description = body.get('description')
+#                 url = body.get('url')
+#                 added_at = parse_datetime(body.get('added_at')) if body.get('added_at') else None
 
-                platform = PlatformLink(
-                    name=name,
-                    description=description,
-                    url=url,
-                    added_at=added_at
-                )
-                platform.save()
-                return JsonResponse({"message": "Plateforme créée avec succès", "id": platform.id}, status=201)
-            except Exception as e:
-                return JsonResponse({"error": str(e)}, status=400)
+#                 platform = PlatformLink(
+#                     name=name,
+#                     description=description,
+#                     url=url,
+#                     added_at=added_at
+#                 )
+#                 platform.save()
+#                 return JsonResponse({"message": "Plateforme créée avec succès", "id": platform.id}, status=201)
+#             except Exception as e:
+#                 return JsonResponse({"error": str(e)}, status=400)
         
-        elif request.FILES:
-            try:
-                name = request.POST.get('name')
-                description = request.POST.get('description')
-                url = request.POST.get('url')
-                icon = request.FILES.get('icon')
+#         elif request.FILES:
+#             try:
+#                 name = request.POST.get('name')
+#                 description = request.POST.get('description')
+#                 url = request.POST.get('url')
+#                 icon = request.FILES.get('icon')
 
-                platform = PlatformLink(
-                    name=name,
-                    description=description,
-                    url=url,
-                    icon=icon
-                )
-                platform.save()
-                return JsonResponse({"message": "Plateforme avec image enregistrée", "id": platform.id}, status=201)
-            except Exception as e:
-                return JsonResponse({"error": str(e)}, status=400)
+#                 platform = PlatformLink(
+#                     name=name,
+#                     description=description,
+#                     url=url,
+#                     icon=icon
+#                 )
+#                 platform.save()
+#                 return JsonResponse({"message": "Plateforme avec image enregistrée", "id": platform.id}, status=201)
+#             except Exception as e:
+#                 return JsonResponse({"error": str(e)}, status=400)
 
-        else:
-            return JsonResponse({"error": "Type de contenu non supporté"}, status=415)
+#         else:
+#             return JsonResponse({"error": "Type de contenu non supporté"}, status=415)
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+from .models import PlatformLink
+from .serializers import PlatformLinkSerializer
+
+# GET (liste de tous les PlatformLink) et POST (création d'un nouveau)
+@api_view(['GET', 'POST'])
+@parser_classes([JSONParser, MultiPartParser, FormParser])
+def platform_link_list_create_api(request):
+    if request.method == 'GET':
+        platforms = PlatformLink.objects.all()
+        serializer = PlatformLinkSerializer(platforms, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = PlatformLinkSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# GET (détail), PUT (mise à jour partielle/complète), DELETE (suppression) pour un PlatformLink donné
+@api_view(['GET', 'PUT', 'DELETE'])
+@parser_classes([JSONParser, MultiPartParser, FormParser])
+def platform_link_detail_api(request, pk):
+    try:
+        platform = PlatformLink.objects.get(pk=pk)
+    except PlatformLink.DoesNotExist:
+        return Response({"error": "Plateforme non trouvée"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PlatformLinkSerializer(platform, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = PlatformLinkSerializer(platform, data=request.data, partial=True, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        platform.delete()
+        return Response({"message": "Plateforme supprimée avec succès"}, status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 
@@ -1208,8 +1256,9 @@ from itertools import chain
 from operator import itemgetter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Blog, Video, Programme, Platform
-from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformSerializer
+from .models import Blog, Video, Programme
+from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformLinkSerializer
+
 
 class AggregatedContentAPIView(APIView):
     def get(self, request):
