@@ -273,3 +273,13 @@ class ProgrammeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Programme
         fields = '__all__'
+
+
+
+from rest_framework import serializers
+from .models import Partenaire
+
+class PartenaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partenaire
+        fields = '__all__'

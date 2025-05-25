@@ -18,7 +18,7 @@
   "contact_us": "Contact Us",
   "community": "Community",
   "become_partner": "Become a Partner",
-  "media_partners": "Media Partners",
+  "media_partnerss": "Media Partners",
   "Nouvelles récentes": "Recent News",
   "À LA UNE": "Featured",
   "Dernière nouvelle": "Latest News",
@@ -330,7 +330,36 @@
         "loading_activities": "Error loading activities",
         "fetch_error": "Data fetch error"
       },
-      "contact_us": "Contact us"
+      
+        "media_partners": {
+          "title": "Media Partners",
+          "subtitle": "Discover our media partners and their activities.",
+          "search_placeholder": "Search for a partner...",
+          "search_aria_label": "Media partners search field",
+          "filters": {
+            "title": "Filters",
+            "clear_all": "Clear All",
+            "category": "Category",
+            "all_categories": "All Categories",
+            "year": "Year",
+            "all_years": "All Years",
+            "month": "Month",
+            "all_months": "All Months",
+            "activity": "Activity",
+            "all_activities": "All Activities"
+          },
+          "errors": {
+            "loading_error": "Error loading media partners.",
+            "fetch_error": "Error fetching media partners."
+          },
+          "retry": "Retry"
+        },
+        "common": {
+          "loading": "Loading...",
+          "error": "Error"
+        }
+      
+      
     
     
   

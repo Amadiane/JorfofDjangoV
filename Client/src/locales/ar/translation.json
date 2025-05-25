@@ -18,7 +18,7 @@
     "contact_us": "اتصل بنا",
     "community": "المجتمع",
     "become_partner": "كن شريكاً",
-    "media_partners": "شركاء الإعلام",
+    "media_partnerss": "شركاء الإعلام",
     "Nouvelles récentes": "الأخبار الحديثة",
     "À LA UNE": "أهم الأخبار",
     "Dernière nouvelle": "أحدث الأخبار",
@@ -331,7 +331,36 @@
         "loading_activities": "خطأ في تحميل الأنشطة",
         "fetch_error": "خطأ في جلب البيانات"
       },
-      "contact_us": "اتصل بنا"
+      
+        "media_partners": {
+          "title": "الشركاء الإعلاميون",
+          "subtitle": "اكتشف شركاءنا الإعلاميين وأنشطتهم.",
+          "search_placeholder": "ابحث عن شريك...",
+          "search_aria_label": "حقل بحث شركاء الإعلام",
+          "filters": {
+            "title": "الفلاتر",
+            "clear_all": "مسح الكل",
+            "category": "الفئة",
+            "all_categories": "جميع الفئات",
+            "year": "السنة",
+            "all_years": "جميع السنوات",
+            "month": "الشهر",
+            "all_months": "جميع الأشهر",
+            "activity": "النشاط",
+            "all_activities": "جميع الأنشطة"
+          },
+          "errors": {
+            "loading_error": "خطأ أثناء تحميل الشركاء الإعلاميين.",
+            "fetch_error": "خطأ أثناء جلب بيانات الشركاء الإعلاميين."
+          },
+          "retry": "إعادة المحاولة"
+        },
+        "common": {
+          "loading": "جاري التحميل...",
+          "error": "خطأ"
+        }
+      
+      
     
     
   

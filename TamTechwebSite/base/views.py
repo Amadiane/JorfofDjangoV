@@ -1184,54 +1184,18 @@ def document_api(request):
 
 #mediapartners
 
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
+from rest_framework import viewsets
 from .models import Partenaire
+from .serializers import PartenaireSerializer
 
-@csrf_exempt
-@require_http_methods(["POST", "GET"])
-def partenaire_api(request):
-    if request.method == "GET":
-        partenaires = Partenaire.objects.all()
-        data = []
+class PartenaireViewSet(viewsets.ModelViewSet):
+    queryset = Partenaire.objects.all().order_by('-id')
+    serializer_class = PartenaireSerializer
 
-        for partenaire in partenaires:
-            data.append({
-                "id": partenaire.id,
-                "titre": partenaire.titre,
-                "description": partenaire.description,
-                "couverture": request.build_absolute_uri(partenaire.couverture.url),
-                "site_url": partenaire.site_url
-            })
-        return JsonResponse(data, safe=False)
 
-    elif request.method == "POST":
-        titre = request.POST.get("titre")
-        description = request.POST.get("description")
-        couverture = request.FILES.get("couverture")
-        site_url = request.POST.get("site_url")
 
-        if not (titre and description and couverture and site_url):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-        partenaire = Partenaire.objects.create(
-            titre=titre,
-            description=description,
-            couverture=couverture,
-            site_url=site_url
-        )
 
-        return JsonResponse({
-            "message": "Partenaire ajouté avec succès.",
-            "partenaire": {
-                "id": partenaire.id,
-                "titre": partenaire.titre,
-                "description": partenaire.description,
-                "couverture": request.build_absolute_uri(partenaire.couverture.url),
-                "site_url": partenaire.site_url
-            }
-        }, status=201)
 
 
 

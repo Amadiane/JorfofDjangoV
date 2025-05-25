@@ -18,7 +18,7 @@
     "contact_us": "Contactez-nous",
     "community": "Communauté",
     "become_partner": "Devenir Partenaire",
-    "media_partners": "Partenaires Medias",
+    "media_partnerss": "Partenaires Medias",
     "Nouvelles récentes": "Nouvelles récentes",
     "À LA UNE": "À LA UNE",
     "Dernière nouvelle": "Dernière nouvelle",
@@ -328,7 +328,36 @@
         "loading_activities": "Erreur lors du chargement des activités",
         "fetch_error": "Erreur de récupération des données"
       },
-      "contact_us": "Nous contacter"
+      
+        "media_partners": {
+          "title": "Médias partenaires",
+          "subtitle": "Découvrez nos partenaires médias et leurs activités.",
+          "search_placeholder": "Rechercher un partenaire...",
+          "search_aria_label": "Champ de recherche des partenaires médias",
+          "filters": {
+            "title": "Filtres",
+            "clear_all": "Tout effacer",
+            "category": "Catégorie",
+            "all_categories": "Toutes les catégories",
+            "year": "Année",
+            "all_years": "Toutes les années",
+            "month": "Mois",
+            "all_months": "Tous les mois",
+            "activity": "Activité",
+            "all_activities": "Toutes les activités"
+          },
+          "errors": {
+            "loading_error": "Erreur lors du chargement des partenaires médias.",
+            "fetch_error": "Erreur lors de la récupération des partenaires médias."
+          },
+          "retry": "Réessayer"
+        },
+        "common": {
+          "loading": "Chargement...",
+          "error": "Erreur"
+        }
+      
+      
     
     
                                                 

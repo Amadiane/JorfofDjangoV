@@ -389,13 +389,23 @@ class Document(models.Model):
 from django.db import models
 
 class Partenaire(models.Model):
-    titre = models.CharField(max_length=255)
-    description = models.TextField()
+    titre_fr = models.CharField(max_length=255)
+    titre_en = models.CharField(max_length=255)
+    titre_ar = models.CharField(max_length=255)
+    
+    description_fr = models.TextField()
+    description_en = models.TextField()
+    description_ar = models.TextField()
+    
     couverture = models.ImageField(upload_to='partenaires/')
     site_url = models.URLField()
 
     def __str__(self):
-        return self.titre
+        return self.titre_fr  # Ou choisir la langue principale
+
+
+
+
 
 
 

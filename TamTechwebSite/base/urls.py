@@ -8,7 +8,7 @@ from .views import (
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
     PartnerAPIView, 
-    add_video, add_media_content, document_api, partenaire_api, AggregatedContentAPIView,
+    add_video, add_media_content, document_api, PartenaireViewSet, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
     mot_president_list_create, mot_president_detail, programme_list_create, programme_detail, platform_link_list_create_api, platform_link_detail_api
  # 👈 ajoute ces deux-là ici
@@ -20,6 +20,7 @@ router.register(r"blog", BlogViewSet)
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 # router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
+router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
 
 # URL Patterns
 urlpatterns = [
@@ -60,7 +61,9 @@ urlpatterns = [
     path('add-video/', add_video, name='add_video'),
     path('media/', add_media_content, name='add_media_content'),
     path('documents/', document_api, name='document_api'),
-    path('partenaires/', partenaire_api, name='partenaire_api'),
+    # path('partenaires/', partenaire_api, name='partenaire_api'),
+    # path('partenaires/', partenaire_api, name='partenaire_list_create'),
+    # path('partenaires/<int:id>/', partenaire_api, name='partenaire_detail_update_delete'),
     # path('programmes/', programmes_api, name='programmes_api'),
     path('programmes/', programme_list_create, name='programme-list-create'),
     path('programmes/<int:pk>/', programme_detail, name='programme-detail'),

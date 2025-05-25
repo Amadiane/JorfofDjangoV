@@ -173,7 +173,7 @@ const Navlinks = () => {
       ]
     },
     {
-      title: t("media_partners"),
+      title: t("media_partnerss"),
       path: "/mediaPartenaire",
       isDropdown: false
     }
