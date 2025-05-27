@@ -18,11 +18,12 @@ const FondationPost = () => {
   const [notification, setNotification] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const API_URL = 'http://127.0.0.1:8000/api/fondationtamkine/';
+  const API_URL = apiUrl + "/api/fondationtamkine/";
 
   useEffect(() => {
     fetchFondations();
@@ -124,7 +125,7 @@ const FondationPost = () => {
       description_ar: fondation.description_ar,
       image: null
     });
-    setImagePreview(fondation.image ? `http://127.0.0.1:8000${fondation.image}` : null);
+    setImagePreview(fondation.image ? `${apiUrl}${fondation.image}` : null);
     setEditingId(fondation.id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });

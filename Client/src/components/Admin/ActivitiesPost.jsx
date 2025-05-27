@@ -17,6 +17,7 @@ const ActivitiesPost = () => {
   const [editingId, setEditingId] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [activeLanguage, setActiveLanguage] = useState('fr'); // Langue active pour l'affichage
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +25,7 @@ const ActivitiesPost = () => {
 
   const fetchActivities = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/activities/');
+      const res = await fetch(apiUrl + "/api/activities/");
       const data = await res.json();
       setActivities(data);
     } catch (err) {
@@ -63,8 +64,8 @@ const ActivitiesPost = () => {
 
     const method = editingId ? 'PATCH' : 'POST';
     const url = editingId 
-      ? `http://127.0.0.1:8000/api/activities/${editingId}/`
-      : 'http://127.0.0.1:8000/api/activities/';
+      ? `${apiUrl}/api/activities/${editingId}/`
+      : `${apiUrl}/api/activities/`;
 
     try {
       const response = await fetch(url, {
@@ -102,7 +103,7 @@ const ActivitiesPost = () => {
     if (!window.confirm("Voulez-vous vraiment supprimer cette activité ?")) return;
 
     try {
-      await fetch(`http://127.0.0.1:8000/api/activities/${id}/`, {
+      await fetch(`${apiUrl}/api/activities/${id}/`, {
         method: 'DELETE'
       });
       fetchActivities();
@@ -499,7 +500,7 @@ const ActivitiesPost = () => {
                 <div style={styles.activityContent}>
                   {activity.cover_photo && (
                     <img 
-                      src={activity.cover_photo} 
+                      src={`${apiUrl}${activity.cover_photo}`} 
                       alt={getLocalizedContent(activity, 'title')} 
                       style={styles.coverPhoto} 
                     />

@@ -9,11 +9,12 @@ const MotPresident = () => {
   const [error, setError] = useState("");
   const [draggingImage, setDraggingImage] = useState(null);
   const [imagePositions, setImagePositions] = useState({});
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchMotPresidents = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/motpresident/");
+        const response = await fetch(apiUrl + "/api/motpresident/");
         if (!response.ok) throw new Error(t('errors.loading_data'));
         const data = await response.json();
 
@@ -114,7 +115,7 @@ const MotPresident = () => {
       if (motPresident.image.startsWith("http")) {
         imageUrl = motPresident.image;
       } else {
-        imageUrl = `http://127.0.0.1:8000${motPresident.image}`;
+        imageUrl = `${apiUrl}${motPresident.image}`;
       }
     }
     return imageUrl;

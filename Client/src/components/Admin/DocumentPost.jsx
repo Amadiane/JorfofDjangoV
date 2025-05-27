@@ -6,6 +6,7 @@ const DocumentPost = () => {
   const [fichier, setFichier] = useState(null);       // pdf/doc/zip
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ const DocumentPost = () => {
     if (fichier) formData.append("fichier", fichier);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/documents/", {
+      const response = await fetch(apiUrl + "/api/documents/", {
         method: "POST",
         body: formData,
       });

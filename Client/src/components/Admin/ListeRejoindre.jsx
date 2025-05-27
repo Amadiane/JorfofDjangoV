@@ -15,11 +15,12 @@ const ListeRejoindre = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const fetchRejoindres = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/rejoindre/', {
+      const response = await fetch(apiUrl + "/api/rejoindre/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -57,7 +58,7 @@ const ListeRejoindre = () => {
   const handleDeleteRejoindre = async (id) => {
     try {
       setDeleteLoading(true);
-      const response = await fetch(`http://127.0.0.1:8000/api/rejoindre/${id}/`, {
+      const response = await fetch(`${apiUrl}/api/rejoindre/${id}/`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`

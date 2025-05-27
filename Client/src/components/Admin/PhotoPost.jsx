@@ -6,6 +6,7 @@ const PhotoPost = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // Palette de couleurs similaire à "Contacter nous"
   const colors = {
@@ -31,7 +32,7 @@ const PhotoPost = () => {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/media/', {
+      const response = await fetch(apiUrl + "/api/media/", {
         method: 'POST',
         body: formData,
       });

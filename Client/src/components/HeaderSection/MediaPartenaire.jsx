@@ -12,6 +12,7 @@ const MediaPartenaire = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
   
   // Filtres
   const [activeFilter, setActiveFilter] = useState('tous');
@@ -35,7 +36,7 @@ const MediaPartenaire = () => {
     const fetchPartenaires = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://127.0.0.1:8000/api/partenaires/");
+        const response = await fetch(apiUrl + "/api/partenaires/"); //apiUrl + "/
         if (!response.ok) throw new Error(t("media_partners.errors.loading_error"));
         const data = await response.json();
         
@@ -110,7 +111,7 @@ const MediaPartenaire = () => {
       return imagePath;
     }
     
-    return `http://127.0.0.1:8000${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+    return `${apiUrl}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
   };
 
   const handleContactClick = () => {

@@ -16,11 +16,12 @@ const Actualites = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/blog/');
+        const response = await fetch(apiUrl + "/api/blog/");
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         const sortedBlogs = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

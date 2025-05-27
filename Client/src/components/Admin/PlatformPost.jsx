@@ -12,6 +12,7 @@ const PlatformPost = () => {
   const [icon, setIcon] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // États pour l'interface
   const [showForm, setShowForm] = useState(false);
@@ -27,7 +28,7 @@ const PlatformPost = () => {
   // Fonction pour récupérer les plateformes
   const fetchPlatforms = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/platformlinks/');
+      const res = await fetch(apiUrl + "api/platformlinks/");
       const data = await res.json();
       setPlatforms(data);
     } catch (err) {
@@ -83,9 +84,9 @@ const PlatformPost = () => {
     if (icon) formData.append('icon', icon);
 
     try {
-      const apiUrl = editingId 
-        ? `http://localhost:8000/api/platformlinks/${editingId}/` 
-        : 'http://localhost:8000/api/platformlinks/';
+      const requestUrl = editingId 
+        ? `${apiUrl}api/platformlinks/${editingId}/`
+        : `${apiUrl}api/platformlinks/`;
       
       const method = editingId ? 'PUT' : 'POST';
 
@@ -114,7 +115,7 @@ const PlatformPost = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/platformlinks/${id}/`, {
+      const response = await fetch(`${apiUrl}api/platformlinks/${id}/`, {
         method: 'DELETE',
       });
 

@@ -13,6 +13,7 @@ const Document = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,7 +29,7 @@ const Document = () => {
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/documents/");
+        const response = await fetch(apiUrl + "/api/documents/");
         if (!response.ok) throw new Error("Erreur lors du chargement des documents.");
         const data = await response.json();
 
@@ -99,7 +100,7 @@ const Document = () => {
       if (document.fichier.startsWith("http")) {
         fileUrl = document.fichier;
       } else {
-        fileUrl = `http://127.0.0.1:8000${document.fichier}`;
+        fileUrl = `${apiUrl}${document.fichier}`;
       }
     }
     return fileUrl;
@@ -111,7 +112,7 @@ const Document = () => {
       if (document.couverture.startsWith("http")) {
         imgUrl = document.couverture;
       } else {
-        imgUrl = `http://127.0.0.1:8000${document.couverture}`;
+        imgUrl = `${apiUrl}${document.couverture}`;
       }
     }
     return imgUrl;

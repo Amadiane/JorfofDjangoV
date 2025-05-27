@@ -9,11 +9,12 @@ const FondationPost = () => {
   const [error, setError] = useState("");
   const [draggingImage, setDraggingImage] = useState(null);
   const [imagePositions, setImagePositions] = useState({});
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchFondations = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/fondationtamkine/");
+        const response = await fetch(apiUrl + "/api/fondationtamkine/"); 
         if (!response.ok) throw new Error(t('errors.loading_data'));
         const data = await response.json();
 
@@ -82,7 +83,7 @@ const FondationPost = () => {
       if (fondation.image.startsWith("http")) {
         imageUrl = fondation.image;
       } else {
-        imageUrl = `http://127.0.0.1:8000${fondation.image}`;
+        imageUrl = `${apiUrl}${fondation.image}`;
       }
     }
     return imageUrl;

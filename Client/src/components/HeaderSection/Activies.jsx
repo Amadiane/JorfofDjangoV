@@ -12,12 +12,13 @@ const Activities = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://127.0.0.1:8000/api/activities/');
+        const response = await fetch(apiUrl + "/api/activities/");
         if (!response.ok) throw new Error(t("errors.loading_activities"));
         const data = await response.json();
         
@@ -47,7 +48,7 @@ const Activities = () => {
       return imagePath;
     }
     
-    return `http://127.0.0.1:8000${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+    return `${apiUrl}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
   };
 
   const handleClick = () => {

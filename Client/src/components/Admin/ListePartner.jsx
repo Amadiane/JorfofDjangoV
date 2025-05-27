@@ -15,11 +15,12 @@ const ListPartners = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const fetchPartenaires = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/partners/', {
+      const response = await fetch(apiUrl + "/api/partners/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -68,7 +69,7 @@ const ListPartners = () => {
       setDeleteLoading(true);
   
       // Effectuer la requête DELETE avec l'ID dans le corps de la requête
-      const response = await fetch(`http://127.0.0.1:8000/api/partners/`, {
+      const response = await fetch(apiUrl + "/api/partners/", {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json', // Assurez-vous que le body est en JSON

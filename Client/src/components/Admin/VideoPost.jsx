@@ -6,6 +6,7 @@ const VideoPost = () => {
   const [couverture, setCouverture] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ const VideoPost = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/add-video/', {
+      const response = await fetch(apiUrl + "/api/add-video/", {
         method: 'POST',
         body: formData,
       });

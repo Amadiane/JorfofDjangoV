@@ -12,6 +12,7 @@ const MediaPartenairePost = () => {
   const [couverture, setCouverture] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // États pour l'interface
   const [showForm, setShowForm] = useState(false);
@@ -27,7 +28,7 @@ const MediaPartenairePost = () => {
   // Fonction pour récupérer les partenaires
   const fetchPartenaires = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/partenaires/');
+      const res = await fetch(apiUrl + "api/partenaires/");
       const data = await res.json();
       setPartenaires(data);
     } catch (err) {
@@ -84,8 +85,8 @@ const MediaPartenairePost = () => {
 
     try {
       const apiUrl = editingId 
-        ? `http://127.0.0.1:8000/api/partenaires/${editingId}/` 
-        : 'http://127.0.0.1:8000/api/partenaires/';
+        ? `${apiUrl}api/partenaires/${editingId}/` 
+        : `${apiUrl}api/partenaires/`;
       
       const method = editingId ? 'PUT' : 'POST';
 
@@ -114,7 +115,7 @@ const MediaPartenairePost = () => {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/partenaires/${id}/`, {
+      const response = await fetch(`${apiUrl}/api/partenaires/${id}/`, {
         method: 'DELETE',
       });
 

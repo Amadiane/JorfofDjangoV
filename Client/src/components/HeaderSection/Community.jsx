@@ -12,6 +12,7 @@ const Community = () => {
     email: '',
     conditions: false,
   });
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,7 +26,7 @@ const Community = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/api/community/", {
+      const response = await fetch(apiUrl + "/api/community/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

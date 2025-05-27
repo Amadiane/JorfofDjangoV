@@ -15,11 +15,12 @@ const ListeContacts = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/contact/', {
+      const response = await fetch(apiUrl + "/api/contact/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -61,7 +62,7 @@ const ListeContacts = () => {
   const handleDeleteContact = async (id) => {
     try {
       setDeleteLoading(true);
-      const response = await fetch(`http://127.0.0.1:8000/api/contact/${id}/`, {
+      const response = await fetch(`${apiUrl}/api/contact/${id}/`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`

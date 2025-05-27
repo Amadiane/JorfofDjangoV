@@ -9,11 +9,12 @@ const NosMissions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchMissions = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/missions/');
+        const response = await fetch(apiUrl + "/api/missions/");
         if (!response.ok) {
           throw new Error(`Erreur HTTP! statut: ${response.status}`);
         }

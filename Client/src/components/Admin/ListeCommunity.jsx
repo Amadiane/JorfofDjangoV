@@ -15,11 +15,12 @@ const ListePostulantsCommunity = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const fetchPostulants = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/community/', {
+      const response = await fetch(apiUrl + "/api/community/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -61,7 +62,7 @@ const ListePostulantsCommunity = () => {
   const handleDeletePostulant = async (id) => {
     try {
       setDeleteLoading(true);
-      const response = await fetch(`http://127.0.0.1:8000/api/community/${id}/`, {
+      const response = await fetch(`${apiUrl}/api/community/${id}/`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`

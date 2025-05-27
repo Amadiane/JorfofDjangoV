@@ -15,6 +15,7 @@ const TeamMessage = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [expanded, setExpanded] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +25,7 @@ const TeamMessage = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/team-messages/');
+        const response = await fetch(apiUrl + "/api/team-messages/");
         if (!response.ok) {
           throw new Error('Impossible de récupérer les messages');
         }
@@ -50,8 +51,8 @@ const TeamMessage = () => {
     e.preventDefault();
     const method = editingMessageId ? 'PUT' : 'POST';
     const url = editingMessageId
-      ? `http://localhost:8000/api/team-messages/${editingMessageId}/`
-      : 'http://localhost:8000/api/team-messages/';
+      ? `${apiUrl}/api/team-messages/${editingMessageId}/`
+      : `${apiUrl}/api/team-messages/`;
 
     try {
       const response = await fetch(url, {
@@ -113,7 +114,7 @@ const TeamMessage = () => {
     const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer ce message ?');
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:8000/api/team-messages/${id}/`, {
+        const response = await fetch(`${apiUrl}/api/team-messages/${id}/`, {
           method: 'DELETE',
         });
         if (!response.ok) {

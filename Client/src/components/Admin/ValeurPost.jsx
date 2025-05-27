@@ -18,12 +18,13 @@ const ValeurPost = () => {
   const [notification, setNotification] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const API_URL = 'http://localhost:8000/api/valeurs/';
+  const API_URL = apiUrl + "/api/valeurs/";
 
   useEffect(() => {
     fetchValeurs();

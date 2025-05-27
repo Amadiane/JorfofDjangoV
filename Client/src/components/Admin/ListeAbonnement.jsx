@@ -15,11 +15,12 @@ const ListeAbonnement = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const fetchAbonnés = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/newsletter/', {
+      const response = await fetch(apiUrl + "/api/newsletter/", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
@@ -67,7 +68,7 @@ const ListeAbonnement = () => {
   
     try {
       setDeleteLoading(true);
-      const response = await fetch(`http://127.0.0.1:8000/api/newsletter/`, {
+      const response = await fetch(`${apiUrl}/api/newsletter/`, { 
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

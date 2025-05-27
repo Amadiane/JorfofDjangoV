@@ -16,6 +16,7 @@ const MissionPost = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [expanded, setExpanded] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +26,7 @@ const MissionPost = () => {
   useEffect(() => {
     const fetchMissions = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/missions/');
+        const response = await fetch(apiUrl + "api/missions/");
         if (!response.ok) {
           throw new Error('Impossible de récupérer les missions');
         }
@@ -51,8 +52,8 @@ const MissionPost = () => {
     e.preventDefault();
     const method = editingMissionId ? 'PUT' : 'POST';
     const url = editingMissionId
-      ? `http://localhost:8000/api/missions/${editingMissionId}/`
-      : 'http://localhost:8000/api/missions/';
+      ? `${apiUrl}api/missions/${editingMissionId}/`
+      : `${apiUrl}api/missions/`;
 
     try {
       const response = await fetch(url, {
@@ -121,7 +122,7 @@ const MissionPost = () => {
     const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer cette mission ?');
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:8000/api/missions/${id}/`, {
+        const response = await fetch(`${apiUrl}api/missions/${id}/`, {
           method: 'DELETE',
         });
         if (!response.ok) {

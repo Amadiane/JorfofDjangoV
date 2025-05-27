@@ -13,12 +13,14 @@ const Programs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedProgram, setExpandedProgram] = useState(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://127.0.0.1:8000/api/programmes/");
+
+        const response = await fetch(apiUrl + "/api/programmes/");
         if (!response.ok) throw new Error(t("errors.loading_programs"));
         const data = await response.json();
         setProgrammes(data);
@@ -43,9 +45,9 @@ const Programs = () => {
     if (program.photo_couverture) {
       return program.photo_couverture.startsWith("http")
         ? program.photo_couverture
-        : `http://127.0.0.1:8000${program.photo_couverture}`;
+        : `${apiUrl}${program.photo_couverture}`;
     }
-    return "/api/placeholder/400/320";
+    return `${apiUrl}/api/placeholder/400/320`;
   };
 
   const toggleDescription = (index) => {

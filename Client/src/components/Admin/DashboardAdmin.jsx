@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const DashboardAdmin = () => {
     const navigate = useNavigate();
+    //const apiUrl = import.meta.env.VITE_API_BACKEND;
     useEffect(() => {
         const accessToken = localStorage.getItem("access");
     

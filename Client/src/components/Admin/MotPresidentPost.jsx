@@ -18,14 +18,15 @@ const MotPresidentPost = () => {
   const [notification, setNotification] = useState(null);
   const [expanded, setExpanded] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const API_URL = 'http://127.0.0.1:8000/api/motpresident/';
+  const API_URL = apiUrl + "/api/motpresident/";
   // URL de base pour les images - assurez-vous que cette URL correspond à la configuration de votre serveur
-  const IMAGE_BASE_URL = 'http://127.0.0.1:8000';
+  const IMAGE_BASE_URL = apiUrl;
 
   // Chargement des messages
   useEffect(() => {

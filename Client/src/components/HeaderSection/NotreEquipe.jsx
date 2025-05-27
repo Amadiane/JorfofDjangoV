@@ -12,13 +12,13 @@ const NotreEquipe = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState('fr'); // Par défaut, la langue est le français
   const [title, setTitle] = useState(""); // État pour stocker le titre dynamique
-
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
 useEffect(() => {
     // Fonction pour récupérer le titre et le contenu en fonction de la langue
     const fetchMessage = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/team-messages/');
+        const response = await fetch(apiUrl + "/api/team-messages/");
         if (!response.ok) {
           throw new Error(`Erreur HTTP! statut: ${response.status}`);
         }

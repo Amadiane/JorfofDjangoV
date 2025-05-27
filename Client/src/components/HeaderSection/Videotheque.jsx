@@ -11,6 +11,7 @@ const Videotheque = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     fetchVideos();
@@ -31,7 +32,7 @@ const Videotheque = () => {
   const fetchVideos = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/add-video/');
+      const response = await fetch(apiUrl + "/api/add-video/"); //(apiUrl + "/api/programmes/");
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }

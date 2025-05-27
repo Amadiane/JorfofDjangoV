@@ -15,11 +15,12 @@ const Phototheque = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // grid or timeline
   const [zoomedImage, setZoomedImage] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/media/");
+        const response = await fetch(apiUrl + "/api/media/");
         if (!response.ok) throw new Error("Erreur lors du chargement des données.");
         const data = await response.json();
 
@@ -158,7 +159,7 @@ const Phototheque = () => {
       if (photo.image.startsWith("http")) {
         imageUrl = photo.image;
       } else {
-        imageUrl = `http://127.0.0.1:8000${photo.image}`;
+        imageUrl = `${apiUrl}${photo.image}`;
       }
     }
     return imageUrl;
