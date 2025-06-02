@@ -59,7 +59,7 @@ import DocumentPost from './components/Admin/DocumentPost.jsx';
 import MediaPartenairePost from './components/Admin/MediaPartenairePost.jsx';
 import ProgramPost from './components/Admin/ProgramPost.jsx';
 import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
-import Activities from './components/HeaderSection/Activies.jsx';
+import Activities from './components/HeaderSection/Activities.jsx';
 
 // Définir les routes avec `createBrowserRouter`
 const router = createBrowserRouter(

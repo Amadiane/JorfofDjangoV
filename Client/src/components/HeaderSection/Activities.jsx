@@ -21,7 +21,6 @@ const Activities = () => {
         const response = await fetch(apiUrl + "/api/activities/");
         if (!response.ok) throw new Error(t("errors.loading_activities"));
         const data = await response.json();
-        
         setActivities(data);
         setError("");
       } catch (err) {
@@ -31,10 +30,10 @@ const Activities = () => {
         setLoading(false);
       }
     };
-
+  
     fetchActivities();
   }, [t]);
-
+  
   // Filtrage multilingue des activités
   const filteredActivities = activities.filter(activity =>
     (activity[`title_${i18n.language}`] || activity.title_fr || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
