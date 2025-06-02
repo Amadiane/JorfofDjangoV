@@ -11,6 +11,7 @@ const NousRejoindre = () => {
   const [responseMessage, setResponseMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // Détecter la largeur de l'écran pour la responsivité
   useEffect(() => {
@@ -35,7 +36,7 @@ const NousRejoindre = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/rejoindre/', {
+      const res = await fetch(apiUrl + "/api/rejoindre/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

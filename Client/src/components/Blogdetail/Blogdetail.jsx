@@ -8,6 +8,7 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   useEffect(() => {
     if (!id) {
@@ -18,7 +19,7 @@ const BlogDetail = () => {
   
     const fetchBlog = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/blog/${id}`);
+        const response = await fetch(`${apiUrl}/api/blog/${id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

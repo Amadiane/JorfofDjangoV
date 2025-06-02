@@ -13,6 +13,7 @@ const Contacternous = () => {
   });
   const [responseMessage, setResponseMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
   
 
   const handleChange = (e) => {
@@ -28,7 +29,7 @@ const Contacternous = () => {
     setIsSubmitting(true);
   
     try {
-      const res = await fetch('http://localhost:8000/api/contact/', {
+      const res = await fetch(apiUrl + "/api/contact/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

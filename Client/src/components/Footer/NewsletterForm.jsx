@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 const NewsletterForm = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:8000/api/newsletter/', {
+      const res = await fetch(apiUrl + "/api/newsletter/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

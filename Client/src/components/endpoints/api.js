@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/'
+//const BASE_URL = 'http://127.0.0.1:8000/api/'
+
+const BASE_URL = import.meta.env.VITE_API_BACKEND + '/api/';
+
 
 const LOGIN_URL = `${BASE_URL}login/`
 const REGISTER_URL = `${BASE_URL}register/`
@@ -8,11 +11,13 @@ const LOGOUT_URL = `${BASE_URL}logout/`
 const NOTES_URL = `${BASE_URL}todos/`
 const BLOG_URL = `${BASE_URL}blog/`
 const AUTHENTICATED_URL = `${BASE_URL}authenticated/`
+const apiUrl = import.meta.env.VITE_API_BACKEND;
+
 
 axios.defaults.withCredentials = true; 
 
 export const login = async (username, password) => {
-    const response = await fetch('http://localhost:8000/api/login/', {
+    const response = await fetch(apiUrl + "/api/login/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
