@@ -38,8 +38,8 @@ const Actualites = () => {
   }, [navigate]);
 
   const filteredBlogs = blogs.filter(blog =>
-    blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    blog.content.toLowerCase().includes(searchQuery.toLowerCase())
+    blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    blog.content?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (dateString) => {

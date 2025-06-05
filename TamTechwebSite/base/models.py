@@ -3,29 +3,23 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 # Modèle Blog
+from django.db import models
+
 class Blog(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    image = models.ImageField(upload_to="images/", blank=True, null=True)  # Correction du chemin d'image
-    author = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, blank=True, max_length=255)
-    tags = models.CharField(max_length=200)
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+    
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    content_ar = models.TextField()
+    
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            # Générer un slug unique basé sur le titre
-            slug = slugify(self.title)
-            unique_slug = slug
-            number = 1
-            while Blog.objects.filter(slug=unique_slug).exists():
-                unique_slug = f"{slug}-{number}"
-                number += 1
-            self.slug = unique_slug
-        super().save(*args, **kwargs)
-
     def __str__(self):
-        return self.title
+        return self.title_fr
+
 
 
 # Modèle Todo

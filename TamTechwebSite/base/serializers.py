@@ -4,11 +4,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Blog, Todo
 
 
-# Serializer pour le modèle Blog
-class BlogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Blog
-        fields = '__all__'  # Inclure tous les champs
+# # Serializer pour le modèle Blog
+# class BlogSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Blog
+#         fields = '__all__'  # Inclure tous les champs
+
+
+
 
 
 # Serializer pour l'enregistrement d'un utilisateur
@@ -184,7 +187,13 @@ from .models import Blog
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'image', 'author', 'slug', 'tags', 'created_at']  # Utilisez 'title' et non 'titre'
+        fields = [
+            'id',
+            'title_fr', 'title_en', 'title_ar',
+            'content_fr', 'content_en', 'content_ar',
+            'image', 'created_at'
+        ]
+
 
 
 

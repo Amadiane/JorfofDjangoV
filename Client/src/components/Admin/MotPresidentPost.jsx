@@ -4,7 +4,7 @@ const MotPresidentPost = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState({
-    titre_fr: "",
+    titre_fr: "", 
     titre_en: "",
     titre_ar: "",
     description_fr: "",
