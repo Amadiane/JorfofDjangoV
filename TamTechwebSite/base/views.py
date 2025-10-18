@@ -1339,3 +1339,13 @@ def fondation_detail(request, pk):
         # Supprimer une fondation
         fondation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
+
