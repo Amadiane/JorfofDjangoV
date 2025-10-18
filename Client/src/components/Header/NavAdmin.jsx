@@ -153,12 +153,12 @@ const NavAdmin = () => {
     {
       title: "Contenu",
       items: [
-        { path: "/platformPost", label: "Plateformes" },
+        // { path: "/platformPost", label: "Plateformes" },
         { path: "/createpost", label: "Actualités" },
-        { path: "/programPost", label: "Programmes" },
+        // { path: "/programPost", label: "Programmes" },
         { path: "/videoPost", label: "Vidéos" },
         { path: "/photoPost", label: "Photothèque" },
-        { path: "/documentPost", label: "Téléchargements" },
+        // { path: "/documentPost", label: "Téléchargements" },
         { path: "/activitiesPost", label: "Activities" },
       ]
     },
@@ -166,17 +166,18 @@ const NavAdmin = () => {
       title: "Équipe & Partenaires",
       items: [
         { path: "/teamMessage", label: "Notre Équipe" },
-        { path: "/listPartners", label: "Partenaires" },
-        { path: "/mediaPartenairePost", label: "Partenaires Médias" },
+        // { path: "/listPartners", label: "Partenaires" },
+        // { path: "/mediaPartenairePost", label: "Partenaires Médias" },
+        { path: "/mediaPartenairePost", label: "Partenaires" },
       ]
     },
     {
       title: "À propos",
       items: [
         { path: "/motPresidentPost", label: "Mot du Président" },
-        { path: "/missionPost", label: "Nos Missions" },
+        // { path: "/missionPost", label: "Nos Missions" },
         { path: "/valeurPost", label: "Nos Valeurs" },
-        { path: "/fondationPost", label: "Fondation Tamkine" },
+        // { path: "/fondationPost", label: "Fondation Tamkine" },
       ]
     },
     {

@@ -33,6 +33,7 @@ const App = () => {
     "/teamMessage",
     "/missionPost",
     "/activitiesPost",
+    
   ];
 
   // Vérifier si la page actuelle est une page admin

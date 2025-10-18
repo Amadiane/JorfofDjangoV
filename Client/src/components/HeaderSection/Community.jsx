@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';  // Import de useTranslation
+import { useTranslation } from 'react-i18next';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 
 const Community = () => {
-  const { t } = useTranslation();  // Initialisation du hook de traduction
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     nom: '',
     prenom: '',
@@ -37,7 +37,7 @@ const Community = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Votre demande d'adhésion a été envoyée avec succès !");
+        alert("Votre inscription a été envoyée avec succès !");
         setForm({
           nom: '',
           prenom: '',
@@ -58,45 +58,44 @@ const Community = () => {
   return (
     <div style={styles.root}>
       <header style={styles.header}>
-        <h1 style={styles.h1}>{t('Communauté Tamkine')}</h1>
-        <p>{t('Ensemble pour une éducation de qualité pour tous')}</p>
+        <h1 style={styles.h1}>{t('Jorfof Club')}</h1>
+        <p>{t('Toujours Prêt à Gagner !')}</p>
       </header>
 
       <div style={styles.container}>
         <div style={styles.card}>
-          <h2 style={styles.h2}>{t('Notre Communauté')}</h2>
+          <h2 style={styles.h2}>{t('Notre Équipe')}</h2>
           <p style={styles.p}>
-           {t('Le nombre des membres de la Communauté Tamkine connait une multiplication continue')} [...]
+            {t("Jorfof Club, c’est bien plus qu’un club : c’est une famille unie par la passion du basketball, la discipline et l’esprit d’équipe. Nous formons, inspirons et motivons les jeunes talents à se dépasser sur le terrain et dans la vie.")}
           </p>
 
-          <h2 style={styles.h2}>{t('La Communauté Tamkine regroupe :')}</h2>
+          <h2 style={styles.h2}>{t('Le Jorfof Club regroupe :')}</h2>
           <ul style={styles.ul}>
-            <li style={styles.li}>{t('Les élèves de toutes origines [...]')}</li>
-            <li style={styles.li}>{t('Les parents de ces élèves ;')}</li>
-            <li style={styles.li}>{t('Les instituteurs, enseignants, inspecteurs [...]')}</li>
-            <li style={styles.li}>{t('Les entités de gestion et d\'administration éducative ;')}</li>
-            <li style={styles.li}>{t('La Société Civile ;')}</li>
-            <li style={styles.li}>{t('Des citoyens du monde entier.')}</li>
+            <li style={styles.li}>{t('Des joueurs passionnés, prêts à tout donner sur le terrain ;')}</li>
+            <li style={styles.li}>{t('Des entraîneurs engagés dans la progression de chaque membre ;')}</li>
+            <li style={styles.li}>{t('Des supporters fidèles qui font vibrer les gradins ;')}</li>
+            <li style={styles.li}>{t('Des bénévoles et encadrants qui assurent la réussite du club ;')}</li>
+            <li style={styles.li}>{t('Et des partenaires qui partagent nos valeurs de respect, d’effort et de dépassement de soi.')}</li>
           </ul>
 
           <p style={styles.p}>
-           {t('Bénéficier de la carte de membre de la Communauté Tamkine')} [...]
+            {t("Rejoindre le Jorfof Club, c’est faire partie d’une aventure humaine et sportive, où chaque match est une nouvelle occasion de prouver notre devise : Toujours Prêt !")}
           </p>
 
           <p style={styles.highlight}>
-            {t('Être membre de la Famille Tamkine, c\'est tout d\'abord et avant tout démontrer [...]')}
+            {t("Être membre du Jorfof Club, c’est vivre le basket avec passion, défendre nos couleurs avec fierté et contribuer à l’essor du sport dans notre communauté.")}
           </p>
         </div>
 
         <div className="call-to-action">
-          <h2 style={styles.h2}>{t('N\'attendez plus, venez nous rejoindre [...]')}</h2>
+          <h2 style={styles.h2}>{t('Rejoignez l’aventure Jorfof Club !')}</h2>
           <p style={styles.quote}>
-            {t('L\'éducation est la pierre angulaire du développement [...] ')}
+            {t("« Ensemble sur le terrain, unis dans la victoire. »")}
           </p>
         </div>
 
         <div style={styles.formContainer}>
-          <h2 style={styles.h2}>{t('Rejoignez la Communauté Tamkine')}</h2>
+          <h2 style={styles.h2}>{t('Devenez membre du Jorfof Club')}</h2>
           <form onSubmit={handleSubmit}>
             <div style={styles.responsiveTwoColumns}>
               <div style={styles.formGroup}>
@@ -114,9 +113,10 @@ const Community = () => {
               <label style={styles.label} htmlFor="role">{t('Rôle *')}</label>
               <select style={styles.select} id="role" name="role" value={form.role} onChange={handleChange} required>
                 <option value="">{t('-- Sélectionnez votre rôle --')}</option>
-                <option value="enseignant">{t('Enseignant')}</option>
-                <option value="parent">{t('Parent d\'élève')}</option>
-                <option value="eleve">{t('Élève')}</option>
+                <option value="joueur">{t('Joueur')}</option>
+                <option value="entraineur">{t('Entraîneur')}</option>
+                <option value="supporter">{t('Supporter')}</option>
+                <option value="benevole">{t('Bénévole')}</option>
                 <option value="autre">{t('Autre')}</option>
               </select>
             </div>
@@ -128,7 +128,7 @@ const Community = () => {
               </div>
 
               <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="email">{t('Email')} *</label>
+                <label style={styles.label} htmlFor="email">{t('Email *')}</label>
                 <input style={styles.input} id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
               </div>
             </div>
@@ -136,7 +136,7 @@ const Community = () => {
             <div style={styles.formGroup}>
               <div style={styles.checkboxGroup}>
                 <input type="checkbox" id="conditions" name="conditions" checked={form.conditions} onChange={handleChange} required />
-                <label htmlFor="conditions">{t('J\'accepte les conditions générales CNDP')}</label>
+                <label htmlFor="conditions">{t("J’accepte les conditions du club Jorfof")}</label>
               </div>
             </div>
 
@@ -146,6 +146,7 @@ const Community = () => {
           </form>
         </div>
       </div>
+
       <div className="fixed bottom-6 right-6 z-50">
         <ChatBotNew />
       </div>

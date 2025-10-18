@@ -3,8 +3,11 @@ import logo from '../../assets/logoblanc.png';
 
 const Loader = () => {
   return (
+    // <div style={styles.loaderContainer}>
+    //   <img src={logo} alt="Logo de la Fondation Tamkine" style={styles.loaderImage} />
+    // </div>
     <div style={styles.loaderContainer}>
-      <img src={logo} alt="Logo de la Fondation Tamkine" style={styles.loaderImage} />
+      <img src={logo} alt="Logo de Jorfof" style={styles.loaderImage} />
     </div>
   );
 };

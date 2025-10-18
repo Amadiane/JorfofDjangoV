@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footerlastpart from './Footerlastpart';
-import logo from '../../assets/logoblanc.png';
+import logo from '../../assets/logo.jpg';
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
 
 const Footer = () => {
@@ -53,14 +53,16 @@ const Footer = () => {
               onClick={() => handleNavigation('/home')} 
               className="mb-4 transition-transform hover:scale-105 duration-300 cursor-pointer"
             >
-              <img src={logo} alt="Tamkine Logo" className="w-48 h-48 object-contain drop-shadow-lg" />
+              {/* <img src={logo} alt="Tamkine Logo" className="w-48 h-48 object-contain drop-shadow-lg" /> */}
+              <img src={logo} alt="logo" className="w-48 h-48 object-contain drop-shadow-lg" />
             </div>
             <p className="text-gray-300 text-sm mt-2 max-w-xs text-center lg:text-left">
-              {t("Fondation dédiée à l'éducation et au développement des compétences")}
+              {/* {t("Fondation dédiée à l'éducation et au développement des compétences")} */}
+              {t("Jorfof Club — Toujours Prêt à Gagner !")}
             </p>
           </div>
 
-          <div className="flex flex-col items-center lg:items-start mb-6 lg:mb-0">
+          {/* <div className="flex flex-col items-center lg:items-start mb-6 lg:mb-0">
             <h4 className="font-bold text-lg mb-5 pb-2 border-b-2 border-blue-400 inline-block">
               {t("Nos Plateformes")}
             </h4>
@@ -85,6 +87,33 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
+          </div> */}
+
+          <div className="flex flex-col items-center lg:items-start mb-6 lg:mb-0">
+            <h4 className="font-bold text-lg mb-5 pb-2 border-b-2 border-blue-400 inline-block">
+              {t("Nos Partenaires")}
+            </h4>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-3 w-full">
+              {[
+                { name: t("Tekacom"), url: "https://tutoring.tamkine.org/" },
+                { name: t("Rahi travels"), url: "https://connect.tamtechsolution.com/" },
+                { name: t("Federation GUINEENNE de basketball"), url: "https://orientation.tamkine.org/" },
+                // { name: t("JPOV"), url: "https://complexe.tamkine.org/" },
+                // { name: t("Séminaires"), url: "https://seminars.tamtechsolution.com/" },
+                // { name: t("Bourses"), url: "https://scholarship.tamkine.org/" }
+              ].map((platform, idx) => (
+                <li key={idx}>
+                  <a 
+                    href={platform.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center text-gray-300 hover:text-white hover:translate-x-1 transition-all duration-300"
+                  >
+                    <span className="text-blue-400 mr-2">›</span> {platform.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="flex flex-col items-center lg:items-start mb-6 lg:mb-0">
@@ -94,7 +123,8 @@ const Footer = () => {
             <ul className="space-y-4">
               {[
                 { name: t("Qui sommes-nous ?"), path: "/qui-sommes-nous-" },
-                { name: t("Contacter Tamkine"), path: "/contacter-tamkine" },
+                // { name: t("Contacter Tamkine"), path: "/contacter-tamkine" },
+                { name: t("Contacter Jorfof"), path: "/contacter-tamkine" },
                 { name: t("Nous rejoindre"), path: "/nous-rejoindre" }
               ].map((item, idx) => (
                 <li key={idx}>
@@ -118,8 +148,10 @@ const Footer = () => {
               onClick={openGoogleMaps}
             >
               <iframe
-                title="Tamkine Location"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma&markers=color:red%7C33.9876158,-6.8701418"
+                // title="Tamkine Location"
+                title="Location du club"
+                // src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma&markers=color:red%7C33.9876158,-6.8701418"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d251747.03027034175!2d-13.744143922458493!3d9.63418613836116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xf1cd12aa388e129%3A0x8a66de1569d341d4!2sConakry%2C%20Guin%C3%A9e!5e0!3m2!1sfr!2sma!4v1760802351532!5m2!1sfr!2sma"
                 width="100%"
                 height="200"
                 style={{ border: 0 }}
@@ -153,7 +185,8 @@ const Footer = () => {
             <div className="flex-1">
               <h3 className="text-xl md:text-2xl font-bold mb-3">{t("Restez informé")}</h3>
               <p className="text-gray-300 text-sm mb-4 md:mb-0">
-                {t("Recevez les dernières actualités de la Fondation Tamkine")}
+                {/* {t("Recevez les dernières actualités de la Fondation Tamkine")} */}
+                {t("Recevez les dernières actualités de Jorfof")}
               </p>
             </div>
             <div className="flex-1">
@@ -196,7 +229,8 @@ const Footer = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">{t("Fondation Tamkine")}</h3>
+              <h3 className="text-xl font-bold">{t("Jorfof")}</h3>
+              {/* <h3 className="text-xl font-bold">{t("Fondation Tamkine")}</h3> */}
               <button 
                 onClick={() => setShowMapModal(false)}
                 className="text-gray-300 hover:text-white"
@@ -206,7 +240,8 @@ const Footer = () => {
             </div>
             <div className="relative rounded-lg overflow-hidden">
               <iframe
-                title="Tamkine Location"
+                // title="Tamkine Location"
+                title="Jorfof Location"
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13232.765817930867!2d-6.8701418!3d33.9876158!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda76b87cf228b79%3A0x10fae9b6f53ca782!2sFondation%20Tamkine!5e0!3m2!1sfr!2sma!4v1709055800360!5m2!1sfr!2sma&markers=color:red%7C33.9876158,-6.8701418"
                 width="100%"
                 height="500"
@@ -219,7 +254,8 @@ const Footer = () => {
             <div className="mt-4 flex justify-between">
               <div>
                 <p className="text-gray-300 text-sm">
-                  <strong>{t("Adresse")}:</strong> Rabat, Maroc
+                  {/* <strong>{t("Adresse")}:</strong> Rabat, Maroc */}
+                  <strong>{t("Adresse")}:</strong> Conakry, Guinée
                 </p>
               </div>
               <button

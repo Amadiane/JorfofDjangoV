@@ -12,8 +12,8 @@ const Footerlastpart = () => {
         
         {/* Texte Copyright bien centré et responsive */}
         <p className="text-xs sm:text-sm text-center leading-relaxed">
-          © 2025 Copyright Tamkine - Tous droits réservés. 
-          Tamkine n'est pas responsable des contenus provenant de sites Internet externes.
+          © 2025 Copyright Jorfof - Tous droits réservés. 
+          Jorfof n'est pas responsable des contenus provenant de sites Internet externes.
         </p>
       </div>
     </div>

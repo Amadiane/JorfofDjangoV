@@ -227,7 +227,8 @@ const Contacternous = () => {
                 </svg>
               </div>
               <h3 className="font-semibold text-[#1C1C47] mb-1 sm:mb-2">{t('Email')}</h3>
-              <p className="text-gray-600 text-sm sm:text-base">{t('contact@tamkine.org')}</p>
+              {/* <p className="text-gray-600 text-sm sm:text-base">{t('contact@tamkine.org')}</p> */}
+              <p className="text-gray-600 text-sm sm:text-base">{t('contact@jorfof.org')}</p>
             </div>
             <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-md sm:shadow-lg text-center">
               <div className="bg-blue-100 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">

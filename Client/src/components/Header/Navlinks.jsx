@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Search, Bell, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.jpg";
 import { useTranslation } from 'react-i18next';
 
 const Navlinks = () => {
@@ -120,18 +120,35 @@ const Navlinks = () => {
       path: "/home",
       isDropdown: false
     },
+    // {
+    //   title: t("tamkine"),
+    //   id: "tamkine",
+    //   isDropdown: true,
+    //   dropdownItems: [
+    //     { title: t("president_word"), path: "/motPresident" },
+    //     { title: t("foundation"), path: "/fondation" },
+    //     { title: t("values"), path: "/nosValeurs" },
+    //     { title: t("missions"), path: "/nosMissions" },
+    //     { title: t("team"), path: "/notreEquipe" }
+    //   ]
+    // },
     {
-      title: t("tamkine"),
+      title: t("Le club"),
       id: "tamkine",
       isDropdown: true,
       dropdownItems: [
         { title: t("president_word"), path: "/motPresident" },
-        { title: t("foundation"), path: "/fondation" },
-        { title: t("values"), path: "/nosValeurs" },
+        // { title: t("foundation"), path: "/Jorfof Club" },
+        // { title: t("values"), path: "/nosValeurs" },
         { title: t("missions"), path: "/nosMissions" },
         { title: t("team"), path: "/notreEquipe" }
       ]
     },
+    // {
+    //   title: t("programms"),
+    //   path: "/programs",
+    //   isDropdown: false
+    // },
     {
       title: t("programms"),
       path: "/programs",
@@ -142,24 +159,25 @@ const Navlinks = () => {
       path: "/actualites",
       isDropdown: false
     },
-    {
-      title: t("platformss"),
-      path: "/Plateforms",
-      isDropdown: false
-    },
-    {
-      title: t("partner_activities"),
-      path: "/activities",
-      isDropdown: false
-    },
+    // {
+    //   title: t("platformss"),
+    //   path: "/Plateforms",
+    //   isDropdown: false
+    // },
+    // {
+    //   title: t("partner_activities"),
+    //   path: "/activities",
+    //   isDropdown: false
+    // },
     {
       title: t("media"),
+      // title: t("media"),
       id: "media",
       isDropdown: true,
       dropdownItems: [
         { title: t("videotheque"), path: "/videotheque" },
         { title: t("phototheque"), path: "/phototheque" },
-        { title: t("downloads"), path: "/document" }
+        // { title: t("downloads"), path: "/document" }
       ]
     },
     {
@@ -173,10 +191,15 @@ const Navlinks = () => {
       ]
     },
     {
-      title: t("media_partnerss"),
+      title: t("Partenaire"),
       path: "/mediaPartenaire",
       isDropdown: false
     }
+    // {
+    //   title: t("media_partnerss"),
+    //   path: "/mediaPartenaire",
+    //   isDropdown: false
+    // }
   ];
   
   const renderDropdown = (item) => {
@@ -217,9 +240,13 @@ const Navlinks = () => {
           <div className="flex items-center">
             <NavLink to="/home" className="flex items-center">
               <img src={logo} alt="Fondation Tamkine" className="h-12 mr-3" />
-              <div>
+              {/* <div>
                 <h1 className="text-[#12138B] font-bold text-xl">{t("TAMKINE FONDATION")}</h1>
                 <p className="text-gray-600 text-xs">Actualités et informations</p>
+              </div> */}
+              <div>
+                <h1 className="text-[#12138B] font-bold text-xl">{t("JORFOF CLUB")}</h1>
+                <p className="text-gray-600 text-xs">Toujours Prêt à Briller !</p>
               </div>
             </NavLink>
           </div>

@@ -42,7 +42,8 @@ const Footerlinks = ({ links, header }) => {
             );
           }
 
-          if (link === "Contacter Tamkine") {
+          // if (link === "Contacter Tamkine") {
+            if (link === "Contacter Jorfof") {
             return (
               <li key={link}>
                 <NavLink
