@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*$9x-&1x@s($^wyb%(sgmf&v4)nevsbowucc(ehx32__if0=ab'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '3ce2-196-64-111-253.ngrok-free.app']
+ALLOWED_HOSTS = ['jorfofdjangov.onrender.com']
 
 
 
@@ -129,20 +129,39 @@ WSGI_APPLICATION = 'TamTechwebSite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tamkinewebsite',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',  # ou l'IP du serveur MySQL
-        'PORT': '3308',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'tamkinewebsite',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',  # ou l'IP du serveur MySQL
+#         'PORT': '3308',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#         }
+#     }
+# }
 
+# Configuration PostgreSQL pour Render
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'jorfofdb',                       # Nom de la base
+#         'USER': 'jorfofuser',                     # Utilisateur PostgreSQL
+#         'PASSWORD': 'xek9dMMKjbYbuFx8zUjgEy9VbdUV8gAW',    # Mot de passe généré par Render
+#         'HOST': 'dpg-d3pvsu0gjchc73av0l8g-a',    # Host Render
+#         'PORT': '5432',                           # Port PostgreSQL
+#     }
+# }
+
+# Optionnel : si tu veux utiliser DATABASE_URL
+
+import dj_database_url
+
+DATABASES = {
+     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+}
 
 
 # Password validation
