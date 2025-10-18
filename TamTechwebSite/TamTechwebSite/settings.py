@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 #Medias
 import os
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
