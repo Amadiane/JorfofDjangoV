@@ -126,6 +126,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'TamTechwebSite.wsgi.application'
 
 
+if os.environ.get('DATABASE_URL'):
+    # Déploiement sur Render
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    }
+else:
+    # Local : MySQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'tamkinewebsite',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '3308',
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            }
+        }
+    }
+
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -157,11 +179,11 @@ WSGI_APPLICATION = 'TamTechwebSite.wsgi.application'
 
 # Optionnel : si tu veux utiliser DATABASE_URL
 
-import dj_database_url
+# import dj_database_url
 
-DATABASES = {
-     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
+# DATABASES = {
+#      'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+# }
 
 
 # Password validation
