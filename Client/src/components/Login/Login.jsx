@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Utilisation de useNavigate pour la redirection
 import { login } from '../endpoints/api'; // Import de la fonction login pour l'API
-import Logo from "../Header/Logo"; // Import du Logo
+// import Logo from "../Header/Logo"; // Import du Logo
 
 const Login = () => {
     const [username, setUsername] = useState(''); // Nom d'utilisateur
