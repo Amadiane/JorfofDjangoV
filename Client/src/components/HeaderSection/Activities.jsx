@@ -238,7 +238,8 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import ChatBotNew from "../ChatBot/ChatbotNew";
-import { API_URL } from "../../config";
+import CONFIG from "../../config/config.js";
+
 
 
 const Activities = () => {

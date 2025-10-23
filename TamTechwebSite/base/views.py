@@ -41,44 +41,52 @@ def register(request):
         return Response(serializer.data)
     return Response(serializer.error)
 
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth import authenticate
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
-        try:
-            response = super().post(request, *args, **kwargs)
-            tokens = response.data
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-            access_token = tokens['access']
-            refresh_token = tokens['refresh']
+        # Vérifie manuellement l'utilisateur
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return Response({'success': False, 'message': 'Nom d’utilisateur ou mot de passe incorrect'}, status=status.HTTP_200_OK)
 
-            seriliazer = UserSerializer(request.user, many=False)
+        response = super().post(request, *args, **kwargs)
+        tokens = response.data
 
-            res = Response()
+        res = Response({
+            'success': True,
+            'access': tokens['access'],
+            'refresh': tokens['refresh'],
+            'username': user.username,
+            'is_superuser': user.is_superuser
+        })
 
-            res.data = {'success':True}
+        res.set_cookie(
+            key='access_token',
+            value=str(tokens['access']),
+            httponly=True,
+            secure=True,
+            samesite='None',
+            path='/'
+        )
 
-            res.set_cookie(
-                key='access_token',
-                value=str(access_token),
-                httponly=True,
-                secure=True,
-                samesite='None',
-                path='/'
-            )
+        res.set_cookie(
+            key='refresh_token',
+            value=str(tokens['refresh']),
+            httponly=True,
+            secure=True,
+            samesite='None',
+            path='/'
+        )
 
-            res.set_cookie(
-                key='refresh_token',
-                value=str(refresh_token),
-                httponly=True,
-                secure=True,
-                samesite='None',
-                path='/'
-            )
-            res.data.update(tokens)
-            return res
-        
-        except Exception as e:
-            print(e)
-            return Response({'success':False})
+        return res
+
         
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):

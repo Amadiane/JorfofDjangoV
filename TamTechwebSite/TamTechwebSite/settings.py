@@ -28,7 +28,9 @@ SECRET_KEY = 'django-insecure-*$9x-&1x@s($^wyb%(sgmf&v4)nevsbowucc(ehx32__if0=ab
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['jorfofdjangov.onrender.com']
+# ALLOWED_HOSTS = ['jorfofdjangov.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'jorfofdjangov.onrender.com']
+
 
 
 
@@ -76,10 +78,12 @@ CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH",  "OPTIONS"]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
 }
+
 
 
 SIMPLE_JWT = {
@@ -127,21 +131,43 @@ TEMPLATES = [
 WSGI_APPLICATION = 'TamTechwebSite.wsgi.application'
 
 
+# if os.environ.get('DATABASE_URL'):
+#     # Déploiement sur Render
+#     DATABASES = {
+#         'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+#     }
+# else:
+# # Configuration PostgreSQL pour Render
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'jorfofbasketserver',                       # Nom de la base
+#             'USER': 'postgres',                     # Utilisateur PostgreSQL
+#             'PASSWORD': 'root',    # Mot de passe généré par Render
+#             'HOST': 'localhost',    # Host Render
+#             'PORT': '5432',                           # Port PostgreSQL
+#         }
+#     }
+
+
+import os
+import dj_database_url
+
 if os.environ.get('DATABASE_URL'):
     # Déploiement sur Render
     DATABASES = {
         'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
     }
 else:
-    # Local : MySQL
+    # Configuration locale (décommenter pour activer)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'tamkinewebsite',
+            'NAME': 'jorfofdb',
             'USER': 'root',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '3308',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',  # ou l'IP du serveur MySQL
+            'PORT': '3306',
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
             }
