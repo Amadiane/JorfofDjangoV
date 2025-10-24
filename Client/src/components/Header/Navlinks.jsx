@@ -190,16 +190,16 @@ const Navlinks = () => {
         { title: t("become_partner"), path: "/partner" }
       ]
     },
-    {
-      title: t("Partenaire"),
-      path: "/mediaPartenaire",
-      isDropdown: false
-    }
     // {
-    //   title: t("media_partnerss"),
+    //   title: t("Partenaire"),
     //   path: "/mediaPartenaire",
     //   isDropdown: false
     // }
+    {
+      title: t("media_partnerss"),
+      path: "/mediaPartenaire",
+      isDropdown: false
+    }
   ];
   
   const renderDropdown = (item) => {

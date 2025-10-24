@@ -154,39 +154,39 @@ const NavAdmin = () => {
       title: "Contenu",
       items: [
         // { path: "/platformPost", label: "Plateformes" },
-        { path: "/createpost", label: "Actualités" },
+        // { path: "/createpost", label: "Actualités" },
         // { path: "/programPost", label: "Programmes" },
-        { path: "/videoPost", label: "Vidéos" },
+        // { path: "/videoPost", label: "Vidéos" },
         { path: "/photoPost", label: "Photothèque" },
         // { path: "/documentPost", label: "Téléchargements" },
-        { path: "/activitiesPost", label: "Activities" },
+        // { path: "/activitiesPost", label: "Activities" },
       ]
     },
     {
       title: "Équipe & Partenaires",
       items: [
-        { path: "/teamMessage", label: "Notre Équipe" },
-        // { path: "/listPartners", label: "Partenaires" },
-        // { path: "/mediaPartenairePost", label: "Partenaires Médias" },
-        { path: "/mediaPartenairePost", label: "Partenaires" },
+        // { path: "/teamMessage", label: "Notre Équipe" },
+        // // { path: "/listPartners", label: "Partenaires" },
+        // // { path: "/mediaPartenairePost", label: "Partenaires Médias" },
+        // { path: "/mediaPartenairePost", label: "Partenaires" },
       ]
     },
     {
       title: "À propos",
       items: [
-        { path: "/motPresidentPost", label: "Mot du Président" },
-        // { path: "/missionPost", label: "Nos Missions" },
-        { path: "/valeurPost", label: "Nos Valeurs" },
+        // { path: "/motPresidentPost", label: "Mot du Président" },
+        // // { path: "/missionPost", label: "Nos Missions" },
+        // { path: "/valeurPost", label: "Nos Valeurs" },
         // { path: "/fondationPost", label: "Fondation Tamkine" },
       ]
     },
     {
       title: "Gestion des utilisateurs",
       items: [
-        { path: "/listeContacts", label: "Contacts" },
-        { path: "/listePostulantsCommunity", label: "Membres" },
-        { path: "/listeRejoindre", label: "Candidatures" },
-        { path: "/listeAbonnement", label: "Abonnés" },
+        // { path: "/listeContacts", label: "Contacts" },
+        // { path: "/listePostulantsCommunity", label: "Membres" },
+        // { path: "/listeRejoindre", label: "Candidatures" },
+        // { path: "/listeAbonnement", label: "Abonnés" },
       ]
     },
   ];

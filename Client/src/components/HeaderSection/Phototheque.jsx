@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';  // Import de useTranslation
 import ChatBotNew from "../ChatBot/ChatbotNew";
+import CONFIG from "../../config/config.js"; // 🔥 importe ton fichier config.js
 
 
 const Phototheque = () => {
+  const apiUrl = CONFIG.BASE_URL;
   const { t } = useTranslation();  // Initialisation du hook de traduction
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,12 +17,16 @@ const Phototheque = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // grid or timeline
   const [zoomedImage, setZoomedImage] = useState(null);
-  const apiUrl = import.meta.env.VITE_API_BACKEND;
+  // const apiUrl = import.meta.env.VITE_API_BACKEND;
+ 
+
 
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const response = await fetch(apiUrl + "/api/media/");
+        // const response = await fetch(apiUrl + "/api/media/");
+        // const response = await fetch(`${CONFIG.BASE_URL}/api/media/`);
+        const response = await fetch(CONFIG.API_PHOTO_LIST);
         if (!response.ok) throw new Error("Erreur lors du chargement des données.");
         const data = await response.json();
 
@@ -153,17 +159,35 @@ const Phototheque = () => {
     };
   }, [draggingImage, zoomedImage]);
 
+  // const getImageSrc = (photo) => {
+  //   let imageUrl = '/image_indispo.png';
+  //   if (photo.image) {
+  //     if (photo.image.startsWith("http")) {
+  //       imageUrl = photo.image;
+  //     } else {
+  //       imageUrl = `${apiUrl}${photo.image}`;
+  //     }
+  //   }
+  //   return imageUrl;
+  // };
+
   const getImageSrc = (photo) => {
-    let imageUrl = '/image_indispo.png';
-    if (photo.image) {
-      if (photo.image.startsWith("http")) {
-        imageUrl = photo.image;
-      } else {
-        imageUrl = `${apiUrl}${photo.image}`;
-      }
+  let imageUrl = "/image_indispo.png";
+
+  if (photo.image) {
+    if (photo.image.startsWith("http")) {
+      // ✅ L’image est déjà une URL complète
+      imageUrl = photo.image;
+    } else {
+      // ✅ On construit correctement le chemin complet vers /media/images/
+      imageUrl = `${CONFIG.BASE_URL}/${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
     }
+  }
+
+    console.log("🖼️ Image URL:", imageUrl);
     return imageUrl;
   };
+
 
   const splitDescription = (description) => {
     if (!description) return { intro: '', main: '' };

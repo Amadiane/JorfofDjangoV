@@ -1,34 +1,44 @@
-import React, { useEffect, useState } from 'react';
-// import ChatBot from '../ChatBot/ChatBot';
-import { useNavigate } from 'react-router-dom';
-import { Clock, ChevronDown, ChevronUp } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import ChatBotNew from "../ChatBot/ChatbotNew";
+import CONFIG from "../../config/config.js"; // import centralisé
 
 const Actualites = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [blogs, setBlogs] = useState([]);
   const [latestPost, setLatestPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showFullContent, setShowFullContent] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
+  const currentLang = i18n.language || "fr";
+
+  // 🌀 Charger les blogs depuis le backend Django
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch(apiUrl + "/api/blog/");
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        console.log("📡 Requête envoyée à :", CONFIG.API_BLOG);
+        const response = await fetch(CONFIG.API_BLOG);
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
         const data = await response.json();
-        const sortedBlogs = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setBlogs(sortedBlogs);
-        setLatestPost(sortedBlogs[0]);
-      } catch (error) {
-        setError(error.message);
+        console.log("✅ Données reçues :", data);
+
+        const sorted = data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+
+        setBlogs(sorted);
+        setLatestPost(sorted[0] || null);
+      } catch (err) {
+        console.error("❌ Erreur :", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -37,121 +47,144 @@ const Actualites = () => {
     fetchBlogs();
   }, [navigate]);
 
-  const filteredBlogs = blogs.filter(blog =>
-    blog.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    blog.content?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    return new Date(dateString).toLocaleDateString('fr-FR', options);
+  // 🌍 Récupération des champs selon la langue
+  const getLocalizedField = (item, base) => {
+    const key = `${base}_${currentLang}`;
+    return item[key] || item[`${base}_fr`] || "";
   };
 
-  const toggleFullContent = () => setShowFullContent(!showFullContent);
+  // 🔎 Filtrage de la recherche
+  const filteredBlogs = blogs.filter((b) => {
+    const title = getLocalizedField(b, "title").toLowerCase();
+    const content = getLocalizedField(b, "content").toLowerCase();
+    const q = searchQuery.toLowerCase();
+    return title.includes(q) || content.includes(q);
+  });
 
-  const toggleCardContent = (id) => {
-    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
+  // 🗓️ Formatage de la date
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  const toggleFullContent = () => setShowFullContent(!showFullContent);
+  const toggleCardContent = (id) =>
+    setExpandedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  // 🖼️ Fonction pour l’URL complète de l’image
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    return `${CONFIG.BASE_URL}${path}`;
   };
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
-      {/* En-tête harmonisée avec Partner et Programs */}
-      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-4 px-4 md:py-8 lg:py-12 shadow-md">
-        <div className="pt-16">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{t('Actualités')}</h1>
-          <p className="max-w-2xl mx-auto text-base md:text-lg opacity-90">
-            {t('Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine')}
+      {/* 🌐 En-tête */}
+      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-8 px-4 shadow-md">
+        <div className="pt-10">
+          <h1 className="text-4xl font-bold mb-4">{t("Actualités")}</h1>
+          <p className="max-w-2xl mx-auto text-lg opacity-90">
+            {t("Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine")}
           </p>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 md:py-16 max-w-6xl">
-        {/* Barre de recherche */}
+      {/* 📄 Contenu principal */}
+      <main className="container mx-auto px-4 py-12 max-w-6xl">
+        {/* 🔍 Recherche */}
         <div className="max-w-md mx-auto mb-10">
-          <div className={`relative transition-all duration-300 ${isSearchFocused ? 'scale-105' : ''}`}>
-            <input
-              type="text"
-              placeholder={t("Rechercher un programme...")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C1C47] focus:border-transparent shadow-sm"
-              aria-label={t("Rechercher un programme")}
-            />
-          </div>
-          {/* <p className="mt-3 text-base sm:text-lg text-gray-600">{t("Aucun programme ne correspond à votre recherche.")}</p> */}
+          <input
+            type="text"
+            placeholder={t("Rechercher une actualité...")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1C1C47]"
+          />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="mt-2 text-[#1C1C47] hover:text-[#3b3b82] transition-colors"
+              className="mt-2 text-[#1C1C47] hover:text-[#3b3b82]"
             >
               {t("Effacer la recherche")}
             </button>
           )}
         </div>
 
+        {/* ⚙️ États : Chargement / Erreur / Données */}
         {loading ? (
           <div className="flex justify-center items-center py-10">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#1C1C47]"></div>
-            <span className="ml-3 text-gray-600 text-sm sm:text-base">{t("Chargement des actualités...")}</span>
+            <span className="ml-3 text-gray-600">
+              {t("Chargement des actualités...")}
+            </span>
           </div>
         ) : error ? (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md my-4" role="alert">
-            <p className="font-bold">{t('Erreur')}</p>
-            <p>{t('Erreur lors du chargement')} : {error}</p>
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md">
+            <p className="font-bold">{t("Erreur")}</p>
+            <p>{error}</p>
           </div>
         ) : (
           <>
+            {/* 📰 Dernière actualité */}
             {latestPost && (
               <div className="mb-12">
-                <h2 className="text-2xl font-bold mb-6 flex flex-wrap items-center justify-center md:justify-start">
-                  <span className="bg-red-600 text-white px-3 py-1 mr-3 mb-2 rounded">{t('À LA UNE')}</span>
-                  {t('Dernière nouvelle')}
+                <h2 className="text-2xl font-bold mb-6 flex items-center justify-center md:justify-start">
+                  <span className="bg-red-600 text-white px-3 py-1 mr-3 rounded">
+                    {t("À LA UNE")}
+                  </span>
+                  {t("Dernière nouvelle")}
                 </h2>
+
                 <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
                   <div className="flex flex-col md:flex-row">
                     <div className="w-full md:w-1/2">
                       {latestPost.image ? (
                         <img
-                          src={latestPost.image}
-                          alt={latestPost.title}
-                          className="w-full h-64 sm:h-80 md:h-full object-cover transition-transform duration-700 hover:scale-105"
+                          src={getImageUrl(latestPost.image)}
+                          alt={getLocalizedField(latestPost, "title")}
+                          className="w-full h-64 object-cover"
                         />
                       ) : (
-                        <div className="w-full h-64 sm:h-80 md:h-full bg-gray-200 flex items-center justify-center">
-                          <p className="text-gray-500">{t('Pas d\'image disponible')}</p>
+                        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+                          <p className="text-gray-500">{t("Pas d'image disponible")}</p>
                         </div>
                       )}
                     </div>
-                    <div className="p-6 md:p-8 flex flex-col justify-between w-full md:w-1/2">
-                      <div className="flex flex-col h-full">
-                        <h3 className="text-xl md:text-2xl font-bold mb-4 text-[#1C1C47]">{latestPost.title}</h3>
-                        <div className="flex-grow overflow-hidden">
-                          <p className={`text-gray-600 ${showFullContent ? '' : 'line-clamp-6 md:line-clamp-8'}`}
-                            style={{ fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', lineHeight: '1.7' }}>
-                            {latestPost.content}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-6">
-                        <div className="flex items-center text-sm text-gray-500 mb-4">
+
+                    <div className="p-6 flex flex-col justify-between w-full md:w-1/2">
+                      <h3 className="text-2xl font-bold mb-4 text-[#1C1C47]">
+                        {getLocalizedField(latestPost, "title")}
+                      </h3>
+                      <p
+                        className={`text-gray-600 ${
+                          showFullContent ? "" : "line-clamp-6"
+                        }`}
+                      >
+                        {getLocalizedField(latestPost, "content")}
+                      </p>
+
+                      <div className="mt-6 flex justify-between items-center">
+                        <div className="flex items-center text-sm text-gray-500">
                           <Clock size={16} className="mr-1" />
                           <span>{formatDate(latestPost.created_at)}</span>
                         </div>
                         <button
-                          className="bg-[#12138B] hover:bg-[#1e1fab] text-white px-5 py-2 rounded-lg flex items-center justify-center w-full md:w-auto transition-all transform hover:scale-105 shadow-md"
+                          className="bg-[#12138B] hover:bg-[#1e1fab] text-white px-5 py-2 rounded-lg flex items-center"
                           onClick={toggleFullContent}
-                          aria-expanded={showFullContent}
                         >
                           {showFullContent ? (
                             <>
-                              {t('Réduire')}
+                              {t("Réduire")}
                               <ChevronUp size={16} className="ml-2" />
                             </>
                           ) : (
                             <>
-                              {t('Lire plus')}
+                              {t("Lire plus")}
                               <ChevronDown size={16} className="ml-2" />
                             </>
                           )}
@@ -163,67 +196,56 @@ const Actualites = () => {
               </div>
             )}
 
-            <div className="mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[#1C1C47]">{t('Nouvelles récentes')}</h2>
-              
-              {filteredBlogs.length <= 1 ? (
-                <div className="text-center py-10 bg-white rounded-lg shadow-md px-4">
-                  <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <p className="mt-3 text-base sm:text-lg text-gray-600">
-                    {searchQuery ? t('Aucune actualité ne correspond à votre recherche.') : t('Aucune actualité disponible pour le moment.')}
-                  </p>
-                  {searchQuery && (
-                    <button 
-                      onClick={() => setSearchQuery("")}
-                      className="mt-2 text-[#1C1C47] hover:text-[#3b3b82] transition-colors"
-                    >
-                      {t("Effacer la recherche")}
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                  {filteredBlogs.map((blog) => (
-                    <div key={blog.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                      <div className="flex flex-col h-full">
-                        <div className="overflow-hidden">
-                          {blog.image ? (
-                            <img
-                              src={blog.image}
-                              alt={blog.title}
-                              className="w-full h-40 object-cover transition-transform duration-700 hover:scale-105"
-                            />
-                          ) : (
-                            <div className="w-full h-40 bg-gray-200 flex items-center justify-center">
-                              <p className="text-gray-500">{t('Pas d\'image disponible')}</p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="p-4 flex flex-col justify-between flex-grow">
-                          <h3 className="text-xl font-semibold text-[#1C1C47] mb-4">{blog.title}</h3>
-                          <div className="overflow-hidden">
-                            <p className="text-gray-600 line-clamp-4">{blog.content}</p>
-                          </div>
-                          <div className="mt-4">
-                            <button
-                              className="bg-[#1C1C47] text-white px-4 py-2 rounded-lg transition-all duration-300 hover:bg-[#12138B] w-full"
-                              onClick={() => toggleCardContent(blog.id)}
-                            >
-                              {expandedCards[blog.id] ? t('Lire moins') : t('Lire plus')}
-                            </button>
-                          </div>
-                        </div>
+            {/* 📚 Autres actualités */}
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {filteredBlogs.length > 1 ? (
+                filteredBlogs.slice(1).map((b) => (
+                  <div
+                    key={b.id}
+                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all"
+                  >
+                    {b.image ? (
+                      <img
+                        src={getImageUrl(b.image)}
+                        alt={getLocalizedField(b, "title")}
+                        className="w-full h-40 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-40 bg-gray-200 flex items-center justify-center">
+                        <p className="text-gray-500">{t("Pas d'image disponible")}</p>
                       </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="text-xl font-semibold text-[#1C1C47] mb-2">
+                        {getLocalizedField(b, "title")}
+                      </h3>
+                      <p
+                        className={`text-gray-600 ${
+                          expandedCards[b.id] ? "" : "line-clamp-4"
+                        }`}
+                      >
+                        {getLocalizedField(b, "content")}
+                      </p>
+                      <button
+                        onClick={() => toggleCardContent(b.id)}
+                        className="mt-3 bg-[#1C1C47] text-white px-4 py-2 rounded-lg w-full hover:bg-[#12138B]"
+                      >
+                        {expandedCards[b.id] ? t("Lire moins") : t("Lire plus")}
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-600 py-10">
+                  {t("Aucune actualité disponible pour le moment.")}
+                </p>
               )}
             </div>
           </>
         )}
       </main>
+
+      {/* 🤖 ChatBot */}
       <div className="fixed bottom-6 right-6 z-50">
         <ChatBotNew />
       </div>

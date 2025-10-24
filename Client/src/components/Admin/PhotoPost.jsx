@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import CONFIG from "../../config/config.js"; // 🔥 importe ton fichier config.js
+
 
 const PhotoPost = () => {
+  const apiUrl = CONFIG.BASE_URL;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const apiUrl = import.meta.env.VITE_API_BACKEND;
+  // const apiUrl = import.meta.env.VITE_API_BACKEND;
 
   // Palette de couleurs similaire à "Contacter nous"
   const colors = {
@@ -20,38 +23,39 @@ const PhotoPost = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    const formData = new FormData();
-    formData.append('titre', title);
-    formData.append('description', description);
-    if (image) {
-      formData.append('image', image);
+  const formData = new FormData();
+  formData.append("titre", title);
+  formData.append("description", description);
+  if (image) {
+    formData.append("image", image);
+  }
+
+  try {
+    // ✅ Correction : la virgule avant "{" était une erreur de syntaxe
+    const response = await fetch(CONFIG.API_PHOTO_LIST, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    try {
-      const response = await fetch(apiUrl + "/api/media/", {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMessage("✅ Photo ajouté avec succès !");
-      setTitle("");
-      setDescription("");
-      setImage(null);
-    } catch (error) {
-      setMessage(`❌ Erreur: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const data = await response.json();
+    setMessage("✅ Photo ajoutée avec succès !");
+    setTitle("");
+    setDescription("");
+    setImage(null);
+  } catch (error) {
+    setMessage(`❌ Erreur: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const styles = {
     container: {
