@@ -14,8 +14,14 @@ const CONFIG = {
   API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/media/${id}/`,
 
   //   // 📸 Images (chemin vers le dossier media)
-  MEDIA_URL: `${BASE_URL}/media/`,
-  API_PHOTO_LIST: `${BASE_URL}/api/media/`,
+  MEDIA_URL: BASE_URL.includes("127.0.0.1")
+    ? "http://127.0.0.1:8000/media/"
+    : "https://jorfofdjangov.onrender.com/media/",
+
+  API_PHOTO_LIST: BASE_URL.includes("127.0.0.1")
+    ? "http://127.0.0.1:8000/media/"
+    : "https://jorfofdjangov.onrender.com/media/",
+
   CLOUDINARY_NAME: "dwuyq2eoz", // ⚡ remplace par ton cloud name exact
 
   
