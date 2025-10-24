@@ -118,11 +118,19 @@ const Phototheque = () => {
   }, [draggingImage, zoomedImage]);
 
   // ✅ Cloudinary + local logic
-  const getImageSrc = (photo) => {
+const getImageSrc = (photo) => {
   if (!photo.image) return "/image_indispo.png";
-  if (photo.image.startsWith("http")) return photo.image;
-  return `${CONFIG.BASE_URL}${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
+
+  if (photo.image.startsWith("http")) {
+    console.log("🔗 URL directe:", photo.image);
+    return photo.image;
+  }
+
+  const full = `${CONFIG.BASE_URL}${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
+  console.log("🧩 URL complétée:", full);
+  return full;
 };
+
 
 
   // ✅ Composant pour image (Cloudinary ou locale)
