@@ -2,7 +2,8 @@ import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage } from "@cloudinary/react";
 import { fill } from "@cloudinary/url-gen/actions/resize";
-import CONFIG from '../../config/config.js';
+import { CONFIG } from "../config/config.js";
+
 
 const CloudImage = ({ publicId, width = 400, height = 300 }) => {
   const cld = new Cloudinary({
