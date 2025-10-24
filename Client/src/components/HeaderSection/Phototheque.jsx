@@ -119,10 +119,17 @@ const Phototheque = () => {
 
   // ✅ Cloudinary + local logic
   const getImageSrc = (photo) => {
-    if (!photo.image) return "/image_indispo.png";
-    if (photo.image.includes("res.cloudinary.com")) return photo.image;
-    return `${CONFIG.BASE_URL}/${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
+  if (!photo.image) return "/image_indispo.png";
+
+  // Si c’est déjà une URL complète (http ou https), on la garde telle quelle
+  if (photo.image.startsWith("http")) {
+    return photo.image;
+  }
+
+  // Sinon, on la complète avec BASE_URL
+  return `${CONFIG.BASE_URL}${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
   };
+
 
   // ✅ Composant pour image (Cloudinary ou locale)
   const renderImage = (photo, index, style) => {
