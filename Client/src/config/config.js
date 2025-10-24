@@ -16,6 +16,7 @@ const CONFIG = {
   //   // 📸 Images (chemin vers le dossier media)
   MEDIA_URL: `${BASE_URL}/media/`,
   API_PHOTO_LIST: `${BASE_URL}/api/media/`,
+  CLOUDINARY_NAME: "dwuyq2eoz", // ⚡ remplace par ton cloud name exact
 
   
 

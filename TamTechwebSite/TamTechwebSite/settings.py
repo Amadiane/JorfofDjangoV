@@ -15,6 +15,11 @@ import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.storage import MediaCloudinaryStorage
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +54,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'base',
+    'cloudinary',
+    'cloudinary_storage',
 
 
 ]
@@ -107,7 +114,14 @@ SIMPLE_JWT = {
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
+# 👇 Définit Cloudinary comme stockage par défaut
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dwuyq2eoz',
+    'API_KEY': '969526892885998',
+    'API_SECRET': '**********',
+}
 
 
 ROOT_URLCONF = 'TamTechwebSite.urls'
