@@ -454,9 +454,9 @@ else:
 # 🔹 Cloudinary (Images)
 # -------------------------
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME': os.getenv('dwuyq2eoz'),
+    'API_KEY': os.getenv('969526892885998'),
+    'API_SECRET': os.getenv('**********'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
