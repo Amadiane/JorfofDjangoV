@@ -18,7 +18,9 @@ from datetime import timedelta
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-from cloudinary.storage import MediaCloudinaryStorage
+# from cloudinary.storage import MediaCloudinaryStorage
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -116,6 +118,8 @@ SESSION_COOKIE_SECURE = False
 
 # 👇 Définit Cloudinary comme stockage par défaut
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dwuyq2eoz',
