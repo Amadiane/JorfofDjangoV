@@ -456,12 +456,13 @@ else:
 # 🔹 Cloudinary (Images)
 # -------------------------
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('dwuyq2eoz'),
-    'API_KEY': os.getenv('969526892885998'),
-    'API_SECRET': os.getenv('**********'),
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dwuyq2eoz'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '969526892885998'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', '**********'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # -------------------------
 # 🔹 Templates
@@ -514,10 +515,12 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
+    "https://jorfofdjangov.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_ALL_ORIGINS = True  # temporairement pour test
+CORS_ALLOW_ALL_ORIGINS = False
+  # temporairement pour test
 
 
