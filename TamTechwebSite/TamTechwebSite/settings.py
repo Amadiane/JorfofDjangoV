@@ -212,7 +212,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
 
 # DEBUG = os.getenv('DEBUG', 'False') == 'True'
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
@@ -371,16 +371,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
     "https://jorfofdjangov.onrender.com",
+    "http://localhost:5173",                # ton frontend local (Vite)
+    "http://127.0.0.1:5173",                # parfois utile selon ton navigateur
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
     "https://jorfofdjangov.onrender.com",
+    "http://localhost:5173",                # ton frontend local (Vite)
+    "http://127.0.0.1:5173",                # parfois utile selon ton navigateur
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False  # Sécurisé
-
+CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
 
 print("Cloudinary name:", os.getenv('CLOUDINARY_CLOUD_NAME'))
+
+
+
 

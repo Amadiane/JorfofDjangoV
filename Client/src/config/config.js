@@ -31,12 +31,18 @@
 // // const BASE_URL = "http://127.0.0.1:8000"; // ✅ d’abord on la définit ici
 // // ✅ Détection automatique : local ou production
 
+const BASE_URL =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:8000"
+    : "https://jorfofdjangov.onrender.com";
+
 
 const CONFIG = {
-  BASE_URL: "https://jorfofdjangov.onrender.com",
-  API_LOGIN: "https://jorfofdjangov.onrender.com/api/login/",
-  API_PHOTO_LIST: "https://jorfofdjangov.onrender.com/api/media/",
-  API_PHOTO_DETAIL: (id) => `https://jorfofdjangov.onrender.com/api/media/${id}/`,
+  BASE_URL,
+  // BASE_URL: "https://jorfofdjangov.onrender.com",
+  API_LOGIN: "/api/login/",
+  API_PHOTO_LIST: "/api/media/",
+  API_PHOTO_DETAIL: (id) => `/api/media/${id}/`,
   MEDIA_URL: "https://jorfofdjangov.onrender.com/media/",
   CLOUDINARY_NAME: "dwuyq2eoz",
 };
