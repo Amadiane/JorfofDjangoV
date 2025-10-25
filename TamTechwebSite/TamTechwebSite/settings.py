@@ -537,6 +537,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+import cloudinary_storage
 
 # -------------------------
 # 🔹 Chargement du .env
@@ -687,3 +688,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False  # Sécurisé
+
+
+print("Cloudinary name:", os.getenv('CLOUDINARY_CLOUD_NAME'))
+
