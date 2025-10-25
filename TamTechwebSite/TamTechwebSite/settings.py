@@ -489,8 +489,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
 # -------------------------
 # 🔹 Internationalisation
@@ -509,6 +509,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
+    "https://jorfofdjangov.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
