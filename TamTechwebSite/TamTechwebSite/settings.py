@@ -360,6 +360,179 @@
 
 
 
+# import os
+# from pathlib import Path
+# from dotenv import load_dotenv
+# import dj_database_url
+
+# # -------------------------
+# # 🔹 Chargement du .env
+# # -------------------------
+# load_dotenv()
+
+# # -------------------------
+# # 🔹 Répertoires de base
+# # -------------------------
+# BASE_DIR = Path(__file__).resolve().parent.parent
+
+# # -------------------------
+# # 🔹 Sécurité Django
+# # -------------------------
+# SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
+
+# DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '127.0.0.1',
+#     'jorfofdjangov.onrender.com'
+# ]
+
+# # -------------------------
+# # 🔹 Applications installées
+# # -------------------------
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+#     'corsheaders',
+
+#     # apps locales
+#     'base',  # 👉 remplace par le nom exact de ton app (ex: "fondation" ou "phototheque")
+
+#     # cloudinary
+#     'cloudinary',
+#     'cloudinary_storage',
+# ]
+
+# # -------------------------
+# # 🔹 Middleware
+# # -------------------------
+# MIDDLEWARE = [
+#     'corsheaders.middleware.CorsMiddleware', 
+#     'django.middleware.security.SecurityMiddleware',
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# ]
+
+# # -------------------------
+# # 🔹 URL & WSGI
+# # -------------------------
+# ROOT_URLCONF = 'TamTechwebSite.urls'
+# WSGI_APPLICATION = 'TamTechwebSite.wsgi.application'
+
+# # -------------------------
+# # 🔹 Base de données
+# # -------------------------
+# DATABASE_URL = os.environ.get("DATABASE_URL")
+
+# if DATABASE_URL:
+#     DATABASES = {
+#         'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'jorfofdb',
+#             'USER': 'root',
+#             'PASSWORD': 'root',
+#             'HOST': 'localhost',
+#             'PORT': '3306',
+#             'OPTIONS': {
+#                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#             }
+#         }
+#     }
+
+# # -------------------------
+# # 🔹 Cloudinary (Images)
+# # -------------------------
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dwuyq2eoz'),
+#     'API_KEY': os.getenv('CLOUDINARY_API_KEY', '969526892885998'),
+#     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', '**********'),
+# }
+
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# # -------------------------
+# # 🔹 Templates
+# # -------------------------
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [BASE_DIR / 'templates'],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
+# # -------------------------
+# # 🔹 Fichiers statiques et médias
+# # -------------------------
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# # MEDIA_URL = '/media/'
+# # MEDIA_ROOT = BASE_DIR / 'media'
+
+# # -------------------------
+# # 🔹 Internationalisation
+# # -------------------------
+# LANGUAGE_CODE = 'fr-fr'
+# TIME_ZONE = 'Africa/Casablanca'
+# USE_I18N = True
+# USE_TZ = True
+
+# # -------------------------
+# # 🔹 Paramètres finaux
+# # -------------------------
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://jorfof-django-v.vercel.app",
+#     "https://jorfofdjangov.onrender.com",
+# ]
+
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://jorfof-django-v.vercel.app",
+#     "https://jorfofdjangov.onrender.com",
+# ]
+
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOW_ALL_ORIGINS = False
+#   # temporairement pour test
+
+
+
+
+
+
+
+
+
+
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -380,12 +553,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------------
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'jorfofdjangov.onrender.com'
+    'jorfofdjangov.onrender.com',
 ]
 
 # -------------------------
@@ -401,7 +574,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # apps locales
-    'base',  # 👉 remplace par le nom exact de ton app (ex: "fondation" ou "phototheque")
+    'base',  # Remplace par ton app principale (si c’est autre chose que base)
 
     # cloudinary
     'cloudinary',
@@ -412,7 +585,7 @@ INSTALLED_APPS = [
 # 🔹 Middleware
 # -------------------------
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', 
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -463,7 +636,6 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
 # -------------------------
 # 🔹 Templates
 # -------------------------
@@ -484,14 +656,11 @@ TEMPLATES = [
 ]
 
 # -------------------------
-# 🔹 Fichiers statiques et médias
+# 🔹 Fichiers statiques
 # -------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
 
 # -------------------------
 # 🔹 Internationalisation
@@ -501,13 +670,11 @@ TIME_ZONE = 'Africa/Casablanca'
 USE_I18N = True
 USE_TZ = True
 
-# -------------------------
-# 🔹 Paramètres finaux
-# -------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
+# -------------------------
+# 🔹 CORS & CSRF (Frontend Vercel)
+# -------------------------
 CORS_ALLOWED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
     "https://jorfofdjangov.onrender.com",
@@ -519,8 +686,4 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOW_ALL_ORIGINS = False
-  # temporairement pour test
-
-
+CORS_ALLOW_ALL_ORIGINS = False  # Sécurisé
