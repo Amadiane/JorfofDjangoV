@@ -35,7 +35,7 @@ const NavAdmin = () => {
   // Fonction pour obtenir les icônes actualisées
   const getIcon = (path) => {
     const icons = {
-      "/home": (
+      "/actualites": (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
         </svg>
@@ -147,7 +147,7 @@ const NavAdmin = () => {
     {
       title: "Principal",
       items: [
-        { path: "/home", label: "Tableau de bord" },
+        { path: "/actualites", label: "Tableau de bord" },
       ]
     },
     {
@@ -167,28 +167,28 @@ const NavAdmin = () => {
       items: [
         // { path: "/teamMessage", label: "Notre Équipe" },
         // // { path: "/listPartners", label: "Partenaires" },
-        // // { path: "/mediaPartenairePost", label: "Partenaires Médias" },
+        { path: "/mediaPartenairePost", label: "Partenaires Médias" },
         // { path: "/mediaPartenairePost", label: "Partenaires" },
       ]
     },
-    {
-      title: "À propos",
-      items: [
-        // { path: "/motPresidentPost", label: "Mot du Président" },
-        // // { path: "/missionPost", label: "Nos Missions" },
-        // { path: "/valeurPost", label: "Nos Valeurs" },
-        // { path: "/fondationPost", label: "Fondation Tamkine" },
-      ]
-    },
-    {
-      title: "Gestion des utilisateurs",
-      items: [
-        // { path: "/listeContacts", label: "Contacts" },
-        // { path: "/listePostulantsCommunity", label: "Membres" },
-        // { path: "/listeRejoindre", label: "Candidatures" },
-        // { path: "/listeAbonnement", label: "Abonnés" },
-      ]
-    },
+    // {
+    //   title: "À propos",
+    //   items: [
+    //     // { path: "/motPresidentPost", label: "Mot du Président" },
+    //     // // { path: "/missionPost", label: "Nos Missions" },
+    //     // { path: "/valeurPost", label: "Nos Valeurs" },
+    //     // { path: "/fondationPost", label: "Fondation Tamkine" },
+    //   ]
+    // },
+    // {
+    //   title: "Gestion des utilisateurs",
+    //   items: [
+    //     // { path: "/listeContacts", label: "Contacts" },
+    //     // { path: "/listePostulantsCommunity", label: "Membres" },
+    //     // { path: "/listeRejoindre", label: "Candidatures" },
+    //     // { path: "/listeAbonnement", label: "Abonnés" },
+    //   ]
+    // },
   ];
 
   // Pour fermer le menu sur mobile après un clic
@@ -273,7 +273,7 @@ const NavAdmin = () => {
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-gray-700">Admin</p>
-                <p className="text-xs text-gray-500">admin@tamkine.org</p>
+                <p className="text-xs text-gray-500">admin@jorfof.org</p>
               </div>
             </div>
             <Loginbtn className="text-red-600 hover:text-red-800 transition-colors" />
