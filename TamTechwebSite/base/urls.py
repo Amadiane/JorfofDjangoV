@@ -8,10 +8,9 @@ from .views import (
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
     PartnerAPIView, 
-    add_video, document_api, PartenaireViewSet, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    mot_president_list_create, mot_president_detail, programme_list_create, programme_detail, platform_link_list_create_api, platform_link_detail_api
- # 👈 ajoute ces deux-là ici
+    document_api, PartenaireViewSet, AggregatedContentAPIView,
+    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,VideoViewSet
+    # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
@@ -21,6 +20,10 @@ router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 # router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
 router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.register(r'videos', VideoViewSet, basename='video')
+
+
 
 # URL Patterns
 urlpatterns = [
@@ -46,8 +49,7 @@ urlpatterns = [
     path('community/<int:id>/', CommunityView.as_view()),
     path('partners/', PartnerAPIView.as_view(), name='partners'),
     # path('platforms/', platform_links_api, name='platform_links_api'),
-    path('platformlinks/', platform_link_list_create_api, name='platform_link_list_create_api'),  # GET liste + POST création
-    path('platformlinks/<int:pk>/', platform_link_detail_api, name='platform_link_detail_api'),  # GET, PUT, DELETE détails
+    
     # path('valeurs/', valeurs_api, name='valeurs_api'),
     # path('valeurs/', views.valeurs_api, name='valeurs_api'),
     # path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
@@ -56,17 +58,7 @@ urlpatterns = [
     # path('fondations/', fondations_api, name='fondations_api'),
     path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
     path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),
-    path('motpresident/', mot_president_list_create, name='motpresident-list-create'),
-    path('motpresident/<int:pk>/', mot_president_detail, name='motpresident-detail'),
-    path('add-video/', add_video, name='add_video'),
-    # path('media/', add_media_content, name='add_media_content'),
     path('documents/', document_api, name='document_api'),
-    # path('partenaires/', partenaire_api, name='partenaire_api'),
-    # path('partenaires/', partenaire_api, name='partenaire_list_create'),
-    # path('partenaires/<int:id>/', partenaire_api, name='partenaire_detail_update_delete'),
-    # path('programmes/', programmes_api, name='programmes_api'),
-    path('programmes/', programme_list_create, name='programme-list-create'),
-    path('programmes/<int:pk>/', programme_detail, name='programme-detail'),
     path('aggregated-content/', AggregatedContentAPIView.as_view(), name='aggregated_content'),
     path('protected/', ProtectedView.as_view(), name='protected_view'),
     path('logout/', logout, name='logout'),

@@ -156,7 +156,7 @@ const NavAdmin = () => {
         // { path: "/platformPost", label: "Plateformes" },
         // { path: "/createpost", label: "Actualités" },
         // { path: "/programPost", label: "Programmes" },
-        // { path: "/videoPost", label: "Vidéos" },
+        { path: "/videoPost", label: "Videothèque" },
         { path: "/photoPost", label: "Photothèque" },
         // { path: "/documentPost", label: "Téléchargements" },
         // { path: "/activitiesPost", label: "Activities" },

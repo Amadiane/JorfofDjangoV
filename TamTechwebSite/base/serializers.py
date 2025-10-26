@@ -178,7 +178,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 #Fil d'actualité
 from rest_framework import serializers
-from .models import Blog, Fondation, Video, Programme, PlatformLink
+from .models import Blog, Fondation, Programme, PlatformLink
 
 
 from rest_framework import serializers
@@ -204,16 +204,16 @@ class BlogSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(obj.image.url) if obj.image else None
 
 
-class VideoSerializer(serializers.ModelSerializer):
-    couverture = serializers.SerializerMethodField()
+# class VideoSerializer(serializers.ModelSerializer):
+#     couverture = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Video
-        fields = ['id', 'titre', 'lien', 'couverture']
+#     class Meta:
+#         model = Video
+#         fields = ['id', 'titre', 'lien', 'couverture']
 
-    def get_couverture(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.couverture.url) if obj.couverture else None
+#     def get_couverture(self, obj):
+#         request = self.context.get('request')
+#         return request.build_absolute_uri(obj.couverture.url) if obj.couverture else None
 
 
 class ProgrammeSerializer(serializers.ModelSerializer):
@@ -302,3 +302,22 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = '__all__'
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from rest_framework import serializers
+from .models import Video
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = [
+            "id",
+            "title_fr", "title_en", "title_ar",
+            "comment_fr", "comment_en", "comment_ar",
+            "lien_video",
+            "cover_image",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at"]

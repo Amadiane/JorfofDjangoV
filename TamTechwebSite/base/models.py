@@ -337,17 +337,17 @@ class Programme(models.Model):
 
 
 
-#AddVideos
-# models.py
-from django.db import models
+# #AddVideos
+# # models.py
+# from django.db import models
 
-class Video(models.Model):
-    titre = models.CharField(max_length=255)
-    lien = models.URLField()
-    couverture = models.ImageField(upload_to='videos_couvertures/')
+# class Video(models.Model):
+#     titre = models.CharField(max_length=255)
+#     lien = models.URLField()
+#     couverture = models.ImageField(upload_to='videos_couvertures/')
 
-    def __str__(self):
-        return self.titre
+#     def __str__(self):
+#         return self.titre
 
 
 
@@ -376,36 +376,6 @@ class Video(models.Model):
 #     def __str__(self):
 #         return self.titre
 #////////////////////////////////////////////////////////////////////////////////////
-
-from django.db import models
-from cloudinary_storage.storage import MediaCloudinaryStorage
-
-class Photo(models.Model):
-    # Titres multilingues
-    title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
-    title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
-    title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
-
-    # Commentaires multilingues
-    comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
-    comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
-    comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
-
-    # Image Cloudinary
-    image = models.ImageField(
-        storage=MediaCloudinaryStorage(),
-        upload_to="phototheque/",
-        verbose_name="Image"
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title_fr or "Photo"
-
-    class Meta:
-        verbose_name = "Photo"
-        verbose_name_plural = "Photothèque"
 
 
 
@@ -474,3 +444,83 @@ class Activity(models.Model):
     def __str__(self):
         return self.title_fr
 
+
+
+
+
+
+
+
+
+
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.db import models
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+class Photo(models.Model):
+    # Titres multilingues
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
+    title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
+
+    # Commentaires multilingues
+    comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
+    comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
+    comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
+
+    # Image Cloudinary
+    image = models.ImageField(
+        storage=MediaCloudinaryStorage(),
+        upload_to="phototheque/",
+        verbose_name="Image"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title_fr or "Photo"
+
+    class Meta:
+        verbose_name = "Photo"
+        verbose_name_plural = "Photothèque"
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+class Video(models.Model):
+    # Titres multilingues
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
+    title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
+
+    # Commentaires multilingues
+    comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
+    comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
+    comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
+
+    # Lien vidéo (URL) — champ texte pour coller YouTube/Vimeo/hosted link
+    lien_video = models.URLField(max_length=2000, verbose_name="Lien vidéo", blank=False)
+
+    # Cover image — forcée sur Cloudinary via MediaCloudinaryStorage
+    cover_image = models.ImageField(
+        storage=MediaCloudinaryStorage(),
+        upload_to="videotheque/covers/",
+        verbose_name="Image de couverture",
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title_fr or (self.title_en or "Video")
+
+    class Meta:
+        verbose_name = "Video"
+        verbose_name_plural = "Videothèque"
+        ordering = ("-created_at",)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1058,47 +1058,47 @@ def programme_detail(request, pk):
 
 
 
-#AddVideo
+# #AddVideo
 
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from .models import Video
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse
+# from django.views.decorators.http import require_http_methods
+# from .models import Video
 
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def add_video(request):
-    if request.method == "GET":
-        videos = Video.objects.all()
-        data = []
-        for video in videos:
-            data.append({
-                "id": video.id,
-                "titre": video.titre,
-                "lien": video.lien,
-                "couverture": request.build_absolute_uri(video.couverture.url)
-            })
-        return JsonResponse(data, safe=False)
+# @csrf_exempt
+# @require_http_methods(["GET", "POST"])
+# def add_video(request):
+#     if request.method == "GET":
+#         videos = Video.objects.all()
+#         data = []
+#         for video in videos:
+#             data.append({
+#                 "id": video.id,
+#                 "titre": video.titre,
+#                 "lien": video.lien,
+#                 "couverture": request.build_absolute_uri(video.couverture.url)
+#             })
+#         return JsonResponse(data, safe=False)
 
-    if request.method == "POST":
-        titre = request.POST.get("titre")
-        lien = request.POST.get("lien")
-        couverture = request.FILES.get("couverture")
+#     if request.method == "POST":
+#         titre = request.POST.get("titre")
+#         lien = request.POST.get("lien")
+#         couverture = request.FILES.get("couverture")
 
-        if not (titre and lien and couverture):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+#         if not (titre and lien and couverture):
+#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-        video = Video.objects.create(titre=titre, lien=lien, couverture=couverture)
+#         video = Video.objects.create(titre=titre, lien=lien, couverture=couverture)
 
-        return JsonResponse({
-            "message": "Vidéo ajoutée avec succès.",
-            "video": {
-                "id": video.id,
-                "titre": video.titre,
-                "lien": video.lien,
-                "couverture": request.build_absolute_uri(video.couverture.url)
-            }
-        }, status=201)
+#         return JsonResponse({
+#             "message": "Vidéo ajoutée avec succès.",
+#             "video": {
+#                 "id": video.id,
+#                 "titre": video.titre,
+#                 "lien": video.lien,
+#                 "couverture": request.build_absolute_uri(video.couverture.url)
+#             }
+#         }, status=201)
 
 
 
@@ -1218,10 +1218,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Blog, Video, Programme, PlatformLink
+from .models import Blog,Programme, PlatformLink
 from .serializers import (
     BlogSerializer,
-    VideoSerializer,
     ProgrammeSerializer,
     PlatformLinkSerializer
 )
@@ -1232,8 +1231,8 @@ from itertools import chain
 from operator import itemgetter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Blog, Video, Programme
-from .serializers import BlogSerializer, FondationSerializer, VideoSerializer, ProgrammeSerializer, PlatformLinkSerializer
+from .models import Blog, Programme
+from .serializers import BlogSerializer, FondationSerializer, ProgrammeSerializer, PlatformLinkSerializer
 
 
 class AggregatedContentAPIView(APIView):
@@ -1247,9 +1246,6 @@ class AggregatedContentAPIView(APIView):
         for item in fondations:
             item["type"] = "fondation"
 
-        videos = VideoSerializer(Video.objects.all(), many=True).data
-        for item in videos:
-            item["type"] = "video"
 
         programmes = ProgrammeSerializer(Programme.objects.all(), many=True).data
         for item in programmes:
@@ -1260,7 +1256,7 @@ class AggregatedContentAPIView(APIView):
             item["type"] = "platform"
 
         # Fusionner les résultats dans une seule liste et trier par date
-        all_items = list(chain(blogs, fondations, videos, programmes, platforms))
+        all_items = list(chain(blogs, fondations, programmes, platforms))
         all_items_sorted = sorted(all_items, key=itemgetter('created_at'), reverse=True)
 
         return Response(all_items_sorted)
@@ -1401,3 +1397,28 @@ def photo_detail(request, pk):
     elif request.method == 'DELETE':
         photo.delete()
         return Response({'message': 'Photo supprimée avec succès'}, status=status.HTTP_204_NO_CONTENT)
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from rest_framework import viewsets, filters, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from .models import Video
+from .serializers import VideoSerializer
+
+class VideoViewSet(viewsets.ModelViewSet):
+    """
+    CRUD complet pour Video.
+    - GET list / retrieve
+    - POST create (supporte multipart/form-data pour cover_image)
+    - PUT/PATCH update
+    - DELETE destroy
+    """
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]  # accepte upload fichiers + JSON
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title_fr", "title_en", "title_ar", "comment_fr", "comment_en"]
+    ordering_fields = ["created_at", "title_fr"]
+

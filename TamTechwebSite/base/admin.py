@@ -70,4 +70,12 @@ class PhotoAdmin(admin.ModelAdmin):
             "fields": ("image", "preview")
         }),
     )
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+from django.contrib import admin
+from .models import Video
+
+@admin.register(Video)
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ("id", "title_fr", "lien_video", "created_at")
+    search_fields = ("title_fr", "title_en", "title_ar", "comment_fr")
