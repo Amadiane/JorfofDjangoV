@@ -1,23 +1,23 @@
 # blog/admin.py
 
-from django.contrib import admin
-from .models import Blog
+# from django.contrib import admin
+# from .models import Blog
 
-from django.contrib import admin
-from .models import Blog
+# from django.contrib import admin
+# from .models import Blog
 
-@admin.register(Blog)
-class BlogAdmin(admin.ModelAdmin):
-    list_display = ['title_fr', 'created_at']
-    list_filter = ['created_at']
+# @admin.register(Blog)
+# class BlogAdmin(admin.ModelAdmin):
+#     list_display = ['title_fr', 'created_at']
+#     list_filter = ['created_at']
 
 
 
-from django.contrib import admin
-from .models import Todo
+# from django.contrib import admin
+# from .models import Todo
 
-# Register your models here.
-admin.site.register(Todo)
+# # Register your models here.
+# admin.site.register(Todo)
 
 
 # admin.py
@@ -79,3 +79,13 @@ from .models import Video
 class VideoAdmin(admin.ModelAdmin):
     list_display = ("id", "title_fr", "lien_video", "created_at")
     search_fields = ("title_fr", "title_en", "title_ar", "comment_fr")
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.contrib import admin
+from .models import News
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ("id", "title_fr", "created_at")
+    search_fields = ("title_fr", "title_en", "content_fr")
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

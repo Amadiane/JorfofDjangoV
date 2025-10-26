@@ -3,25 +3,26 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 from .views import (
-    BlogViewSet, get_todos, CustomTokenObtainPairView, CustomTokenRefreshView,
+    CustomTokenObtainPairView, CustomTokenRefreshView,
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
     PartnerAPIView, 
     document_api, PartenaireViewSet, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,VideoViewSet
+    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
+    VideoViewSet, NewsViewSet
     # 👈 ajoute ces deux-là ici
 )
 
 # Définir le routeur
 router = DefaultRouter()
-router.register(r"blog", BlogViewSet)
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 # router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
 router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.register(r'videos', VideoViewSet, basename='video')
+router.register(r"news", NewsViewSet, basename="news")
 
 
 
@@ -30,7 +31,6 @@ urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('logout/', logout),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
-    path('todos/', get_todos),
     path('register/', register),
     path('authenticated/', is_logged_in),
     path('chatbot/', chatbot, name='chatbot'),

@@ -1,35 +1,35 @@
-from django.db import models
-from django.utils.text import slugify
-from django.contrib.auth.models import User
+# from django.db import models
+# from django.utils.text import slugify
+# from django.contrib.auth.models import User
 
-# Modèle Blog
-from django.db import models
+# # Modèle Blog
+# from django.db import models
 
-class Blog(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    title_ar = models.CharField(max_length=255)
+# class Blog(models.Model):
+#     title_fr = models.CharField(max_length=255)
+#     title_en = models.CharField(max_length=255)
+#     title_ar = models.CharField(max_length=255)
     
-    content_fr = models.TextField()
-    content_en = models.TextField()
-    content_ar = models.TextField()
+#     content_fr = models.TextField()
+#     content_en = models.TextField()
+#     content_ar = models.TextField()
     
-    image = models.ImageField(upload_to="images/", blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+#     image = models.ImageField(upload_to="images/", blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title_fr
+#     def __str__(self):
+#         return self.title_fr
 
 
 
-# Modèle Todo
-class Todo(models.Model):
-    name = models.CharField(max_length=200)
-    completed = models.BooleanField(default=False)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='todos')  # Correction du nom de la relation
+# # Modèle Todo
+# class Todo(models.Model):
+#     name = models.CharField(max_length=200)
+#     completed = models.BooleanField(default=False)
+#     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='todos')  # Correction du nom de la relation
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 
@@ -523,4 +523,37 @@ class Video(models.Model):
         verbose_name = "Video"
         verbose_name_plural = "Videothèque"
         ordering = ("-created_at",)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.db import models
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+class News(models.Model):
+    # Titres multilingues
+    title_fr = models.CharField("Titre (FR)", max_length=255)
+    title_en = models.CharField("Title (EN)", max_length=255, blank=True, null=True)
+    title_ar = models.CharField("العنوان (AR)", max_length=255, blank=True, null=True)
+
+    # Contenus multilingues
+    content_fr = models.TextField("Contenu (FR)", blank=True, null=True)
+    content_en = models.TextField("Content (EN)", blank=True, null=True)
+    content_ar = models.TextField("المحتوى (AR)", blank=True, null=True)
+
+    # Image (stockée sur Cloudinary via MediaCloudinaryStorage)
+    image = models.ImageField(
+        storage=MediaCloudinaryStorage(),
+        upload_to="news/images/",
+        verbose_name="Image",
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "News"
+        verbose_name_plural = "News"
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return self.title_fr or self.title_en or "News"
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

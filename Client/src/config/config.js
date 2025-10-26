@@ -20,10 +20,19 @@ const CONFIG = {
   API_VIDEO_UPDATE: (id) => `${BASE_URL}/api/videos/${id}/`,
   API_VIDEO_DELETE: (id) => `${BASE_URL}/api/videos/${id}/`,
 
+  // 📰 News (Cloudinary)
+  API_NEWS_LIST: `${BASE_URL}/api/news/`,
+  API_NEWS_DETAIL: (id) => `${BASE_URL}/api/news/${id}/`,
+  /* optionally */
+  API_NEWS_CREATE: `${BASE_URL}/api/news/`,
+  API_NEWS_UPDATE: (id) => `${BASE_URL}/api/news/${id}/`,
+  API_NEWS_DELETE: (id) => `${BASE_URL}/api/news/${id}/`,
+
   // 📸 Dossier media (pour les images directes)
   MEDIA_URL: `${BASE_URL}/media/`,
 
   CLOUDINARY_NAME: "dwuyq2eoz",
+  CLOUDINARY_UPLOAD_PRESET: "ml_default", // 👈 nom exact du preset créé
 };
 
 export default CONFIG;

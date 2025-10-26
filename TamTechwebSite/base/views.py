@@ -5,16 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
-from .models import Blog
-from .serializers import BlogSerializer
 
 from rest_framework import viewsets
-from .models import Blog
-from .serializers import BlogSerializer
 
-class BlogViewSet(viewsets.ModelViewSet):
-    queryset = Blog.objects.all().order_by('-created_at')
-    serializer_class = BlogSerializer
+# class BlogViewSet(viewsets.ModelViewSet):
+#     queryset = Blog.objects.all().order_by('-created_at')
+#     serializer_class = BlogSerializer
 
 
 
@@ -25,9 +21,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
-
-from .models import Todo
-from .serializers import TodoSerializer, UserRegisterSerializer, UserSerializer
 
 from datetime import datetime, timedelta
 
@@ -1218,12 +1211,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Blog,Programme, PlatformLink
-from .serializers import (
-    BlogSerializer,
-    ProgrammeSerializer,
-    PlatformLinkSerializer
-)
 
 
 # views.py
@@ -1231,8 +1218,8 @@ from itertools import chain
 from operator import itemgetter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Blog, Programme
-from .serializers import BlogSerializer, FondationSerializer, ProgrammeSerializer, PlatformLinkSerializer
+from .models import Programme
+from .serializers import FondationSerializer, ProgrammeSerializer, PlatformLinkSerializer
 
 
 class AggregatedContentAPIView(APIView):
@@ -1422,3 +1409,18 @@ class VideoViewSet(viewsets.ModelViewSet):
     search_fields = ["title_fr", "title_en", "title_ar", "comment_fr", "comment_en"]
     ordering_fields = ["created_at", "title_fr"]
 
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import viewsets, filters, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from .models import News
+from .serializers import NewsSerializer
+
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [permissions.AllowAny]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]  # accepte upload image
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title_fr", "title_en", "title_ar", "content_fr", "content_en"]
+    ordering_fields = ["created_at", "title_fr"]
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

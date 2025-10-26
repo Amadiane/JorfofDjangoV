@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Blog, Todo
 
 
 # # Serializer pour le modèle Blog
@@ -39,11 +38,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username']
 
 
-# Serializer pour le modèle Todo
-class TodoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Todo
-        fields = ['id', 'name', 'completed']
+# # Serializer pour le modèle Todo
+# class TodoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Todo
+#         fields = ['id', 'name', 'completed']
 
 
 
@@ -178,30 +177,29 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 #Fil d'actualité
 from rest_framework import serializers
-from .models import Blog, Fondation, Programme, PlatformLink
+from .models import Fondation, Programme, PlatformLink
 
 
-from rest_framework import serializers
-from .models import Blog
+# from rest_framework import serializers
 
-class BlogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Blog
-        fields = [
-            'id',
-            'title_fr', 'title_en', 'title_ar',
-            'content_fr', 'content_en', 'content_ar',
-            'image', 'created_at'
-        ]
-
-
+# class BlogSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Blog
+#         fields = [
+#             'id',
+#             'title_fr', 'title_en', 'title_ar',
+#             'content_fr', 'content_en', 'content_ar',
+#             'image', 'created_at'
+#         ]
 
 
 
 
-    def get_image(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.image.url) if obj.image else None
+
+
+    # def get_image(self, obj):
+    #     request = self.context.get('request')
+    #     return request.build_absolute_uri(obj.image.url) if obj.image else None
 
 
 # class VideoSerializer(serializers.ModelSerializer):
@@ -321,3 +319,29 @@ class VideoSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import serializers
+from .models import News
+
+class NewsSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = News
+        fields = [
+            "id",
+            "title_fr", "title_en", "title_ar",
+            "content_fr", "content_en", "content_ar",
+            "image", "image_url",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at", "image_url"]
+
+    def get_image_url(self, obj):
+        request = self.context.get("request")
+        if obj.image:
+            # cloudinary donne une URL publique via .url
+            return request.build_absolute_uri(obj.image.url) if request else obj.image.url
+        return None
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
