@@ -363,17 +363,52 @@ class Video(models.Model):
 
 #     def __str__(self):
 #         return self.titre
+#////////////////////////////////////////////////////////////////////////////////////
+# from django.db import models
+# from cloudinary_storage.storage import MediaCloudinaryStorage
+
+# class MediaContent(models.Model):
+#     titre = models.CharField(max_length=200)
+#     description = models.TextField(blank=True)
+#     image = models.ImageField(storage=MediaCloudinaryStorage(), upload_to='media_content/')
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.titre
+#////////////////////////////////////////////////////////////////////////////////////
+
 from django.db import models
 from cloudinary_storage.storage import MediaCloudinaryStorage
 
-class MediaContent(models.Model):
-    titre = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    image = models.ImageField(storage=MediaCloudinaryStorage(), upload_to='media_content/')
+class Photo(models.Model):
+    # Titres multilingues
+    title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
+    title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
+    title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
+
+    # Commentaires multilingues
+    comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
+    comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
+    comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
+
+    # Image Cloudinary
+    image = models.ImageField(
+        storage=MediaCloudinaryStorage(),
+        upload_to="phototheque/",
+        verbose_name="Image"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.titre
+        return self.title_fr or "Photo"
+
+    class Meta:
+        verbose_name = "Photo"
+        verbose_name_plural = "Photothèque"
+
+
+
 
 
 #Document

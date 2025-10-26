@@ -292,3 +292,13 @@ class PartenaireSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partenaire
         fields = '__all__'
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import Photo
+
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = '__all__'

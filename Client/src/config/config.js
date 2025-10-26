@@ -41,8 +41,8 @@ const CONFIG = {
   BASE_URL,
   // BASE_URL: "https://jorfofdjangov.onrender.com",
   API_LOGIN: "/api/login/",
-  API_PHOTO_LIST: "/api/media/",
-  API_PHOTO_DETAIL: (id) => `/api/media/${id}/`,
+  API_PHOTO_LIST: "http://127.0.0.1:8000/api/media/",
+  API_PHOTO_DETAIL: (id) => `http://127.0.0.1:8000/api/media/${id}/`,
   MEDIA_URL: "https://jorfofdjangov.onrender.com/media/",
   CLOUDINARY_NAME: "dwuyq2eoz",
 };

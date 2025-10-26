@@ -8,7 +8,7 @@ from .views import (
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
     PartnerAPIView, 
-    add_video, add_media_content, document_api, PartenaireViewSet, AggregatedContentAPIView,
+    add_video, document_api, PartenaireViewSet, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
     mot_president_list_create, mot_president_detail, programme_list_create, programme_detail, platform_link_list_create_api, platform_link_detail_api
  # 👈 ajoute ces deux-là ici
@@ -59,7 +59,7 @@ urlpatterns = [
     path('motpresident/', mot_president_list_create, name='motpresident-list-create'),
     path('motpresident/<int:pk>/', mot_president_detail, name='motpresident-detail'),
     path('add-video/', add_video, name='add_video'),
-    path('media/', add_media_content, name='add_media_content'),
+    # path('media/', add_media_content, name='add_media_content'),
     path('documents/', document_api, name='document_api'),
     # path('partenaires/', partenaire_api, name='partenaire_api'),
     # path('partenaires/', partenaire_api, name='partenaire_list_create'),
@@ -70,6 +70,9 @@ urlpatterns = [
     path('aggregated-content/', AggregatedContentAPIView.as_view(), name='aggregated_content'),
     path('protected/', ProtectedView.as_view(), name='protected_view'),
     path('logout/', logout, name='logout'),
+    #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    path('media/', views.photo_list, name='photo_list'),
+    path('media/<int:pk>/', views.photo_detail, name='photo_detail'),
     
 
     path("", include(router.urls)),

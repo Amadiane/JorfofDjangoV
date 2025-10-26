@@ -1103,52 +1103,52 @@ def add_video(request):
 
 
 
-
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #addphoto
 
-# views.py
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from .models import MediaContent
+# # views.py
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse
+# from django.views.decorators.http import require_http_methods
+# from .models import MediaContent
 
-@csrf_exempt
-@require_http_methods(["POST", "GET"])
-def add_media_content(request):
-    if request.method == "GET":
-        contenus = MediaContent.objects.all()
-        data = []
+# @csrf_exempt
+# @require_http_methods(["POST", "GET"])
+# def add_media_content(request):
+#     if request.method == "GET":
+#         contenus = MediaContent.objects.all()
+#         data = []
 
-        for contenu in contenus:
-            data.append({
-                "id": contenu.id,
-                "titre": contenu.titre,
-                "description": contenu.description,
-                "image": request.build_absolute_uri(contenu.image.url)
-            })
-        return JsonResponse(data, safe=False)
+#         for contenu in contenus:
+#             data.append({
+#                 "id": contenu.id,
+#                 "titre": contenu.titre,
+#                 "description": contenu.description,
+#                 "image": request.build_absolute_uri(contenu.image.url)
+#             })
+#         return JsonResponse(data, safe=False)
 
-    elif request.method == "POST":
-        titre = request.POST.get("titre")
-        description = request.POST.get("description")
-        image = request.FILES.get("image")
+#     elif request.method == "POST":
+#         titre = request.POST.get("titre")
+#         description = request.POST.get("description")
+#         image = request.FILES.get("image")
 
-        if not (titre and description and image):
-            return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
+#         if not (titre and description and image):
+#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
 
-        media = MediaContent.objects.create(titre=titre, description=description, image=image)
+#         media = MediaContent.objects.create(titre=titre, description=description, image=image)
 
-        return JsonResponse({
-            "message": "Contenu ajouté avec succès.",
-            "media": {
-                "id": media.id,
-                "titre": media.titre,
-                "description": media.description,
-                "image": request.build_absolute_uri(media.image.url)
-            }
-        }, status=201)
+#         return JsonResponse({
+#             "message": "Contenu ajouté avec succès.",
+#             "media": {
+#                 "id": media.id,
+#                 "titre": media.titre,
+#                 "description": media.description,
+#                 "image": request.build_absolute_uri(media.image.url)
+#             }
+#         }, status=201)
 
-
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #document
 
 
@@ -1357,3 +1357,47 @@ from django.http import HttpResponse
 def home(request):
     return HttpResponse("Bienvenue sur JorfofVDjango !")
 
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Photo
+from .serializers import PhotoSerializer
+
+@api_view(['GET', 'POST'])
+def photo_list(request):
+    if request.method == 'GET':
+        photos = Photo.objects.all().order_by('-created_at')
+        serializer = PhotoSerializer(photos, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = PhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def photo_detail(request, pk):
+    try:
+        photo = Photo.objects.get(pk=pk)
+    except Photo.DoesNotExist:
+        return Response({'error': 'Photo non trouvée'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PhotoSerializer(photo, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = PhotoSerializer(photo, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        photo.delete()
+        return Response({'message': 'Photo supprimée avec succès'}, status=status.HTTP_204_NO_CONTENT)

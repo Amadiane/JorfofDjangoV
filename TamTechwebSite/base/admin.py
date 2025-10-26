@@ -30,8 +30,44 @@ admin.site.register(PlatformLink)
 
 
 from django.contrib import admin
-from .models import MediaContent
+# from .models import MediaContent
 
-@admin.register(MediaContent)
-class MediaContentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'titre', 'description', 'image')
+# @admin.register(MediaContent)
+# class MediaContentAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'titre', 'description', 'image')
+
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from django.contrib import admin
+from .models import Photo
+from django.utils.html import format_html
+
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ("id", "preview", "title_fr", "created_at")
+    list_display_links = ("id", "title_fr")
+    search_fields = ("title_fr", "comment_fr")
+    list_filter = ("created_at",)
+    readonly_fields = ("preview",)
+
+    # Pour afficher une miniature de l’image
+    def preview(self, obj):
+        if obj.image:
+            return format_html(f'<img src="{obj.image.url}" width="80" height="80" style="object-fit: cover; border-radius: 8px;" />')
+        return "Aucune image"
+    preview.short_description = "Aperçu"
+
+    fieldsets = (
+        ("Informations principales", {
+            "fields": ("title_fr", "title_en", "title_ar")
+        }),
+        ("Commentaires", {
+            "fields": ("comment_fr", "comment_en", "comment_ar")
+        }),
+        ("Image", {
+            "fields": ("image", "preview")
+        }),
+    )
+
