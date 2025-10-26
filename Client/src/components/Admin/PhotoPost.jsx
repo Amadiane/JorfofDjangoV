@@ -250,7 +250,7 @@
 // export default PhotoPost;
 
 import React, { useState, useEffect } from "react";
-import CONFIG from "../../config/config.js"; // ⚙️ URL de ton backend
+import CONFIG from "../../config/config.js"; // ⚙️ ton fichier config.js
 
 const PhotoPost = () => {
   const [photos, setPhotos] = useState([]);
@@ -267,15 +267,17 @@ const PhotoPost = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = CONFIG.API_PHOTO_LIST; // Exemple: "http://localhost:8000/api/photos/"
+  const apiUrl = CONFIG.API_PHOTO_LIST; // ex : http://127.0.0.1:8000/api/media/
 
-  // 🟢 GET — Charger les photos
+  // 🟢 Charger les photos existantes
   const fetchPhotos = async () => {
     try {
       const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error(`Erreur ${res.status}`);
       const data = await res.json();
       setPhotos(data);
     } catch (error) {
+      console.error("Erreur fetch photos :", error);
       setMessage("❌ Erreur de chargement des photos");
     }
   };
@@ -284,7 +286,7 @@ const PhotoPost = () => {
     fetchPhotos();
   }, []);
 
-  // 🟡 Gérer les champs du formulaire
+  // 🟡 Gérer le formulaire
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm({
@@ -293,7 +295,7 @@ const PhotoPost = () => {
     });
   };
 
-  // 🟠 POST ou PUT — Enregistrer une photo
+  // 🟠 Envoi du formulaire (POST/PUT)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -310,10 +312,14 @@ const PhotoPost = () => {
 
       const res = await fetch(url, {
         method,
-        body: formData,
+        body: formData, // ⚠️ ne surtout pas mettre de headers ici
       });
 
-      if (!res.ok) throw new Error("Erreur d’envoi");
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Erreur serveur :", errorText);
+        throw new Error(`Erreur serveur ${res.status}`);
+      }
 
       setMessage(editId ? "✅ Photo mise à jour !" : "✅ Photo ajoutée !");
       setForm({
@@ -328,17 +334,19 @@ const PhotoPost = () => {
       setEditId(null);
       fetchPhotos();
     } catch (error) {
+      console.error("Erreur upload :", error);
       setMessage("❌ Erreur : " + error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔴 DELETE — Supprimer une photo
+  // 🔴 Supprimer une photo
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cette photo ?")) return;
     try {
-      await fetch(`${apiUrl}${id}/`, { method: "DELETE" });
+      const res = await fetch(`${apiUrl}${id}/`, { method: "DELETE" });
+      if (!res.ok) throw new Error(`Erreur ${res.status}`);
       setMessage("🗑️ Photo supprimée !");
       fetchPhotos();
     } catch (error) {
@@ -346,15 +354,15 @@ const PhotoPost = () => {
     }
   };
 
-  // ✏️ Pré-remplir pour modification
+  // ✏️ Éditer une photo existante
   const handleEdit = (photo) => {
     setForm({
-      title_fr: photo.title_fr,
-      title_en: photo.title_en,
-      title_ar: photo.title_ar,
-      comment_fr: photo.comment_fr,
-      comment_en: photo.comment_en,
-      comment_ar: photo.comment_ar,
+      title_fr: photo.title_fr || "",
+      title_en: photo.title_en || "",
+      title_ar: photo.title_ar || "",
+      comment_fr: photo.comment_fr || "",
+      comment_en: photo.comment_en || "",
+      comment_ar: photo.comment_ar || "",
       image: null,
     });
     setEditId(photo.id);
@@ -372,7 +380,11 @@ const PhotoPost = () => {
           {["fr", "en", "ar"].map((lang) => (
             <div key={lang} style={styles.langSection}>
               <h3 style={styles.langTitle}>
-                {lang === "fr" ? "Français" : lang === "en" ? "English" : "العربية"}
+                {lang === "fr"
+                  ? "Français"
+                  : lang === "en"
+                  ? "English"
+                  : "العربية"}
               </h3>
               <div style={styles.formGroup}>
                 <label style={styles.label}>Titre ({lang})</label>
@@ -412,7 +424,11 @@ const PhotoPost = () => {
             disabled={loading}
             style={{ ...styles.button, opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "⏳ Envoi..." : editId ? "💾 Mettre à jour" : "📤 Ajouter"}
+            {loading
+              ? "⏳ Envoi..."
+              : editId
+              ? "💾 Mettre à jour"
+              : "📤 Ajouter"}
           </button>
         </form>
 
@@ -440,6 +456,10 @@ const PhotoPost = () => {
                 src={photo.image}
                 alt={photo.title_fr}
                 style={styles.image}
+                onError={(e) => {
+                  e.target.src =
+                    "https://via.placeholder.com/250x180?text=Image+non+disponible";
+                }}
               />
               <h3>{photo.title_fr}</h3>
               <p>{photo.comment_fr}</p>
@@ -464,11 +484,7 @@ const PhotoPost = () => {
 
 // 🎨 Styles
 const styles = {
-  container: {
-    background: "#f8fafc",
-    padding: "40px",
-    minHeight: "100vh",
-  },
+  container: { background: "#f8fafc", padding: "40px", minHeight: "100vh" },
   section: {
     background: "#fff",
     padding: "25px",
