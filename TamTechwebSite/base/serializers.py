@@ -345,3 +345,35 @@ class NewsSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url) if request else obj.image.url
         return None
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import serializers
+from .models import Match
+
+class MatchSerializer(serializers.ModelSerializer):
+    home_team_logo_url = serializers.SerializerMethodField()
+    away_team_logo_url = serializers.SerializerMethodField()
+    banner_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Match
+        fields = "__all__"
+
+    def get_home_team_logo_url(self, obj):
+        try:
+            return obj.home_team_logo.url if obj.home_team_logo else None
+        except:
+            return None
+
+    def get_away_team_logo_url(self, obj):
+        try:
+            return obj.away_team_logo.url if obj.away_team_logo else None
+        except:
+            return None
+
+    def get_banner_image_url(self, obj):
+        try:
+            return obj.banner_image.url if obj.banner_image else None
+        except:
+            return None
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

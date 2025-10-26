@@ -10,7 +10,7 @@ from .views import (
     PartnerAPIView, 
     document_api, PartenaireViewSet, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet
     # 👈 ajoute ces deux-là ici
 )
 
@@ -23,6 +23,8 @@ router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.register(r'videos', VideoViewSet, basename='video')
 router.register(r"news", NewsViewSet, basename="news")
+router.register(r'matches', MatchViewSet, basename='match')
+
 
 
 

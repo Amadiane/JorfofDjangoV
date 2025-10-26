@@ -1,785 +1,622 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import CONFIG from "../../config/config.js";
 
 const ProgramPost = () => {
-  const [programs, setPrograms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [newProgram, setNewProgram] = useState({
-    title_fr: "",
-    title_en: "",
-    title_ar: "",
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editId, setEditId] = useState(null);
+
+  const initialForm = {
+    home_team_name_fr: "",
+    home_team_name_en: "",
+    home_team_name_ar: "",
+    away_team_name_fr: "",
+    away_team_name_en: "",
+    away_team_name_ar: "",
+    location_fr: "",
+    location_en: "",
+    location_ar: "",
+    match_date: "",
+    match_time: "",
     description_fr: "",
     description_en: "",
     description_ar: "",
-    photo_couverture: null
+    home_score: 0,
+    away_score: 0,
+    home_team_logo: null,
+    away_team_logo: null,
+    banner_image: null,
+  };
+
+  const [formData, setFormData] = useState(initialForm);
+  const [preview, setPreview] = useState({
+    home_team_logo: null,
+    away_team_logo: null,
+    banner_image: null,
   });
-  const [editingId, setEditingId] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [error, setError] = useState(null);
-  const [notification, setNotification] = useState(null);
-  const [expanded, setExpanded] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const apiUrl = import.meta.env.VITE_API_BACKEND;
 
-  // Pagination améliorée
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [totalItems, setTotalItems] = useState(0);
-
-  const API_URL = `${apiUrl}/api/programmes/`;
-  const IMAGE_BASE_URL = apiUrl;
-
+  // === Charger les matchs
   useEffect(() => {
-    fetchPrograms();
-  }, [currentPage]);
+    fetchMatches();
+  }, []);
 
-  const fetchPrograms = async () => {
+  const fetchMatches = async () => {
     try {
-      setLoading(true);
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Erreur lors du chargement des programmes");
-      const data = await response.json();
-      setPrograms(data);
-      setTotalItems(data.length);
+      const { data } = await axios.get(CONFIG.API_MATCH_LIST);
+      setMatches(data);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.error("❌ Erreur chargement matchs :", err);
     }
   };
 
-  const handleInputChange = (e) => {
+  // === Upload Cloudinary
+  const uploadToCloudinary = async (file) => {
+    if (!file || typeof file === "string") return file;
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
+
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/upload`,
+      data
+    );
+    return res.data.secure_url;
+  };
+
+  // === Gestion texte
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewProgram((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
+  // === Gestion fichiers
+  const handleFileChange = (e, field) => {
     const file = e.target.files[0];
-    if (file) {
-      setNewProgram((prev) => ({ ...prev, photo_couverture: file }));
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    setFormData((prev) => ({ ...prev, [field]: file }));
+    setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(file) }));
   };
 
+  // === Soumission formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = editingId ? 'PUT' : 'POST';
-    const url = editingId ? `${API_URL}${editingId}/` : API_URL;
+    setLoading(true);
 
     try {
-      setLoading(true);
-      const formData = new FormData();
-      Object.keys(newProgram).forEach(key => {
-        if (newProgram[key] !== null) {
-          formData.append(key, newProgram[key]);
-        }
-      });
+      // Upload des images Cloudinary
+      const [homeLogoURL, awayLogoURL, bannerURL] = await Promise.all([
+        uploadToCloudinary(formData.home_team_logo),
+        uploadToCloudinary(formData.away_team_logo),
+        uploadToCloudinary(formData.banner_image),
+      ]);
 
-      const response = await fetch(url, {
-        method,
-        body: formData
-      });
+      const payload = {
+        home_team_name_fr: formData.home_team_name_fr,
+        home_team_name_en: formData.home_team_name_en,
+        home_team_name_ar: formData.home_team_name_ar,
+        away_team_name_fr: formData.away_team_name_fr,
+        away_team_name_en: formData.away_team_name_en,
+        away_team_name_ar: formData.away_team_name_ar,
+        location_fr: formData.location_fr,
+        location_en: formData.location_en,
+        location_ar: formData.location_ar,
+        match_date: formData.match_date,
+        match_time: formData.match_time,
+        description_fr: formData.description_fr,
+        description_en: formData.description_en,
+        description_ar: formData.description_ar,
+        home_score: Number(formData.home_score),
+        away_score: Number(formData.away_score),
+        home_team_logo_url: homeLogoURL || "",
+        away_team_logo_url: awayLogoURL || "",
+        banner_image_url: bannerURL || "",
+      };
 
-      if (!response.ok) throw new Error("Erreur lors de l'enregistrement");
-      
-      // Récupération du programme mis à jour
-      const updatedProgram = await response.json();
-      
-      // Mise à jour optimiste du state
-      if (editingId) {
-        setPrograms(prev => prev.map(p => p.id === editingId ? updatedProgram : p));
+      if (editId) {
+        await axios.put(CONFIG.API_MATCH_UPDATE(editId), payload);
       } else {
-        setPrograms(prev => [...prev, updatedProgram]);
-        // Naviguer vers la dernière page pour voir le nouveau programme
-        setTimeout(() => {
-          const newTotalPages = Math.ceil((programs.length + 1) / itemsPerPage);
-          setCurrentPage(newTotalPages);
-        }, 100);
+        await axios.post(CONFIG.API_MATCH_CREATE, payload);
       }
 
-      setNotification(editingId ? "Programme mis à jour avec succès !" : "Nouveau programme ajouté avec succès !");
-
-      // Réinitialisation du formulaire
-      setNewProgram({
-        title_fr: "",
-        title_en: "",
-        title_ar: "",
-        description_fr: "",
-        description_en: "",
-        description_ar: "",
-        photo_couverture: null
-      });
-      setImagePreview(null);
-      setEditingId(null);
-      setShowForm(false);
-      setError(null);
-
-      setTimeout(() => setNotification(null), 5000);
+      await fetchMatches();
+      resetForm();
     } catch (err) {
-      setError(err.message);
+      console.error("❌ Erreur soumission :", err.response?.data || err);
+      alert("⚠️ Erreur lors de la soumission — vérifie les champs requis.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEdit = (program) => {
-    setNewProgram({
-      title_fr: program.title_fr || "",
-      title_en: program.title_en || "",
-      title_ar: program.title_ar || "",
-      description_fr: program.description_fr || "",
-      description_en: program.description_en || "",
-      description_ar: program.description_ar || "",
-      photo_couverture: null
+  // === Mode édition
+  const handleEdit = (match) => {
+    setEditId(match.id);
+    setFormData({
+      ...formData,
+      ...match,
+      home_team_logo: match.home_team_logo_url,
+      away_team_logo: match.away_team_logo_url,
+      banner_image: match.banner_image_url,
     });
-    setImagePreview(program.photo_couverture ? `${IMAGE_BASE_URL}${program.photo_couverture}` : null);
-    setEditingId(program.id);
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setPreview({
+      home_team_logo: match.home_team_logo_url,
+      away_team_logo: match.away_team_logo_url,
+      banner_image: match.banner_image_url,
+    });
   };
 
+  // === Suppression
   const handleDelete = async (id) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce programme ?")) return;
-
+    if (!window.confirm("Supprimer ce match ?")) return;
     try {
-      setLoading(true);
-      const response = await fetch(`${API_URL}${id}/`, { method: 'DELETE' });
-      if (!response.ok) throw new Error("Erreur lors de la suppression");
-
-      // Mise à jour optimiste du state
-      setPrograms(prev => prev.filter(p => p.id !== id));
-      setNotification("Programme supprimé avec succès !");
-      setTimeout(() => setNotification(null), 5000);
-
-      // Vérifier si nous devons changer de page
-      const newTotalPages = Math.ceil((programs.length - 1) / itemsPerPage);
-      if (currentPage > newTotalPages && newTotalPages > 0) {
-        setCurrentPage(newTotalPages);
-      }
+      await axios.delete(CONFIG.API_MATCH_DELETE(id));
+      fetchMatches();
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.error("❌ Erreur suppression :", err);
     }
   };
 
-  const toggleExpand = (id) => {
-    setExpanded(expanded === id ? null : id);
+  // === Reset
+  const resetForm = () => {
+    setFormData(initialForm);
+    setPreview({
+      home_team_logo: null,
+      away_team_logo: null,
+      banner_image: null,
+    });
+    setEditId(null);
   };
-
-  // Pagination améliorée
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = programs.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(programs.length / itemsPerPage);
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo({ top: document.getElementById('programs-list').offsetTop - 20, behavior: 'smooth' });
-  };
-
-  const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to first page when changing items per page
-  };
-
-  // Styles pour le design responsive
-  const styles = {
-    container: {
-      padding: '20px',
-      maxWidth: '1200px',
-      margin: '0 auto',
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexWrap: 'wrap',
-      marginBottom: '20px',
-    },
-    title: {
-      fontSize: '24px',
-      margin: '10px 0',
-    },
-    addButton: {
-      padding: '10px 15px',
-      backgroundColor: '#1C1C47',
-      color: 'white',
-      fontSize: '16px',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      transition: 'background-color 0.3s',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    },
-    formContainer: {
-      backgroundColor: '#f9f9f9',
-      padding: '20px',
-      borderRadius: '10px',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-      marginBottom: '30px',
-      width: '100%',
-    },
-    form: {
-      display: 'grid',
-      gap: '15px',
-    },
-    formGroup: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    label: {
-      marginBottom: '5px',
-      fontWeight: '500',
-    },
-    input: {
-      padding: '10px',
-      borderRadius: '5px',
-      border: '1px solid #ddd',
-      fontSize: '16px',
-    },
-    textarea: {
-      padding: '10px',
-      borderRadius: '5px',
-      border: '1px solid #ddd',
-      minHeight: '100px',
-      fontSize: '16px',
-      fontFamily: 'inherit',
-      resize: 'vertical',
-    },
-    submitButton: {
-      padding: '12px',
-      backgroundColor: '#1C1C47',
-      color: 'white',
-      border: 'none',
-      borderRadius: '5px',
-      fontSize: '16px',
-      cursor: 'pointer',
-      transition: 'background-color 0.3s',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    },
-    programsList: {
-      display: 'grid',
-      gap: '15px',
-    },
-    programCard: {
-      border: '1px solid #eaeaea',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      transition: 'box-shadow 0.3s',
-      backgroundColor: '#fff',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-    },
-    programHeader: {
-      padding: '15px',
-      cursor: 'pointer',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: '#f5f5f5',
-    },
-    programTitle: {
-      margin: 0,
-      fontSize: '18px',
-      fontWeight: '500',
-    },
-    programContent: {
-      padding: '15px',
-    },
-    programInfo: {
-      margin: '8px 0',
-    },
-    programActions: {
-      display: 'flex',
-      gap: '10px',
-      marginTop: '15px',
-    },
-    actionButton: {
-      padding: '8px 12px',
-      borderRadius: '5px',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '14px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '5px',
-    },
-    editButton: {
-      backgroundColor: '#e0e0e0',
-      color: '#333',
-    },
-    deleteButton: {
-      backgroundColor: '#ffebee',
-      color: '#c62828',
-    },
-    paginationContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '10px',
-      marginTop: '20px',
-      flexWrap: 'wrap',
-    },
-    pageButton: {
-      padding: '8px 12px',
-      border: '1px solid #ddd',
-      borderRadius: '5px',
-      backgroundColor: '#fff',
-      cursor: 'pointer',
-      minWidth: '40px',
-      textAlign: 'center',
-    },
-    activePageButton: {
-      backgroundColor: '#1C1C47',
-      color: 'white',
-      border: '1px solid #1C1C47',
-    },
-    errorMessage: {
-      padding: '10px',
-      borderRadius: '5px',
-      backgroundColor: '#ffebee',
-      color: '#c62828',
-      marginBottom: '15px',
-    },
-    notificationMessage: {
-      padding: '10px',
-      borderRadius: '5px',
-      backgroundColor: '#e8f5e9',
-      color: '#2e7d32',
-      marginBottom: '15px',
-    },
-    languageSection: {
-      marginTop: '10px',
-      padding: '10px',
-      borderTop: '1px solid #eee',
-    },
-    languageTitle: {
-      fontSize: '16px',
-      fontWeight: '500',
-      marginBottom: '8px',
-    },
-    imagePreview: {
-      marginTop: '10px',
-      maxWidth: '200px',
-      maxHeight: '200px',
-      objectFit: 'contain',
-      borderRadius: '5px',
-      border: '1px solid #ddd',
-    },
-    imageContainer: {
-      marginTop: '15px',
-    },
-    fileInput: {
-      marginTop: '5px',
-    },
-    infoItem: {
-      marginBottom: '8px'
-    },
-    loadingContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '200px'
-    },
-    loadingText: {
-      fontSize: '18px',
-      fontWeight: '500',
-      color: '#666'
-    },
-    paginationInfo: {
-      margin: '0 15px',
-      fontSize: '14px',
-      color: '#666',
-    },
-    paginationControls: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-    },
-    programImage: {
-      maxWidth: '100%',
-      maxHeight: '200px',
-      objectFit: 'contain',
-      borderRadius: '5px',
-      border: '1px solid #ddd',
-      margin: '10px 0',
-    },
-    selectControl: {
-      padding: '8px 10px',
-      borderRadius: '5px',
-      border: '1px solid #ddd',
-      fontSize: '14px',
-      marginLeft: '5px',
-    }
-  };
-
-  if (loading && programs.length === 0) {
-    return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.loadingText}>
-          Chargement...
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>Gestion des Programmes</h1>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">🏀 Gestion des matchs</h2>
+
+      {/* === FORMULAIRE === */}
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 bg-gray-100 p-4 rounded-lg shadow-md"
+      >
+        {/* Équipe à domicile */}
+        <h3 className="font-semibold">🏠 Équipe à domicile</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {["fr", "en", "ar"].map((lang) => (
+            <input
+              key={`home_${lang}`}
+              type="text"
+              name={`home_team_name_${lang}`}
+              placeholder={`Nom (${lang.toUpperCase()})`}
+              value={formData[`home_team_name_${lang}`]}
+              onChange={handleChange}
+              className="p-2 border rounded"
+              required
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleFileChange(e, "home_team_logo")}
+            className="p-2 border rounded"
+          />
+          {preview.home_team_logo && (
+            <img
+              src={preview.home_team_logo}
+              alt="home logo"
+              className="w-12 h-12 rounded-full object-cover border"
+            />
+          )}
+        </div>
+
+        {/* Équipe adverse */}
+        <h3 className="font-semibold mt-4">🚀 Équipe adverse</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {["fr", "en", "ar"].map((lang) => (
+            <input
+              key={`away_${lang}`}
+              type="text"
+              name={`away_team_name_${lang}`}
+              placeholder={`Nom (${lang.toUpperCase()})`}
+              value={formData[`away_team_name_${lang}`]}
+              onChange={handleChange}
+              className="p-2 border rounded"
+              required
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleFileChange(e, "away_team_logo")}
+            className="p-2 border rounded"
+          />
+          {preview.away_team_logo && (
+            <img
+              src={preview.away_team_logo}
+              alt="away logo"
+              className="w-12 h-12 rounded-full object-cover border"
+            />
+          )}
+        </div>
+
+        {/* Lieu */}
+        <h3 className="font-semibold mt-4">📍 Lieu du match</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {["fr", "en", "ar"].map((lang) => (
+            <input
+              key={`loc_${lang}`}
+              type="text"
+              name={`location_${lang}`}
+              placeholder={`Lieu (${lang.toUpperCase()})`}
+              value={formData[`location_${lang}`]}
+              onChange={handleChange}
+              className="p-2 border rounded"
+              required
+            />
+          ))}
+        </div>
+
+        {/* Date & Heure */}
+        <div className="grid grid-cols-2 gap-3 mt-4">
+          <input
+            type="date"
+            name="match_date"
+            value={formData.match_date}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
+          <input
+            type="time"
+            name="match_time"
+            value={formData.match_time}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            required
+          />
+        </div>
+
+        {/* Scores */}
+        <div className="grid grid-cols-2 gap-3 mt-4">
+          <input
+            type="number"
+            name="home_score"
+            value={formData.home_score}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            placeholder="Score domicile"
+          />
+          <input
+            type="number"
+            name="away_score"
+            value={formData.away_score}
+            onChange={handleChange}
+            className="p-2 border rounded"
+            placeholder="Score extérieur"
+          />
+        </div>
+
+        {/* Bannière */}
+        <h3 className="font-semibold mt-4">🖼️ Bannière du match</h3>
+        <div className="flex items-center gap-3">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleFileChange(e, "banner_image")}
+            className="p-2 border rounded"
+          />
+          {preview.banner_image && (
+            <img
+              src={preview.banner_image}
+              alt="banner"
+              className="w-20 h-12 rounded object-cover border"
+            />
+          )}
+        </div>
+
         <button
-          onClick={() => setShowForm(!showForm)}
-          style={styles.addButton}
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          {showForm ? 'Fermer le formulaire' : 'Ajouter un programme'}
+          {loading ? "⏳ Envoi..." : editId ? "💾 Modifier" : "🚀 Publier"}
         </button>
-      </div>
+      </form>
 
-      {error && (
-        <div style={styles.errorMessage}>
-          Erreur: {error}
-        </div>
-      )}
-
-      {notification && (
-        <div style={styles.notificationMessage}>
-          {notification}
-        </div>
-      )}
-
-      {/* Formulaire d'ajout de programme */}
-      {showForm && (
-        <section style={styles.formContainer}>
-          <h2 style={styles.title}>{editingId ? 'Modifier le programme' : 'Nouveau programme'}</h2>
-          <form onSubmit={handleSubmit} style={styles.form} encType="multipart/form-data">
-            {/* Champs titre */}
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Titre en Français</label>
-              <input
-                type="text"
-                id="title_fr"
-                name="title_fr"
-                style={styles.input}
-                value={newProgram.title_fr}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Title in English</label>
-              <input
-                type="text"
-                id="title_en"
-                name="title_en"
-                style={styles.input}
-                value={newProgram.title_en}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>العنوان بالعربية</label>
-              <input
-                type="text"
-                id="title_ar"
-                name="title_ar"
-                style={{...styles.input, textAlign: 'right'}}
-                value={newProgram.title_ar}
-                onChange={handleInputChange}
-                dir="rtl"
-                required
-              />
-            </div>
-
-            {/* Champs description */}
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Description en Français</label>
-              <textarea
-                id="description_fr"
-                name="description_fr"
-                rows="3"
-                style={styles.textarea}
-                value={newProgram.description_fr}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Description in English</label>
-              <textarea
-                id="description_en"
-                name="description_en"
-                rows="3"
-                style={styles.textarea}
-                value={newProgram.description_en}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>الوصف بالعربية</label>
-              <textarea
-                id="description_ar"
-                name="description_ar"
-                rows="3"
-                style={{...styles.textarea, textAlign: 'right'}}
-                value={newProgram.description_ar}
-                onChange={handleInputChange}
-                dir="rtl"
-                required
-              />
-            </div>
-
-            {/* Champ image */}
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Photo de couverture</label>
-              <input 
-                type="file" 
-                onChange={handleImageChange}
-                style={styles.fileInput}
-                accept="image/*"
-              />
-              {imagePreview && (
-                <div style={styles.imageContainer}>
-                  <h4 style={styles.languageTitle}>Prévisualisation de l'image:</h4>
-                  <img 
-                    src={imagePreview} 
-                    alt="Image prévisualisée" 
-                    style={styles.imagePreview}
-                    loading="lazy"
-                  />
-                </div>
-              )}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px', gap: '10px' }}>
-              <button 
-                type="button" 
-                onClick={() => {
-                  setShowForm(false);
-                  setEditingId(null);
-                  setNewProgram({
-                    title_fr: "",
-                    title_en: "",
-                    title_ar: "",
-                    description_fr: "",
-                    description_en: "",
-                    description_ar: "",
-                    photo_couverture: null
-                  });
-                  setImagePreview(null);
-                }}
-                style={{
-                  padding: '12px',
-                  backgroundColor: '#e0e0e0',
-                  border: 'none',
-                  borderRadius: '5px',
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                }}
-              >
-                Annuler
-              </button>
-              <button type="submit" style={styles.submitButton}>
-                {editingId ? 'Mettre à jour' : 'Ajouter'}
-              </button>
-            </div>
-          </form>
-        </section>
-      )}
-
-      {/* Liste des programmes */}
-      <h2 style={styles.title} id="programs-list">Liste des programmes</h2>
-      
-      {loading && programs.length > 0 && (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          Chargement...
-        </div>
-      )}
-      
-      <div style={styles.programsList}>
-        {!loading && currentItems.length === 0 ? (
-          <p>Aucun programme à afficher.</p>
+      {/* === LISTE DES MATCHS === */}
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-3">📅 Liste des matchs</h3>
+        {matches.length === 0 ? (
+          <p className="text-gray-500">Aucun match pour le moment.</p>
         ) : (
-          currentItems.map((program) => (
-            <div key={program.id} style={styles.programCard}>
-              <div
-                onClick={() => toggleExpand(program.id)}
-                style={styles.programHeader}
-              >
-                <h3 style={styles.programTitle}>{program.title_fr || program.title}</h3>
-                <span>{expanded === program.id ? '−' : '+'}</span>
+          matches.map((match) => (
+            <div
+              key={match.id}
+              className="p-3 mb-3 border rounded flex items-center justify-between bg-white shadow-sm"
+            >
+              <div className="flex items-center gap-2">
+                {match.home_team_logo_url && (
+                  <img
+                    src={match.home_team_logo_url}
+                    alt="Home"
+                    className="w-10 h-10 rounded-full object-cover border"
+                  />
+                )}
+                <span className="font-bold">{match.home_team_name_fr}</span>
+                <span>vs</span>
+                {match.away_team_logo_url && (
+                  <img
+                    src={match.away_team_logo_url}
+                    alt="Away"
+                    className="w-10 h-10 rounded-full object-cover border"
+                  />
+                )}
+                <span className="font-bold">{match.away_team_name_fr}</span>
               </div>
 
-              {expanded === program.id && (
-                <div style={styles.programContent}>
-                  {/* Affichage de l'image en premier pour plus de visibilité */}
-                  {program.photo_couverture && (
-                    <div style={styles.languageSection}>
-                      <div style={styles.languageTitle}>Photo de couverture</div>
-                      <img 
-                        src={program.photo_couverture.startsWith('http') 
-                          ? program.photo_couverture 
-                          : `${IMAGE_BASE_URL}${program.photo_couverture}`}
-                        alt={program.title_fr || program.title} 
-                        style={styles.programImage}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.onerror = null; 
-                          e.target.src = '/placeholder-image.png';
-                          console.log("Erreur de chargement de l'image:", program.photo_couverture);
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {/* Informations du programme */}
-                  <div style={styles.infoItem}>
-                    <strong>Titre (FR):</strong> {program.title_fr || program.title || "N/A"}
-                  </div>
-                  <div style={styles.infoItem}>
-                    <strong>Title (EN):</strong> {program.title_en || "N/A"}
-                  </div>
-                  <div style={{...styles.infoItem, textAlign: 'right'}} dir="rtl">
-                    <strong>العنوان (AR):</strong> {program.title_ar || "N/A"}
-                  </div>
-                  
-                  <div style={styles.infoItem}>
-                    <strong>Description (FR):</strong> {program.description_fr || program.description || "N/A"}
-                  </div>
-                  <div style={styles.infoItem}>
-                    <strong>Description (EN):</strong> {program.description_en || "N/A"}
-                  </div>
-                  <div style={{...styles.infoItem, textAlign: 'right'}} dir="rtl">
-                    <strong>الوصف (AR):</strong> {program.description_ar || "N/A"}
-                  </div>
-                  
-                  <div style={styles.programActions}>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEdit(program);
-                      }}
-                      style={{...styles.actionButton, ...styles.editButton}}
-                    >
-                      ✏️ Modifier
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(program.id);
-                      }}
-                      style={{...styles.actionButton, ...styles.deleteButton}}
-                    >
-                      🗑️ Supprimer
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {match.match_date} — {match.match_time}
+                </span>
+                <button
+                  onClick={() => handleEdit(match)}
+                  className="text-blue-600 mr-2 hover:underline"
+                >
+                  Modifier
+                </button>
+                <button
+                  onClick={() => handleDelete(match.id)}
+                  className="text-red-600 hover:underline"
+                >
+                  Supprimer
+                </button>
+              </div>
             </div>
           ))
         )}
       </div>
-      
-      {/* Pagination améliorée */}
-      {programs.length > 0 && (
-        <div style={styles.paginationContainer}>
-          <div style={styles.paginationControls}>
-            <button 
-              onClick={() => paginate(1)}
-              disabled={currentPage === 1}
-              style={{
-                ...styles.pageButton,
-                opacity: currentPage === 1 ? 0.5 : 1,
-                cursor: currentPage === 1 ? 'default' : 'pointer'
-              }}
-            >
-              &laquo;
-            </button>
-            
-            <button 
-              onClick={() => paginate(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              style={{
-                ...styles.pageButton,
-                opacity: currentPage === 1 ? 0.5 : 1,
-                cursor: currentPage === 1 ? 'default' : 'pointer'
-              }}
-            >
-              &lsaquo;
-            </button>
-            
-            {/* Afficher les numéros de page avec un nombre limité de pages visibles */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(num => 
-                num === 1 || 
-                num === totalPages || 
-                (num >= currentPage - 1 && num <= currentPage + 1)
-              )
-              .map((number, index, array) => (
-                <React.Fragment key={number}>
-                  {index > 0 && array[index - 1] !== number - 1 && (
-                    <span style={{ margin: '0 5px' }}>...</span>
-                  )}
-                  <button
-                    onClick={() => paginate(number)}
-                    style={{
-                      ...styles.pageButton,
-                      ...(currentPage === number ? styles.activePageButton : {})
-                    }}
-                  >
-                    {number}
-                  </button>
-                </React.Fragment>
-              ))
-            }
-            
-            <button 
-              onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
-              style={{
-                ...styles.pageButton,
-                opacity: currentPage === totalPages ? 0.5 : 1,
-                cursor: currentPage === totalPages ? 'default' : 'pointer'
-              }}
-            >
-              &rsaquo;
-            </button>
-            
-            <button 
-              onClick={() => paginate(totalPages)}
-              disabled={currentPage === totalPages}
-              style={{
-                ...styles.pageButton,
-                opacity: currentPage === totalPages ? 0.5 : 1,
-                cursor: currentPage === totalPages ? 'default' : 'pointer'
-              }}
-            >
-              &raquo;
-            </button>
-          </div>
-          
-          <div style={styles.paginationInfo}>
-            Affichage {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} sur {totalItems} programmes
-            <span style={{ marginLeft: '10px' }}>
-              Programmes par page:
-              <select 
-                value={itemsPerPage} 
-                onChange={handleItemsPerPageChange}
-                style={styles.selectControl}
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default ProgramPost;
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import axios from "axios";
+// import CONFIG from "../../config/config.js";
+
+// const ProgramPost = () => {
+//   const [form, setForm] = useState({
+//     home_team_name_fr: "",
+//     home_team_name_en: "",
+//     home_team_name_ar: "",
+//     away_team_name_fr: "",
+//     away_team_name_en: "",
+//     away_team_name_ar: "",
+//     location_fr: "",
+//     location_en: "",
+//     location_ar: "",
+//     match_date: "",
+//     match_time: "",
+//     description_fr: "",
+//     description_en: "",
+//     description_ar: "",
+//     home_score: 0,
+//     away_score: 0,
+//     home_team_logo: null,
+//     away_team_logo: null,
+//     banner_image: null,
+//   });
+
+//   const [loading, setLoading] = useState(false);
+//   const [message, setMessage] = useState("");
+
+//   const handleChange = (e) => {
+//     const { name, value, files } = e.target;
+//     if (files) {
+//       setForm((prev) => ({ ...prev, [name]: files[0] }));
+//     } else {
+//       setForm((prev) => ({ ...prev, [name]: value }));
+//     }
+//   };
+
+//   const uploadToCloudinary = async (file) => {
+//     const formData = new FormData();
+//     formData.append("file", file);
+//     formData.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
+
+//     const res = await fetch(
+//       `https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/image/upload`,
+//       { method: "POST", body: formData }
+//     );
+
+//     const data = await res.json();
+//     if (!res.ok) throw new Error(data.error?.message || "Cloudinary upload failed");
+//     return data.secure_url;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setMessage("");
+
+//     try {
+//       // Upload Cloudinary si besoin
+//       const homeLogoUrl = form.home_team_logo ? await uploadToCloudinary(form.home_team_logo) : null;
+//       const awayLogoUrl = form.away_team_logo ? await uploadToCloudinary(form.away_team_logo) : null;
+//       const bannerUrl = form.banner_image ? await uploadToCloudinary(form.banner_image) : null;
+
+//       // Payload complet
+//       const payload = {
+//         home_team_name_fr: form.home_team_name_fr,
+//         home_team_name_en: form.home_team_name_en,
+//         home_team_name_ar: form.home_team_name_ar,
+//         away_team_name_fr: form.away_team_name_fr,
+//         away_team_name_en: form.away_team_name_en,
+//         away_team_name_ar: form.away_team_name_ar,
+//         location_fr: form.location_fr,
+//         location_en: form.location_en,
+//         location_ar: form.location_ar,
+//         match_date: form.match_date,
+//         match_time: form.match_time,
+//         description_fr: form.description_fr,
+//         description_en: form.description_en,
+//         description_ar: form.description_ar,
+//         home_score: form.home_score,
+//         away_score: form.away_score,
+//         home_team_logo: homeLogoUrl,
+//         away_team_logo: awayLogoUrl,
+//         banner_image: bannerUrl,
+//       };
+
+//       await axios.post(CONFIG.API_MATCH_CREATE, payload);
+
+//       setMessage("✅ Match ajouté avec succès !");
+//       setForm({
+//         home_team_name_fr: "",
+//         home_team_name_en: "",
+//         home_team_name_ar: "",
+//         away_team_name_fr: "",
+//         away_team_name_en: "",
+//         away_team_name_ar: "",
+//         location_fr: "",
+//         location_en: "",
+//         location_ar: "",
+//         match_date: "",
+//         match_time: "",
+//         description_fr: "",
+//         description_en: "",
+//         description_ar: "",
+//         home_score: 0,
+//         away_score: 0,
+//         home_team_logo: null,
+//         away_team_logo: null,
+//         banner_image: null,
+//       });
+//     } catch (err) {
+//       console.error("Erreur soumission :", err.response?.data || err);
+//       setMessage("❌ Erreur lors de la soumission du match. Vérifie tous les champs.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow-md">
+//       <h2 className="text-2xl font-semibold mb-4">🏀 Ajouter un match</h2>
+
+//       {message && (
+//         <div
+//           className={`p-3 rounded mb-4 ${
+//             message.startsWith("✅") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+//           }`}
+//         >
+//           {message}
+//         </div>
+//       )}
+
+//       <form onSubmit={handleSubmit} className="space-y-4">
+//         {/* Logos */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <div>
+//             <label>🏠 Logo de ton club</label>
+//             <input type="file" name="home_team_logo" onChange={handleChange} className="w-full border p-2" />
+//           </div>
+//           <div>
+//             <label>🚩 Logo du club adverse</label>
+//             <input type="file" name="away_team_logo" onChange={handleChange} className="w-full border p-2" />
+//           </div>
+//         </div>
+
+//         {/* Bannière */}
+//         <div>
+//           <label>🖼️ Affiche principale (bannière)</label>
+//           <input type="file" name="banner_image" onChange={handleChange} className="w-full border p-2" />
+//         </div>
+
+//         {/* Noms des clubs */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <div>
+//             <label>🏠 Équipe à domicile</label>
+//             <input type="text" name="home_team_name_fr" placeholder="Nom FR" value={form.home_team_name_fr} onChange={handleChange} className="w-full border p-2 mb-1" required />
+//             <input type="text" name="home_team_name_en" placeholder="Name EN" value={form.home_team_name_en} onChange={handleChange} className="w-full border p-2 mb-1" required />
+//             <input type="text" name="home_team_name_ar" placeholder="الاسم بالعربية" value={form.home_team_name_ar} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+
+//           <div>
+//             <label>🚩 Équipe adverse</label>
+//             <input type="text" name="away_team_name_fr" placeholder="Nom FR" value={form.away_team_name_fr} onChange={handleChange} className="w-full border p-2 mb-1" required />
+//             <input type="text" name="away_team_name_en" placeholder="Name EN" value={form.away_team_name_en} onChange={handleChange} className="w-full border p-2 mb-1" required />
+//             <input type="text" name="away_team_name_ar" placeholder="الاسم بالعربية" value={form.away_team_name_ar} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//         </div>
+
+//         {/* Lieux */}
+//         <div className="grid grid-cols-3 gap-4">
+//           <div>
+//             <label>📍 Lieu (FR)</label>
+//             <input type="text" name="location_fr" value={form.location_fr} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//           <div>
+//             <label>📍 Location (EN)</label>
+//             <input type="text" name="location_en" value={form.location_en} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//           <div>
+//             <label>📍 الموقع (AR)</label>
+//             <input type="text" name="location_ar" value={form.location_ar} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//         </div>
+
+//         {/* Date & Heure */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <div>
+//             <label>📅 Date du match</label>
+//             <input type="date" name="match_date" value={form.match_date} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//           <div>
+//             <label>⏰ Heure du match</label>
+//             <input type="time" name="match_time" value={form.match_time} onChange={handleChange} className="w-full border p-2" required />
+//           </div>
+//         </div>
+
+//         {/* Scores */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <div>
+//             <label>🏀 Score domicile</label>
+//             <input type="number" name="home_score" value={form.home_score} onChange={handleChange} className="w-full border p-2" min="0" />
+//           </div>
+//           <div>
+//             <label>🏀 Score extérieur</label>
+//             <input type="number" name="away_score" value={form.away_score} onChange={handleChange} className="w-full border p-2" min="0" />
+//           </div>
+//         </div>
+
+//         {/* Descriptions */}
+//         <div>
+//           <label>📝 Description</label>
+//           <textarea name="description_fr" placeholder="Description FR" value={form.description_fr} onChange={handleChange} className="w-full border p-2 mb-1" />
+//           <textarea name="description_en" placeholder="Description EN" value={form.description_en} onChange={handleChange} className="w-full border p-2 mb-1" />
+//           <textarea name="description_ar" placeholder="الوصف بالعربية" value={form.description_ar} onChange={handleChange} className="w-full border p-2" />
+//         </div>
+
+//         <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">
+//           {loading ? "⏳ Envoi en cours..." : "✅ Ajouter le match"}
+//         </button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default ProgramPost;

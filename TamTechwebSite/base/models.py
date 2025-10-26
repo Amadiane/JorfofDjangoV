@@ -557,3 +557,65 @@ class News(models.Model):
     def __str__(self):
         return self.title_fr or self.title_en or "News"
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+import cloudinary.uploader
+
+class Match(models.Model):
+    home_team_name_fr = models.CharField(max_length=255)
+    home_team_name_en = models.CharField(max_length=255)
+    home_team_name_ar = models.CharField(max_length=255)
+    home_team_logo = CloudinaryField('home_team_logo', blank=True, null=True)
+
+    away_team_name_fr = models.CharField(max_length=255)
+    away_team_name_en = models.CharField(max_length=255)
+    away_team_name_ar = models.CharField(max_length=255)
+    away_team_logo = CloudinaryField('away_team_logo', blank=True, null=True)
+
+    location_fr = models.CharField(max_length=255)
+    location_en = models.CharField(max_length=255)
+    location_ar = models.CharField(max_length=255)
+
+    match_date = models.DateField()
+    match_time = models.TimeField()
+
+    description_fr = models.TextField(blank=True, null=True)
+    description_en = models.TextField(blank=True, null=True)
+    description_ar = models.TextField(blank=True, null=True)
+
+    home_score = models.PositiveIntegerField(default=0)
+    away_score = models.PositiveIntegerField(default=0)
+
+    banner_image = CloudinaryField('match_banner', blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-match_date', '-match_time']
+
+    def __str__(self):
+        return f"{self.home_team_name_en} vs {self.away_team_name_en}"
+
+    def save(self, *args, **kwargs):
+        """
+        Forcer l'upload des images locales vers Cloudinary avant la sauvegarde
+        """
+        if self.home_team_logo and not str(self.home_team_logo).startswith("http"):
+            upload_result = cloudinary.uploader.upload(self.home_team_logo)
+            self.home_team_logo = upload_result["public_id"]
+
+        if self.away_team_logo and not str(self.away_team_logo).startswith("http"):
+            upload_result = cloudinary.uploader.upload(self.away_team_logo)
+            self.away_team_logo = upload_result["public_id"]
+
+        if self.banner_image and not str(self.banner_image).startswith("http"):
+            upload_result = cloudinary.uploader.upload(self.banner_image)
+            self.banner_image = upload_result["public_id"]
+
+        super().save(*args, **kwargs)
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,11 +28,20 @@ const CONFIG = {
   API_NEWS_UPDATE: (id) => `${BASE_URL}/api/news/${id}/`,
   API_NEWS_DELETE: (id) => `${BASE_URL}/api/news/${id}/`,
 
+
+  //Match
+  API_MATCH_LIST: `${BASE_URL}/api/matches/`,
+  API_MATCH_CREATE: `${BASE_URL}/api/matches/`,
+  API_MATCH_UPDATE: (id) => `${BASE_URL}/api/matches/${id}/`,
+  API_MATCH_DELETE: (id) => `${BASE_URL}/api/matches/${id}/`,
+
   // 📸 Dossier media (pour les images directes)
   MEDIA_URL: `${BASE_URL}/media/`,
 
   CLOUDINARY_NAME: "dwuyq2eoz",
-  CLOUDINARY_UPLOAD_PRESET: "ml_default", // 👈 nom exact du preset créé
+  CLOUDINARY_UPLOAD_PRESET: "default", // 👈 le nom exact de ton preset UNSIGNED
+  
+  // CLOUDINARY_UPLOAD_PRESET: "ml_default", // 👈 nom exact du preset créé
 };
 
 export default CONFIG;

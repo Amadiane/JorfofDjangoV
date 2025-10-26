@@ -1424,3 +1424,15 @@ class NewsViewSet(viewsets.ModelViewSet):
     search_fields = ["title_fr", "title_en", "title_ar", "content_fr", "content_en"]
     ordering_fields = ["created_at", "title_fr"]
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import viewsets, parsers
+from .models import Match
+from .serializers import MatchSerializer
+
+class MatchViewSet(viewsets.ModelViewSet):
+    queryset = Match.objects.all()
+    serializer_class = MatchSerializer
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

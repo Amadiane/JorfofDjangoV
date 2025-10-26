@@ -89,3 +89,27 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ("id", "title_fr", "created_at")
     search_fields = ("title_fr", "title_en", "content_fr")
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.contrib import admin
+from .models import Match
+
+@admin.register(Match)
+class MatchAdmin(admin.ModelAdmin):
+    list_display = (
+        "home_team_name_fr",
+        "away_team_name_fr",
+        "match_date",
+        "match_time",
+        "home_score",
+        "away_score",
+        "location_fr",
+    )
+    search_fields = (
+        "home_team_name_fr",
+        "away_team_name_fr",
+        "location_fr",
+    )
+    list_filter = ("match_date",)
+    readonly_fields = ("created_at", "updated_at")
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

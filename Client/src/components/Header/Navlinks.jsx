@@ -150,7 +150,7 @@ const Navlinks = () => {
     //   isDropdown: false
     // },
     {
-      title: t("programms"),
+      title: t("Calendrier"),
       path: "/programs",
       isDropdown: false
     },
