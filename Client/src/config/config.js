@@ -1,50 +1,43 @@
-// // const BASE_URL = "http://127.0.0.1:8000"; // ✅ d’abord on la définit ici
-// // ✅ Détection automatique : local ou production
 // const BASE_URL =
 //   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
 //     ? "http://127.0.0.1:8000"
-//     : "https://jorfofdjangov.onrender.com"; // ton URL Render
+//     : "https://jorfofdjangov.onrender.com";
+
 
 // const CONFIG = {
-//   BASE_URL: "http://127.0.0.1:8000", // ton backend local
+//   BASE_URL,
+//   // BASE_URL: "https://jorfofdjangov.onrender.com",
 //   API_LOGIN: "/api/login/",
-
-//   //   // 🖼️ Photothèque
-//   API_PHOTO_LIST: `${BASE_URL}/api/media/`,
-//   API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/media/${id}/`,
-
-//   //   // 📸 Images (chemin vers le dossier media)
-//   MEDIA_URL: BASE_URL.includes("127.0.0.1")
-//     ? "http://127.0.0.1:8000/media/"
-//     : "https://jorfofdjangov.onrender.com/media/",
-
-//   API_PHOTO_LIST: `${BASE_URL}/api/media/`,
-//   CLOUDINARY_NAME: "dwuyq2eoz", // ⚡ remplace par ton cloud name exact
-
-  
-
+//   API_PHOTO_LIST: "http://127.0.0.1:8000/api/media/",
+//   API_PHOTO_DETAIL: (id) => `http://127.0.0.1:8000/api/media/${id}/`,
+//   MEDIA_URL: "https://jorfofdjangov.onrender.com/media/",
+//   CLOUDINARY_NAME: "dwuyq2eoz",
 // };
 
 // export default CONFIG;
 
 
-// // const BASE_URL = "http://127.0.0.1:8000"; // ✅ d’abord on la définit ici
-// // ✅ Détection automatique : local ou production
 
+// ✅ Détection automatique selon le domaine
 const BASE_URL =
   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:8000"
-    : "https://jorfofdjangov.onrender.com";
-
+    : "https://jorfofdjangov.onrender.com"; // ton URL backend Render
 
 const CONFIG = {
   BASE_URL,
-  // BASE_URL: "https://jorfofdjangov.onrender.com",
-  API_LOGIN: "/api/login/",
-  API_PHOTO_LIST: "http://127.0.0.1:8000/api/media/",
-  API_PHOTO_DETAIL: (id) => `http://127.0.0.1:8000/api/media/${id}/`,
-  MEDIA_URL: "https://jorfofdjangov.onrender.com/media/",
+  API_LOGIN: `/api/login/`,
+
+  // 🖼️ Photothèque
+  API_PHOTO_LIST: `${BASE_URL}/api/media/`,
+  API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/media/${id}/`,
+
+  // 📸 Dossier media (pour les images directes)
+  MEDIA_URL: `${BASE_URL}/media/`,
+
   CLOUDINARY_NAME: "dwuyq2eoz",
 };
 
 export default CONFIG;
+
+
