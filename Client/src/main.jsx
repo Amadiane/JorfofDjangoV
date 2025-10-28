@@ -139,6 +139,7 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
+  Navigate,
 } from 'react-router-dom';
 
 // Layout principal
@@ -201,7 +202,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       {/* Routes publiques */}
-      <Route index element={<Home />} />
+      {/* <Route index element={<Home />} /> */}
+      <Route index element={<Navigate to="/actualites" replace />} />
       <Route path="home" element={<Home />} />
       <Route path="categories" element={<Categories />} />
       <Route path="createpost" element={<Createpost />} />
