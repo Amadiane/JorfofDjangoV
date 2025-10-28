@@ -394,24 +394,24 @@ class Document(models.Model):
         return self.titre
 
 
-#mediapartners
+# #mediapartners
 
-from django.db import models
+# from django.db import models
 
-class Partenaire(models.Model):
-    titre_fr = models.CharField(max_length=255)
-    titre_en = models.CharField(max_length=255)
-    titre_ar = models.CharField(max_length=255)
+# class Partenaire(models.Model):
+#     titre_fr = models.CharField(max_length=255)
+#     titre_en = models.CharField(max_length=255)
+#     titre_ar = models.CharField(max_length=255)
     
-    description_fr = models.TextField()
-    description_en = models.TextField()
-    description_ar = models.TextField()
+#     description_fr = models.TextField()
+#     description_en = models.TextField()
+#     description_ar = models.TextField()
     
-    couverture = models.ImageField(upload_to='partenaires/')
-    site_url = models.URLField()
+#     couverture = models.ImageField(upload_to='partenaires/')
+#     site_url = models.URLField()
 
-    def __str__(self):
-        return self.titre_fr  # Ou choisir la langue principale
+#     def __str__(self):
+#         return self.titre_fr  # Ou choisir la langue principale
 
 
 
@@ -619,3 +619,33 @@ class Match(models.Model):
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+from django.utils import timezone
+from cloudinary.models import CloudinaryField
+
+class Partenaire(models.Model):
+    titre_fr = models.CharField(max_length=255)
+    titre_en = models.CharField(max_length=255)
+    titre_ar = models.CharField(max_length=255)
+
+    description_fr = models.TextField()
+    description_en = models.TextField()
+    description_ar = models.TextField()
+
+    couverture = CloudinaryField('Image de couverture', folder='partenaires', blank=True, null=True)
+    video = CloudinaryField('Vidéo de présentation', resource_type='video', folder='partenaires/videos', blank=True, null=True)
+
+    site_url = models.URLField(help_text="Lien vers le site web du partenaire", blank=True, null=True)
+
+    # 👉 Ajoute un default ici :
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Partenaire"
+        verbose_name_plural = "Partenaires"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.titre_fr

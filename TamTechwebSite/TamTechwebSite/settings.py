@@ -26,6 +26,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'jorfofdjangov.onrender.com',
     "jorfof-django-v.vercel.app",
+    "api.jorfofbasketclub.com",
 ]
 
 # -------------------------
@@ -189,6 +190,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
     "https://jorfofdjangov.onrender.com",
+    "https://jorfofbasketclub.com",
+    "https://www.jorfofbasketclub.com",
     "http://localhost:5173",                # ton frontend local (Vite)
     "http://127.0.0.1:5173",                # parfois utile selon ton navigateur
 ]
@@ -196,6 +199,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://jorfof-django-v.vercel.app",
     "https://jorfofdjangov.onrender.com",
+    "https://jorfofbasketclub.com",
+    "https://www.jorfofbasketclub.com",
     "http://localhost:5173",                # ton frontend local (Vite)
     "http://127.0.0.1:5173",                # parfois utile selon ton navigateur
 ]

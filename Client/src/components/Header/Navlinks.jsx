@@ -229,7 +229,7 @@ const Navlinks = () => {
   };
 
   const handleNotificationClick = () => {
-    navigate('/home');
+    navigate('/actualites');
   };
 
   return (
@@ -239,14 +239,14 @@ const Navlinks = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
-            <NavLink to="/home" className="flex items-center">
+            <NavLink to="/actualites" className="flex items-center">
               <img src={logo} alt="Fondation Tamkine" className="h-12 mr-3" />
               {/* <div>
                 <h1 className="text-[#12138B] font-bold text-xl">{t("TAMKINE FONDATION")}</h1>
                 <p className="text-gray-600 text-xs">Actualités et informations</p>
               </div> */}
               <div>
-                <h1 className="text-[#12138B] font-bold text-xl">{t("JORFOF CLUB")}</h1>
+                <h1 className="text-[#12138B] font-bold text-xl">{t("JORFOF BASKET CLUB")}</h1>
                 <p className="text-gray-600 text-xs">Toujours Prêt à Briller !</p>
               </div>
             </NavLink>

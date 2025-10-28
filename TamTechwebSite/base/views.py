@@ -554,74 +554,74 @@ class CommunityView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#ComminityPartner
-# partners/views.py
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Partner
-from .serializers import PartnerSerializer
-from django.conf import settings
+# #ComminityPartner
+# # partners/views.py
+# from django.core.mail import send_mail
+# from django.template.loader import render_to_string
+# from rest_framework import status
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from .models import Partner
+# from .serializers import PartnerSerializer
+# from django.conf import settings
 
-class PartnerAPIView(APIView):
-    # GET : Affiche tous les partenaires
-    def get(self, request):
-        partners = Partner.objects.all().order_by('-created_at')  # Les plus récents d'abord
-        serializer = PartnerSerializer(partners, many=True)
-        return Response(serializer.data)
+# class PartnerAPIView(APIView):
+#     # GET : Affiche tous les partenaires
+#     def get(self, request):
+#         partners = Partner.objects.all().order_by('-created_at')  # Les plus récents d'abord
+#         serializer = PartnerSerializer(partners, many=True)
+#         return Response(serializer.data)
 
-    # POST : Permet d'ajouter un partenaire et d'envoyer un email
-    def post(self, request, *args, **kwargs):
-        serializer = PartnerSerializer(data=request.data)
-        if serializer.is_valid():
-            partner = serializer.save()
+#     # POST : Permet d'ajouter un partenaire et d'envoyer un email
+#     def post(self, request, *args, **kwargs):
+#         serializer = PartnerSerializer(data=request.data)
+#         if serializer.is_valid():
+#             partner = serializer.save()
 
-            # ==== Envoi d'un email à l'administrateur ====
-            html_admin_message = render_to_string('emails/partner_admin.html', {
-                'partner': partner,
-            })
-            email_admin = send_mail(
-                subject=f"Nouveau partenaire enregistré: {partner.first_name} {partner.last_name}",
-                message=html_admin_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=['admin@example.com'],  # Remplace par l'email de l'admin
-                html_message=html_admin_message,
-            )
+#             # ==== Envoi d'un email à l'administrateur ====
+#             html_admin_message = render_to_string('emails/partner_admin.html', {
+#                 'partner': partner,
+#             })
+#             email_admin = send_mail(
+#                 subject=f"Nouveau partenaire enregistré: {partner.first_name} {partner.last_name}",
+#                 message=html_admin_message,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 recipient_list=['admin@example.com'],  # Remplace par l'email de l'admin
+#                 html_message=html_admin_message,
+#             )
 
-            # ==== Envoi d'un email de confirmation à l'utilisateur ====
-            html_user_message = render_to_string('emails/partner_admin.html', {'partner': partner})
-            email_user = send_mail(
-                subject="Confirmation de votre inscription",
-                message=html_user_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[partner.email],
-                html_message=html_user_message,
-            )
+#             # ==== Envoi d'un email de confirmation à l'utilisateur ====
+#             html_user_message = render_to_string('emails/partner_admin.html', {'partner': partner})
+#             email_user = send_mail(
+#                 subject="Confirmation de votre inscription",
+#                 message=html_user_message,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 recipient_list=[partner.email],
+#                 html_message=html_user_message,
+#             )
 
-            return Response({'message': 'Partenaire ajouté et confirmation envoyée.'}, status=status.HTTP_201_CREATED)
+#             return Response({'message': 'Partenaire ajouté et confirmation envoyée.'}, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    # DELETE : Supprimer un partenaire spécifique
-    def delete(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            partner_id = data.get("id")
-            if not partner_id:
-                return JsonResponse({"message": "ID requis pour supprimer."}, status=400)
+#     # DELETE : Supprimer un partenaire spécifique
+#     def delete(self, request, *args, **kwargs):
+#         try:
+#             data = json.loads(request.body)
+#             partner_id = data.get("id")
+#             if not partner_id:
+#                 return JsonResponse({"message": "ID requis pour supprimer."}, status=400)
             
-            partner = Partner.objects.get(id=partner_id)
-            partner.delete()
-            return JsonResponse({"message": "Partenaire supprimé avec succès."}, status=200)
+#             partner = Partner.objects.get(id=partner_id)
+#             partner.delete()
+#             return JsonResponse({"message": "Partenaire supprimé avec succès."}, status=200)
         
-        except Partner.DoesNotExist:
-            return JsonResponse({"message": "Partenaire non trouvé."}, status=404)
-        except json.JSONDecodeError:
-            return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
-        except Exception as e:
-            return JsonResponse({"message": str(e)}, status=400)
+#         except Partner.DoesNotExist:
+#             return JsonResponse({"message": "Partenaire non trouvé."}, status=404)
+#         except json.JSONDecodeError:
+#             return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
+#         except Exception as e:
+#             return JsonResponse({"message": str(e)}, status=400)
 
 
 
@@ -1187,15 +1187,15 @@ def document_api(request):
         }, status=201)
 
 
-#mediapartners
+# #mediapartners
 
-from rest_framework import viewsets
-from .models import Partenaire
-from .serializers import PartenaireSerializer
+# from rest_framework import viewsets
+# from .models import Partenaire
+# from .serializers import PartenaireSerializer
 
-class PartenaireViewSet(viewsets.ModelViewSet):
-    queryset = Partenaire.objects.all().order_by('-id')
-    serializer_class = PartenaireSerializer
+# class PartenaireViewSet(viewsets.ModelViewSet):
+#     queryset = Partenaire.objects.all().order_by('-id')
+#     serializer_class = PartenaireSerializer
 
 
 
@@ -1436,3 +1436,15 @@ class MatchViewSet(viewsets.ModelViewSet):
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import generics
+from .models import Partenaire
+from .serializers import PartenaireSerializer
+
+class PartnerAPIView(generics.ListCreateAPIView):
+    queryset = Partenaire.objects.all()
+    serializer_class = PartenaireSerializer
+
+class PartnerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Partenaire.objects.all()
+    serializer_class = PartenaireSerializer

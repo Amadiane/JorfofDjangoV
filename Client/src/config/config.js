@@ -2,7 +2,7 @@
 const BASE_URL =
   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:8000"
-    : "https://jorfofdjangov.onrender.com"; // ton URL backend Render
+    : "https://api.jorfofbasketclub.com"; // ton URL backend Render
 
 const CONFIG = {
   BASE_URL,
@@ -34,6 +34,14 @@ const CONFIG = {
   API_MATCH_CREATE: `${BASE_URL}/api/matches/`,
   API_MATCH_UPDATE: (id) => `${BASE_URL}/api/matches/${id}/`,
   API_MATCH_DELETE: (id) => `${BASE_URL}/api/matches/${id}/`,
+
+
+  // 🤝 Partners
+API_PARTNER_LIST: `${BASE_URL}/api/partners/`,
+API_PARTNER_DETAIL: (id) => `${BASE_URL}/api/partners/${id}/`,
+API_PARTNER_CREATE: `${BASE_URL}/api/partners/`,
+API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`,
+API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`,
 
   // 📸 Dossier media (pour les images directes)
   MEDIA_URL: `${BASE_URL}/media/`,

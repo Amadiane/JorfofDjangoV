@@ -8,9 +8,9 @@ from .views import (
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
     PartnerAPIView, 
-    document_api, PartenaireViewSet, AggregatedContentAPIView,
+    document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerAPIView, PartnerDetailAPIView
     # 👈 ajoute ces deux-là ici
 )
 
@@ -19,7 +19,7 @@ router = DefaultRouter()
 router.register(r"team-messages", TeamMessageViewSet, basename='team-messages')
 # router.register(r'platforms', PlatformViewSet)
 router.register(r'activities', ActivityViewSet, basename='activity')
-router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
+# router.register(r'partenaires', PartenaireViewSet, basename='partenaire')
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.register(r'videos', VideoViewSet, basename='video')
 router.register(r"news", NewsViewSet, basename="news")
@@ -67,6 +67,8 @@ urlpatterns = [
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     path('media/', views.photo_list, name='photo_list'),
     path('media/<int:pk>/', views.photo_detail, name='photo_detail'),
+    path('partners/', PartnerAPIView.as_view(), name='partners-list'),
+    path('partners/<int:pk>/', PartnerDetailAPIView.as_view(), name='partners-detail'),
     
 
     path("", include(router.urls)),

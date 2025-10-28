@@ -283,13 +283,13 @@ class ProgrammeSerializer(serializers.ModelSerializer):
 
 
 
-from rest_framework import serializers
-from .models import Partenaire
+# from rest_framework import serializers
+# from .models import Partenaire
 
-class PartenaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Partenaire
-        fields = '__all__'
+# class PartenaireSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Partenaire
+#         fields = '__all__'
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -377,3 +377,11 @@ class MatchSerializer(serializers.ModelSerializer):
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import Partenaire
+
+class PartenaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partenaire
+        fields = '__all__'
