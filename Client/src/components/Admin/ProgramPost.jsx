@@ -36,7 +36,7 @@ const ProgramPost = () => {
     banner_image: null,
   });
 
-  // === Charger les matchs
+  // === Charger les matchs ===
   useEffect(() => {
     fetchMatches();
   }, []);
@@ -50,7 +50,7 @@ const ProgramPost = () => {
     }
   };
 
-  // === Upload Cloudinary
+  // === Upload Cloudinary ===
   const uploadToCloudinary = async (file) => {
     if (!file || typeof file === "string") return file;
     const data = new FormData();
@@ -64,13 +64,13 @@ const ProgramPost = () => {
     return res.data.secure_url;
   };
 
-  // === Gestion texte
+  // === Gestion texte ===
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // === Gestion fichiers
+  // === Gestion fichiers ===
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -78,13 +78,12 @@ const ProgramPost = () => {
     setPreview((prev) => ({ ...prev, [field]: URL.createObjectURL(file) }));
   };
 
-  // === Soumission formulaire
+  // === Soumission formulaire ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Upload des images Cloudinary
       const [homeLogoURL, awayLogoURL, bannerURL] = await Promise.all([
         uploadToCloudinary(formData.home_team_logo),
         uploadToCloudinary(formData.away_team_logo),
@@ -108,9 +107,9 @@ const ProgramPost = () => {
         description_ar: formData.description_ar,
         home_score: Number(formData.home_score),
         away_score: Number(formData.away_score),
-        home_team_logo_url: homeLogoURL || "",
-        away_team_logo_url: awayLogoURL || "",
-        banner_image_url: bannerURL || "",
+        home_team_logo: homeLogoURL || "",
+        away_team_logo: awayLogoURL || "",
+        banner_image: bannerURL || "",
       };
 
       if (editId) {
@@ -129,24 +128,24 @@ const ProgramPost = () => {
     }
   };
 
-  // === Mode édition
+  // === Mode édition ===
   const handleEdit = (match) => {
     setEditId(match.id);
     setFormData({
       ...formData,
       ...match,
-      home_team_logo: match.home_team_logo_url,
-      away_team_logo: match.away_team_logo_url,
-      banner_image: match.banner_image_url,
+      home_team_logo: match.home_team_logo,
+      away_team_logo: match.away_team_logo,
+      banner_image: match.banner_image,
     });
     setPreview({
-      home_team_logo: match.home_team_logo_url,
-      away_team_logo: match.away_team_logo_url,
-      banner_image: match.banner_image_url,
+      home_team_logo: match.home_team_logo,
+      away_team_logo: match.away_team_logo,
+      banner_image: match.banner_image,
     });
   };
 
-  // === Suppression
+  // === Suppression ===
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer ce match ?")) return;
     try {
@@ -157,7 +156,7 @@ const ProgramPost = () => {
     }
   };
 
-  // === Reset
+  // === Reset ===
   const resetForm = () => {
     setFormData(initialForm);
     setPreview({
@@ -339,18 +338,18 @@ const ProgramPost = () => {
               className="p-3 mb-3 border rounded flex items-center justify-between bg-white shadow-sm"
             >
               <div className="flex items-center gap-2">
-                {match.home_team_logo_url && (
+                {match.home_team_logo && (
                   <img
-                    src={match.home_team_logo_url}
+                    src={match.home_team_logo}
                     alt="Home"
                     className="w-10 h-10 rounded-full object-cover border"
                   />
                 )}
                 <span className="font-bold">{match.home_team_name_fr}</span>
                 <span>vs</span>
-                {match.away_team_logo_url && (
+                {match.away_team_logo && (
                   <img
-                    src={match.away_team_logo_url}
+                    src={match.away_team_logo}
                     alt="Away"
                     className="w-10 h-10 rounded-full object-cover border"
                   />

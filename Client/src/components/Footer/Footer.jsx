@@ -418,7 +418,7 @@ const Footer = () => {
             
             {/* Bouton devenir partenaire */}
             <a 
-              href="/partenaires"
+              href="/partner"
               className="mt-6 inline-block px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
             >
               Devenir partenaire

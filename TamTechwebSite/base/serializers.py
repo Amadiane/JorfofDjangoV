@@ -349,31 +349,23 @@ from rest_framework import serializers
 from .models import Match
 
 class MatchSerializer(serializers.ModelSerializer):
-    home_team_logo_url = serializers.SerializerMethodField()
-    away_team_logo_url = serializers.SerializerMethodField()
-    banner_image_url = serializers.SerializerMethodField()
-
     class Meta:
         model = Match
         fields = "__all__"
 
-    def get_home_team_logo_url(self, obj):
-        try:
-            return obj.home_team_logo.url if obj.home_team_logo else None
-        except:
-            return None
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["home_team_logo"] = (
+            instance.home_team_logo.url if instance.home_team_logo else None
+        )
+        data["away_team_logo"] = (
+            instance.away_team_logo.url if instance.away_team_logo else None
+        )
+        data["banner_image"] = (
+            instance.banner_image.url if instance.banner_image else None
+        )
+        return data
 
-    def get_away_team_logo_url(self, obj):
-        try:
-            return obj.away_team_logo.url if obj.away_team_logo else None
-        except:
-            return None
-
-    def get_banner_image_url(self, obj):
-        try:
-            return obj.banner_image.url if obj.banner_image else None
-        except:
-            return None
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

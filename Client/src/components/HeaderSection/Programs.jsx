@@ -155,7 +155,6 @@
 // export default Programs;
 
 
-
 import React, { useEffect, useState } from "react";
 import { ChevronUp, ChevronDown } from "react-feather";
 import ChatBotNew from "../ChatBot/ChatbotNew";
@@ -177,7 +176,7 @@ const Programs = () => {
         const response = await fetch(CONFIG.API_MATCH_LIST);
         if (!response.ok) throw new Error("Erreur lors du chargement des matchs");
         const data = await response.json();
-        setMatches(data);
+        setMatches(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Erreur API :", err);
         setError("Impossible de charger les matchs pour le moment.");
@@ -191,9 +190,9 @@ const Programs = () => {
   // ✅ Filtrage des matchs
   const filteredMatches = matches.filter(
     (match) =>
-      match.home_team_name_fr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      match.away_team_name_fr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      match.location_fr.toLowerCase().includes(searchTerm.toLowerCase())
+      match.home_team_name_fr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      match.away_team_name_fr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      match.location_fr?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleDescription = (index) => {
@@ -256,43 +255,66 @@ const Programs = () => {
                 key={match.id}
                 className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 flex flex-col"
               >
-                {/* ✅ Affiche ou logo du match */}
+                {/* ✅ Bannière du match */}
                 <div className="relative h-48 overflow-hidden bg-gray-100">
                   <img
                     src={
-                      match.banner_image?.startsWith("http")
-                        ? match.banner_image
-                        : `https://res.cloudinary.com/${CONFIG.CLOUDINARY_NAME}/image/upload/${match.banner_image}`
+                      match.banner_image ||
+                      "https://placehold.co/600x300?text=Aucune+bannière"
                     }
                     alt={`${match.home_team_name_fr} vs ${match.away_team_name_fr}`}
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     loading="lazy"
                     onError={(e) =>
                       (e.target.src =
-                        "https://via.placeholder.com/400x300?text=Image+indisponible")
+                        "https://placehold.co/400x300?text=Image+indisponible")
                     }
                   />
                 </div>
 
                 {/* ✅ Infos principales */}
-                <div className="p-4 flex flex-col flex-grow">
-                  <h2 className="text-lg font-semibold text-[#1C1C47] mb-2">
-                    {match.home_team_name_fr} vs {match.away_team_name_fr}
-                  </h2>
+                <div className="p-4 flex flex-col flex-grow text-center">
+                  {/* Logos et noms */}
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <img
+                      src={
+                        match.home_team_logo ||
+                        "https://placehold.co/50x50?text=Logo"
+                      }
+                      alt="home team logo"
+                      className="w-10 h-10 rounded-full border object-cover"
+                    />
+                    <span className="font-semibold text-[#1C1C47]">
+                      {match.home_team_name_fr}
+                    </span>
+                    <span className="font-bold text-gray-600">VS</span>
+                    <span className="font-semibold text-[#1C1C47]">
+                      {match.away_team_name_fr}
+                    </span>
+                    <img
+                      src={
+                        match.away_team_logo ||
+                        "https://placehold.co/50x50?text=Logo"
+                      }
+                      alt="away team logo"
+                      className="w-10 h-10 rounded-full border object-cover"
+                    />
+                  </div>
 
+                  {/* Détails */}
                   <p className="text-gray-700 text-sm">
                     📅 {match.match_date} à {match.match_time?.slice(0, 5)}
                   </p>
                   <p className="text-gray-700 text-sm mb-2">📍 {match.location_fr}</p>
 
-                  {/* ✅ Score (si disponible) */}
+                  {/* Score */}
                   {match.home_score !== null && match.away_score !== null && (
                     <p className="text-[#12138B] font-semibold">
                       Résultat : {match.home_score} - {match.away_score}
                     </p>
                   )}
 
-                  {/* ✅ Description */}
+                  {/* Description */}
                   <div
                     className={`overflow-hidden transition-all duration-500 flex-grow ${
                       expandedMatch === index ? "max-h-screen" : "max-h-20"
@@ -304,7 +326,7 @@ const Programs = () => {
                   </div>
 
                   <button
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center mt-3"
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center justify-center mt-3"
                     onClick={() => toggleDescription(index)}
                   >
                     {expandedMatch === index ? (
