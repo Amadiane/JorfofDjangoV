@@ -1,162 +1,5 @@
-// import React, { useEffect, useState } from 'react';
-// import { ChevronUp, ChevronDown } from 'react-feather';
-// import ChatBotNew from "../ChatBot/ChatbotNew";
-
-// const Programs = () => {
-//   const [events, setEvents] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [expandedEvent, setExpandedEvent] = useState(null);
-//   const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-//   // Exemple d'événements du club
-//   useEffect(() => {
-//     setLoading(true);
-//     try {
-//       // Ici, tu pourrais remplacer par un fetch réel depuis ton backend
-//       const data = [
-//         {
-//           id: 1,
-//           title: "Match Jorfof Club vs Kankan Stars",
-//           description: "Venez soutenir Jorfof Club dans ce match décisif du championnat régional.",
-//           date: "2025-10-25",
-//           location: "Salle Municipale de Kankan",
-//           photo: "https://source.unsplash.com/400x300/?basketball"
-//         },
-//         {
-//           id: 2,
-//           title: "Entraînement ouvert au public",
-//           description: "Découvrez l’esprit d’équipe du club et participez à notre séance d’entraînement.",
-//           date: "2025-10-28",
-//           location: "Terrain du Lycée Alpha Yaya Diallo",
-//           photo: "https://source.unsplash.com/400x300/?basketball-training"
-//         },
-//         {
-//           id: 3,
-//           title: "Tournoi Interclubs – Phase finale",
-//           description: "Jorfof Club affrontera les meilleures équipes de la région. Une journée intense de basket !",
-//           date: "2025-11-10",
-//           location: "Complexe Sportif de Conakry",
-//           photo: "https://source.unsplash.com/400x300/?basketball-tournament"
-//         }
-//       ];
-//       setEvents(data);
-//     } catch (err) {
-//       setError("Impossible de charger les événements du club.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   }, []);
-
-//   const filteredEvents = events.filter(event =>
-//     event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//     event.description.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
-
-//   const toggleDescription = (index) => {
-//     setExpandedEvent(expandedEvent === index ? null : index);
-//   };
-
-//   return (
-//     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
-//       {/* Header */}
-//       <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-8 shadow-md">
-//         <h1 className="text-4xl font-bold mb-2">Jorfof Club 🏀</h1>
-//         <p className="text-lg opacity-90 max-w-2xl mx-auto">
-//           Passion, esprit d’équipe et performance — notre club vit au rythme du basket.
-//         </p>
-//       </header>
-
-//       {/* Barre de recherche */}
-//       <div className="container mx-auto px-4 py-8 max-w-4xl">
-//         <input
-//           type="text"
-//           placeholder="Rechercher un match ou événement..."
-//           value={searchTerm}
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//           onFocus={() => setIsSearchFocused(true)}
-//           onBlur={() => setIsSearchFocused(false)}
-//           className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C1C47] shadow-sm transition-all ${isSearchFocused ? 'scale-105' : ''}`}
-//         />
-//       </div>
-
-//       {/* Contenu */}
-//       <div className="container mx-auto px-4 max-w-6xl">
-//         {loading ? (
-//           <div className="flex justify-center items-center py-10">
-//             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#1C1C47]"></div>
-//             <span className="ml-3 text-gray-600 text-base">Chargement...</span>
-//           </div>
-//         ) : error ? (
-//           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md my-4">
-//             <p className="font-bold">Erreur</p>
-//             <p>{error}</p>
-//           </div>
-//         ) : filteredEvents.length === 0 ? (
-//           <div className="text-center py-10 bg-white rounded-lg shadow-md px-4">
-//             <p className="mt-3 text-gray-600 text-base">Aucun événement trouvé.</p>
-//             {searchTerm && (
-//               <button
-//                 onClick={() => setSearchTerm("")}
-//                 className="mt-2 text-[#1C1C47] hover:text-[#3b3b82] transition-colors"
-//               >
-//                 Effacer la recherche
-//               </button>
-//             )}
-//           </div>
-//         ) : (
-//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//             {filteredEvents.map((event, index) => (
-//               <div key={event.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 flex flex-col">
-//                 <div className="relative h-48 overflow-hidden">
-//                   <img
-//                     src={event.photo}
-//                     alt={event.title}
-//                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-//                     loading="lazy"
-//                   />
-//                 </div>
-//                 <div className="p-4 flex flex-col flex-grow">
-//                   <h2 className="text-lg font-semibold text-[#1C1C47] mb-2">{event.title}</h2>
-//                   <p className="text-gray-700 text-sm">{event.date} — {event.location}</p>
-//                   <div className={`overflow-hidden transition-all duration-500 flex-grow ${expandedEvent === index ? 'max-h-screen' : 'max-h-20'}`}>
-//                     <p className="text-gray-600 text-sm mt-2">{event.description}</p>
-//                   </div>
-//                   <button
-//                     className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center mt-3"
-//                     onClick={() => toggleDescription(index)}
-//                   >
-//                     {expandedEvent === index ? <>Voir moins <ChevronUp size={14} className="ml-1" /></> : <>Lire la suite <ChevronDown size={14} className="ml-1" /></>}
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Footer CTA */}
-//       <div className="bg-white py-16 text-black text-center">
-//         <h2 className="text-3xl font-bold mb-4">Rejoignez-nous !</h2>
-//         <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-//           Suivez nos actualités, venez assister aux matchs et soutenez Jorfof Club !
-//         </p>
-//       </div>
-
-//       {/* ChatBot */}
-//       <div className="fixed bottom-6 right-6 z-50">
-//         <ChatBotNew />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Programs;
-
-
 import React, { useEffect, useState } from "react";
-import { ChevronUp, ChevronDown } from "react-feather";
+import { ChevronUp, ChevronDown, Calendar, Clock, MapPin, Trophy, Zap } from "lucide-react";
 import ChatBotNew from "../ChatBot/ChatbotNew";
 import CONFIG from "../../config/config.js";
 
@@ -200,145 +43,233 @@ const Programs = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-[#1C1C47] to-[#12138B] text-white text-center py-8 shadow-md">
-        <h1 className="text-4xl font-bold mb-2">Matchs du Jorfof Club 🏀</h1>
-        <p className="text-lg opacity-90 max-w-2xl mx-auto">
-          Découvrez tous les matchs à venir et les résultats récents de notre club.
-        </p>
-      </header>
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
+      {/* Effets de fond lumineux */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
 
-      {/* Barre de recherche */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <input
-          type="text"
-          placeholder="Rechercher un match..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsSearchFocused(true)}
-          onBlur={() => setIsSearchFocused(false)}
-          className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C1C47] shadow-sm transition-all ${
-            isSearchFocused ? "scale-105" : ""
-          }`}
-        />
+      {/* Header avec halo lumineux - ajusté pour éviter le chevauchement */}
+      <div className="relative pt-32 pb-16 text-center">
+        <div className="relative inline-block">
+          {/* Halo lumineux */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-orange-500/30 to-blue-500/30 blur-3xl scale-150 animate-pulse"></div>
+          
+          <div className="relative">
+            <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-full mb-6 shadow-2xl shadow-orange-500/50 animate-pulse">
+              <Calendar className="w-12 h-12 text-white" />
+            </div>
+            
+            <h1 className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-4 tracking-tight">
+              CALENDRIER
+            </h1>
+            
+            {/* Ligne animée */}
+            <div className="relative w-32 h-1 mx-auto mt-6 overflow-hidden rounded-full">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-orange-500 to-blue-500 animate-pulse" style={{ animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Contenu principal */}
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="relative container mx-auto px-4 pb-16 max-w-7xl">
         {loading ? (
-          <div className="flex justify-center items-center py-10">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#1C1C47]"></div>
-            <span className="ml-3 text-gray-600 text-base">Chargement des matchs...</span>
+          <div className="flex flex-col justify-center items-center py-20">
+            <div className="relative w-20 h-20">
+              <div className="absolute inset-0 border-4 border-orange-500/30 rounded-full animate-ping"></div>
+              <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
+            </div>
+            <span className="text-white text-lg mt-6 font-semibold">Chargement des matchs...</span>
           </div>
         ) : error ? (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md my-4">
-            <p className="font-bold">Erreur</p>
-            <p>{error}</p>
+          <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl shadow-red-500/20 backdrop-blur-xl">
+            <p className="font-bold text-xl mb-2 flex items-center gap-2">
+              <Zap className="w-6 h-6 text-red-500" />
+              Erreur
+            </p>
+            <p className="text-gray-300">{error}</p>
           </div>
         ) : filteredMatches.length === 0 ? (
-          <div className="text-center py-10 bg-white rounded-lg shadow-md px-4">
-            <p className="mt-3 text-gray-600 text-base">Aucun match trouvé.</p>
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="mt-2 text-[#1C1C47] hover:text-[#3b3b82] transition-colors"
-              >
-                Effacer la recherche
-              </button>
-            )}
+          <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-4">
+            <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+              <Trophy className="w-12 h-12 text-orange-400" />
+            </div>
+            <p className="text-white text-2xl font-bold mb-2">Aucun match programmé</p>
+            <p className="text-gray-400 text-lg">Revenez bientôt pour découvrir nos prochains matchs</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredMatches.map((match, index) => (
               <div
                 key={match.id}
-                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition transform hover:-translate-y-1 flex flex-col"
+                className="relative group"
               >
-                {/* ✅ Bannière du match */}
-                <div className="relative h-48 overflow-hidden bg-gray-100">
-                  <img
-                    src={
-                      match.banner_image ||
-                      "https://placehold.co/600x300?text=Aucune+bannière"
-                    }
-                    alt={`${match.home_team_name_fr} vs ${match.away_team_name_fr}`}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    loading="lazy"
-                    onError={(e) =>
-                      (e.target.src =
-                        "https://placehold.co/400x300?text=Image+indisponible")
-                    }
-                  />
-                </div>
-
-                {/* ✅ Infos principales */}
-                <div className="p-4 flex flex-col flex-grow text-center">
-                  {/* Logos et noms */}
-                  <div className="flex items-center justify-center gap-3 mb-3">
+                {/* Glow effect */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500 animate-pulse"></div>
+                
+                {/* Card principale */}
+                <div className="relative bg-[#0f1729]/80 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-orange-500/20 group-hover:border-orange-500/60 transition-all duration-500 shadow-2xl group-hover:shadow-orange-500/20 hover:scale-[1.02]">
+                  {/* ✅ Bannière du match */}
+                  <div className="relative h-72 overflow-hidden">
                     <img
                       src={
-                        match.home_team_logo ||
-                        "https://placehold.co/50x50?text=Logo"
+                        match.banner_image ||
+                        "https://placehold.co/800x600/1a1a2e/ffffff?text=Match+Basketball"
                       }
-                      alt="home team logo"
-                      className="w-10 h-10 rounded-full border object-cover"
-                    />
-                    <span className="font-semibold text-[#1C1C47]">
-                      {match.home_team_name_fr}
-                    </span>
-                    <span className="font-bold text-gray-600">VS</span>
-                    <span className="font-semibold text-[#1C1C47]">
-                      {match.away_team_name_fr}
-                    </span>
-                    <img
-                      src={
-                        match.away_team_logo ||
-                        "https://placehold.co/50x50?text=Logo"
+                      alt={`${match.home_team_name_fr} vs ${match.away_team_name_fr}`}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      onError={(e) =>
+                        (e.target.src =
+                          "https://placehold.co/800x600/1a1a2e/ffffff?text=Image+indisponible")
                       }
-                      alt="away team logo"
-                      className="w-10 h-10 rounded-full border object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729] via-[#0f1729]/60 to-transparent"></div>
+                    
+                    {/* Badge date avec glow */}
+                    <div className="absolute top-4 right-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-orange-500/50 blur-lg rounded-xl"></div>
+                        <div className="relative bg-gradient-to-br from-orange-500 to-orange-600 px-4 py-2 rounded-xl shadow-2xl border border-orange-400/50">
+                          <div className="flex items-center gap-2 text-white">
+                            <Calendar className="w-4 h-4" />
+                            <span className="text-sm font-bold">{match.match_date}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Badge "LIVE" si le match est en cours (optionnel) */}
+                    <div className="absolute top-4 left-4">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-red-500/50 blur-lg rounded-full"></div>
+                        <div className="relative flex items-center gap-2 bg-red-500 px-4 py-1.5 rounded-full shadow-2xl border border-red-400/50">
+                          <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                          <span className="text-white text-xs font-bold tracking-wider">À VENIR</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Détails */}
-                  <p className="text-gray-700 text-sm">
-                    📅 {match.match_date} à {match.match_time?.slice(0, 5)}
-                  </p>
-                  <p className="text-gray-700 text-sm mb-2">📍 {match.location_fr}</p>
+                  {/* ✅ Infos principales */}
+                  <div className="p-6 flex flex-col">
+                    {/* Logos et noms des équipes */}
+                    <div className="flex items-center justify-between mb-6">
+                      {/* Équipe domicile */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-full"></div>
+                          <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-orange-500 shadow-2xl shadow-orange-500/50 mb-3 bg-[#1a1f3a]">
+                            <img
+                              src={
+                                match.home_team_logo ||
+                                "https://placehold.co/100x100/ff6b35/ffffff?text=H"
+                              }
+                              alt="home team logo"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                        <span className="font-bold text-white text-center text-sm leading-tight">
+                          {match.home_team_name_fr}
+                        </span>
+                      </div>
 
-                  {/* Score */}
-                  {match.home_score !== null && match.away_score !== null && (
-                    <p className="text-[#12138B] font-semibold">
-                      Résultat : {match.home_score} - {match.away_score}
-                    </p>
-                  )}
+                      {/* VS ou Score avec glow orange vif */}
+                      <div className="flex flex-col items-center px-4">
+                        {match.home_score !== null && match.away_score !== null && (match.home_score !== 0 || match.away_score !== 0) ? (
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-orange-500/50 blur-2xl rounded-2xl"></div>
+                            <div className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl px-6 py-4 border-2 border-orange-400/50 shadow-2xl">
+                              <div className="flex items-center gap-4">
+                                <span className="text-4xl font-black text-white drop-shadow-lg">{match.home_score}</span>
+                                <span className="text-white text-2xl font-bold">-</span>
+                                <span className="text-4xl font-black text-white drop-shadow-lg">{match.away_score}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-orange-500/50 blur-2xl rounded-2xl"></div>
+                            <div className="relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 rounded-2xl px-8 py-4 shadow-2xl border-2 border-orange-400/50">
+                              <span className="text-white font-black text-2xl tracking-wider drop-shadow-lg">VS</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
-                  {/* Description */}
-                  <div
-                    className={`overflow-hidden transition-all duration-500 flex-grow ${
-                      expandedMatch === index ? "max-h-screen" : "max-h-20"
-                    }`}
-                  >
-                    <p className="text-gray-600 text-sm mt-2">
-                      {match.description_fr || "Aucune description disponible."}
-                    </p>
-                  </div>
+                      {/* Équipe adverse */}
+                      <div className="flex flex-col items-center flex-1">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-blue-500/30 blur-xl rounded-full"></div>
+                          <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-blue-500 shadow-2xl shadow-blue-500/50 mb-3 bg-[#1a1f3a]">
+                            <img
+                              src={
+                                match.away_team_logo ||
+                                "https://placehold.co/100x100/004e89/ffffff?text=A"
+                              }
+                              alt="away team logo"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+                        <span className="font-bold text-white text-center text-sm leading-tight">
+                          {match.away_team_name_fr}
+                        </span>
+                      </div>
+                    </div>
 
-                  <button
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center justify-center mt-3"
-                    onClick={() => toggleDescription(index)}
-                  >
-                    {expandedMatch === index ? (
-                      <>
-                        Voir moins <ChevronUp size={14} className="ml-1" />
-                      </>
-                    ) : (
-                      <>
-                        Lire la suite <ChevronDown size={14} className="ml-1" />
-                      </>
+                    {/* Détails du match */}
+                    <div className="space-y-3 mb-4">
+                      <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-orange-500/20 hover:border-orange-500/40 transition-colors">
+                        <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
+                          <Clock className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-white text-sm font-bold">{match.match_time?.slice(0, 5)}</span>
+                      </div>
+                      <div className="flex items-start gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-blue-500/20 hover:border-blue-500/40 transition-colors">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
+                          <MapPin className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-white text-sm font-semibold leading-tight">{match.location_fr}</span>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    {match.description_fr && (
+                      <div className="border-t border-white/10 pt-4">
+                        <div
+                          className={`overflow-hidden transition-all duration-500 ${
+                            expandedMatch === index ? "max-h-96" : "max-h-20"
+                          }`}
+                        >
+                          <p className="text-gray-300 text-sm leading-relaxed">
+                            {match.description_fr || "Aucune description disponible."}
+                          </p>
+                        </div>
+                        <button
+                          className="relative mt-3 w-full group/btn overflow-hidden"
+                          onClick={() => toggleDescription(index)}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/20 to-orange-500/0 group-hover/btn:via-orange-500/40 transition-all duration-300"></div>
+                          <div className="relative flex items-center justify-center py-3 bg-white/5 rounded-xl border border-orange-500/30 group-hover/btn:border-orange-500/60 transition-all duration-300">
+                            <span className="text-orange-400 font-bold text-sm mr-2">
+                              {expandedMatch === index ? "Voir moins" : "Lire la suite"}
+                            </span>
+                            {expandedMatch === index ? (
+                              <ChevronUp size={16} className="text-orange-400" />
+                            ) : (
+                              <ChevronDown size={16} className="text-orange-400" />
+                            )}
+                          </div>
+                        </button>
+                      </div>
                     )}
-                  </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -346,12 +277,51 @@ const Programs = () => {
         )}
       </div>
 
-      {/* Footer CTA */}
-      <div className="bg-white py-16 text-black text-center">
-        <h2 className="text-3xl font-bold mb-4">Rejoignez-nous !</h2>
-        <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-          Suivez nos actualités et venez encourager le Jorfof Club à chaque match !
-        </p>
+      {/* Section CTA simplifiée - sans footer intégré */}
+      <div className="relative py-12 text-center">
+        <div className="container mx-auto px-4">
+          <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-orange-500/10 backdrop-blur-xl border-2 border-orange-500/30 rounded-3xl p-12 shadow-2xl">
+            {/* Effets de fond */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30 rounded-3xl"></div>
+            
+            <div className="relative">
+              <div className="relative inline-block mb-6">
+                <div className="absolute inset-0 bg-orange-500/30 blur-2xl rounded-full"></div>
+                <div className="relative w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-2xl shadow-orange-500/50">
+                  <Trophy className="w-10 h-10 text-white" />
+                </div>
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white">
+                REJOIGNEZ-NOUS !
+              </h2>
+              <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+                Suivez nos actualités et venez encourager le Jorfof Club à chaque match !
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href="/contacter-tamkine"
+                  className="relative group/cta overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-xl opacity-50 group-hover/cta:opacity-75 transition-opacity"></div>
+                  <div className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/cta:scale-105 transition-transform">
+                    NOUS CONTACTER
+                  </div>
+                </a>
+                <a
+                  href="/nous-rejoindre"
+                  className="relative group/cta overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-white/10 blur-xl opacity-50 group-hover/cta:opacity-75 transition-opacity"></div>
+                  <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/cta:scale-105 transition-all">
+                    REJOINDRE LE CLUB
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ChatBot */}
