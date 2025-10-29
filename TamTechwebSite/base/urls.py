@@ -7,10 +7,9 @@ from .views import (
     logout, register, is_logged_in, chatbot, ContactAPIView,
     newsletter_subscription, TeamMessageViewSet,
     RejoindreAPIView, CommunityView,
-    PartnerAPIView, 
     document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet, PartnerAPIView, PartnerDetailAPIView
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet
     # 👈 ajoute ces deux-là ici
 )
 
@@ -24,6 +23,7 @@ router.register(r'activities', ActivityViewSet, basename='activity')
 router.register(r'videos', VideoViewSet, basename='video')
 router.register(r"news", NewsViewSet, basename="news")
 router.register(r'matches', MatchViewSet, basename='match')
+router.register(r'partners', PartnerViewSet, basename='partner')
 
 
 
@@ -49,7 +49,7 @@ urlpatterns = [
     path('community/', CommunityView.as_view(), name='community'),
     # Route pour DELETE (supprimer un contact) avec un id
     path('community/<int:id>/', CommunityView.as_view()),
-    path('partners/', PartnerAPIView.as_view(), name='partners'),
+    # path('partners/', PartnerAPIView.as_view(), name='partners'),
     # path('platforms/', platform_links_api, name='platform_links_api'),
     
     # path('valeurs/', valeurs_api, name='valeurs_api'),
@@ -67,8 +67,7 @@ urlpatterns = [
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     path('media/', views.photo_list, name='photo_list'),
     path('media/<int:pk>/', views.photo_detail, name='photo_detail'),
-    path('partners/', PartnerAPIView.as_view(), name='partners-list'),
-    path('partners/<int:pk>/', PartnerDetailAPIView.as_view(), name='partners-detail'),
+ 
     
 
     path("", include(router.urls)),

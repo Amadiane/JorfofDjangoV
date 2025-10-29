@@ -620,32 +620,35 @@ class Match(models.Model):
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# base/models.py
 from django.db import models
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
 
-class Partenaire(models.Model):
-    titre_fr = models.CharField(max_length=255)
-    titre_en = models.CharField(max_length=255)
-    titre_ar = models.CharField(max_length=255)
+class Partner(models.Model): 
+    name_fr = models.CharField(max_length=255, verbose_name="Nom (FR)")
+    name_en = models.CharField(max_length=255, verbose_name="Name (EN)")
+    
+    cover_image = CloudinaryField(
+        'Cover Image',
+        folder='partners',
+        blank=True,
+        null=True
+    )
+    
+    website_url = models.URLField(
+        help_text="Partner's official website link",
+        blank=True,
+        null=True
+    )
 
-    description_fr = models.TextField()
-    description_en = models.TextField()
-    description_ar = models.TextField()
-
-    couverture = CloudinaryField('Image de couverture', folder='partenaires', blank=True, null=True)
-    video = CloudinaryField('Vidéo de présentation', resource_type='video', folder='partenaires/videos', blank=True, null=True)
-
-    site_url = models.URLField(help_text="Lien vers le site web du partenaire", blank=True, null=True)
-
-    # 👉 Ajoute un default ici :
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Partenaire"
-        verbose_name_plural = "Partenaires"
+        verbose_name = "Partner"
+        verbose_name_plural = "Partners"
         ordering = ['-created_at']
 
     def __str__(self):
-        return self.titre_fr
+        return self.name_en or self.name_fr

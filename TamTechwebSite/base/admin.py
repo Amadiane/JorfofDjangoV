@@ -6,7 +6,7 @@ from .models import (
     Video,
     News,
     Match,
-    Partenaire
+    Partner
 )
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,28 +105,12 @@ class MatchAdmin(admin.ModelAdmin):
     )
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-# 🤝 PARTENAIRE
-@admin.register(Partenaire)
-class PartenaireAdmin(admin.ModelAdmin):
-    list_display = ('titre_fr', 'site_url', 'created_at', 'updated_at')
-    search_fields = ('titre_fr', 'titre_en', 'titre_ar')
-    list_filter = ('created_at',)
-    readonly_fields = ('created_at', 'updated_at')
+# base/admin.py
+from django.contrib import admin
+from .models import Partner
 
-    fieldsets = (
-        ('🧩 Informations principales', {
-            'fields': ('titre_fr', 'titre_en', 'titre_ar')
-        }),
-        ('📝 Description', {
-            'fields': ('description_fr', 'description_en', 'description_ar')
-        }),
-        ('📸 Médias', {
-            'fields': ('couverture', 'video')
-        }),
-        ('🔗 Lien externe', {
-            'fields': ('site_url',)
-        }),
-        ('📅 Métadonnées', {
-            'fields': ('created_at', 'updated_at')
-        }),
-    )
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ('name_fr', 'name_en', 'website_url', 'created_at')
+    search_fields = ('name_fr', 'name_en')
+    list_filter = ('created_at',)

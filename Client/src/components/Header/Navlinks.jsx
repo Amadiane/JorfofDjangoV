@@ -137,18 +137,18 @@ const Navlinks = () => {
       path: "/actualites",
       isDropdown: false
     },
-    // {
-    //   title: t("Le club"),
-    //   id: "tamkine",
-    //   isDropdown: true,
-    //   dropdownItems: [
-    //     { title: t("president_word"), path: "/motPresident" },
-    //     // { title: t("foundation"), path: "/Jorfof Club" },
-    //     // { title: t("values"), path: "/nosValeurs" },
-    //     { title: t("missions"), path: "/nosMissions" },
-    //     { title: t("team"), path: "/notreEquipe" }
-    //   ]
-    // },
+    {
+      title: t("Le club"),
+      id: "tamkine",
+      isDropdown: true,
+      dropdownItems: [
+        { title: t("president_word"), path: "/motPresident" },
+        // { title: t("foundation"), path: "/Jorfof Club" },
+        // { title: t("values"), path: "/nosValeurs" },
+        { title: t("missions"), path: "/nosMissions" },
+        { title: t("team"), path: "/notreEquipe" }
+      ]
+    },
     // {
     //   title: t("programms"),
     //   path: "/programs",
@@ -171,7 +171,7 @@ const Navlinks = () => {
     //   isDropdown: false
     // },
     {
-      title: t("media"),
+      title: t("Medias"),
       // title: t("media"),
       id: "media",
       isDropdown: true,

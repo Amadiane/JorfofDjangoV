@@ -370,10 +370,11 @@ class MatchSerializer(serializers.ModelSerializer):
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# base/serializers.py
 from rest_framework import serializers
-from .models import Partenaire
+from .models import Partner
 
-class PartenaireSerializer(serializers.ModelSerializer):
+class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Partenaire
+        model = Partner
         fields = '__all__'
