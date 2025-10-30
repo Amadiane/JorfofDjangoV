@@ -165,11 +165,7 @@ const Navlinks = () => {
     //   path: "/Plateforms",
     //   isDropdown: false
     // },
-    // {
-    //   title: t("partner_activities"),
-    //   path: "/activities",
-    //   isDropdown: false
-    // },
+    
     {
       title: t("Medias"),
       // title: t("media"),
@@ -180,6 +176,11 @@ const Navlinks = () => {
         { title: t("phototheque"), path: "/phototheque" },
         // { title: t("downloads"), path: "/document" }
       ]
+    },
+    {
+      title: t("Partenaires"),
+      path: "/partner",
+      isDropdown: false
     },
     {
       title: t("join_us"),

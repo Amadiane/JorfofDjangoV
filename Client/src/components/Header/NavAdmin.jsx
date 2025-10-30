@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import Logo from "./Logo";
 import Loginbtn from "./Loginbtn";
 import { useState, useEffect } from "react";
-
-// Importez ici vos composants de page
-//import PhotoPost from "./PhotoPost";
-// import PlatformPost from "./PlatformPost";
-// import CreatePost from "./CreatePost";
-// Ajoutez d'autres imports selon vos besoins
+import { 
+  Home, FileText, Calendar, Video, Image, Users, 
+  Newspaper, LogOut, Menu, X, ChevronLeft, ChevronRight,
+  Shield, Zap, TrendingUp
+} from "lucide-react";
 
 const NavAdmin = () => {
   const { t } = useTranslation();
@@ -17,7 +16,6 @@ const NavAdmin = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Gestion responsive du sidebar
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -32,166 +30,45 @@ const NavAdmin = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fonction pour obtenir les icônes actualisées
   const getIcon = (path) => {
     const icons = {
-      "/actualites": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-        </svg>
-      ),
-      "/createpost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/platformPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-        </svg>
-      ),
-      "/photoPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/videoPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-          <path fillRule="evenodd" d="M12 5a1 1 0 011 1v8a1 1 0 11-2 0V6a1 1 0 011-1z" clipRule="evenodd" />
-          <path fillRule="evenodd" d="M15 5a1 1 0 011 1v8a1 1 0 11-2 0V6a1 1 0 011-1z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/programPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/teamMessage": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-        </svg>
-      ),
-      "/documentPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/listPartners": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-        </svg>
-      ),
-      "/mediaPartenairePost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M5 3a1 1 0 011-1h8a1 1 0 011 1v2a1 1 0 01-1 1H6a1 1 0 01-1-1V3zm1 6a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H7a1 1 0 01-1-1V9z" clipRule="evenodd" />
-          <path d="M4 11H2a2 2 0 00-2 2v1a2 2 0 002 2h2v-5z" />
-          <path d="M18 11h-2v5h2a2 2 0 002-2v-1a2 2 0 00-2-2z" />
-        </svg>
-      ),
-      "/listeContacts": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-        </svg>
-      ),
-      "/motPresidentPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
-        </svg>
-      ),
-      "/missionPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5z" />
-          <path d="M8 8a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V8z" />
-        </svg>
-      ),
-      "/valeurPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ),
-      "/fondationPost": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
-        </svg>
-      ),
-      "/listeAbonnement": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-        </svg>
-      ),
-      "/listePostulantsCommunity": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-        </svg>
-      ),
-      "/listeRejoindre": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-        </svg>
-      ),
-      "default": (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clipRule="evenodd" />
-          <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
-        </svg>
-      )
+      "/dashboardAdmin": <Home className="w-5 h-5" />,
+      "/createpost": <Newspaper className="w-5 h-5" />,
+      "/programPost": <Calendar className="w-5 h-5" />,
+      "/videoPost": <Video className="w-5 h-5" />,
+      "/photoPost": <Image className="w-5 h-5" />,
+      "/partnerPost": <Users className="w-5 h-5" />,
+      "/mediaPartenairePost": <TrendingUp className="w-5 h-5" />,
+      "default": <FileText className="w-5 h-5" />
     };
-
     return icons[path] || icons["default"];
   };
 
-  // Liste des liens de navigation organisés par catégories
   const navCategories = [
     {
       title: "Principal",
       items: [
-        { path: "/actualites", label: "Tableau de bord" },
+        { path: "/dashboardAdmin", label: "Tableau de bord" },
       ]
     },
     {
       title: "Contenu",
       items: [
-        // { path: "/platformPost", label: "Plateformes" },
         { path: "/createpost", label: "Actualités" },
         { path: "/programPost", label: "Calendrier" },
         { path: "/videoPost", label: "Videothèque" },
         { path: "/photoPost", label: "Photothèque" },
-        // { path: "/documentPost", label: "Téléchargements" },
-        // { path: "/activitiesPost", label: "Activities" },
       ]
     },
     {
       title: "Équipe & Partenaires",
       items: [
-        // { path: "/teamMessage", label: "Notre Équipe" },
-        // // { path: "/listPartners", label: "Partenaires" },
+        { path: "/partnerPost", label: "Partenaires" },
         { path: "/mediaPartenairePost", label: "Partenaires Médias" },
-        // { path: "/mediaPartenairePost", label: "Partenaires" },
       ]
     },
-    // {
-    //   title: "À propos",
-    //   items: [
-    //     // { path: "/motPresidentPost", label: "Mot du Président" },
-    //     // // { path: "/missionPost", label: "Nos Missions" },
-    //     // { path: "/valeurPost", label: "Nos Valeurs" },
-    //     // { path: "/fondationPost", label: "Fondation Tamkine" },
-    //   ]
-    // },
-    // {
-    //   title: "Gestion des utilisateurs",
-    //   items: [
-    //     // { path: "/listeContacts", label: "Contacts" },
-    //     // { path: "/listePostulantsCommunity", label: "Membres" },
-    //     // { path: "/listeRejoindre", label: "Candidatures" },
-    //     // { path: "/listeAbonnement", label: "Abonnés" },
-    //   ]
-    // },
   ];
 
-  // Pour fermer le menu sur mobile après un clic
   const handleMobileMenuClose = () => {
     if (windowWidth < 768) {
       setSidebarCollapsed(true);
@@ -199,133 +76,207 @@ const NavAdmin = () => {
   };
 
   return (
-    <aside 
-      className={`${
-        isSidebarCollapsed ? 'w-20' : 'w-72'
-      } transition-all duration-300 ease-in-out h-screen bg-white shadow-xl fixed left-0 top-0 z-40 flex flex-col`}
-    >
-      {/* En-tête avec logo et bouton de réduction */}
-      <div className={`py-5 px-4 border-b border-gray-200 flex ${isSidebarCollapsed ? 'justify-center' : 'justify-between'} items-center bg-[#12138B] text-white`}>
-        {!isSidebarCollapsed && <Logo />}
-        <button 
-          onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-          className="p-1.5 rounded-md hover:bg-[#2526A9] text-white transition-colors"
-          aria-label={isSidebarCollapsed ? "Étendre le menu" : "Réduire le menu"}
-        >
-          {isSidebarCollapsed ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
+    <>
+      <aside 
+        className={`${
+          isSidebarCollapsed ? 'w-20' : 'w-72'
+        } transition-all duration-300 ease-in-out h-screen bg-[#0a0e27] shadow-2xl fixed left-0 top-0 z-50 flex flex-col border-r-2 border-orange-500/30 relative overflow-hidden`}
+      >
+        {/* Effets de fond lumineux */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-20 left-0 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/3 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 left-1/2 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Grille de fond */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
+
+        {/* En-tête avec logo et bouton de réduction */}
+        <div className={`relative py-6 px-4 border-b-2 border-orange-500/30 flex ${isSidebarCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-blue-500/10 backdrop-blur-sm"></div>
+          
+          {!isSidebarCollapsed && (
+            <div className="relative flex items-center space-x-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-full animate-pulse"></div>
+                <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-2xl shadow-2xl shadow-orange-500/50">
+                  🏀
+                </div>
+              </div>
+              <div>
+                <h3 className="text-base font-black text-white tracking-tight">JORFOF ADMIN</h3>
+                <p className="text-xs text-orange-400 font-semibold">Dashboard</p>
+              </div>
+            </div>
           )}
-        </button>
-      </div>
+          
+          <button 
+            onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
+            className="relative group/toggle z-10"
+            aria-label={isSidebarCollapsed ? "Étendre le menu" : "Réduire le menu"}
+          >
+            <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover/toggle:opacity-100 transition-opacity rounded-lg"></div>
+            <div className="relative p-2 rounded-lg bg-white/5 backdrop-blur-sm border border-orange-500/30 hover:border-orange-500/50 transition-all">
+              {isSidebarCollapsed ? (
+                <ChevronRight className="w-5 h-5 text-orange-400" />
+              ) : (
+                <ChevronLeft className="w-5 h-5 text-orange-400" />
+              )}
+            </div>
+          </button>
+        </div>
 
-      {/* Navigation links avec un scroll */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 bg-gray-50">
-        {navCategories.map((category, index) => (
-          <div key={index} className={`mb-6 ${isSidebarCollapsed ? 'text-center' : ''}`}>
-            {!isSidebarCollapsed && (
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3">
-                {t(category.title)}
-              </h3>
-            )}
-            <div className="space-y-1">
-              {category.items.map(({ path, label }) => (
-                <NavLink
-                  key={path}
-                  to={path}
-                  onClick={handleMobileMenuClose}
-                  className={({ isActive }) => `
-                    block ${isSidebarCollapsed ? 'text-center px-2' : 'px-4'} 
-                    py-2.5 rounded-lg transition-all duration-200 
-                    ${isActive 
-                      ? "bg-[#12138B] text-white font-medium shadow-md" 
-                      : "text-gray-700 hover:bg-blue-50 hover:text-[#12138B]"
-                    }
-                  `}
-                >
-                  <div className="flex items-center">
-                    <span className="flex-shrink-0">{getIcon(path)}</span>
-                    {!isSidebarCollapsed && (
-                      <span className="ml-3 font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">
-                        {t(label)}
-                      </span>
+        {/* Navigation links avec un scroll */}
+        <nav className="relative flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
+          {navCategories.map((category, index) => (
+            <div key={index} className={`mb-6 ${isSidebarCollapsed ? 'text-center' : ''}`}>
+              {!isSidebarCollapsed && (
+                <div className="relative inline-block mb-3">
+                  <div className="absolute inset-0 bg-orange-500/20 blur-md rounded"></div>
+                  <h3 className="relative text-xs font-black text-gray-400 uppercase tracking-wider px-3 flex items-center gap-2">
+                    <Zap className="w-3 h-3 text-orange-400" />
+                    {t(category.title)}
+                  </h3>
+                </div>
+              )}
+              <div className="space-y-2">
+                {category.items.map(({ path, label }) => (
+                  <NavLink
+                    key={path}
+                    to={path}
+                    onClick={handleMobileMenuClose}
+                    className={({ isActive }) => `
+                      relative block group/link overflow-hidden
+                      ${isSidebarCollapsed ? 'px-0' : 'px-4'} 
+                      py-3 rounded-xl transition-all duration-300
+                    `}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {/* Effet de fond pour l'élément actif */}
+                        {isActive && (
+                          <>
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-orange-600/30 blur-lg"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 opacity-90"></div>
+                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r-full"></div>
+                          </>
+                        )}
+                        
+                        {/* Effet de fond pour le hover */}
+                        {!isActive && (
+                          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm opacity-0 group-hover/link:opacity-100 transition-opacity border border-orange-500/0 group-hover/link:border-orange-500/30 rounded-xl"></div>
+                        )}
+
+                        <div className={`relative flex items-center ${isSidebarCollapsed ? 'justify-center' : 'justify-start'}`}>
+                          <div className={`flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-400 group-hover/link:text-orange-400'} transition-colors`}>
+                            {getIcon(path)}
+                          </div>
+                          {!isSidebarCollapsed && (
+                            <span className={`ml-3 font-bold text-sm whitespace-nowrap overflow-hidden text-ellipsis ${
+                              isActive ? 'text-white' : 'text-gray-400 group-hover/link:text-white'
+                            } transition-colors`}>
+                              {t(label)}
+                            </span>
+                          )}
+                          {isActive && !isSidebarCollapsed && (
+                            <Shield className="w-4 h-4 text-white ml-auto" />
+                          )}
+                        </div>
+                      </>
                     )}
-                  </div>
-                </NavLink>
-              ))}
+                  </NavLink>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </nav>
+          ))}
+        </nav>
 
-      {/* Section pour la déconnexion */}
-      <div className={`mt-auto p-4 border-t border-gray-200 bg-white ${isSidebarCollapsed ? 'flex justify-center' : ''}`}>
-        {!isSidebarCollapsed && (
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-[#12138B] text-white flex items-center justify-center">
-                <span className="font-semibold">A</span>
+        {/* Section pour la déconnexion */}
+        <div className={`relative mt-auto p-4 border-t-2 border-orange-500/30 ${isSidebarCollapsed ? 'flex justify-center' : ''}`}>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+          
+          {!isSidebarCollapsed ? (
+            <div className="relative flex items-center justify-between w-full bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-orange-500/30">
+              <div className="flex items-center">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-orange-500/30 blur-lg rounded-full"></div>
+                  <div className="relative h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center shadow-lg">
+                    <span className="font-black text-lg">A</span>
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-bold text-white">Admin</p>
+                  <p className="text-xs text-gray-400 font-semibold">admin@jorfof.org</p>
+                </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">Admin</p>
-                <p className="text-xs text-gray-500">admin@jorfof.org</p>
-              </div>
+              <button className="relative group/logout">
+                <div className="absolute inset-0 bg-red-500/30 blur-lg opacity-0 group-hover/logout:opacity-100 transition-opacity rounded-lg"></div>
+                <div className="relative p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-500/20 transition-all">
+                  <LogOut className="w-5 h-5 text-red-400" />
+                </div>
+              </button>
             </div>
-            <Loginbtn className="text-red-600 hover:text-red-800 transition-colors" />
-          </div>
-        )}
-        {isSidebarCollapsed && (
-          <Loginbtn className="text-red-600 hover:text-red-800">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-          </Loginbtn>
-        )}
-      </div>
+          ) : (
+            <button className="relative group/logout">
+              <div className="absolute inset-0 bg-red-500/30 blur-lg opacity-0 group-hover/logout:opacity-100 transition-opacity rounded-lg"></div>
+              <div className="relative p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-500/20 transition-all">
+                <LogOut className="w-6 h-6 text-red-400" />
+              </div>
+            </button>
+          )}
+        </div>
+
+        {/* Particules décoratives */}
+        <div className="absolute top-20 left-4 w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-4 w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        <div className="absolute bottom-40 left-4 w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </aside>
 
       {/* Bouton pour mobile pour ouvrir/fermer le menu */}
       <button
-        className={`lg:hidden fixed bottom-4 right-4 z-50 bg-[#12138B] text-white p-3 rounded-full shadow-lg ${
+        className={`lg:hidden fixed bottom-6 right-6 z-50 group/mobile ${
           isSidebarCollapsed ? 'opacity-100' : 'opacity-0 pointer-events-none'
         } transition-opacity duration-300`}
         onClick={() => setSidebarCollapsed(false)}
         aria-label="Ouvrir le menu"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
+        <div className="absolute inset-0 bg-orange-500/50 blur-xl opacity-75 animate-pulse rounded-full"></div>
+        <div className="relative bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-full shadow-2xl shadow-orange-500/50 border-2 border-orange-400/50 group-hover/mobile:scale-110 transition-transform">
+          <Menu className="w-6 h-6" />
+        </div>
       </button>
 
       {/* Overlay pour fermer le menu sur mobile */}
       {!isSidebarCollapsed && windowWidth < 1024 && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden" 
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
 
       <style jsx>{`
-        nav::-webkit-scrollbar {
-          width: 5px;
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
         }
-        nav::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        nav::-webkit-scrollbar-thumb {
-          background-color: rgba(156, 163, 175, 0.5);
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
           border-radius: 10px;
         }
-        nav {
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+          border-radius: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
+        }
+        .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+          scrollbar-color: #f97316 rgba(255, 255, 255, 0.05);
         }
       `}</style>
-    </aside>
+    </>
   );
 };
 
@@ -334,15 +285,13 @@ const AdminLayout = () => {
   const location = useLocation();
   
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex bg-[#0a0e27] min-h-screen">
       <NavAdmin />
-      <main className="ml-20 lg:ml-72 flex-1 transition-all duration-300 ease-in-out">
+      <main className="ml-20 lg:ml-72 flex-1 transition-all duration-300 ease-in-out w-full">
         <Routes>
-          <Route path="/home" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Tableau de bord</h1></div>} />
-          <Route path="/platformPost" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Gestion des plateformes</h1></div>} />
-          <Route path="/photoPost" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Photothèque</h1><PhotoPost /></div>} />
-          {/* Ajoutez ici les autres routes pour chaque élément du menu */}
-          <Route path="*" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Page non trouvée</h1></div>} />
+          <Route path="/home" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-white">Tableau de bord</h1></div>} />
+          <Route path="/platformPost" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-white">Gestion des plateformes</h1></div>} />
+          <Route path="*" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4 text-white">Page non trouvée</h1></div>} />
         </Routes>
       </main>
     </div>

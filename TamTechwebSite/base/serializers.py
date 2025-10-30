@@ -375,6 +375,22 @@ from rest_framework import serializers
 from .models import Partner
 
 class PartnerSerializer(serializers.ModelSerializer):
+    cover_image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Partner
-        fields = '__all__'
+        fields = [
+            'id',
+            'name_fr',
+            'name_en',
+            'website_url',
+            'cover_image',
+            'cover_image_url',
+            'created_at',
+            'updated_at',
+        ]
+
+    def get_cover_image_url(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None

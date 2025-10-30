@@ -37,11 +37,13 @@ const CONFIG = {
 
 
   // 🤝 Partners
+// 🤝 Partners
 API_PARTNER_LIST: `${BASE_URL}/api/partners/`,
 API_PARTNER_DETAIL: (id) => `${BASE_URL}/api/partners/${id}/`,
 API_PARTNER_CREATE: `${BASE_URL}/api/partners/`,
 API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`,
 API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`,
+
 
   // 📸 Dossier media (pour les images directes)
   MEDIA_URL: `${BASE_URL}/media/`,

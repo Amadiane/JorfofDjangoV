@@ -1439,27 +1439,9 @@ class MatchViewSet(viewsets.ModelViewSet):
 
 # base/views.py
 from rest_framework import viewsets
-from rest_framework.response import Response
 from .models import Partner
 from .serializers import PartnerSerializer
 
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = Partner.objects.all().order_by('-created_at')
     serializer_class = PartnerSerializer
-
-    def list(self, request, *args, **kwargs):
-        lang = request.GET.get('lang', 'fr').lower()
-        partners = self.get_queryset()
-        serializer = self.get_serializer(partners, many=True)
-
-        # Multilingue : on renvoie uniquement la langue demandée
-        data = []
-        for p in serializer.data:
-            name = p['name_en'] if lang == 'en' else p['name_fr']
-            data.append({
-                'id': p['id'],
-                'name': name,
-                'cover_image': p['cover_image'],
-                'website_url': p['website_url'],
-            })
-        return Response(data)
