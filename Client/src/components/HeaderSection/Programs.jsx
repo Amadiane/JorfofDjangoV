@@ -11,7 +11,6 @@ const Programs = () => {
   const [expandedMatch, setExpandedMatch] = useState(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  // ✅ Chargement des matchs depuis le backend Django
   useEffect(() => {
     const fetchMatches = async () => {
       setLoading(true);
@@ -30,7 +29,6 @@ const Programs = () => {
     fetchMatches();
   }, []);
 
-  // ✅ Filtrage des matchs
   const filteredMatches = matches.filter(
     (match) =>
       match.home_team_name_fr?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,18 +41,20 @@ const Programs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
-      {/* Effets de fond lumineux */}
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden w-full">
+      {/* Effets de fond lumineux - couvrent toute la largeur */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Header avec halo lumineux - ajusté pour éviter le chevauchement */}
-      <div className="relative pt-32 pb-16 text-center">
+      {/* Grille de fond - couvre toute la largeur */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
+
+      {/* Header avec halo lumineux */}
+      <div className="relative pt-32 pb-16 text-center px-4">
         <div className="relative inline-block">
-          {/* Halo lumineux */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-orange-500/30 to-blue-500/30 blur-3xl scale-150 animate-pulse"></div>
           
           <div className="relative">
@@ -66,7 +66,6 @@ const Programs = () => {
               CALENDRIER
             </h1>
             
-            {/* Ligne animée */}
             <div className="relative w-32 h-1 mx-auto mt-6 overflow-hidden rounded-full">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-orange-500 to-blue-500 animate-pulse" style={{ animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}></div>
@@ -75,8 +74,8 @@ const Programs = () => {
         </div>
       </div>
 
-      {/* Contenu principal */}
-      <div className="relative container mx-auto px-4 pb-16 max-w-7xl">
+      {/* Contenu principal - SANS container mx-auto, juste padding horizontal */}
+      <div className="relative px-6 lg:px-12 xl:px-20 pb-16 w-full">
         {loading ? (
           <div className="flex flex-col justify-center items-center py-20">
             <div className="relative w-20 h-20">
@@ -86,7 +85,7 @@ const Programs = () => {
             <span className="text-white text-lg mt-6 font-semibold">Chargement des matchs...</span>
           </div>
         ) : error ? (
-          <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl shadow-red-500/20 backdrop-blur-xl">
+          <div className="max-w-4xl mx-auto bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl shadow-red-500/20 backdrop-blur-xl">
             <p className="font-bold text-xl mb-2 flex items-center gap-2">
               <Zap className="w-6 h-6 text-red-500" />
               Erreur
@@ -94,7 +93,7 @@ const Programs = () => {
             <p className="text-gray-300">{error}</p>
           </div>
         ) : filteredMatches.length === 0 ? (
-          <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-4">
+          <div className="max-w-4xl mx-auto text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-4">
             <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
               <Trophy className="w-12 h-12 text-orange-400" />
             </div>
@@ -102,18 +101,15 @@ const Programs = () => {
             <p className="text-gray-400 text-lg">Revenez bientôt pour découvrir nos prochains matchs</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredMatches.map((match, index) => (
               <div
                 key={match.id}
                 className="relative group"
               >
-                {/* Glow effect */}
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500 animate-pulse"></div>
                 
-                {/* Card principale */}
                 <div className="relative bg-[#0f1729]/80 backdrop-blur-xl rounded-3xl overflow-hidden border-2 border-orange-500/20 group-hover:border-orange-500/60 transition-all duration-500 shadow-2xl group-hover:shadow-orange-500/20 hover:scale-[1.02]">
-                  {/* ✅ Bannière du match */}
                   <div className="relative h-72 overflow-hidden">
                     <img
                       src={
@@ -130,7 +126,6 @@ const Programs = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729] via-[#0f1729]/60 to-transparent"></div>
                     
-                    {/* Badge date avec glow */}
                     <div className="absolute top-4 right-4">
                       <div className="relative">
                         <div className="absolute inset-0 bg-orange-500/50 blur-lg rounded-xl"></div>
@@ -143,7 +138,6 @@ const Programs = () => {
                       </div>
                     </div>
 
-                    {/* Badge "LIVE" si le match est en cours (optionnel) */}
                     <div className="absolute top-4 left-4">
                       <div className="relative">
                         <div className="absolute inset-0 bg-red-500/50 blur-lg rounded-full"></div>
@@ -155,11 +149,8 @@ const Programs = () => {
                     </div>
                   </div>
 
-                  {/* ✅ Infos principales */}
                   <div className="p-6 flex flex-col">
-                    {/* Logos et noms des équipes */}
                     <div className="flex items-center justify-between mb-6">
-                      {/* Équipe domicile */}
                       <div className="flex flex-col items-center flex-1">
                         <div className="relative">
                           <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-full"></div>
@@ -179,7 +170,6 @@ const Programs = () => {
                         </span>
                       </div>
 
-                      {/* VS ou Score avec glow orange vif */}
                       <div className="flex flex-col items-center px-4">
                         {match.home_score !== null && match.away_score !== null && (match.home_score !== 0 || match.away_score !== 0) ? (
                           <div className="relative">
@@ -202,7 +192,6 @@ const Programs = () => {
                         )}
                       </div>
 
-                      {/* Équipe adverse */}
                       <div className="flex flex-col items-center flex-1">
                         <div className="relative">
                           <div className="absolute inset-0 bg-blue-500/30 blur-xl rounded-full"></div>
@@ -223,7 +212,6 @@ const Programs = () => {
                       </div>
                     </div>
 
-                    {/* Détails du match */}
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-orange-500/20 hover:border-orange-500/40 transition-colors">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg">
@@ -239,7 +227,6 @@ const Programs = () => {
                       </div>
                     </div>
 
-                    {/* Description */}
                     {match.description_fr && (
                       <div className="border-t border-white/10 pt-4">
                         <div
@@ -277,14 +264,13 @@ const Programs = () => {
         )}
       </div>
 
-      {/* Section CTA simplifiée - sans footer intégré */}
-      <div className="relative py-12 text-center">
-        <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-orange-500/10 backdrop-blur-xl border-2 border-orange-500/30 rounded-3xl p-12 shadow-2xl">
-            {/* Effets de fond */}
+      {/* Section CTA - full width */}
+      <div className="relative py-12 w-full">
+        <div className="px-6 lg:px-12 xl:px-20">
+          <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-orange-500/10 backdrop-blur-xl border-2 border-orange-500/30 rounded-3xl p-12 shadow-2xl relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30 rounded-3xl"></div>
             
-            <div className="relative">
+            <div className="relative text-center">
               <div className="relative inline-block mb-6">
                 <div className="absolute inset-0 bg-orange-500/30 blur-2xl rounded-full"></div>
                 <div className="relative w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-2xl shadow-orange-500/50">
