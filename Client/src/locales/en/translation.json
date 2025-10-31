@@ -261,6 +261,22 @@
                           "Erreur lors du chargement des programmes.": "Error loading programs.",
 
 
+
+                          
+  "Actualités": "News",
+  "EN DIRECT DU TERRAIN": "LIVE FROM THE COURT",
+  "Retrouvez les dernières nouvelles du Jorfof Basket Club, les matchs récents et les moments forts !": "Find the latest news from Jorfof Basket Club, recent games, and highlights!",
+  "Chargement des actualités...": "Loading news...",
+  "Erreur": "Error",
+  "À LA UNE": "Breaking News",
+  "Pas d'image disponible": "No image available",
+  "Lire plus": "Read more",
+  "Autres actualités": "More News",
+  "Aucune actualité disponible pour le moment.": "No news available at the moment.",
+
+
+
+
                           
                             "Actualités": "News",
                             "Découvrez les dernières nouvelles et mises à jour de la Fondation Tamkine": "Discover the latest news and updates from the Tamkine Foundation",
@@ -357,7 +373,23 @@
         "common": {
           "loading": "Loading...",
           "error": "Error"
-        }
+        },
+
+  "calendar": {
+    "title": "SCHEDULE",
+    "search_placeholder": "Search for a match...",
+    "loading": "Loading matches...",
+    "no_matches": "No matches scheduled yet.",
+    "show_details": "Show details",
+    "hide_details": "Hide details",
+    "no_description": "No description available for this match.",
+    "error": "An error occurred while loading matches.",
+    "join_title": "JOIN US!",
+    "join_text": "Follow our news and come support the Jorfof Club at every match!",
+    "contact_us": "Contact us",
+    "join_us": "Join us"
+  }
+
       
       
     

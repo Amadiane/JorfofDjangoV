@@ -242,6 +242,22 @@
 
 
                                                     
+  "Actualités": "Actualités",
+  "EN DIRECT DU TERRAIN": "EN DIRECT DU TERRAIN",
+  "Retrouvez les dernières nouvelles du Jorfof Basket Club, les matchs récents et les moments forts !": "Retrouvez les dernières nouvelles du Jorfof Basket Club, les matchs récents et les moments forts !",
+  "Chargement des actualités...": "Chargement des actualités...",
+  "Erreur": "Erreur",
+  "À LA UNE": "À LA UNE",
+  "Pas d'image disponible": "Pas d'image disponible",
+  "Lire plus": "Lire plus",
+  "Autres actualités": "Autres actualités",
+  "Aucune actualité disponible pour le moment.": "Aucune actualité disponible pour le moment.",
+
+
+  
+
+
+                                                    
                                                         "Nos Programmes": "Nos Programmes",
                                                         "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.": "Découvrez les différents programmes et initiatives de notre fondation pour maximiser notre impact collectif.",
                                                         "Rechercher un programme...": "Rechercher un programme...",
@@ -355,8 +371,24 @@
         "common": {
           "loading": "Chargement...",
           "error": "Erreur"
-        }
+        },
       
+  "calendar": {
+    "title": "CALENDRIER",
+    "search_placeholder": "Rechercher un match...",
+    "loading": "Chargement des matchs...",
+    "no_matches": "Aucun match programmé pour le moment.",
+    "show_details": "Voir les détails",
+    "hide_details": "Masquer les détails",
+    "no_description": "Aucune description disponible pour ce match.",
+    "error": "Une erreur est survenue lors du chargement des matchs.",
+    "join_title": "REJOIGNEZ-NOUS !",
+    "join_text": "Suivez nos actualités et venez encourager le Jorfof Club à chaque match !",
+    "contact_us": "Nous contacter",
+    "join_us": "Nous rejoindre"
+  }
+
+
       
     
     

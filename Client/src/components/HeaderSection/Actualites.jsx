@@ -391,22 +391,22 @@ const Actualites = () => {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
 
       {/* Header Section */}
-      <section className="relative text-center py-16 px-4">
+      <section className="relative text-center pt-40 pb-16 px-4">
         <div className="relative inline-block mb-6">
           <div className="absolute inset-0 bg-orange-500/30 blur-2xl rounded-full animate-pulse"></div>
           <div className="relative">
             <h2 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-2 tracking-tight">
-              ACTUALITÉS
+              {t("Actualités")}
             </h2>
             <div className="flex items-center justify-center gap-2 text-orange-400 font-bold text-sm">
               <Zap className="w-4 h-4" />
-              <span>EN DIRECT DU TERRAIN</span>
+              <span>{t("EN DIRECT DU TERRAIN")}</span>
               <Zap className="w-4 h-4" />
             </div>
           </div>
         </div>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto font-semibold">
-          Retrouvez les dernières nouvelles du Jorfof Basket Club, les matchs récents et les moments forts !
+          {t("Retrouvez les dernières nouvelles du Jorfof Basket Club, les matchs récents et les moments forts !")}
         </p>
         <div className="w-32 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto mt-6 rounded-full"></div>
       </section>

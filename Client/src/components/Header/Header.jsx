@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <header className="bg-white body-font fixed top-0 left-0 w-full z-10 shadow-md">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <Logo />
+        {/* <Logo /> */}
         <Navlinks />
         {/* <LanguageSwitcher /> */}
         {/* <Loginbtn /> */}
