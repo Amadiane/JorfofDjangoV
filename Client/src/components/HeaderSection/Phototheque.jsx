@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, RefreshCw, Camera, FolderOpen, X, ZoomIn, ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  Search,
+  RefreshCw,
+  Camera,
+  FolderOpen,
+  X,
+  ZoomIn,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 import CONFIG from "../../config/config.js";
 
@@ -21,18 +30,36 @@ const Phototheque = () => {
       setRefreshing(true);
       const [albumRes, photoRes] = await Promise.all([
         fetch(CONFIG.API_ALBUM_LIST),
-        fetch(CONFIG.API_PHOTO_LIST)
+        fetch(CONFIG.API_PHOTO_LIST),
       ]);
 
       if (!albumRes.ok || !photoRes.ok) throw new Error("Erreur de chargement");
 
       const [albumData, photoData] = await Promise.all([
         albumRes.json(),
-        photoRes.json()
+        photoRes.json(),
       ]);
 
-      setAlbums(albumData);
-      setPhotos(photoData);
+      // Vérifie et normalise les URLs Cloudinary
+      const normalizeUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith("http")) return url;
+        if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
+        return `${CONFIG.BASE_URL}/${url}`;
+      };
+
+      const albumsWithUrls = albumData.map((a) => ({
+        ...a,
+        image: normalizeUrl(a.image),
+      }));
+
+      const photosWithUrls = photoData.map((p) => ({
+        ...p,
+        image: normalizeUrl(p.image),
+      }));
+
+      setAlbums(albumsWithUrls);
+      setPhotos(photosWithUrls);
       setError("");
     } catch (err) {
       console.error("Erreur:", err);
@@ -47,13 +74,6 @@ const Phototheque = () => {
     fetchData();
   }, []);
 
-  // 🧩 Gestion des images Cloudinary
-  const getImageSrc = (url) => {
-    if (!url) return "/image_indispo.png";
-    if (url.startsWith("http")) return url; // Cloudinary renvoie déjà une URL absolue
-    return `${CONFIG.BASE_URL}${url.startsWith("/") ? url : `/${url}`}`;
-  };
-
   // 🔍 Filtrage albums
   const filteredAlbums = albums.filter((album) => {
     const term = searchTerm.toLowerCase();
@@ -64,7 +84,8 @@ const Phototheque = () => {
   });
 
   // 🔄 Récupérer photos d’un album
-  const getPhotosByAlbum = (albumId) => photos.filter((p) => p.album === albumId);
+  const getPhotosByAlbum = (albumId) =>
+    photos.filter((photo) => photo.album === albumId);
 
   return (
     <div className="min-h-screen bg-[#0a0e27] pt-40">
@@ -80,7 +101,10 @@ const Phototheque = () => {
             {t("phototheque.titre", "PHOTOTHÈQUE")}
           </h1>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            {t("phototheque.sous_titre", "Découvrez notre collection de photos illustrant nos activités et événements.")}
+            {t(
+              "phototheque.sous_titre",
+              "Découvrez notre collection de photos illustrant nos activités et événements."
+            )}
           </p>
         </div>
       </div>
@@ -109,49 +133,72 @@ const Phototheque = () => {
       {/* 📸 Albums */}
       <div className="w-[90%] mx-auto pb-20">
         {loading ? (
-          <p className="text-center text-gray-400">{t("chargement", "Chargement...")}</p>
+          <p className="text-center text-gray-400">
+            {t("chargement", "Chargement...")}
+          </p>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : filteredAlbums.length === 0 ? (
           <div className="text-center py-16 bg-white/5 rounded-3xl border border-orange-500/20">
             <FolderOpen className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-            <p className="text-white font-bold text-xl">{t("aucun_album", "Aucun album trouvé")}</p>
+            <p className="text-white font-bold text-xl">
+              {t("aucun_album", "Aucun album trouvé")}
+            </p>
           </div>
         ) : (
           <div className="space-y-6">
             {filteredAlbums.map((album) => {
               const isOpen = openAlbum === album.id;
               const albumPhotos = getPhotosByAlbum(album.id);
-              const desc = i18n.language === "fr" ? album.description_fr : album.description_en;
+              const desc =
+                i18n.language === "fr"
+                  ? album.description_fr
+                  : album.description_en;
 
               return (
-                <div key={album.id} className="bg-[#10142c]/80 border border-orange-500/20 rounded-3xl shadow-2xl overflow-hidden">
+                <div
+                  key={album.id}
+                  className="bg-[#10142c]/80 border border-orange-500/20 rounded-3xl shadow-2xl overflow-hidden"
+                >
                   <button
                     onClick={() => setOpenAlbum(isOpen ? null : album.id)}
                     className="w-full flex justify-between items-center p-6"
                   >
                     <div className="flex items-center gap-6">
                       <img
-                        src={getImageSrc(album.image)}
+                        src={album.image || "/image_indispo.png"}
                         alt={album.title_fr}
                         className="w-24 h-24 rounded-2xl object-cover border-4 border-orange-500"
-                        onError={(e) => (e.target.src = "/image_indispo.png")}
+                        onError={(e) =>
+                          (e.target.src = "/image_indispo.png")
+                        }
                       />
                       <div className="text-left">
                         <h2 className="text-2xl font-bold text-white">
-                          {i18n.language === "fr" ? album.title_fr : album.title_en}
+                          {i18n.language === "fr"
+                            ? album.title_fr
+                            : album.title_en}
                         </h2>
                         <p className="text-sm text-gray-400 mt-1">
-                          📸 {albumPhotos.length} {t("photos", "photos")}
+                          📸 {albumPhotos.length}{" "}
+                          {t("photos", "photos")}
                         </p>
                       </div>
                     </div>
-                    {isOpen ? <ChevronUp className="text-orange-400" size={28} /> : <ChevronDown className="text-orange-400" size={28} />}
+                    {isOpen ? (
+                      <ChevronUp className="text-orange-400" size={28} />
+                    ) : (
+                      <ChevronDown className="text-orange-400" size={28} />
+                    )}
                   </button>
 
                   {isOpen && (
                     <div className="p-6 border-t border-orange-500/20">
-                      {desc && <p className="text-gray-300 mb-6 italic leading-relaxed">{desc}</p>}
+                      {desc && (
+                        <p className="text-gray-300 mb-6 italic leading-relaxed">
+                          {desc}
+                        </p>
+                      )}
 
                       {/* Photos de l’album */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -160,17 +207,26 @@ const Phototheque = () => {
                             key={photo.id}
                             onClick={() =>
                               setZoomedImage({
-                                src: getImageSrc(photo.image),
-                                title: i18n.language === "fr" ? photo.title_fr : photo.title_en,
-                                comment: i18n.language === "fr" ? photo.comment_fr : photo.comment_en,
+                                src: photo.image || "/image_indispo.png",
+                                title:
+                                  i18n.language === "fr"
+                                    ? photo.title_fr
+                                    : photo.title_en,
+                                comment:
+                                  i18n.language === "fr"
+                                    ? photo.comment_fr
+                                    : photo.comment_en,
                               })
                             }
                             className="relative group cursor-pointer"
                           >
                             <img
-                              src={getImageSrc(photo.image)}
+                              src={photo.image || "/image_indispo.png"}
                               alt={photo.title_fr}
                               className="w-full h-48 object-cover rounded-2xl border-2 border-orange-500/20 group-hover:border-orange-500 transition-all"
+                              onError={(e) =>
+                                (e.target.src = "/image_indispo.png")
+                              }
                             />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
                               <ZoomIn className="text-white" size={28} />
@@ -199,13 +255,18 @@ const Phototheque = () => {
           >
             <X className="text-white" />
           </button>
-          <div onClick={(e) => e.stopPropagation()} className="max-w-5xl mx-auto text-center">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-5xl mx-auto text-center"
+          >
             <img
               src={zoomedImage.src}
               alt={zoomedImage.title}
               className="max-h-[70vh] mx-auto rounded-2xl border-4 border-orange-500/30"
             />
-            <p className="text-white text-xl font-bold mt-6">{zoomedImage.title}</p>
+            <p className="text-white text-xl font-bold mt-6">
+              {zoomedImage.title}
+            </p>
             <p className="text-gray-400 mt-2">{zoomedImage.comment}</p>
           </div>
         </div>
