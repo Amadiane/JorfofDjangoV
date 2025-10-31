@@ -484,11 +484,11 @@ from django.template.loader import render_to_string
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CommunityContact
-from .serializers import CommunityContactSerializer
+# from .models import CommunityContact
+# from .serializers import CommunityContactSerializer
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from .models import CommunityContact
+
 
 
 class CommunityView(APIView):

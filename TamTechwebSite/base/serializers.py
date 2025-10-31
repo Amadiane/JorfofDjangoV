@@ -154,13 +154,13 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 
 #ComminityContact
 # serializers.py
-from rest_framework import serializers
-from .models import CommunityContact
+# from rest_framework import serializers
+# from .models import CommunityContact
 
-class CommunityContactSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CommunityContact
-        fields = '__all__'
+# class CommunityContactSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CommunityContact
+#         fields = '__all__'
 
 #ComminityPartner
 # partners/serializers.py
