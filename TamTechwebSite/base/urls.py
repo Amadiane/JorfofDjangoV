@@ -65,6 +65,8 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected_view'),
     path('logout/', logout, name='logout'),
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    path('albums/', views.album_list, name='album_list'),
+    path('albums/<int:pk>/', views.album_detail, name='album_detail'),
     path('media/', views.photo_list, name='photo_list'),
     path('media/<int:pk>/', views.photo_detail, name='photo_detail'),
  

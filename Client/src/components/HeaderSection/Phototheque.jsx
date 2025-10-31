@@ -1,283 +1,41 @@
-// //A rendre responsive
-// import React, { useEffect, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
-// import ChatBotNew from "../ChatBot/ChatbotNew";
-// import CONFIG from "../../config/config.js";
-// import CloudImage from "../CloudImage"; // ✅ composant Cloudinary
-
-// const Phototheque = () => {
-//   const apiUrl = CONFIG.BASE_URL;
-//   const { t } = useTranslation();
-//   const [photos, setPhotos] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [draggingImage, setDraggingImage] = useState(null);
-//   const [imagePositions, setImagePositions] = useState({});
-//   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [viewMode, setViewMode] = useState("grid");
-//   const [zoomedImage, setZoomedImage] = useState(null);
-
-//   useEffect(() => {
-//     const fetchPhotos = async () => {
-//       try {
-//         const response = await fetch(CONFIG.API_PHOTO_LIST);
-//         if (!response.ok) throw new Error("Erreur lors du chargement des données.");
-//         const data = await response.json();
-//         const initialPositions = {};
-//         data.forEach((item, index) => {
-//           initialPositions[index] = { x: 0, y: 0 };
-//         });
-//         setImagePositions(initialPositions);
-//         setPhotos(data);
-//       } catch (err) {
-//         console.error("Erreur de fetch:", err);
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchPhotos();
-//   }, []);
-
-//   const filteredPhotos = photos.filter(photo => {
-//     const matchesSearch =
-//       searchTerm === "" ||
-//       photo.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       (photo.description && photo.description.toLowerCase().includes(searchTerm.toLowerCase()));
-//     return matchesSearch;
-//   });
-
-//   const handleMouseDown = (index, e) => {
-//     if (zoomedImage !== null) return;
-//     setDraggingImage(index);
-//     e.preventDefault();
-//   };
-
-//   const handleTouchStart = (index, e) => {
-//     if (zoomedImage !== null) return;
-//     setDraggingImage(index);
-//   };
-
-//   const handleMouseMove = (e) => {
-//     if (draggingImage !== null) {
-//       e.preventDefault();
-//       setImagePositions(prev => ({
-//         ...prev,
-//         [draggingImage]: {
-//           x: (prev[draggingImage]?.x || 0) + e.movementX,
-//           y: (prev[draggingImage]?.y || 0) + e.movementY
-//         }
-//       }));
-//     }
-//   };
-
-//   const handleTouchMove = (e) => {
-//     if (draggingImage !== null && e.touches && e.touches[0]) {
-//       const touch = e.touches[0];
-//       const previousTouch = e.target.previousTouch || { clientX: touch.clientX, clientY: touch.clientY };
-//       const movementX = touch.clientX - previousTouch.clientX;
-//       const movementY = touch.clientY - previousTouch.clientY;
-//       e.target.previousTouch = { clientX: touch.clientX, clientY: touch.clientY };
-//       setImagePositions(prev => ({
-//         ...prev,
-//         [draggingImage]: {
-//           x: (prev[draggingImage]?.x || 0) + movementX,
-//           y: (prev[draggingImage]?.y || 0) + movementY
-//         }
-//       }));
-//     }
-//   };
-
-//   const handleMouseUp = () => setDraggingImage(null);
-//   const handleTouchEnd = () => setDraggingImage(null);
-//   const resetImagePosition = (index, e) => {
-//     e && e.stopPropagation();
-//     setImagePositions(prev => ({ ...prev, [index]: { x: 0, y: 0 } }));
-//   };
-//   const toggleDescription = (index) => setExpandedDescriptions(prev => ({ ...prev, [index]: !prev[index] }));
-//   const handleZoomImage = (index, e) => { e && e.stopPropagation(); setZoomedImage(zoomedImage === index ? null : index); };
-//   const closeZoomedImage = () => setZoomedImage(null);
-
-//   useEffect(() => {
-//     if (draggingImage !== null) {
-//       window.addEventListener('mousemove', handleMouseMove);
-//       window.addEventListener('mouseup', handleMouseUp);
-//       window.addEventListener('touchmove', handleTouchMove);
-//       window.addEventListener('touchend', handleTouchEnd);
-//     }
-//     const handleEscKey = (e) => e.key === 'Escape' && closeZoomedImage();
-//     if (zoomedImage !== null) document.addEventListener('keydown', handleEscKey);
-//     return () => {
-//       window.removeEventListener('mousemove', handleMouseMove);
-//       window.removeEventListener('mouseup', handleMouseUp);
-//       window.removeEventListener('touchmove', handleTouchMove);
-//       window.removeEventListener('touchend', handleTouchEnd);
-//       document.removeEventListener('keydown', handleEscKey);
-//     };
-//   }, [draggingImage, zoomedImage]);
-
-//   // ✅ Cloudinary + local logic
-// const getImageSrc = (photo) => {
-//   if (!photo.image) return "/image_indispo.png";
-
-//   if (photo.image.startsWith("http")) {
-//     console.log("🔗 URL directe:", photo.image);
-//     return photo.image;
-//   }
-
-//   const full = `${CONFIG.BASE_URL}${photo.image}`.replace(/([^:]\/)\/+/g, "$1");
-//   console.log("🧩 URL complétée:", full);
-//   return full;
-// };
-
-
-
-//   // ✅ Composant pour image (Cloudinary ou locale)
-//   const renderImage = (photo, index, style) => {
-//     const imageUrl = getImageSrc(photo);
-//     const isCloudinary = imageUrl.includes("res.cloudinary.com");
-
-//     return isCloudinary ? (
-//       <CloudImage
-//         publicId={photo.cloudinary_id || photo.image.split("/").pop().split(".")[0]}
-//         width={400}
-//         height={300}
-//       />
-//     ) : (
-//       <img
-//         src={imageUrl}
-//         alt={photo.titre}
-//         style={{
-//           ...style,
-//           transform: `translate(-50%, -50%) translate(${imagePositions[index]?.x || 0}px, ${imagePositions[index]?.y || 0}px)`
-//         }}
-//         onMouseDown={(e) => handleMouseDown(index, e)}
-//         onTouchStart={(e) => handleTouchStart(index, e)}
-//         onError={(e) => (e.target.src = "/image_indispo.png")}
-//       />
-//     );
-//   };
-
-//   // 🖼️ rendu principal (grille ou timeline)
-//   const renderGridView = () => (
-//     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }}>
-//       {filteredPhotos.map((photo, index) => (
-//         <div key={index} style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px rgba(0,0,0,0.05)' }}>
-//           <div style={{ position: 'relative', width: '100%', paddingTop: '66%', backgroundColor: '#f0f0f0', overflow: 'hidden' }}>
-//             {renderImage(photo, index, {
-//               position: 'absolute',
-//               top: '50%',
-//               left: '50%',
-//               width: 'auto',
-//               height: 'auto',
-//               maxWidth: '90%',
-//               maxHeight: '90%',
-//               objectFit: 'contain',
-//               cursor: 'grab',
-//               transition: 'transform 0.2s ease',
-//             })}
-//           </div>
-//           <div style={{ padding: '20px' }}>
-//             <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '10px' }}>{photo.titre}</h3>
-//             <p style={{ fontSize: '15px', color: '#636e72' }}>
-//               {expandedDescriptions[index] ? photo.description : (photo.description || '').slice(0, 150) + '...'}
-//             </p>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   );
-
-//   return (
-//     <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
-//       <div style={{ backgroundColor: '#1C1C47', color: 'white', padding: '25px 0', textAlign: 'center' }}>
-//         <h1>{t('Phototheque')}</h1>
-//         <p>{t('Découvrez notre collection de photos illustrant les activités et événements de notre fondation')}</p>
-//       </div>
-
-//       <div style={{ padding: '20px' }}>
-//         {loading ? <p>Chargement...</p> :
-//           error ? <p style={{ color: 'red' }}>{error}</p> :
-//             filteredPhotos.length === 0 ? <p>Aucune photo trouvée</p> :
-//               renderGridView()}
-//       </div>
-
-//       {zoomedImage !== null && (
-//         <div
-//           style={{
-//             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-//             backgroundColor: 'rgba(0,0,0,0.9)', display: 'flex',
-//             justifyContent: 'center', alignItems: 'center', zIndex: 1000
-//           }}
-//           onClick={closeZoomedImage}
-//         >
-//           <div style={{ position: 'relative' }}>
-//             {renderImage(photos[zoomedImage], zoomedImage, { maxWidth: '90%', maxHeight: '90%', objectFit: 'contain' })}
-//             <button
-//               onClick={closeZoomedImage}
-//               style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', color: 'white', fontSize: '24px', border: 'none', cursor: 'pointer' }}
-//             >
-//               ✖
-//             </button>
-//           </div>
-//         </div>
-//       )}
-
-//       <div className="fixed bottom-6 right-6 z-50">
-//         <ChatBotNew />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Phototheque;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Search, RefreshCw, Camera, FolderOpen, X, ZoomIn, ChevronDown, ChevronUp } from 'lucide-react';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 import CONFIG from "../../config/config.js";
-import CloudImage from "../CloudImage"; // Optionnel si tu veux Cloudinary auto-format
 
 const Phototheque = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [albums, setAlbums] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
+  const [openAlbum, setOpenAlbum] = useState(null);
 
-  // 🟢 Charger les photos depuis Django
-  const fetchPhotos = async () => {
+  // 🟢 Charger albums + photos
+  const fetchData = async () => {
     try {
       setRefreshing(true);
-      const response = await fetch(CONFIG.API_PHOTO_LIST);
-      if (!response.ok) throw new Error("Erreur de chargement des photos.");
-      const data = await response.json();
-      setPhotos(data);
+      const [albumRes, photoRes] = await Promise.all([
+        fetch(CONFIG.API_ALBUM_LIST),
+        fetch(CONFIG.API_PHOTO_LIST)
+      ]);
+
+      if (!albumRes.ok || !photoRes.ok) throw new Error("Erreur de chargement");
+
+      const [albumData, photoData] = await Promise.all([
+        albumRes.json(),
+        photoRes.json()
+      ]);
+
+      setAlbums(albumData);
+      setPhotos(photoData);
       setError("");
     } catch (err) {
-      console.error("Erreur :", err);
+      console.error("Erreur:", err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -286,239 +44,174 @@ const Phototheque = () => {
   };
 
   useEffect(() => {
-    fetchPhotos();
+    fetchData();
   }, []);
 
-  // 🔍 Recherche locale
-  const filteredPhotos = photos.filter((photo) => {
+  // 🧩 Gestion des images Cloudinary
+  const getImageSrc = (url) => {
+    if (!url) return "/image_indispo.png";
+    if (url.startsWith("http")) return url; // Cloudinary renvoie déjà une URL absolue
+    return `${CONFIG.BASE_URL}${url.startsWith("/") ? url : `/${url}`}`;
+  };
+
+  // 🔍 Filtrage albums
+  const filteredAlbums = albums.filter((album) => {
     const term = searchTerm.toLowerCase();
     return (
-      photo.title_fr?.toLowerCase().includes(term) ||
-      photo.comment_fr?.toLowerCase().includes(term)
+      album.title_fr?.toLowerCase().includes(term) ||
+      album.title_en?.toLowerCase().includes(term)
     );
   });
 
-  // 🧩 Gestion de l'image (Cloudinary ou locale)
-  const getImageSrc = (photo) => {
-    if (!photo.image) return "/image_indispo.png";
-    return photo.image.startsWith("http")
-      ? photo.image
-      : `${CONFIG.BASE_URL}${photo.image}`;
-  };
+  // 🔄 Récupérer photos d’un album
+  const getPhotosByAlbum = (albumId) => photos.filter((p) => p.album === albumId);
 
-  // 🎨 Style principal (reprend le design du code commenté)
-  const styles = {
-    page: {
-      backgroundColor: '#f8f9fa',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    header: {
-      backgroundColor: '#1C1C47',
-      color: 'white',
-      padding: '40px 20px',
-      textAlign: 'center',
-    },
-    title: {
-      fontSize: '2.5rem',
-      fontWeight: '700',
-      marginBottom: '10px',
-    },
-    subtitle: {
-      fontSize: '1.1rem',
-      color: '#ddd',
-      maxWidth: '700px',
-      margin: '0 auto',
-    },
-    searchBar: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '10px',
-      margin: '30px auto',
-      flexWrap: 'wrap',
-      width: '90%',
-      maxWidth: '800px',
-    },
-    input: {
-      padding: '12px',
-      width: '60%',
-      borderRadius: '8px',
-      border: '1px solid #ccc',
-      fontSize: '16px',
-    },
-    refreshButton: {
-      backgroundColor: '#1C1C47',
-      color: 'white',
-      border: 'none',
-      padding: '12px 20px',
-      borderRadius: '8px',
-      fontWeight: '600',
-      cursor: 'pointer',
-    },
-    grid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-      gap: '25px',
-      padding: '0 20px 60px',
-    },
-    card: {
-      backgroundColor: '#fff',
-      borderRadius: '12px',
-      overflow: 'hidden',
-      boxShadow: '0 8px 20px rgba(0,0,0,0.05)',
-      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-      cursor: 'pointer',
-    },
-    cardHover: {
-      transform: 'translateY(-5px)',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
-    },
-    image: {
-      width: '100%',
-      height: '230px',
-      objectFit: 'cover',
-      transition: 'transform 0.3s ease',
-    },
-    content: {
-      padding: '18px',
-    },
-    titleCard: {
-      fontSize: '18px',
-      fontWeight: '600',
-      marginBottom: '8px',
-    },
-    desc: {
-      fontSize: '15px',
-      color: '#636e72',
-      lineHeight: '1.4',
-    },
-    zoomContainer: {
-      position: 'fixed',
-      top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.9)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1000,
-    },
-    zoomImage: {
-      maxWidth: '90%',
-      maxHeight: '90%',
-      objectFit: 'contain',
-    },
-    closeButton: {
-      position: 'absolute',
-      top: '20px',
-      right: '30px',
-      background: 'none',
-      border: 'none',
-      color: 'white',
-      fontSize: '28px',
-      cursor: 'pointer',
-    },
-  };
-
-  // ✅ Rendu principal
   return (
-    <div style={styles.page}>
-              {/* HEADER */}
-        <div
-          style={{
-            backgroundColor: '#1C1C47',
-            color: 'white',
-            padding: '120px 20px', // 🟢 Plus de hauteur POUR POUSSER LE TITRE VERS LE BAS
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '200px', // 🟢 Hauteur minimale
-          }}
-        >
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '10px' }}>
-            {t('Photothèque')}
+    <div className="min-h-screen bg-[#0a0e27] pt-40">
+      {/* 🧠 En-tête */}
+      <div className="relative text-center">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 blur-3xl rounded-full" />
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full" />
+        <div className="relative py-10">
+          <div className="relative w-24 h-24 bg-gradient-to-br from-orange-500 via-orange-600 to-blue-600 rounded-full mx-auto flex items-center justify-center shadow-2xl shadow-orange-500/50">
+            <Camera className="w-12 h-12 text-white" />
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mt-6 mb-4">
+            {t("phototheque.titre", "PHOTOTHÈQUE")}
           </h1>
-          <p style={{ fontSize: '1.1rem', maxWidth: '700px', lineHeight: '1.5' }}>
-            {t('Découvrez notre collection de photos illustrant les activités et événements de notre fondation')}
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            {t("phototheque.sous_titre", "Découvrez notre collection de photos illustrant nos activités et événements.")}
           </p>
         </div>
+      </div>
 
-
-      {/* BARRE DE RECHERCHE */}
-      <div style={styles.searchBar}>
-        <input
-          type="text"
-          placeholder="🔍 Rechercher une photo..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={styles.input}
-        />
+      {/* 🔍 Barre de recherche */}
+      <div className="flex justify-end px-6 mb-8">
+        <div className="flex items-center gap-2 bg-white/10 border border-orange-500/20 rounded-full px-3 py-2">
+          <Search size={18} className="text-orange-400" />
+          <input
+            type="text"
+            placeholder={t("phototheque.recherche", "Rechercher...")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-transparent text-white text-sm outline-none placeholder-gray-400 w-40"
+          />
+        </div>
         <button
-          onClick={fetchPhotos}
-          style={{
-            ...styles.refreshButton,
-            opacity: refreshing ? 0.6 : 1,
-          }}
+          onClick={fetchData}
           disabled={refreshing}
+          className="ml-3 p-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-full text-white transition-all"
         >
-          {refreshing ? "Rafraîchissement..." : "🔄 Rafraîchir"}
+          <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
         </button>
       </div>
 
-      {/* CONTENU */}
-      {loading ? (
-        <p style={{ textAlign: 'center' }}>Chargement...</p>
-      ) : error ? (
-        <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>
-      ) : filteredPhotos.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>Aucune photo trouvée</p>
-      ) : (
-        <div style={styles.grid}>
-          {filteredPhotos.map((photo, index) => (
-            <div
-              key={photo.id || index}
-              style={styles.card}
-              onClick={() => setZoomedImage(getImageSrc(photo))}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = styles.cardHover.transform)
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "none")
-              }
-            >
-              <img
-                src={getImageSrc(photo)}
-                alt={photo.title_fr}
-                style={styles.image}
-                onError={(e) => (e.target.src = "/image_indispo.png")}
-              />
-              <div style={styles.content}>
-                <h3 style={styles.titleCard}>{photo.title_fr}</h3>
-                <p style={styles.desc}>
-                  {(photo.comment_fr || "").slice(0, 150)}...
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* 📸 Albums */}
+      <div className="w-[90%] mx-auto pb-20">
+        {loading ? (
+          <p className="text-center text-gray-400">{t("chargement", "Chargement...")}</p>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
+        ) : filteredAlbums.length === 0 ? (
+          <div className="text-center py-16 bg-white/5 rounded-3xl border border-orange-500/20">
+            <FolderOpen className="w-12 h-12 text-orange-400 mx-auto mb-4" />
+            <p className="text-white font-bold text-xl">{t("aucun_album", "Aucun album trouvé")}</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {filteredAlbums.map((album) => {
+              const isOpen = openAlbum === album.id;
+              const albumPhotos = getPhotosByAlbum(album.id);
+              const desc = i18n.language === "fr" ? album.description_fr : album.description_en;
 
-      {/* ZOOM IMAGE */}
+              return (
+                <div key={album.id} className="bg-[#10142c]/80 border border-orange-500/20 rounded-3xl shadow-2xl overflow-hidden">
+                  <button
+                    onClick={() => setOpenAlbum(isOpen ? null : album.id)}
+                    className="w-full flex justify-between items-center p-6"
+                  >
+                    <div className="flex items-center gap-6">
+                      <img
+                        src={getImageSrc(album.image)}
+                        alt={album.title_fr}
+                        className="w-24 h-24 rounded-2xl object-cover border-4 border-orange-500"
+                        onError={(e) => (e.target.src = "/image_indispo.png")}
+                      />
+                      <div className="text-left">
+                        <h2 className="text-2xl font-bold text-white">
+                          {i18n.language === "fr" ? album.title_fr : album.title_en}
+                        </h2>
+                        <p className="text-sm text-gray-400 mt-1">
+                          📸 {albumPhotos.length} {t("photos", "photos")}
+                        </p>
+                      </div>
+                    </div>
+                    {isOpen ? <ChevronUp className="text-orange-400" size={28} /> : <ChevronDown className="text-orange-400" size={28} />}
+                  </button>
+
+                  {isOpen && (
+                    <div className="p-6 border-t border-orange-500/20">
+                      {desc && <p className="text-gray-300 mb-6 italic leading-relaxed">{desc}</p>}
+
+                      {/* Photos de l’album */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {albumPhotos.map((photo) => (
+                          <div
+                            key={photo.id}
+                            onClick={() =>
+                              setZoomedImage({
+                                src: getImageSrc(photo.image),
+                                title: i18n.language === "fr" ? photo.title_fr : photo.title_en,
+                                comment: i18n.language === "fr" ? photo.comment_fr : photo.comment_en,
+                              })
+                            }
+                            className="relative group cursor-pointer"
+                          >
+                            <img
+                              src={getImageSrc(photo.image)}
+                              alt={photo.title_fr}
+                              className="w-full h-48 object-cover rounded-2xl border-2 border-orange-500/20 group-hover:border-orange-500 transition-all"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                              <ZoomIn className="text-white" size={28} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* 🔍 MODAL IMAGE */}
       {zoomedImage && (
-        <div style={styles.zoomContainer} onClick={() => setZoomedImage(null)}>
-          <img src={zoomedImage} alt="Zoomed" style={styles.zoomImage} />
+        <div
+          onClick={() => setZoomedImage(null)}
+          className="fixed inset-0 bg-black/90 backdrop-blur-xl flex items-center justify-center z-50"
+        >
           <button
             onClick={() => setZoomedImage(null)}
-            style={styles.closeButton}
+            className="absolute top-8 right-8 w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center"
           >
-            ✖
+            <X className="text-white" />
           </button>
+          <div onClick={(e) => e.stopPropagation()} className="max-w-5xl mx-auto text-center">
+            <img
+              src={zoomedImage.src}
+              alt={zoomedImage.title}
+              className="max-h-[70vh] mx-auto rounded-2xl border-4 border-orange-500/30"
+            />
+            <p className="text-white text-xl font-bold mt-6">{zoomedImage.title}</p>
+            <p className="text-gray-400 mt-2">{zoomedImage.comment}</p>
+          </div>
         </div>
       )}
 
-      {/* CHATBOT */}
+      {/* 🤖 CHATBOT */}
       <div className="fixed bottom-6 right-6 z-50">
         <ChatBotNew />
       </div>

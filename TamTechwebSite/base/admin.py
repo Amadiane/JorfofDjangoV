@@ -18,28 +18,44 @@ from .models import (
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # 🖼️ PHOTO
+# @admin.register(Photo)
+# class PhotoAdmin(admin.ModelAdmin):
+#     list_display = ("id", "preview", "title_fr", "created_at")
+#     list_display_links = ("id", "title_fr")
+#     search_fields = ("title_fr", "comment_fr")
+#     list_filter = ("created_at",)
+#     readonly_fields = ("preview",)
+
+#     def preview(self, obj):
+#         if obj.image:
+#             return format_html(
+#                 f'<img src="{obj.image.url}" width="80" height="80" '
+#                 f'style="object-fit: cover; border-radius: 8px;" />'
+#             )
+#         return "Aucune image"
+#     preview.short_description = "Aperçu"
+
+#     fieldsets = (
+#         ("Informations principales", {"fields": ("title_fr", "title_en", "title_ar")}),
+#         ("Commentaires", {"fields": ("comment_fr", "comment_en", "comment_ar")}),
+#         ("Image", {"fields": ("image", "preview")}),
+#     )
+
+from django.contrib import admin
+from .models import Album, Photo
+
+@admin.register(Album)
+class AlbumAdmin(admin.ModelAdmin):
+    list_display = ('title_fr', 'title_en', 'created_at')
+    search_fields = ('title_fr', 'title_en')
+    list_filter = ('created_at',)
+
+
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ("id", "preview", "title_fr", "created_at")
-    list_display_links = ("id", "title_fr")
-    search_fields = ("title_fr", "comment_fr")
-    list_filter = ("created_at",)
-    readonly_fields = ("preview",)
-
-    def preview(self, obj):
-        if obj.image:
-            return format_html(
-                f'<img src="{obj.image.url}" width="80" height="80" '
-                f'style="object-fit: cover; border-radius: 8px;" />'
-            )
-        return "Aucune image"
-    preview.short_description = "Aperçu"
-
-    fieldsets = (
-        ("Informations principales", {"fields": ("title_fr", "title_en", "title_ar")}),
-        ("Commentaires", {"fields": ("comment_fr", "comment_en", "comment_ar")}),
-        ("Image", {"fields": ("image", "preview")}),
-    )
+    list_display = ('title_fr', 'album', 'created_at')
+    search_fields = ('title_fr', 'title_en')
+    list_filter = ('album', 'created_at')
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # 🎬 VIDEO

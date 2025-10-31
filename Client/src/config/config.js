@@ -12,6 +12,10 @@ const CONFIG = {
   API_PHOTO_LIST: `${BASE_URL}/api/media/`,
   API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/media/${id}/`,
 
+  // ✅ Albums
+  API_ALBUM_LIST: `${BASE_URL}/api/albums/`,
+  API_ALBUM_DETAIL: (id) => `${BASE_URL}/api/albums/${id}/`,
+
 
    // 🎬 Vidéothèque (Cloudinary)
   API_VIDEO_LIST: `${BASE_URL}/api/videos/`,

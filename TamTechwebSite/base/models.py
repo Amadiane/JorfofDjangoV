@@ -457,35 +457,67 @@ class Activity(models.Model):
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# from django.db import models
+# from cloudinary_storage.storage import MediaCloudinaryStorage
+
+# class Photo(models.Model):
+#     # Titres multilingues
+#     title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
+#     title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
+#     title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
+
+#     # Commentaires multilingues
+#     comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
+#     comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
+#     comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
+
+#     # Image Cloudinary
+#     image = models.ImageField(
+#         storage=MediaCloudinaryStorage(),
+#         upload_to="phototheque/",
+#         verbose_name="Image"
+#     )
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.title_fr or "Photo"
+
+#     class Meta:
+#         verbose_name = "Photo"
+#         verbose_name_plural = "Photothèque"
+
+# models.py
 from django.db import models
-from cloudinary_storage.storage import MediaCloudinaryStorage
+from cloudinary.models import CloudinaryField
 
-class Photo(models.Model):
-    # Titres multilingues
-    title_fr = models.CharField(max_length=255, verbose_name="Titre (Français)")
-    title_en = models.CharField(max_length=255, verbose_name="Title (English)", blank=True, null=True)
-    title_ar = models.CharField(max_length=255, verbose_name="العنوان (Arabe)", blank=True, null=True)
-
-    # Commentaires multilingues
-    comment_fr = models.TextField(verbose_name="Commentaire (Français)", blank=True, null=True)
-    comment_en = models.TextField(verbose_name="Comment (English)", blank=True, null=True)
-    comment_ar = models.TextField(verbose_name="تعليق (Arabe)", blank=True, null=True)
-
-    # Image Cloudinary
-    image = models.ImageField(
-        storage=MediaCloudinaryStorage(),
-        upload_to="phototheque/",
-        verbose_name="Image"
-    )
+class Album(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    description_fr = models.TextField()
+    description_en = models.TextField(blank=True, null=True)
+    image = CloudinaryField('image', folder='albums')
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title_fr or "Photo"
+        return self.title_fr
 
-    class Meta:
-        verbose_name = "Photo"
-        verbose_name_plural = "Photothèque"
+
+class Photo(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='photos')
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    comment_fr = models.TextField(blank=True)
+    comment_en = models.TextField(blank=True)
+    image = CloudinaryField('image', folder='photos')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title_fr
+
+
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from django.db import models

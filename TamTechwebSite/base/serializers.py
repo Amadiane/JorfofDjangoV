@@ -293,13 +293,30 @@ class ProgrammeSerializer(serializers.ModelSerializer):
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# from rest_framework import serializers
+# from .models import Photo
+
+# class PhotoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Photo
+#         fields = '__all__'
+
+# serializers.py
 from rest_framework import serializers
-from .models import Photo
+from .models import Album, Photo
+
+class AlbumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = '__all__'
+
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = '__all__'
+
+
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
