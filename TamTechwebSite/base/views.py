@@ -1387,90 +1387,28 @@ def home(request):
 
 
 # views.py
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import viewsets
 from .models import Album, Photo
 from .serializers import AlbumSerializer, PhotoSerializer
 
-# === ALBUMS ===
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
 
-@api_view(['GET', 'POST'])
-def album_list(request):
-    if request.method == 'GET':
-        albums = Album.objects.all().order_by('-id')
-        serializer = AlbumSerializer(albums, many=True)
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
-        serializer = AlbumSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        # Si le frontend envoie déjà un lien Cloudinary complet, on le garde
+        image_url = self.request.data.get("image")
+        serializer.save(image=image_url)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def album_detail(request, pk):
-    try:
-        album = Album.objects.get(pk=pk)
-    except Album.DoesNotExist:
-        return Response({'error': 'Album non trouvé'}, status=status.HTTP_404_NOT_FOUND)
+class PhotoViewSet(viewsets.ModelViewSet):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
 
-    if request.method == 'GET':
-        serializer = AlbumSerializer(album)
-        return Response(serializer.data)
+    def perform_create(self, serializer):
+        image_url = self.request.data.get("image")
+        serializer.save(image=image_url)
 
-    elif request.method == 'PUT':
-        serializer = AlbumSerializer(album, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        album.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# === PHOTOS ===
-
-@api_view(['GET', 'POST'])
-def photo_list(request):
-    if request.method == 'GET':
-        photos = Photo.objects.all().order_by('-id')
-        serializer = PhotoSerializer(photos, many=True)
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
-        serializer = PhotoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def photo_detail(request, pk):
-    try:
-        photo = Photo.objects.get(pk=pk)
-    except Photo.DoesNotExist:
-        return Response({'error': 'Photo non trouvée'}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = PhotoSerializer(photo)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = PhotoSerializer(photo, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        photo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 

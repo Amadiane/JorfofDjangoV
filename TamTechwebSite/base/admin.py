@@ -46,16 +46,12 @@ from .models import Album, Photo
 
 @admin.register(Album)
 class AlbumAdmin(admin.ModelAdmin):
-    list_display = ('title_fr', 'title_en', 'created_at')
-    search_fields = ('title_fr', 'title_en')
-    list_filter = ('created_at',)
+    list_display = ("title_fr", "title_en", "image")
 
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('title_fr', 'album', 'created_at')
-    search_fields = ('title_fr', 'title_en')
-    list_filter = ('album', 'created_at')
+    list_display = ("title_fr", "album", "image")
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # 🎬 VIDEO

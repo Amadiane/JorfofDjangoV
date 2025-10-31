@@ -9,15 +9,15 @@ const CONFIG = {
   API_LOGIN: `/api/login/`,
 
   // 🖼️ Photothèque
-  API_PHOTO_LIST: `${BASE_URL}/api/media/`,
-  API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/media/${id}/`,
+  API_PHOTO_LIST: `${BASE_URL}/api/photos/`,
+  API_PHOTO_DETAIL: (id) => `${BASE_URL}/api/photos/${id}/`,
 
   // ✅ Albums
   API_ALBUM_LIST: `${BASE_URL}/api/albums/`,
   API_ALBUM_DETAIL: (id) => `${BASE_URL}/api/albums/${id}/`,
 
 
-   // 🎬 Vidéothèque (Cloudinary)
+  // 🎬 Vidéothèque (Cloudinary)
   API_VIDEO_LIST: `${BASE_URL}/api/videos/`,
   API_VIDEO_DETAIL: (id) => `${BASE_URL}/api/videos/${id}/`,
   API_VIDEO_CREATE: `${BASE_URL}/api/videos/`,

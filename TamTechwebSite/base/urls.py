@@ -9,7 +9,7 @@ from .views import (
     RejoindreAPIView, CommunityView,
     document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet
     # 👈 ajoute ces deux-là ici
 )
 
@@ -24,6 +24,8 @@ router.register(r'videos', VideoViewSet, basename='video')
 router.register(r"news", NewsViewSet, basename="news")
 router.register(r'matches', MatchViewSet, basename='match')
 router.register(r'partners', PartnerViewSet, basename='partner')
+router.register(r'albums', AlbumViewSet)
+router.register(r'photos', PhotoViewSet)
 
 
 
@@ -65,10 +67,7 @@ urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected_view'),
     path('logout/', logout, name='logout'),
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    path('albums/', views.album_list, name='album_list'),
-    path('albums/<int:pk>/', views.album_detail, name='album_detail'),
-    path('media/', views.photo_list, name='photo_list'),
-    path('media/<int:pk>/', views.photo_detail, name='photo_detail'),
+
  
     
 

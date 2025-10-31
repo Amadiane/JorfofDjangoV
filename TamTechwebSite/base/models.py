@@ -489,30 +489,25 @@ class Activity(models.Model):
 
 # models.py
 from django.db import models
-from cloudinary.models import CloudinaryField
 
 class Album(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
+    title_fr = models.CharField(max_length=200)
+    title_en = models.CharField(max_length=200)
     description_fr = models.TextField()
-    description_en = models.TextField(blank=True, null=True)
-    image = CloudinaryField('image', folder='albums')
-
-    created_at = models.DateTimeField(auto_now_add=True)
+    description_en = models.TextField()
+    image = models.URLField(blank=True, null=True)  # lien Cloudinary
 
     def __str__(self):
         return self.title_fr
 
 
 class Photo(models.Model):
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='photos')
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    comment_fr = models.TextField(blank=True)
-    comment_en = models.TextField(blank=True)
-    image = CloudinaryField('image', folder='photos')
-
-    created_at = models.DateTimeField(auto_now_add=True)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="photos")
+    title_fr = models.CharField(max_length=200)
+    title_en = models.CharField(max_length=200)
+    comment_fr = models.TextField(blank=True, null=True)
+    comment_en = models.TextField(blank=True, null=True)
+    image = models.URLField(blank=True, null=True)  # lien Cloudinary
 
     def __str__(self):
         return self.title_fr
