@@ -386,7 +386,84 @@
     "join_text": "Suivez nos actualités et venez encourager le Jorfof Club à chaque match !",
     "contact_us": "Nous contacter",
     "join_us": "Nous rejoindre"
+  }, 
+
+  
+  "partner": {
+    "title": "NOS PARTENAIRES",
+    "subtitle": {
+      "part1": "Découvrez les partenaires qui soutiennent le",
+      "club": "Jorfof Club",
+      "part2": "dans son aventure !"
+    },
+    "section_title": "Partenaires Officiels",
+    "section_subtitle": "Ils croient en notre vision",
+    "loading": "Chargement des partenaires...",
+    "no_partners_title": "Aucun partenaire disponible",
+    "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
+    "cta_title": "REJOIGNEZ NOS PARTENAIRES",
+    "cta_text": {
+      "part1": "Soutenez le",
+      "club": "Jorfof Club",
+      "part2": "et participez à notre passion commune : le basket-ball."
+    },
+    "cta_button": "DEVENIR PARTENAIRE"
+  },
+
+
+  "partner": {
+    "title": "NOS PARTENAIRES",
+
+    "section_title": "Partenaires Officiels",
+    "section_subtitle": "Ils croient en notre vision",
+
+    "subtitle": {
+      "part1": "Découvrez les partenaires qui soutiennent le",
+      "club": "Jorfof Club",
+      "part2": "dans son aventure !"
+    },
+
+    "loading": "Chargement des partenaires...",
+    "no_partners_title": "Aucun partenaire disponible",
+    "no_partners_text": "Revenez bientôt pour découvrir nos partenaires.",
+
+    "cta_title": "REJOIGNEZ NOS PARTENAIRES",
+    "cta_text": {
+      "part1": "Soutenez le",
+      "club": "Jorfof Club",
+      "part2": "et participez à notre passion commune : le basket-ball."
+    },
+    "cta_button": "DEVENIR PARTENAIRE"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur"
+  }, 
+
+  
+  "nav": {
+    "news": "Actualités",
+    "club": "Club",
+    "president_word": "Mot du Président",
+    "missions": "Nos Missions",
+    "team": "Notre Équipe",
+    "calendrier": "Calendrier",
+    "medias": "Médias",
+    "photos": "Photothèque",
+    "videos": "Vidéothèque",
+    "partenaires": "Partenaires",
+    "join_us": "Nous Rejoindre",
+    "contact": "Nous Contacter",
+    "community": "Communauté",
+    "medias_partners": "Médias Partenaires",
+    "club_presentation": "Présentation du Club",
+    "slogan": "Toujours prêt à briller"
   }
+
+
+
+
+
 
 
       

@@ -388,6 +388,55 @@
     "join_text": "Follow our news and come support the Jorfof Club at every match!",
     "contact_us": "Contact us",
     "join_us": "Join us"
+  },
+
+  
+  "partner": {
+    "title": "OUR PARTNERS",
+
+    "section_title": "Official Partners",
+    "section_subtitle": "They believe in our vision",
+
+    "subtitle": {
+      "part1": "Discover the partners who support",
+      "club": "Jorfof Club",
+      "part2": "in its journey!"
+    },
+
+    "loading": "Loading partners...",
+    "no_partners_title": "No partners available",
+    "no_partners_text": "Check back soon to discover our partners.",
+
+    "cta_title": "JOIN OUR PARTNERS",
+    "cta_text": {
+      "part1": "Support",
+      "club": "Jorfof Club",
+      "part2": "and be part of our shared passion: basketball."
+    },
+    "cta_button": "BECOME A PARTNER"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error"
+  },
+
+  "nav": {
+    "news": "News",
+    "club": "Club",
+    "president_word": "President's Message",
+    "missions": "Our Missions",
+    "team": "Our Team",
+    "calendrier": "Schedule",
+    "medias": "Media",
+    "photos": "Photo Gallery",
+    "videos": "Video Gallery",
+    "partenaires": "Partners",
+    "join_us": "Join Us",
+    "contact": "Contact Us",
+    "community": "Community",
+    "medias_partners": "Media Partners",
+    "club_presentation": "Club Presentation",
+    "slogan": "Always ready to shine"
   }
 
       
