@@ -130,21 +130,21 @@ class ContactMessage(models.Model):
 
 
 
-#ComminityContact
+# #ComminityContact
 
-from django.db import models
+# from django.db import models
 
-class CommunityContact(models.Model):
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    tel = models.CharField(max_length=20)
-    email = models.EmailField()
-    conditions = models.BooleanField()
-    created_at = models.DateTimeField(auto_now_add=True)
+# class CommunityContact(models.Model):
+#     nom = models.CharField(max_length=100)
+#     prenom = models.CharField(max_length=100)
+#     role = models.CharField(max_length=100)
+#     tel = models.CharField(max_length=20)
+#     email = models.EmailField()
+#     conditions = models.BooleanField()
+#     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.nom} {self.prenom}"
+#     def __str__(self):
+#         return f"{self.nom} {self.prenom}"
 
 
 
