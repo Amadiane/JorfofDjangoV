@@ -76,13 +76,18 @@ class FondationTamkineSerializer(serializers.ModelSerializer):
 
 
 # serializers.py
-from rest_framework import serializers
-from .models import MotPresident
+# from rest_framework import serializers
+# from .models import MotPresident
 
-class MotPresidentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MotPresident
-        fields = '__all__'
+# class MotPresidentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MotPresident
+#         fields = '__all__'
+
+
+
+
+
 
 
 
@@ -262,13 +267,13 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 
-from rest_framework import serializers
-from .models import Valeur  # Assurez-vous que le modèle Valeur existe dans models.py
+# from rest_framework import serializers
+# from .models import Valeur  # Assurez-vous que le modèle Valeur existe dans models.py
 
-class ValeurSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Valeur
-        fields = '__all__'  # ou liste de champs spécifiques si nécessaire
+# class ValeurSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Valeur
+#         fields = '__all__'  # ou liste de champs spécifiques si nécessaire
 
 
 
@@ -410,4 +415,61 @@ class PartnerSerializer(serializers.ModelSerializer):
     def get_cover_image_url(self, obj):
         if obj.cover_image:
             return obj.cover_image.url
+        return None
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import MotPresident
+
+class MotPresidentSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MotPresident
+        fields = [
+            'id',
+            'title_fr',
+            'title_en',
+            'title_ar',
+            'description_fr',
+            'description_en',
+            'description_ar',
+            'image',
+            'image_url',
+        ]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url  # Cloudinary donne une URL publique
+        return None
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from rest_framework import serializers
+from .models import Valeur
+
+
+class ValeurSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Valeur
+        fields = [
+            'id',
+            'title_fr',
+            'title_en',
+            'title_ar',
+            'description_fr',
+            'description_en',
+            'description_ar',
+            'image',
+            'image_url',
+        ]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url  # Cloudinary ou Media URL
         return None

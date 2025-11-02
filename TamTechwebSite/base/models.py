@@ -220,21 +220,43 @@ class PlatformLink(models.Model):
 
 
 
-from django.db import models
+# from django.db import models
 
-class MotPresident(models.Model):
-    titre_fr = models.CharField(max_length=255)
-    titre_en = models.CharField(max_length=255)
-    titre_ar = models.CharField(max_length=255)
+# class MotPresident(models.Model):
+#     titre_fr = models.CharField(max_length=255)
+#     titre_en = models.CharField(max_length=255)
+#     titre_ar = models.CharField(max_length=255)
 
-    description_fr = models.TextField()
-    description_en = models.TextField()
-    description_ar = models.TextField()
+#     description_fr = models.TextField()
+#     description_en = models.TextField()
+#     description_ar = models.TextField()
 
-    image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
+#     image = models.ImageField(upload_to='mot_president')  # dossier media/mot_president/
 
-    def __str__(self):
-        return self.titre_fr
+#     def __str__(self):
+#         return self.titre_fr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -286,21 +308,7 @@ class FondationTamkine(models.Model):
 
 #     def __str__(self):
 #         return self.titre
-from django.db import models
 
-class Valeur(models.Model):
-    titre_fr = models.CharField(max_length=255)
-    titre_en = models.CharField(max_length=255, blank=True, null=True)
-    titre_ar = models.CharField(max_length=255, blank=True, null=True)
-
-    description_fr = models.TextField()
-    description_en = models.TextField(blank=True, null=True)
-    description_ar = models.TextField(blank=True, null=True)
-
-    image = models.ImageField(upload_to='valeurs/')  # dans media/valeurs
-
-    def __str__(self):
-        return self.titre_fr
 
 
 
@@ -679,3 +687,51 @@ class Partner(models.Model):
 
     def __str__(self):
         return self.name_en or self.name_fr
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#django made by me
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+class MotPresident (models.Model):
+
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+
+    description_fr = models.TextField ()
+    description_en = models.TextField ()
+    description_ar = models.TextField ()
+
+    image = CloudinaryField (
+        'Image du President',
+        folder= 'mot_president',
+        blank = True,
+        null = True
+    )
+
+    def __str__(self):
+        return self.title_fr
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.db import models
+
+class Valeur(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255, blank=True, null=True)
+    title_ar = models.CharField(max_length=255, blank=True, null=True)
+
+    description_fr = models.TextField()
+    description_en = models.TextField(blank=True, null=True)
+    description_ar = models.TextField(blank=True, null=True)
+
+    image = CloudinaryField (
+        'Nos Valeurs',
+        folder= 'valeur',
+        blank = True,
+        null = True
+    )
+
+    def __str__(self):
+        return self.title_fr

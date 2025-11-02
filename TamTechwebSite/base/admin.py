@@ -126,3 +126,59 @@ class PartnerAdmin(admin.ModelAdmin):
     list_display = ('name_fr', 'name_en', 'website_url', 'created_at')
     search_fields = ('name_fr', 'name_en')
     list_filter = ('created_at',)
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.contrib import admin
+from .models import MotPresident
+
+@admin.register(MotPresident)
+class MotPresidentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title_fr', 'title_en', 'title_ar', 'image')
+    search_fields = ('title_fr', 'title_en', 'title_ar')
+    list_filter = ('title_fr',)
+    ordering = ('-id',)
+
+    fieldsets = (
+        ('Titres', {
+            'fields': ('title_fr', 'title_en', 'title_ar')
+        }),
+        ('Descriptions', {
+            'fields': ('description_fr', 'description_en', 'description_ar')
+        }),
+        ('Image', {
+            'fields': ('image',)
+        }),
+    )
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from django.contrib import admin
+from .models import Valeur
+
+
+@admin.register(Valeur)
+class ValeurAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title_fr', 'title_en', 'title_ar', 'image_preview')
+    search_fields = ('title_fr', 'title_en', 'title_ar')
+    list_filter = ('title_fr',)
+    ordering = ('-id',)
+
+    readonly_fields = ('image_preview',)
+
+    fieldsets = (
+        ('Informations principales', {
+            'fields': ('title_fr', 'title_en', 'title_ar', 'description_fr', 'description_en', 'description_ar')
+        }),
+        ('Image', {
+            'fields': ('image', 'image_preview')
+        }),
+    )
+
+    def image_preview(self, obj):
+        if obj.image:
+            return f'<img src="{obj.image.url}" width="100" height="100" style="object-fit: cover; border-radius: 8px;" />'
+        return "Aucune image"
+    image_preview.allow_tags = True
+    image_preview.short_description = "Aperçu de l'image"

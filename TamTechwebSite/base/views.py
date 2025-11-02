@@ -754,49 +754,6 @@ def platform_link_detail_api(request, pk):
 
 
 
-#MotDuPresident
-# views.py
-# from .models import MotPresident
-# from django.views.decorators.csrf import csrf_exempt
-# from django.views.decorators.http import require_http_methods
-# from django.http import JsonResponse
-
-# @csrf_exempt
-# @require_http_methods(["GET", "POST"])
-# def mot_president_api(request):
-#     if request.method == "GET":
-#         mots = MotPresident.objects.all()
-#         data = []
-#         for mot in mots:
-#             data.append({
-#                 "id": mot.id,
-#                 "titre": mot.titre,
-#                 "description": mot.description,
-#                 "image": request.build_absolute_uri(mot.image.url)
-#             })
-#         return JsonResponse(data, safe=False)
-
-#     if request.method == "POST":
-#         titre = request.POST.get("titre")
-#         description = request.POST.get("description")
-#         image = request.FILES.get("image")
-
-#         if not (titre and description and image):
-#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
-
-#         mot = MotPresident.objects.create(titre=titre, description=description, image=image)
-        
-#         return JsonResponse({
-#             "message": "Mot du président ajouté avec succès.",
-#             "motPresident": {
-#                 "id": mot.id,
-#                 "titre": mot.titre,
-#                 "description": mot.description,
-#                 "image": request.build_absolute_uri(mot.image.url)
-#             }
-#         }, status=201)
-# views.py
-# views.py
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -850,100 +807,7 @@ def mot_president_detail(request, pk):
 
 
 
-
-# #Valeurs
-# from django.views.decorators.csrf import csrf_exempt
-# from django.http import JsonResponse
-# from django.views.decorators.http import require_http_methods
-# from .models import Valeur
-# from django.core.files.storage import default_storage
-
-# @csrf_exempt
-# @require_http_methods(["GET", "POST"])
-# def valeurs_api(request):
-#     if request.method == "GET":
-#         # Récupérer toutes les valeurs avec leurs informations
-#         valeurs = Valeur.objects.all()
-        
-#         # Convertir les objets en dictionnaires
-#         data = []
-#         for valeur in valeurs:
-#             data.append({
-#                 "id": valeur.id,
-#                 "titre": valeur.titre,
-#                 "description": valeur.description,
-#                 "image": request.build_absolute_uri(valeur.image.url)
-
-#             })
-
-#         return JsonResponse(data, safe=False)
-
-#     if request.method == "POST":
-#         titre = request.POST.get("titre")
-#         description = request.POST.get("description")
-#         image = request.FILES.get("image")
-
-#         if not (titre and description and image):
-#             return JsonResponse({"error": "Tous les champs sont requis."}, status=400)
-
-#         # Créer une nouvelle instance de Valeur avec l'image
-#         valeur = Valeur.objects.create(titre=titre, description=description, image=image)
-
-#         # Retourner une réponse JSON avec l'URL complète de l'image
-#         return JsonResponse({
-#             "message": "Valeur ajoutée avec succès.",
-#             "valeur": {
-#                 "id": valeur.id,
-#                 "titre": valeur.titre,
-#                 "description": valeur.description,
-#                 "image": request.build_absolute_uri(valeur.image.url)  # Assure l'URL absolue de l'image
-#             }
-#         }, status=201)
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Valeur
-from .serializers import ValeurSerializer
-
-@api_view(['GET', 'POST'])
-def valeurs_list(request):
-    if request.method == 'GET':
-        valeurs = Valeur.objects.all()
-        serializer = ValeurSerializer(valeurs, many=True, context={'request': request})
-        return Response(serializer.data)
-    
-    if request.method == 'POST':
-        serializer = ValeurSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def valeurs_detail(request, id):
-    try:
-        valeur = Valeur.objects.get(id=id)
-    except Valeur.DoesNotExist:
-        return Response({"error": "Valeur non trouvée."}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = ValeurSerializer(valeur, context={'request': request})
-        return Response(serializer.data)
-    
-    elif request.method == 'PUT':
-        serializer = ValeurSerializer(valeur, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        valeur.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
+# 
 
 
 
@@ -1472,3 +1336,50 @@ from .serializers import PartnerSerializer
 class PartnerViewSet(viewsets.ModelViewSet):
     queryset = Partner.objects.all().order_by('-created_at')
     serializer_class = PartnerSerializer
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Valeur
+from .serializers import ValeurSerializer
+
+
+@api_view(['GET', 'POST'])
+def valeurs_list(request):
+    if request.method == 'GET':
+        valeurs = Valeur.objects.all().order_by('-id')  # pour avoir les plus récentes en premier
+        serializer = ValeurSerializer(valeurs, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = ValeurSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def valeurs_detail(request, pk):
+    try:
+        valeur = Valeur.objects.get(pk=pk)
+    except Valeur.DoesNotExist:
+        return Response({"error": "Valeur non trouvée."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ValeurSerializer(valeur, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ValeurSerializer(valeur, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        valeur.delete()
+        return Response({"message": "Valeur supprimée avec succès."}, status=status.HTTP_204_NO_CONTENT)

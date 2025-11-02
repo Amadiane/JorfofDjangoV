@@ -51,14 +51,9 @@ urlpatterns = [
     path('community/', CommunityView.as_view(), name='community'),
     # Route pour DELETE (supprimer un contact) avec un id
     path('community/<int:id>/', CommunityView.as_view()),
-    # path('partners/', PartnerAPIView.as_view(), name='partners'),
-    # path('platforms/', platform_links_api, name='platform_links_api'),
-    
-    # path('valeurs/', valeurs_api, name='valeurs_api'),
-    # path('valeurs/', views.valeurs_api, name='valeurs_api'),
-    # path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
     path('valeurs/', views.valeurs_list, name='valeurs_list'),
-    path('valeurs/<int:id>/', views.valeurs_detail, name='valeurs_detail'),
+    path('valeurs/<int:pk>/', views.valeurs_detail, name='valeurs_detail'),
+
     # path('fondations/', fondations_api, name='fondations_api'),
     path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
     path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),

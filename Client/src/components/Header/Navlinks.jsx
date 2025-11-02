@@ -352,6 +352,7 @@ const Navlinks = () => {
   };
 
   const navItems = [
+    { title: t("nav.medias_partners"), path: "/Accueil", icon: Newspaper },
     { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
       title: t("nav.club"),
@@ -383,7 +384,7 @@ const Navlinks = () => {
         { title: t("nav.community"), path: "/community" },
       ]
     },
-    { title: t("nav.medias_partners"), path: "/mediaPartenaire", icon: Newspaper },
+    // { title: t("nav.medias_partners"), path: "/mediaPartenaire", icon: Newspaper },
   ];
 
   return (
