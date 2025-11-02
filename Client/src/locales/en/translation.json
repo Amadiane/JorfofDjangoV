@@ -437,7 +437,76 @@
     "medias_partners": "Media Partners",
     "club_presentation": "Club Presentation",
     "slogan": "Always ready to shine"
+  }, 
+
+  "team": {
+    "title": "Our Team",
+    "loading": "Loading team...",
+    "error": "Error loading data",
+    "all": "All",
+    "players": "Players",
+    "coaches": "Coaches",
+    "staffs": "Staff Members",
+    "player": "Player",
+    "coach": "Coach",
+    "staff": "Staff Member",
+    "number": "Number",
+    "position": "Position",
+    "no_members": "No members found",
+    "no_members_desc": "The team is being built. Come back soon to discover our talents!",
+    "join_title": "Join Our Team!",
+    "join_text": "Are you passionate about basketball and want to be part of an ambitious team? Join our club today and contribute to our success!",
+    "contact_us": "Contact Us",
+    "join_club": "Join the Club"
+  },
+  
+  "missions": {
+    "title": "OUR MISSION",
+    "loading": "Loading mission...",
+    "error": "Loading error",
+    "empty": "No mission available",
+    "empty_desc": "Come back soon to discover our mission",
+    "published": "Published on",
+    "our_vision": "Our Vision",
+    "dedication": "Dedication",
+    "ambition": "Ambition",
+    "passion": "Passion",
+    "key_objectives": "Our Key Objectives",
+    "objective_1": "Train young talents and develop their sports and personal skills",
+    "objective_2": "Promote basketball values: fair play, team spirit and self-improvement",
+    "objective_3": "Create a united community around the passion for sports",
+    "objective_4": "Proudly represent our club in all competitions",
+    "cta_title": "Join Our Mission!",
+    "cta_text": "Together, let's build the future of basketball and train the next generation of champions",
+    "contact_us": "Contact Us",
+    "join_us": "Join the Club"
+  },
+
+  "values": {
+    "title": "OUR VALUES",
+    "loading": "Loading values...",
+    "error": "Loading error",
+    "empty": "No values available",
+    "empty_desc": "Come back soon to discover our values",
+    "published": "Published on",
+    "our_core": "Our Core",
+    "respect": "Respect",
+    "integrity": "Integrity",
+    "excellence": "Excellence",
+    "key_principles": "Our Core Principles",
+    "principle_1": "Mutual respect and solidarity among all club members",
+    "principle_2": "Team spirit and collaboration to achieve our common goals",
+    "principle_3": "Discipline and commitment in every training and competition",
+    "principle_4": "Fair play and integrity on and off the court",
+    "cta_title": "Share Our Values!",
+    "cta_text": "Join a community that puts people and excellence at the heart of every action",
+    "contact_us": "Contact Us",
+    "join_us": "Join the Club"
   }
+
+
+
+
 
       
       

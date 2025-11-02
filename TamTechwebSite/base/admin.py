@@ -182,3 +182,83 @@ class ValeurAdmin(admin.ModelAdmin):
         return "Aucune image"
     image_preview.allow_tags = True
     image_preview.short_description = "Aperçu de l'image"
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.contrib import admin
+from .models import Mission
+from django.utils.html import format_html
+
+
+@admin.register(Mission)
+class MissionAdmin(admin.ModelAdmin):
+    list_display = ('title_fr', 'title_en', 'created_at', 'preview_image')
+    list_filter = ('created_at',)
+    search_fields = ('title_fr', 'title_en', 'content_fr')
+    readonly_fields = ('preview_image', 'created_at')  # ✅ ajouté ici
+
+    fieldsets = (
+        ("Titres", {
+            'fields': ('title_fr', 'title_en', 'title_ar')
+        }),
+        ("Contenus", {
+            'fields': ('content_fr', 'content_en', 'content_ar')
+        }),
+        ("Image", {
+            'fields': ('image', 'preview_image')
+        }),
+        # ❌ On supprime la section "Dates" ou on la garde en lecture seule
+        ("Informations automatiques", {
+            'fields': ('created_at',),
+        }),
+    )
+
+    def preview_image(self, obj):
+        """Affiche un aperçu de l'image dans l'admin."""
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="100" height="100" style="object-fit:cover; border-radius:6px;" />',
+                obj.image.url
+            )
+        return "Aucune image"
+
+    preview_image.short_description = "Aperçu"
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.contrib import admin
+from django.utils.html import format_html
+from .models import EquipeMember
+
+
+@admin.register(EquipeMember)
+class EquipeMemberAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'role', 'position', 'number', 'preview_photo')
+    list_filter = ('role', 'nationality')
+    search_fields = ('first_name', 'last_name', 'role', 'nationality')
+    readonly_fields = ('preview_photo', 'created_at', 'updated_at')
+
+    fieldsets = (
+        ("Identité", {
+            'fields': ('first_name', 'last_name', 'role', 'position', 'number')
+        }),
+        ("Informations physiques", {
+            'fields': ('height', 'weight', 'nationality')
+        }),
+        ("Description", {
+            'fields': ('bio_fr', 'bio_en')
+        }),
+        ("Photo", {
+            'fields': ('photo', 'preview_photo')
+        }),
+        ("Dates", {
+            'fields': ('created_at', 'updated_at'),
+        }),
+    )
+
+    def preview_photo(self, obj):
+        if obj.photo:
+            return format_html('<img src="{}" width="80" height="80" style="object-fit:cover;border-radius:8px;"/>', obj.photo.url)
+        return "Aucune photo"
+    preview_photo.short_description = "Aperçu"

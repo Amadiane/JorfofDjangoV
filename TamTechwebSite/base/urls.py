@@ -9,7 +9,7 @@ from .views import (
     RejoindreAPIView, CommunityView,
     document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet
     # 👈 ajoute ces deux-là ici
 )
 
@@ -26,6 +26,7 @@ router.register(r'matches', MatchViewSet, basename='match')
 router.register(r'partners', PartnerViewSet, basename='partner')
 router.register(r'albums', AlbumViewSet)
 router.register(r'photos', PhotoViewSet)
+router.register(r'equipe', EquipeMemberViewSet, basename='equipe')
 
 
 
@@ -42,8 +43,6 @@ urlpatterns = [
     # Route pour DELETE (supprimer un contact) avec un id
     path('contact/<int:id>/', ContactAPIView.as_view(), name='contact-detail'),
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
-    # path('missions/', get_last_two_missions, name='get_last_two_missions'),
-    # path('missions/create/', create_mission, name='create_mission'),
     path('missions/', views.mission_list_create, name='mission_list_create'),
     path('missions/<int:pk>/', views.mission_detail, name='mission_detail'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),

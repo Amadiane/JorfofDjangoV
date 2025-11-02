@@ -458,7 +458,76 @@
     "medias_partners": "Médias Partenaires",
     "club_presentation": "Présentation du Club",
     "slogan": "Toujours prêt à briller"
+  }, 
+  
+  "team": {
+    "title": "Notre Équipe",
+    "loading": "Chargement de l'équipe...",
+    "error": "Erreur de chargement",
+    "all": "Tous",
+    "players": "Joueurs",
+    "coaches": "Entraîneurs",
+    "staffs": "Staffs",
+    "player": "Joueur",
+    "coach": "Entraîneur",
+    "staff": "Membre du staff",
+    "number": "Numéro",
+    "position": "Poste",
+    "no_members": "Aucun membre trouvé",
+    "no_members_desc": "L'équipe est en cours de constitution. Revenez bientôt pour découvrir nos talents !",
+    "join_title": "Rejoignez notre équipe !",
+    "join_text": "Vous êtes passionné de basketball et souhaitez faire partie d'une équipe ambitieuse ? Rejoignez notre club dès aujourd'hui et contribuez à notre succès !",
+    "contact_us": "Nous contacter",
+    "join_club": "Rejoindre le club"
+  },
+  
+  "missions": {
+    "title": "NOTRE MISSION",
+    "loading": "Chargement de la mission...",
+    "error": "Erreur de chargement",
+    "empty": "Aucune mission disponible",
+    "empty_desc": "Revenez bientôt pour découvrir notre mission",
+    "published": "Publié le",
+    "our_vision": "Notre Vision",
+    "dedication": "Dévouement",
+    "ambition": "Ambition",
+    "passion": "Passion",
+    "key_objectives": "Nos Objectifs Clés",
+    "objective_1": "Former les jeunes talents et développer leurs compétences sportives et personnelles",
+    "objective_2": "Promouvoir les valeurs du basket-ball : fair-play, esprit d'équipe et dépassement de soi",
+    "objective_3": "Créer une communauté unie autour de la passion du sport",
+    "objective_4": "Représenter fièrement notre club dans toutes les compétitions",
+    "cta_title": "Rejoignez Notre Mission !",
+    "cta_text": "Ensemble, construisons l'avenir du basket-ball et formons la prochaine génération de champions",
+    "contact_us": "Nous Contacter",
+    "join_us": "Rejoindre le Club"
+  }, 
+
+  
+  "values": {
+    "title": "NOS VALEURS",
+    "loading": "Chargement des valeurs...",
+    "error": "Erreur de chargement",
+    "empty": "Aucune valeur disponible",
+    "empty_desc": "Revenez bientôt pour découvrir nos valeurs",
+    "published": "Publié le",
+    "our_core": "Notre Essence",
+    "respect": "Respect",
+    "integrity": "Intégrité",
+    "excellence": "Excellence",
+    "key_principles": "Nos Principes Fondamentaux",
+    "principle_1": "Le respect mutuel et la solidarité entre tous les membres du club",
+    "principle_2": "L'esprit d'équipe et la collaboration pour atteindre nos objectifs communs",
+    "principle_3": "La discipline et l'engagement dans chaque entraînement et compétition",
+    "principle_4": "Le fair-play et l'intégrité sur et en dehors du terrain",
+    "cta_title": "Partagez Nos Valeurs !",
+    "cta_text": "Rejoignez une communauté qui place l'humain et l'excellence au cœur de chaque action",
+    "contact_us": "Nous Contacter",
+    "join_us": "Rejoindre le Club"
   }
+
+
+
 
 
 

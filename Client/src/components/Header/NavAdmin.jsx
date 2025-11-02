@@ -38,7 +38,9 @@ const NavAdmin = () => {
       "/videoPost": <Video className="w-5 h-5" />,
       "/photoPost": <Image className="w-5 h-5" />,
       "/partnerPost": <Users className="w-5 h-5" />,
-      "/mediaPartenairePost": <TrendingUp className="w-5 h-5" />,
+      "/teamMessage": <TrendingUp className="w-5 h-5" />,
+      "/missionPost": <TrendingUp className="w-5 h-5" />,
+      "/valeurPost": <TrendingUp className="w-5 h-5" />,
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -64,7 +66,9 @@ const NavAdmin = () => {
       title: "Équipe & Partenaires",
       items: [
         { path: "/partnerPost", label: "Partenaires" },
-        { path: "/mediaPartenairePost", label: "Partenaires Médias" },
+        { path: "/teamMessage", label: "Equipe" },
+        { path: "/missionPost", label: "Missions" },
+        { path: "/valeurPost", label: "Valeurs" },
       ]
     },
   ];

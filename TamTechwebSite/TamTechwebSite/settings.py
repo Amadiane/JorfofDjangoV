@@ -46,6 +46,7 @@ INSTALLED_APPS = [
      # cloudinary
     'cloudinary',
     'cloudinary_storage',
+    'django_filters',
 
     # apps locales
     'base',  # Remplace par ton app principale (si c’est autre chose que base)

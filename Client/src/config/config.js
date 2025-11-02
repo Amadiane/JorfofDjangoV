@@ -49,6 +49,33 @@ API_PARTNER_UPDATE: (id) => `${BASE_URL}/api/partners/${id}/`,
 API_PARTNER_DELETE: (id) => `${BASE_URL}/api/partners/${id}/`,
 
 
+// 👇 ajoute ces lignes à la fin du CONFIG existant
+// 🏀 Équipe (membres, coachs, staff)
+API_EQUIPE_LIST: `${BASE_URL}/api/equipe/`,
+API_EQUIPE_DETAIL: (id) => `${BASE_URL}/api/equipe/${id}/`,
+API_EQUIPE_CREATE: `${BASE_URL}/api/equipe/`,
+API_EQUIPE_UPDATE: (id) => `${BASE_URL}/api/equipe/${id}/`,
+API_EQUIPE_DELETE: (id) => `${BASE_URL}/api/equipe/${id}/`,
+
+
+
+// 🌍 Missions
+API_MISSION_LIST: `${BASE_URL}/api/missions/`,
+API_MISSION_DETAIL: (id) => `${BASE_URL}/api/missions/${id}/`,
+API_MISSION_CREATE: `${BASE_URL}/api/missions/`,
+API_MISSION_UPDATE: (id) => `${BASE_URL}/api/missions/${id}/`,
+API_MISSION_DELETE: (id) => `${BASE_URL}/api/missions/${id}/`,
+
+
+// 🌟 Valeurs
+API_VALEUR_LIST: `${BASE_URL}/api/valeurs/`,
+API_VALEUR_DETAIL: (id) => `${BASE_URL}/api/valeurs/${id}/`,
+API_VALEUR_CREATE: `${BASE_URL}/api/valeurs/`,
+API_VALEUR_UPDATE: (id) => `${BASE_URL}/api/valeurs/${id}/`,
+API_VALEUR_DELETE: (id) => `${BASE_URL}/api/valeurs/${id}/`,
+
+
+
   // 📸 Dossier media (pour les images directes)
   MEDIA_URL: `${BASE_URL}/media/`,
 

@@ -1383,3 +1383,87 @@ def valeurs_detail(request, pk):
     elif request.method == 'DELETE':
         valeur.delete()
         return Response({"message": "Valeur supprimée avec succès."}, status=status.HTTP_204_NO_CONTENT)
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Mission
+from .serializers import MissionSerializer
+
+@api_view(['GET', 'POST'])
+def mission_list_create(request):
+    if request.method == 'GET':
+        missions = Mission.objects.all()
+        serializer = MissionSerializer(missions, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = MissionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def mission_detail(request, pk):
+    try:
+        mission = Mission.objects.get(pk=pk)
+    except Mission.DoesNotExist:
+        return Response({'error': 'Mission non trouvée.'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = MissionSerializer(mission, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = MissionSerializer(mission, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        mission.delete()
+        return Response({'message': 'Supprimée avec succès.'}, status=status.HTTP_204_NO_CONTENT)
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import viewsets, filters
+from rest_framework.pagination import PageNumberPagination
+from .models import EquipeMember
+from .serializers import EquipeMemberSerializer
+
+
+# 🎛️ Pagination personnalisée
+class EquipePagination(PageNumberPagination):
+    page_size = 6  # nombre d’éléments par page
+    page_size_query_param = 'page_size'
+    max_page_size = 30
+
+
+# 🎯 Vue API principale
+class EquipeMemberViewSet(viewsets.ModelViewSet):
+    queryset = EquipeMember.objects.all().order_by('role', 'last_name')
+    serializer_class = EquipeMemberSerializer
+    pagination_class = EquipePagination
+
+    # 🔍 Ajoute filtres, recherche et tri
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['first_name', 'last_name', 'nationality', 'role']
+    ordering_fields = ['last_name', 'created_at']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        role = self.request.query_params.get('role')
+        if role:
+            queryset = queryset.filter(role=role)
+        return queryset
+
+
+from django_filters.rest_framework import DjangoFilterBackend
+
+filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+filterset_fields = ['role', 'nationality']

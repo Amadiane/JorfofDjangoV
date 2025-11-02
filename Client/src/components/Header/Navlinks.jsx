@@ -294,7 +294,7 @@ const Navlinks = () => {
     { title: t("nav.photos"), path: "/phototheque", keywords: ["photos"], icon: Image },
     { title: t("nav.videos"), path: "/videotheque", keywords: ["vidéos"], icon: Video },
     { title: t("nav.partenaires"), path: "/partner", keywords: ["partenaires"], icon: Handshake },
-    { title: t("nav.medias_partners"), path: "/mediaPartenaire", keywords: ["médias"], icon: Newspaper },
+    { title: t("nav.acceuil"), path: "/Acceuil", keywords: ["acceuil"], icon: Newspaper },
     { title: t("nav.contact"), path: "/contacter-tamkine", keywords: ["contact"], icon: Phone },
     { title: t("nav.community"), path: "/community", keywords: ["communauté"], icon: Users },
   ];
@@ -352,7 +352,7 @@ const Navlinks = () => {
   };
 
   const navItems = [
-    { title: t("nav.medias_partners"), path: "/Accueil", icon: Newspaper },
+    { title: t("nav.acceuil"), path: "/Accueil", icon: Newspaper },
     { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
       title: t("nav.club"),
@@ -361,6 +361,7 @@ const Navlinks = () => {
       items: [
         { title: t("nav.president_word"), path: "/motPresident" },
         { title: t("nav.missions"), path: "/nosMissions" },
+        { title: t("nav.values"), path: "/nosValeurs" },
         { title: t("nav.team"), path: "/notreEquipe" },
       ]
     },

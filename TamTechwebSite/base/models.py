@@ -53,31 +53,8 @@ class TeamMessage(models.Model):
 
 
 
-# models.py
-# from django.db import models
 
-# class Mission(models.Model):
-#     title = models.CharField(max_length=255, blank=True, null=True)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.title
-from django.db import models
-
-class Mission(models.Model):
-    title_fr = models.CharField(max_length=255)
-    title_en = models.CharField(max_length=255)
-    title_ar = models.CharField(max_length=255)
-
-    content_fr = models.TextField()
-    content_en = models.TextField()
-    content_ar = models.TextField()
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title_fr
 
 
 
@@ -735,3 +712,109 @@ class Valeur(models.Model):
 
     def __str__(self):
         return self.title_fr
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+
+class Mission(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    content_ar = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title_fr
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+
+class Mission(models.Model):
+    title_fr = models.CharField(max_length=255)
+    title_en = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
+
+    content_fr = models.TextField()
+    content_en = models.TextField()
+    content_ar = models.TextField()
+
+    # ✅ On utilise CloudinaryField pour l'image
+    image = CloudinaryField(
+        'Image de la mission',
+        folder='missions',  # Le dossier où Cloudinary va stocker les images
+        blank=True,
+        null=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Mission"
+        verbose_name_plural = "Missions"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title_fr
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+from django.db import models
+from cloudinary.models import CloudinaryField
+from django.utils import timezone
+
+
+class EquipeMember(models.Model):
+    ROLE_CHOICES = [
+        ('player', 'Joueur'),
+        ('coach', 'Entraîneur'),
+        ('assistant', 'Assistant'),
+        ('staff', 'Staff technique'),
+        ('manager', 'Manager'),
+    ]
+
+    # ✅ Informations de base
+    first_name = models.CharField(max_length=100, verbose_name="Prénom")
+    last_name = models.CharField(max_length=100, verbose_name="Nom")
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='player', verbose_name="Rôle")
+
+    # ✅ Détails sportifs / professionnels
+    position = models.CharField(max_length=100, blank=True, null=True, verbose_name="Poste (ex: Meneur, Pivot)")
+    height = models.CharField(max_length=20, blank=True, null=True, verbose_name="Taille (ex: 2m03)")
+    weight = models.CharField(max_length=20, blank=True, null=True, verbose_name="Poids (ex: 98 kg)")
+    nationality = models.CharField(max_length=100, blank=True, null=True, verbose_name="Nationalité")
+    number = models.PositiveIntegerField(blank=True, null=True, verbose_name="Numéro sur le maillot")
+
+    # ✅ Description multilingue
+    bio_fr = models.TextField(blank=True, null=True, verbose_name="Biographie (FR)")
+    bio_en = models.TextField(blank=True, null=True, verbose_name="Biography (EN)")
+
+    # ✅ Image stockée sur Cloudinary
+    photo = CloudinaryField(
+        'Photo',
+        folder='equipe',
+        blank=True,
+        null=True
+    )
+
+    # ✅ Dates
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Membre de l'équipe"
+        verbose_name_plural = "Équipe"
+        ordering = ['role', 'last_name']
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.get_role_display()})"

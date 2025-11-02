@@ -473,3 +473,66 @@ class ValeurSerializer(serializers.ModelSerializer):
         if obj.image:
             return obj.image.url  # Cloudinary ou Media URL
         return None
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import Mission
+
+class MissionSerializer(serializers.ModelSerializer):
+    # Champ personnalisé pour afficher directement l’URL Cloudinary
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Mission
+        fields = [
+            'id',
+            'title_fr',
+            'title_en',
+            'title_ar',
+            'content_fr',
+            'content_en',
+            'content_ar',
+            'image',
+            'image_url',
+            'created_at',
+        ]
+
+    def get_image_url(self, obj):
+        # Retourne le lien complet de l’image Cloudinary si elle existe
+        if obj.image:
+            return obj.image.url
+        return None
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import EquipeMember
+
+class EquipeMemberSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EquipeMember
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'role',
+            'position',
+            'height',
+            'weight',
+            'nationality',
+            'number',
+            'bio_fr',
+            'bio_en',
+            'photo',
+            'photo_url',
+            'created_at',
+            'updated_at',
+        ]
+
+    def get_photo_url(self, obj):
+        if obj.photo:
+            return obj.photo.url
+        return None
