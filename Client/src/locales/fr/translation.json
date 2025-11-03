@@ -545,7 +545,38 @@
     "objective_4": "Promouvoir l'excellence sportive et le fair-play à tous les niveaux",
     "president_name": "Le Président",
     "president_role": "Président du Club"
-  }
+  }, 
+
+  
+  "Jorfof Club": "Jorfof Club",
+  "Toujours Prêt à Gagner !": "Toujours Prêt à Gagner !",
+
+  "Rejoignez notre communauté": "Rejoignez notre communauté",
+  "Partagez vos idées, vos motivations et votre passion pour le basketball avec la famille Jorfof.": "Partagez vos idées, vos motivations et votre passion pour le basketball avec la famille Jorfof.",
+
+  "Formulaire de contact": "Formulaire de contact",
+  "Nom complet": "Nom complet",
+  "Votre nom complet": "Votre nom complet",
+  "Email": "Email",
+  "votre.email@exemple.com": "votre.email@exemple.com",
+  "Rôle": "Rôle",
+  "-- Sélectionnez votre rôle --": "-- Sélectionnez votre rôle --",
+  "Joueur": "Joueur",
+  "Entraîneur": "Entraîneur",
+  "Supporter": "Supporter",
+  "Bénévole": "Bénévole",
+  "Autres": "Autres",
+  "Message": "Message",
+  "Partagez votre motivation ou votre message...": "Partagez votre motivation ou votre message...",
+
+  "Envoyer": "Envoyer",
+  "Envoi en cours...": "Envoi en cours...",
+
+  "✅ Votre message a été envoyé avec succès !": "✅ Votre message a été envoyé avec succès !",
+  "❌ Une erreur s'est produite.": "❌ Une erreur s'est produite.",
+  "⚠️ Impossible d'envoyer le formulaire pour le moment.": "⚠️ Impossible d'envoyer le formulaire pour le moment."
+}
+
 
 
 
@@ -585,7 +616,7 @@
           
           
       
-  }
+  
 
   
    

@@ -83,9 +83,31 @@ API_MOTPRESIDENT_CREATE: `${BASE_URL}/api/mot-president/`,
 API_MOTPRESIDENT_UPDATE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
 API_MOTPRESIDENT_DELETE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
 
+// 👥 Community
+API_COMMUNITY_LIST: `${BASE_URL}/api/community/`,
+API_COMMUNITY_DETAIL: (id) => `${BASE_URL}/api/community/${id}/`,
+API_COMMUNITY_CREATE: `${BASE_URL}/api/community/`,
+API_COMMUNITY_UPDATE: (id) => `${BASE_URL}/api/community/${id}/`,
+API_COMMUNITY_DELETE: (id) => `${BASE_URL}/api/community/${id}/`,
+API_COMMUNITY_REPLY: (id) => `${BASE_URL}/api/community/${id}/reply/`,
 
-// 📩 Contact (nouvelle API)
+
+  // 🏀 Contacts
+API_CONTACT_LIST: `${BASE_URL}/api/contacts/`,
 API_CONTACT_CREATE: `${BASE_URL}/api/contacts/`,
+API_CONTACT_DETAIL: (id) => `${BASE_URL}/api/contacts/${id}/`,
+API_CONTACT_REPLY: (id) => `${BASE_URL}/api/contacts/${id}/reply/`,
+
+
+API_NEWSLETTER_LIST: `${BASE_URL}/api/newsletter/`,
+API_NEWSLETTER_CREATE: `${BASE_URL}/api/newsletter/create/`,
+API_NEWSLETTER_UPDATE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
+API_NEWSLETTER_DELETE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
+API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
+
+
+
+
 
 
 

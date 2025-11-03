@@ -142,15 +142,7 @@ class Partner(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-#Newletter
-from django.db import models
 
-class Subscriber(models.Model):
-    email = models.EmailField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.email
 
 
 
@@ -839,3 +831,39 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from django.db import models
+
+class Community(models.Model):
+    ROLE_CHOICES = [
+        ("benevole", "Bénévole"),
+        ("entraineur", "Entraîneur"),
+        ("joueur", "Joueur"),
+        ("supporter", "Supporter"),
+        ("autres", "Autres"),
+    ]
+
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_replied = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_role_display()})"
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_replied = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email

@@ -1,304 +1,320 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Users, UserPlus, Mail, MessageSquare, Shield, CheckCircle, AlertCircle, X, Loader } from 'lucide-react';
 import ChatBotNew from "../ChatBot/ChatbotNew";
+import CONFIG from "../../config/config.js";
 
 const Community = () => {
   const { t } = useTranslation();
   const [form, setForm] = useState({
-    nom: '',
-    prenom: '',
-    role: '',
-    tel: '',
+    name: '',
     email: '',
-    conditions: false,
+    role: '',
+    message: '',
   });
-  const apiUrl = import.meta.env.VITE_API_BACKEND;
+  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const showToast = (message, type) => {
+    setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: '', type: '' });
+    }, 5000);
+  };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch(apiUrl + "/api/community/", {
+      const response = await fetch(CONFIG.API_COMMUNITY_CREATE, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        alert("Votre inscription a été envoyée avec succès !");
-        setForm({
-          nom: '',
-          prenom: '',
-          role: '',
-          tel: '',
-          email: '',
-          conditions: false,
-        });
+        showToast(t("✅ Votre message a été envoyé avec succès !"), 'success');
+        setForm({ name: '', email: '', role: '', message: '' });
       } else {
-        alert("Erreur : " + (data.error || "Vérifiez les champs du formulaire."));
+        let errorMessage = t("❌ Une erreur s'est produite.");
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          // pas de JSON dans la réponse
+        }
+        showToast(errorMessage, 'error');
       }
     } catch (error) {
       console.error("Erreur lors de l'envoi :", error);
-      alert("Une erreur est survenue lors de l'envoi du formulaire.");
+      showToast(t("⚠️ Impossible d'envoyer le formulaire pour le moment."), 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div style={styles.root}>
-      <header style={styles.header}>
-        <h1 style={styles.h1}>{t('Jorfof Club')}</h1>
-        <p>{t('Toujours Prêt à Gagner !')}</p>
-      </header>
+    <div className="min-h-screen bg-[#0a0e27] w-full relative overflow-hidden">
+      {/* Effets de fond lumineux */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
 
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <h2 style={styles.h2}>{t('Notre Équipe')}</h2>
-          <p style={styles.p}>
-            {t("Jorfof Club, c’est bien plus qu’un club : c’est une famille unie par la passion du basketball, la discipline et l’esprit d’équipe. Nous formons, inspirons et motivons les jeunes talents à se dépasser sur le terrain et dans la vie.")}
-          </p>
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-24 right-4 md:right-8 z-50 animate-slide-in">
+          <div className="relative">
+            <div className={`absolute -inset-1 ${toast.type === 'success' ? 'bg-green-500/50' : 'bg-red-500/50'} blur-xl rounded-xl`}></div>
+            <div className={`relative ${toast.type === 'success' ? 'bg-green-500/20 border-green-500/50' : 'bg-red-500/20 border-red-500/50'} backdrop-blur-xl border-2 rounded-xl p-4 pr-12 shadow-2xl max-w-md`}>
+              <div className="flex items-start gap-3">
+                {toast.type === 'success' ? (
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                ) : (
+                  <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
+                )}
+                <p className={`${toast.type === 'success' ? 'text-green-100' : 'text-red-100'} font-medium text-sm leading-relaxed`}>
+                  {toast.message}
+                </p>
+              </div>
+              <button
+                onClick={() => setToast({ show: false, message: '', type: '' })}
+                className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-          <h2 style={styles.h2}>{t('Le Jorfof Club regroupe :')}</h2>
-          <ul style={styles.ul}>
-            <li style={styles.li}>{t('Des joueurs passionnés, prêts à tout donner sur le terrain ;')}</li>
-            <li style={styles.li}>{t('Des entraîneurs engagés dans la progression de chaque membre ;')}</li>
-            <li style={styles.li}>{t('Des supporters fidèles qui font vibrer les gradins ;')}</li>
-            <li style={styles.li}>{t('Des bénévoles et encadrants qui assurent la réussite du club ;')}</li>
-            <li style={styles.li}>{t('Et des partenaires qui partagent nos valeurs de respect, d’effort et de dépassement de soi.')}</li>
-          </ul>
+      {/* Contenu principal */}
+      <div className="relative">
+        {/* Spacer pour header */}
+        <div className="h-20 md:h-24"></div>
 
-          <p style={styles.p}>
-            {t("Rejoindre le Jorfof Club, c’est faire partie d’une aventure humaine et sportive, où chaque match est une nouvelle occasion de prouver notre devise : Toujours Prêt !")}
-          </p>
+        {/* Hero Section */}
+        <div className="pt-12 md:pt-20 pb-8 md:pb-12 px-4 text-center">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-orange-500/30 to-blue-500/30 blur-3xl scale-150 animate-pulse"></div>
+            
+            <div className="relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-full mb-4 shadow-2xl shadow-blue-500/50">
+                <Users className="w-8 h-8 md:w-10 md:h-10 text-white" />
+              </div>
+              
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-400 to-white mb-3 tracking-tight px-4">
+                {t('Jorfof Club')}
+              </h1>
+              
+              <div className="relative w-20 md:w-24 h-1 mx-auto mt-4 overflow-hidden rounded-full">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 animate-pulse"></div>
+              </div>
 
-          <p style={styles.highlight}>
-            {t("Être membre du Jorfof Club, c’est vivre le basket avec passion, défendre nos couleurs avec fierté et contribuer à l’essor du sport dans notre communauté.")}
-          </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-orange-400 mt-6 font-bold px-4">
+                {t('Toujours Prêt à Gagner !')}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="call-to-action">
-          <h2 style={styles.h2}>{t('Rejoignez l’aventure Jorfof Club !')}</h2>
-          <p style={styles.quote}>
-            {t("« Ensemble sur le terrain, unis dans la victoire. »")}
-          </p>
+        {/* Section intro communauté */}
+        <div className="px-4 pb-8 md:pb-12">
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 rounded-2xl md:rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition duration-700"></div>
+              
+              <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden border-2 border-blue-500/30 shadow-2xl p-6 md:p-10 lg:p-12">
+                <div className="flex items-center gap-3 md:gap-4 mb-6">
+                  <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Users className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white">
+                    {t('Rejoignez notre communauté')}
+                  </h2>
+                </div>
+                
+                <div className="w-24 md:w-32 h-1 md:h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-transparent rounded-full mb-6"></div>
+                
+                <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed">
+                  {t("Partagez vos idées, vos motivations et votre passion pour le basketball avec la famille Jorfof.")}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div style={styles.formContainer}>
-          <h2 style={styles.h2}>{t('Devenez membre du Jorfof Club')}</h2>
-          <form onSubmit={handleSubmit}>
-            <div style={styles.responsiveTwoColumns}>
-              <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="nom">{t('Nom *')}</label>
-                <input style={styles.input} id="nom" name="nom" value={form.nom} onChange={handleChange} required />
-              </div>
+        {/* Formulaire de contact */}
+        <div className="px-4 pb-16 md:pb-24">
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-2xl md:rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition duration-700"></div>
+              
+              <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden border-2 border-orange-500/30 shadow-2xl p-6 md:p-10 lg:p-12">
+                
+                <div className="flex items-center gap-3 md:gap-4 mb-8">
+                  <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <UserPlus className="w-6 h-6 md:w-7 md:h-7 text-white" />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white">
+                    {t('Formulaire de contact')}
+                  </h2>
+                </div>
 
-              <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="prenom">{t('Prénom *')}</label>
-                <input style={styles.input} id="prenom" name="prenom" value={form.prenom} onChange={handleChange} required />
+                <div className="w-24 md:w-32 h-1 md:h-1.5 bg-gradient-to-r from-orange-500 via-blue-500 to-transparent rounded-full mb-8 md:mb-10"></div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Nom complet */}
+                  <div className="relative">
+                    <label htmlFor="name" className="block text-gray-300 mb-2 text-sm font-semibold flex items-center gap-2">
+                      <UserPlus className="w-4 h-4 text-orange-400" />
+                      {t('Nom complet')} <span className="text-orange-500">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      placeholder={t('Votre nom complet')}
+                      required
+                      className="px-4 py-3 w-full rounded-xl border-2 border-white/10 bg-white/5 backdrop-blur-sm focus:outline-none focus:border-orange-500/50 focus:bg-white/10 text-white placeholder-gray-500 transition-all duration-300"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="relative">
+                    <label htmlFor="email" className="block text-gray-300 mb-2 text-sm font-semibold flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-blue-400" />
+                      {t('Email')} <span className="text-orange-500">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder={t('votre.email@exemple.com')}
+                      required
+                      className="px-4 py-3 w-full rounded-xl border-2 border-white/10 bg-white/5 backdrop-blur-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/10 text-white placeholder-gray-500 transition-all duration-300"
+                    />
+                  </div>
+
+                  {/* Rôle */}
+                  <div className="relative">
+                    <label htmlFor="role" className="block text-gray-300 mb-2 text-sm font-semibold flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-purple-400" />
+                      {t('Rôle')} <span className="text-orange-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        id="role"
+                        name="role"
+                        value={form.role}
+                        onChange={handleChange}
+                        required
+                        className="appearance-none px-4 py-3 w-full rounded-xl border-2 border-white/10 bg-white/5 backdrop-blur-sm focus:outline-none focus:border-purple-500/50 focus:bg-white/10 text-white transition-all duration-300 cursor-pointer"
+                      >
+                        <option value="" className="bg-[#0f1729] text-gray-400">{t('-- Sélectionnez votre rôle --')}</option>
+                        <option value="joueur" className="bg-[#0f1729] text-white">{t('Joueur')}</option>
+                        <option value="entraineur" className="bg-[#0f1729] text-white">{t('Entraîneur')}</option>
+                        <option value="supporter" className="bg-[#0f1729] text-white">{t('Supporter')}</option>
+                        <option value="benevole" className="bg-[#0f1729] text-white">{t('Bénévole')}</option>
+                        <option value="autres" className="bg-[#0f1729] text-white">{t('Autres')}</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="relative">
+                    <label htmlFor="message" className="block text-gray-300 mb-2 text-sm font-semibold flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4 text-blue-400" />
+                      {t('Message')}
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      placeholder={t("Partagez votre motivation ou votre message...")}
+                      rows="6"
+                      className="px-4 py-3 w-full rounded-xl border-2 border-white/10 bg-white/5 backdrop-blur-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/10 text-white placeholder-gray-500 resize-none transition-all duration-300"
+                    />
+                  </div>
+
+                  {/* Bouton d'envoi */}
+                  <div className="pt-4">
+                    <div className="relative group/button">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-xl blur opacity-30 group-hover/button:opacity-50 transition duration-300"></div>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={`relative w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 text-white ${
+                          isSubmitting
+                            ? "bg-gradient-to-r from-gray-500 to-gray-600 cursor-not-allowed"
+                            : "bg-gradient-to-r from-orange-500 to-blue-500 hover:from-orange-600 hover:to-blue-600 shadow-lg hover:shadow-2xl hover:scale-[1.02]"
+                        }`}
+                      >
+                        <span className="flex items-center justify-center gap-3">
+                          {isSubmitting ? (
+                            <>
+                              <Loader className="w-5 h-5 animate-spin" />
+                              {t('Envoi en cours...')}
+                            </>
+                          ) : (
+                            <>
+                              <UserPlus className="w-5 h-5" />
+                              {t('Envoyer')}
+                            </>
+                          )}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label} htmlFor="role">{t('Rôle *')}</label>
-              <select style={styles.select} id="role" name="role" value={form.role} onChange={handleChange} required>
-                <option value="">{t('-- Sélectionnez votre rôle --')}</option>
-                <option value="joueur">{t('Joueur')}</option>
-                <option value="entraineur">{t('Entraîneur')}</option>
-                <option value="supporter">{t('Supporter')}</option>
-                <option value="benevole">{t('Bénévole')}</option>
-                <option value="autre">{t('Autre')}</option>
-              </select>
-            </div>
-
-            <div style={styles.responsiveTwoColumns}>
-              <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="tel">{t('Téléphone * ')}</label>
-                <input style={styles.input} id="tel" name="tel" type="tel" value={form.tel} onChange={handleChange} required />
-              </div>
-
-              <div style={styles.formGroup}>
-                <label style={styles.label} htmlFor="email">{t('Email *')}</label>
-                <input style={styles.input} id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
-              </div>
-            </div>
-
-            <div style={styles.formGroup}>
-              <div style={styles.checkboxGroup}>
-                <input type="checkbox" id="conditions" name="conditions" checked={form.conditions} onChange={handleChange} required />
-                <label htmlFor="conditions">{t("J’accepte les conditions du club Jorfof")}</label>
-              </div>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <button style={styles.button} type="submit">{t('Envoyer')}</button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
 
+      {/* ChatBot */}
       <div className="fixed bottom-6 right-6 z-50">
         <ChatBotNew />
       </div>
+
+      <style jsx>{`
+        @keyframes slide-in {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-in {
+          animation: slide-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
-};
-
-const styles = {
-  root: {
-    '--primary-color': '#1C1C47',
-    '--secondary-color': '#1C1C47',
-    '--accent-color': '#1C1C47',
-    '--text-color': '#333',
-    '--light-color': '#f5f5f5',
-    '--dark-color': '#262626',
-    '--shadow': '0 4px 6px rgba(0, 0, 0, 0.1)',
-    fontFamily: `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`,
-    backgroundColor: '#f5f5f5',
-    color: '#333',
-    lineHeight: '1.6',
-  },
-  header: {
-    background: 'linear-gradient(135deg, #1C1C47, #1C1C47)',
-    color: 'white',
-    padding: '3rem 1rem', // Augmentation du padding pour descendre encore le titre
-    textAlign: 'center',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    paddingTop: '6rem',  // <-- augmenté
-    paddingBottom: '3rem', // <-- augmenté
-  },
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '2rem 1rem',
-  },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    padding: '2rem',
-    marginBottom: '2rem',
-    transition: 'transform 0.3s ease',
-  },
-  cardHover: {
-    transform: 'translateY(-5px)',
-  },
-  h1: {
-    fontSize: '2.8rem',
-    marginBottom: '1rem',
-    marginTop: '1.5rem', // Ajustement du margin top pour pousser encore plus bas
-  },
-  h2: {
-    color: '#1C1C47',
-    marginBottom: '1rem',
-    fontSize: '1.8rem',
-  },
-  p: {
-    marginBottom: '1.5rem',
-  },
-  ul: {
-    paddingLeft: '2rem',
-    marginBottom: '1.5rem',
-  },
-  li: {
-    marginBottom: '0.5rem',
-  },
-  highlight: {
-    fontWeight: 'bold',
-    color: '#1C1C47',
-  },
-  quote: {
-    fontStyle: 'italic',
-    textAlign: 'center',
-    fontSize: '1.2rem',
-    margin: '2rem 0',
-    color: '#1C1C47',
-  },
-  formContainer: {
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    padding: '2rem',
-  },
-  formGroup: {
-    marginBottom: '1.5rem',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '0.5rem',
-    fontWeight: 'bold',
-    color: '#262626',
-  },
-  input: {
-    width: '100%',
-    padding: '0.8rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem',
-  },
-  select: {
-    width: '100%',
-    padding: '0.8rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem',
-  },
-  checkboxGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: '1rem',
-  },
-  button: {
-    backgroundColor: '#1C1C47',
-    color: 'white',
-    border: 'none',
-    padding: '1rem 2rem',
-    fontSize: '1rem',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    width: '100%',
-    transition: 'background-color 0.3s ease',
-  },
-  buttonHover: {
-    backgroundColor: '#1C1C47',
-  },
-  footer: {
-    backgroundColor: '#262626',
-    color: 'white',
-    textAlign: 'center',
-    padding: '2rem 1rem',
-    marginTop: '2rem',
-  },
-  responsiveTwoColumns: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '2rem',
-    // Adaptation mobile
-    '@media (max-width: 768px)': {
-      gridTemplateColumns: '1fr',
-    },
-  },
-  '@media (max-width: 768px)': {
-    h1: {
-      fontSize: '2rem',
-    },
-    h2: {
-      fontSize: '1.5rem',
-    },
-    p: {
-      fontSize: '1rem',
-    },
-  },
 };
 
 export default Community;

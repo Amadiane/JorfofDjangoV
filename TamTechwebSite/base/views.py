@@ -254,69 +254,6 @@ class ContactAPIView(APIView):
 
 
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import EmailMessage
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from django.conf import settings
-from .models import Subscriber
-import json
-
-@csrf_exempt
-def newsletter_subscription(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            email = data.get("email")
-
-            if not email:
-                return JsonResponse({"message": "Email est requis."}, status=400)
-
-            if Subscriber.objects.filter(email=email).exists():
-                return JsonResponse({"message": "Cet email est déjà abonné."}, status=400)
-
-            subscriber = Subscriber.objects.create(email=email)
-
-            html_message = render_to_string('emails/abonnement_email.html')
-            subject = "Welcome to subscription"
-            email_message = EmailMessage(
-                subject=subject,
-                body=html_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[email],
-                reply_to=[settings.DEFAULT_FROM_EMAIL],
-            )
-            email_message.content_subtype = "html"
-            email_message.send()
-
-            return JsonResponse({"message": "Merci pour votre abonnement !"}, status=200)
-        except json.JSONDecodeError:
-            return JsonResponse({"message": "Erreur de décodage JSON."}, status=400)
-
-    elif request.method == "GET":
-        subscribers = Subscriber.objects.all()
-        data = [{"id": s.id, "email": s.email} for s in subscribers]
-        return JsonResponse(data, safe=False)
-
-    elif request.method == "DELETE":
-        try:
-            data = json.loads(request.body)
-            subscriber_id = data.get("id")
-            if not subscriber_id:
-                return JsonResponse({"message": "ID requis pour supprimer."}, status=400)
-            subscriber = Subscriber.objects.get(id=subscriber_id)
-            subscriber.delete()
-            return JsonResponse({"message": "Abonné supprimé avec succès."}, status=200)
-        except Subscriber.DoesNotExist:
-            return JsonResponse({"message": "Abonné non trouvé."}, status=404)
-        except Exception as e:
-            return JsonResponse({"message": str(e)}, status=400)
-
-    return JsonResponse({"message": "Méthode non autorisée."}, status=405)
-
-
-
 
 
 
@@ -478,80 +415,7 @@ class RejoindreAPIView(APIView):
 
 
 
-#ComminityContact
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-# from .models import CommunityContact
-# from .serializers import CommunityContactSerializer
-from django.conf import settings
-from django.shortcuts import get_object_or_404
 
-
-
-class CommunityView(APIView):
-    def get(self, request):
-        contacts = CommunityContact.objects.all().order_by('-created_at')
-        serializer = CommunityContactSerializer(contacts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CommunityContactSerializer(data=request.data)
-
-        if serializer.is_valid():
-            # Sauvegarde dans la base de données
-            community_contact = serializer.save()
-
-            # Récupérer les informations nécessaires
-            nom = community_contact.nom
-            email = community_contact.email
-            organisation = "Tamkine Foundation"  # Nom de ton organisation
-            message = "Merci d'avoir soumis votre demande d'adhésion. Vous serez bientôt contacté."
-
-            # Envoi de l'email à la personne ayant postulé
-            html_user = render_to_string('emails/community_email.html', {
-                'nom': nom,
-                'organisation': organisation,
-                'message': message,
-            })
-            email_user = EmailMessage(
-                subject=f"Confirmation d'adhésion - {organisation}",
-                body=html_user,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[email]
-            )
-            email_user.content_subtype = "html"
-            email_user.send()
-
-            # Envoi de l'email à l'admin
-            html_admin = render_to_string('emails/rejoindre_admin.html', {
-                'nom': nom,
-                'email': email,
-                'message': message,
-                'organisation': organisation,
-            })
-            email_admin = EmailMessage(
-                subject=f"Nouvelle demande de contact - {organisation}",
-                body=html_admin,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=['tonemail@admin.com'],  # Remplacer par l'email de l'admin
-                reply_to=[email]
-            )
-            email_admin.content_subtype = "html"
-            email_admin.send()
-
-            return Response({'message': 'Votre demande a été envoyée avec succès !'}, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def delete(self, request, id, *args, **kwargs):
-        # Remplacer Community par CommunityContact
-        community_contact = get_object_or_404(CommunityContact, id=id)
-        community_contact.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # #ComminityPartner
@@ -1580,3 +1444,202 @@ class ContactListCreateView(generics.ListCreateAPIView):
 class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+
+
+from rest_framework.views import APIView
+
+class ContactReplyView(APIView):
+    def post(self, request, pk):
+        try:
+            contact = Contact.objects.get(pk=pk)
+        except Contact.DoesNotExist:
+            return Response({'error': 'Contact introuvable'}, status=status.HTTP_404_NOT_FOUND)
+
+        reply_message = request.data.get('reply', '').strip()
+        if not reply_message:
+            return Response({'error': 'Le message de réponse est vide'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ✉️ Envoi de la réponse à l'utilisateur
+        send_mail(
+            subject=f"Réponse à votre message - {contact.subject}",
+            message=f"Bonjour {contact.name},\n\n{reply_message}\n\nCordialement,\nL’équipe Jorfof Basket Club",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[contact.email],
+            fail_silently=False,
+        )
+
+        return Response({'success': 'Email envoyé avec succès'}, status=status.HTTP_200_OK)
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Community
+from .serializers import CommunitySerializer
+
+
+# 🔹 Liste + Création des membres de la communauté
+class CommunityListCreateView(generics.ListCreateAPIView):
+    queryset = Community.objects.all().order_by('-created_at')
+    serializer_class = CommunitySerializer
+
+    def perform_create(self, serializer):
+        community = serializer.save()
+
+        # 📨 Email de confirmation personnalisé selon le rôle
+        greetings = f"Bonjour {community.name},\n\n"
+        base_message = (
+            "Merci de rejoindre la communauté du Jorfof Basket Club !\n"
+            "Nous avons bien enregistré votre inscription en tant que "
+            f"{community.get_role_display()}.\n\n"
+        )
+
+        # Message selon le rôle
+        if community.role == "benevole":
+            role_message = "Nous vous contacterons prochainement pour participer à nos événements."
+        elif community.role == "entraineur":
+            role_message = "Notre équipe technique prendra contact avec vous pour une éventuelle collaboration."
+        elif community.role == "joueur":
+            role_message = "Nous vous informerons des prochaines sélections et opportunités sportives."
+        elif community.role == "supporter":
+            role_message = "Merci de votre soutien ! Vous serez tenu informé des actualités du club."
+        else:
+            role_message = "Merci de votre intérêt pour le Jorfof Basket Club."
+
+        footer = "\n\nCordialement,\nL’équipe Jorfof Basket Club"
+
+        message_user = greetings + base_message + role_message + footer
+
+        send_mail(
+            subject="Bienvenue dans la communauté Jorfof Basket Club",
+            message=message_user,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[community.email],
+            fail_silently=True,
+        )
+
+        # 📩 Notification à l’administrateur
+        subject_admin = f"Nouvelle inscription à la communauté : {community.name}"
+        message_admin = (
+            f"Nom : {community.name}\n"
+            f"Email : {community.email}\n"
+            f"Rôle : {community.get_role_display()}\n"
+            f"Message : {community.message or '—'}\n"
+        )
+
+        send_mail(
+            subject_admin,
+            message_admin,
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.CONTACT_ADMIN_EMAIL],
+            fail_silently=True,
+        )
+
+
+# 🔹 Détail, modification, suppression
+class CommunityDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Community.objects.all()
+    serializer_class = CommunitySerializer
+
+
+# 🔹 Envoi d’une réponse manuelle (comme ContactReplyView)
+class CommunityReplyView(APIView):
+    def post(self, request, pk):
+        try:
+            community = Community.objects.get(pk=pk)
+        except Community.DoesNotExist:
+            return Response({'error': 'Membre introuvable'}, status=status.HTTP_404_NOT_FOUND)
+
+        reply_message = request.data.get('reply', '').strip()
+        if not reply_message:
+            return Response({'error': 'Le message de réponse est vide'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ✉️ Envoi de la réponse à l’utilisateur
+        send_mail(
+            subject="Réponse de l’équipe Jorfof Basket Club",
+            message=f"Bonjour {community.name},\n\n{reply_message}\n\nCordialement,\nL’équipe Jorfof Basket Club",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[community.email],
+            fail_silently=False,
+        )
+
+        community.is_replied = True
+        community.save()
+
+        return Response({'success': 'Email envoyé avec succès'}, status=status.HTTP_200_OK)
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Newsletter
+from .serializers import NewsletterSerializer
+
+# ✅ Créer et envoyer mail de confirmation
+class NewsletterCreateView(generics.CreateAPIView):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsletterSerializer
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+
+        # Envoi du mail au client
+        send_mail(
+            "Confirmation d’inscription à la Newsletter - Jorfof Club",
+            "Merci de vous être inscrit à notre newsletter ! Vous recevrez nos actualités bientôt.",
+            settings.EMAIL_HOST_USER,
+            [instance.email],
+            fail_silently=False,
+        )
+
+        # Envoi d’un mail à l’admin
+        send_mail(
+            "Nouvelle inscription à la newsletter",
+            f"Nouvel abonné : {instance.email}",
+            settings.EMAIL_HOST_USER,
+            [settings.EMAIL_HOST_USER],
+            fail_silently=False,
+        )
+
+
+# ✅ Lister toutes les inscriptions
+class NewsletterListView(generics.ListAPIView):
+    queryset = Newsletter.objects.all().order_by('-created_at')
+    serializer_class = NewsletterSerializer
+
+
+# ✅ Détails, modification, suppression
+class NewsletterDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsletterSerializer
+
+
+# ✅ Répondre manuellement à un abonné
+from rest_framework.views import APIView
+
+class NewsletterReplyView(APIView):
+    def post(self, request, pk):
+        try:
+            subscriber = Newsletter.objects.get(pk=pk)
+        except Newsletter.DoesNotExist:
+            return Response({"error": "Abonné introuvable"}, status=404)
+
+        message = request.data.get("message", "")
+        if not message:
+            return Response({"error": "Le message est requis"}, status=400)
+
+        send_mail(
+            "Réponse de Jorfof Club",
+            message,
+            settings.EMAIL_HOST_USER,
+            [subscriber.email],
+            fail_silently=False,
+        )
+
+        subscriber.is_replied = True
+        subscriber.save()
+        return Response({"success": "Message envoyé avec succès"})

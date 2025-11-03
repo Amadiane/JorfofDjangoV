@@ -42,6 +42,9 @@ const NavAdmin = () => {
       "/missionPost": <TrendingUp className="w-5 h-5" />,
       "/valeurPost": <TrendingUp className="w-5 h-5" />,
       "/motPresidentPost": <TrendingUp className="w-5 h-5" />,
+      "/listeContacts": <TrendingUp className="w-5 h-5" />,
+      "/listePostulantsCommunity": <TrendingUp className="w-5 h-5" />,
+
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -71,6 +74,8 @@ const NavAdmin = () => {
         { path: "/missionPost", label: "Missions" },
         { path: "/valeurPost", label: "Valeurs" },
         { path: "/motPresidentPost", label: "Mot du President" },
+        { path: "/listeContacts", label: "Liste Contacts" },
+        { path: "/listePostulantsCommunity", label: "Liste Community" },
       ]
     },
   ];

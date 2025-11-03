@@ -4,13 +4,19 @@ from rest_framework.routers import DefaultRouter
 from . import views
 from .views import (
     CustomTokenObtainPairView, CustomTokenRefreshView,
-    logout, register, is_logged_in, chatbot, ContactAPIView,
-    newsletter_subscription, TeamMessageViewSet,
-    RejoindreAPIView, CommunityView,
+    logout, register, is_logged_in, chatbot,
+    TeamMessageViewSet,
+    RejoindreAPIView,
     document_api, AggregatedContentAPIView,
-    ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
+    ProtectedView, logout, ActivityViewSet, fondation_list_create, fondation_detail,
     VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet,
-    ContactListCreateView, ContactDetailView
+    ContactListCreateView, ContactDetailView, ContactReplyView, CommunityListCreateView, CommunityDetailView, CommunityReplyView,
+    NewsletterCreateView,
+    NewsletterListView,
+    NewsletterDetailView,
+    NewsletterReplyView
+
+
     # 👈 ajoute ces deux-là ici
 )
 
@@ -33,6 +39,7 @@ router.register(r'mot-president', MotPresidentViewSet, basename='mot-president')
 
 
 
+
 # URL Patterns
 urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -44,18 +51,23 @@ urlpatterns = [
     
     # Route pour DELETE (supprimer un contact) avec un id
    
-    path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
+   
     path('missions/', views.mission_list_create, name='mission_list_create'),
     path('missions/<int:pk>/', views.mission_detail, name='mission_detail'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
     path('rejoindre/<int:id>/', RejoindreAPIView.as_view(), name='rejoindre-delete'),
-    path('community/', CommunityView.as_view(), name='community'),
-    # Route pour DELETE (supprimer un contact) avec un id
-    path('community/<int:id>/', CommunityView.as_view()),
     path('valeurs/', views.valeurs_list, name='valeurs_list'),
     path('valeurs/<int:pk>/', views.valeurs_detail, name='valeurs_detail'),
     path('contacts/', ContactListCreateView.as_view(), name='contact-list-create'),
     path('contacts/<int:pk>/', ContactDetailView.as_view(), name='contact-detail'),
+    path('contacts/<int:pk>/reply/', ContactReplyView.as_view(), name='contact-reply'),
+    path('community/', CommunityListCreateView.as_view(), name='community-list-create'),
+    path('community/<int:pk>/', CommunityDetailView.as_view(), name='community-detail'),
+    path('community/<int:pk>/reply/', CommunityReplyView.as_view(), name='community-reply'),
+    path("newsletter/", NewsletterListView.as_view(), name="newsletter-list"),
+    path("newsletter/create/", NewsletterCreateView.as_view(), name="newsletter-create"),
+    path("newsletter/<int:pk>/", NewsletterDetailView.as_view(), name="newsletter-detail"),
+    path("newsletter/<int:pk>/reply/", NewsletterReplyView.as_view(), name="newsletter-reply"),
     # path('fondations/', fondations_api, name='fondations_api'),
     path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
     path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),

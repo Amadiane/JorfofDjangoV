@@ -557,3 +557,22 @@ class ContactSerializer(serializers.ModelSerializer):
             'category_display',
             'created_at',
         ]
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import serializers
+from .models import Community
+
+class CommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = "__all__"
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import serializers
+from .models import Newsletter
+
+class NewsletterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Newsletter
+        fields = '__all__'
