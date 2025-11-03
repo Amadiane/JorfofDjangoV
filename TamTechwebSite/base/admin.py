@@ -262,3 +262,51 @@ class EquipeMemberAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="80" height="80" style="object-fit:cover;border-radius:8px;"/>', obj.photo.url)
         return "Aucune photo"
     preview_photo.short_description = "Aperçu"
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from django.contrib import admin
+from .models import Contact
+from django.utils.html import format_html
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'email',
+        'subject',
+        'category',
+        'created_at',
+        'has_attachment',
+    )
+    list_filter = ('category', 'created_at')
+    search_fields = ('name', 'email', 'subject', 'message')
+    readonly_fields = ('created_at', 'preview_attachment')
+
+    fieldsets = (
+        ("Informations du contact", {
+            'fields': ('name', 'email', 'subject', 'category', 'message')
+        }),
+        ("Pièce jointe (optionnelle)", {
+            'fields': ('attachment', 'preview_attachment')
+        }),
+        ("Méta", {
+            'fields': ('created_at',),
+        }),
+    )
+
+    def has_attachment(self, obj):
+        return bool(obj.attachment)
+    has_attachment.boolean = True
+    has_attachment.short_description = "Pièce jointe ?"
+
+    def preview_attachment(self, obj):
+        """Affiche l'image Cloudinary dans l'admin si disponible."""
+        if obj.attachment:
+            return format_html('<img src="{}" width="200" style="border-radius:8px;" />', obj.attachment.url)
+        return "Aucune image"
+    preview_attachment.short_description = "Aperçu de la pièce jointe"
+
+
+    

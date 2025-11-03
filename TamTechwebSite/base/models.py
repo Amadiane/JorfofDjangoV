@@ -78,16 +78,7 @@ class TeamMessage(models.Model):
 
 # models.py
 
-from django.db import models
 
-class Contact(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.name} - {self.email}"
 
 
 
@@ -824,3 +815,27 @@ class EquipeMember(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.get_role_display()})"
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from django.db import models
+
+class Contact(models.Model):
+    CATEGORY_CHOICES = [
+        ('commentaire', 'Commentaires et suggestions'),
+        ('question', 'Questions générales'),
+        ('support', 'Support technique'),
+        ('partenariat', 'Partenariat'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"

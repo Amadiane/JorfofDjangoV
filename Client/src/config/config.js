@@ -84,7 +84,8 @@ API_MOTPRESIDENT_UPDATE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
 API_MOTPRESIDENT_DELETE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
 
 
-
+// 📩 Contact (nouvelle API)
+API_CONTACT_CREATE: `${BASE_URL}/api/contacts/`,
 
 
 

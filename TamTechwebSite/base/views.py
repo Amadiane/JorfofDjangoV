@@ -1518,3 +1518,65 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
 filterset_fields = ['role', 'nationality']
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Contact
+from .serializers import ContactSerializer
+
+
+class ContactListCreateView(generics.ListCreateAPIView):
+    queryset = Contact.objects.all().order_by('-created_at')
+    serializer_class = ContactSerializer
+
+    def perform_create(self, serializer):
+        contact = serializer.save()
+
+        # 📨 Email de confirmation à l’utilisateur
+        subject_user = f"Confirmation de votre message - {contact.subject}"
+        message_user = (
+            f"Bonjour {contact.name},\n\n"
+            f"Merci de nous avoir contactés via le site Jorfof Basket Club.\n"
+            f"Nous avons bien reçu votre message :\n\n"
+            f"---\n"
+            f"{contact.message}\n"
+            f"---\n\n"
+            f"Notre équipe vous répondra dès que possible.\n\n"
+            f"Cordialement,\n"
+            f"L’équipe Jorfof Basket Club"
+        )
+
+        send_mail(
+            subject_user,
+            message_user,
+            settings.DEFAULT_FROM_EMAIL,
+            [contact.email],
+            fail_silently=True,
+        )
+
+        # 📩 Notification à l’administrateur
+        subject_admin = f"Nouveau message de contact : {contact.subject}"
+        message_admin = (
+            f"Nom : {contact.name}\n"
+            f"Email : {contact.email}\n"
+            f"Catégorie : {contact.get_category_display()}\n\n"
+            f"Message :\n{contact.message}"
+        )
+
+        send_mail(
+            subject_admin,
+            message_admin,
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.CONTACT_ADMIN_EMAIL],
+            fail_silently=True,
+        )
+
+
+class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer

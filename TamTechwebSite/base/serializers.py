@@ -536,3 +536,24 @@ class EquipeMemberSerializer(serializers.ModelSerializer):
         if obj.photo:
             return obj.photo.url
         return None
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import Contact
+
+class ContactSerializer(serializers.ModelSerializer):
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
+
+    class Meta:
+        model = Contact
+        fields = [
+            'id',
+            'name',
+            'email',
+            'subject',
+            'message',
+            'category',
+            'category_display',
+            'created_at',
+        ]

@@ -216,3 +216,14 @@ print("Cloudinary name:", os.getenv('CLOUDINARY_CLOUD_NAME'))
 
 
 
+# --- Email configuration LWS (sécurisé et compatible Django) ---
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "mail81.lwspanel.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = "contact@jorfofbasketclub.com"
+EMAIL_HOST_PASSWORD = "Jorfof@2025"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+CONTACT_ADMIN_EMAIL = EMAIL_HOST_USER
+

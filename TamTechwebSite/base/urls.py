@@ -9,7 +9,8 @@ from .views import (
     RejoindreAPIView, CommunityView,
     document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet,
+    ContactListCreateView, ContactDetailView
     # 👈 ajoute ces deux-là ici
 )
 
@@ -40,9 +41,9 @@ urlpatterns = [
     path('register/', register),
     path('authenticated/', is_logged_in),
     path('chatbot/', chatbot, name='chatbot'),
-    path('contact/', ContactAPIView.as_view(), name='contact'),
+    
     # Route pour DELETE (supprimer un contact) avec un id
-    path('contact/<int:id>/', ContactAPIView.as_view(), name='contact-detail'),
+   
     path('newsletter/', newsletter_subscription, name='newsletter_subscription'),
     path('missions/', views.mission_list_create, name='mission_list_create'),
     path('missions/<int:pk>/', views.mission_detail, name='mission_detail'),
@@ -53,7 +54,8 @@ urlpatterns = [
     path('community/<int:id>/', CommunityView.as_view()),
     path('valeurs/', views.valeurs_list, name='valeurs_list'),
     path('valeurs/<int:pk>/', views.valeurs_detail, name='valeurs_detail'),
-
+    path('contacts/', ContactListCreateView.as_view(), name='contact-list-create'),
+    path('contacts/<int:pk>/', ContactDetailView.as_view(), name='contact-detail'),
     # path('fondations/', fondations_api, name='fondations_api'),
     path('fondationtamkine/', fondation_list_create, name='fondation-list-create'),
     path('fondationtamkine/<int:pk>/', fondation_detail, name='fondation-detail'),
