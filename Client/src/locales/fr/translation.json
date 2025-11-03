@@ -524,7 +524,29 @@
     "cta_text": "Rejoignez une communauté qui place l'humain et l'excellence au cœur de chaque action",
     "contact_us": "Nous Contacter",
     "join_us": "Rejoindre le Club"
+  },
+
+  
+  "president": {
+    "title": "MOT DU PRÉSIDENT",
+    "loading": "Chargement du message...",
+    "error": "Erreur de chargement",
+    "empty": "Aucun message disponible",
+    "empty_desc": "Revenez bientôt pour lire le message du président",
+    "published": "Publié le",
+    "message_from": "Message du Président",
+    "years_experience": "Ans d'Expérience",
+    "commitment": "Engagement",
+    "passion": "Passion",
+    "vision_objectives": "Notre Vision et Nos Objectifs",
+    "objective_1": "Développer le basket-ball dans notre région et former les jeunes talents",
+    "objective_2": "Créer une communauté unie et solidaire autour des valeurs sportives",
+    "objective_3": "Représenter fièrement notre club dans toutes les compétitions",
+    "objective_4": "Promouvoir l'excellence sportive et le fair-play à tous les niveaux",
+    "president_name": "Le Président",
+    "president_role": "Président du Club"
   }
+
 
 
 

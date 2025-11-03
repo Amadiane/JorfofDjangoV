@@ -9,7 +9,7 @@ from .views import (
     RejoindreAPIView, CommunityView,
     document_api, AggregatedContentAPIView,
     ProtectedView, logout, newsletter_subscription, ActivityViewSet, fondation_list_create, fondation_detail,
-    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet
+    VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet
     # 👈 ajoute ces deux-là ici
 )
 
@@ -27,6 +27,7 @@ router.register(r'partners', PartnerViewSet, basename='partner')
 router.register(r'albums', AlbumViewSet)
 router.register(r'photos', PhotoViewSet)
 router.register(r'equipe', EquipeMemberViewSet, basename='equipe')
+router.register(r'mot-president', MotPresidentViewSet, basename='mot-president')
 
 
 

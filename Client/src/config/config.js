@@ -75,14 +75,27 @@ API_VALEUR_UPDATE: (id) => `${BASE_URL}/api/valeurs/${id}/`,
 API_VALEUR_DELETE: (id) => `${BASE_URL}/api/valeurs/${id}/`,
 
 
+// 💬 Mot du Président
+// 🧑‍💼 Mot du Président
+API_MOTPRESIDENT_LIST: `${BASE_URL}/api/mot-president/`,
+API_MOTPRESIDENT_DETAIL: (id) => `${BASE_URL}/api/mot-president/${id}/`,
+API_MOTPRESIDENT_CREATE: `${BASE_URL}/api/mot-president/`,
+API_MOTPRESIDENT_UPDATE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
+API_MOTPRESIDENT_DELETE: (id) => `${BASE_URL}/api/mot-president/${id}/`,
 
-  // 📸 Dossier media (pour les images directes)
-  MEDIA_URL: `${BASE_URL}/media/`,
 
-  CLOUDINARY_NAME: "dwuyq2eoz",
-  CLOUDINARY_UPLOAD_PRESET: "default", // 👈 le nom exact de ton preset UNSIGNED
+
+
+
+
+
+// 📸 Dossier media (pour les images directes)
+MEDIA_URL: `${BASE_URL}/media/`,
+
+CLOUDINARY_NAME: "dwuyq2eoz",
+CLOUDINARY_UPLOAD_PRESET: "default", // 👈 le nom exact de ton preset UNSIGNED
   
-  // CLOUDINARY_UPLOAD_PRESET: "ml_default", // 👈 nom exact du preset créé
+// CLOUDINARY_UPLOAD_PRESET: "ml_default", // 👈 nom exact du preset créé
 };
 
 export default CONFIG;

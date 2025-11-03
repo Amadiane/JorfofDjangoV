@@ -502,7 +502,28 @@
     "cta_text": "Join a community that puts people and excellence at the heart of every action",
     "contact_us": "Contact Us",
     "join_us": "Join the Club"
+  }, 
+  
+  "president": {
+    "title": "PRESIDENT'S MESSAGE",
+    "loading": "Loading message...",
+    "error": "Loading error",
+    "empty": "No message available",
+    "empty_desc": "Come back soon to read the president's message",
+    "published": "Published on",
+    "message_from": "President's Message",
+    "years_experience": "Years Experience",
+    "commitment": "Commitment",
+    "passion": "Passion",
+    "vision_objectives": "Our Vision and Objectives",
+    "objective_1": "Develop basketball in our region and train young talents",
+    "objective_2": "Create a united and supportive community around sports values",
+    "objective_3": "Proudly represent our club in all competitions",
+    "objective_4": "Promote sports excellence and fair play at all levels",
+    "president_name": "The President",
+    "president_role": "Club President"
   }
+
 
 
 

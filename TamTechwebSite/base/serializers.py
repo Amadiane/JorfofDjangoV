@@ -419,7 +419,7 @@ class PartnerSerializer(serializers.ModelSerializer):
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 from rest_framework import serializers
-from .models import MotPresident
+from .models import MotPresident  # ✅ On importe directement le modèle ici
 
 class MotPresidentSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
@@ -436,13 +436,13 @@ class MotPresidentSerializer(serializers.ModelSerializer):
             'description_ar',
             'image',
             'image_url',
+            'created_at',
         ]
 
     def get_image_url(self, obj):
         if obj.image:
-            return obj.image.url  # Cloudinary donne une URL publique
+            return obj.image.url  # ✅ URL Cloudinary publique
         return None
-
 
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

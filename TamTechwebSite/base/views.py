@@ -1340,6 +1340,57 @@ class PartnerViewSet(viewsets.ModelViewSet):
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+# base/views/mot_president_views.py (ou directement dans base/views.py si tu préfères)
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from .models import MotPresident
+from .serializers import MotPresidentSerializer
+
+class MotPresidentViewSet(viewsets.ModelViewSet):
+    """
+    API CRUD pour le mot du président
+    """
+    queryset = MotPresident.objects.all().order_by('-created_at')
+    serializer_class = MotPresidentSerializer
+    permission_classes = [AllowAny]  # à sécuriser si besoin (IsAuthenticated)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Permet d’ajouter un mot du président (avec image Cloudinary)
+        """
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
