@@ -1,39 +1,58 @@
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, Facebook, Instagram, Youtube, Award, Trophy, Users } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Facebook,
+  Instagram,
+  Youtube,
+  Award,
+  Users,
+} from "lucide-react";
+
 
 const Footer = () => {
+  // 🧠 États pour la newsletter
   const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // ✉️ Fonction d’abonnement à la newsletter
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email.trim()) return;
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("https://jorfofdjangov.onrender.com/api/newsletter/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      
+      const response = await fetch(
+        "https://jorfofdjangov.onrender.com/api/newsletter/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
       if (response.ok) {
         setMessage("✓ Merci pour votre inscription !");
         setEmail("");
-        setTimeout(() => setMessage(""), 5000);
       } else {
-        setMessage("⚠ Une erreur est survenue. Réessayez.");
-        setTimeout(() => setMessage(""), 5000);
+        setMessage(
+          data.error || data.message || "⚠ Une erreur est survenue. Réessayez."
+        );
       }
     } catch (err) {
       console.error("Erreur d'inscription :", err);
       setMessage("⚠ Erreur de connexion. Réessayez.");
-      setTimeout(() => setMessage(""), 5000);
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => setMessage(""), 5000);
     }
   };
+
 
   const partners = [
     { name: "Tekacom", icon: "💼", url: "https://www.facebook.com/profile.php?id=61553931658632" },

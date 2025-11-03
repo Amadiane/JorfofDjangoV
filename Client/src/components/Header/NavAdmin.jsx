@@ -44,6 +44,7 @@ const NavAdmin = () => {
       "/motPresidentPost": <TrendingUp className="w-5 h-5" />,
       "/listeContacts": <TrendingUp className="w-5 h-5" />,
       "/listePostulantsCommunity": <TrendingUp className="w-5 h-5" />,
+      "/listeAbonnement": <TrendingUp className="w-5 h-5" />,
 
       "default": <FileText className="w-5 h-5" />
     };
@@ -76,6 +77,7 @@ const NavAdmin = () => {
         { path: "/motPresidentPost", label: "Mot du President" },
         { path: "/listeContacts", label: "Liste Contacts" },
         { path: "/listePostulantsCommunity", label: "Liste Community" },
+        { path: "/listeAbonnement", label: "Liste Abonnement" },
       ]
     },
   ];

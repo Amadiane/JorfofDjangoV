@@ -11,10 +11,8 @@ from .views import (
     ProtectedView, logout, ActivityViewSet, fondation_list_create, fondation_detail,
     VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet,
     ContactListCreateView, ContactDetailView, ContactReplyView, CommunityListCreateView, CommunityDetailView, CommunityReplyView,
-    NewsletterCreateView,
-    NewsletterListView,
-    NewsletterDetailView,
-    NewsletterReplyView
+    NewsletterListCreateView, NewsletterDetailView, NewsletterReplyView
+
 
 
     # 👈 ajoute ces deux-là ici
@@ -64,8 +62,7 @@ urlpatterns = [
     path('community/', CommunityListCreateView.as_view(), name='community-list-create'),
     path('community/<int:pk>/', CommunityDetailView.as_view(), name='community-detail'),
     path('community/<int:pk>/reply/', CommunityReplyView.as_view(), name='community-reply'),
-    path("newsletter/", NewsletterListView.as_view(), name="newsletter-list"),
-    path("newsletter/create/", NewsletterCreateView.as_view(), name="newsletter-create"),
+    path("newsletter/", NewsletterListCreateView.as_view(), name="newsletter-list-create"),
     path("newsletter/<int:pk>/", NewsletterDetailView.as_view(), name="newsletter-detail"),
     path("newsletter/<int:pk>/reply/", NewsletterReplyView.as_view(), name="newsletter-reply"),
     # path('fondations/', fondations_api, name='fondations_api'),

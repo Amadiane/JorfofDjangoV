@@ -99,13 +99,10 @@ API_CONTACT_DETAIL: (id) => `${BASE_URL}/api/contacts/${id}/`,
 API_CONTACT_REPLY: (id) => `${BASE_URL}/api/contacts/${id}/reply/`,
 
 
-API_NEWSLETTER_LIST: `${BASE_URL}/api/newsletter/`,
-API_NEWSLETTER_CREATE: `${BASE_URL}/api/newsletter/create/`,
-API_NEWSLETTER_UPDATE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
-API_NEWSLETTER_DELETE: (id) => `${BASE_URL}/api/newsletter/${id}/`,
-API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
-
-
+  // 📰 Newsletter
+  API_NEWSLETTER_LIST: `${BASE_URL}/api/newsletter/`,
+  API_NEWSLETTER_CREATE: `${BASE_URL}/api/newsletter/`,
+  API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
 
 
 

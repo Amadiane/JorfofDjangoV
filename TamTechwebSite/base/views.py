@@ -1572,16 +1572,18 @@ class CommunityReplyView(APIView):
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.response import Response
 from django.core.mail import send_mail
 from django.conf import settings
+from rest_framework.views import APIView
 from .models import Newsletter
 from .serializers import NewsletterSerializer
 
-# ✅ Créer et envoyer mail de confirmation
-class NewsletterCreateView(generics.CreateAPIView):
-    queryset = Newsletter.objects.all()
+
+# ✅ Liste + Création d'abonnés (un seul endpoint)
+class NewsletterListCreateView(generics.ListCreateAPIView):
+    queryset = Newsletter.objects.all().order_by('-created_at')
     serializer_class = NewsletterSerializer
 
     def perform_create(self, serializer):
@@ -1606,21 +1608,13 @@ class NewsletterCreateView(generics.CreateAPIView):
         )
 
 
-# ✅ Lister toutes les inscriptions
-class NewsletterListView(generics.ListAPIView):
-    queryset = Newsletter.objects.all().order_by('-created_at')
-    serializer_class = NewsletterSerializer
-
-
 # ✅ Détails, modification, suppression
 class NewsletterDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Newsletter.objects.all()
     serializer_class = NewsletterSerializer
 
 
-# ✅ Répondre manuellement à un abonné
-from rest_framework.views import APIView
-
+# ✅ Répondre à un abonné
 class NewsletterReplyView(APIView):
     def post(self, request, pk):
         try:
