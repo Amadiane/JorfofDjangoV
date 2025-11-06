@@ -495,26 +495,24 @@
     "slogan": "Always ready to shine"
   }, 
 
+  
   "team": {
     "title": "Our Team",
-    "loading": "Loading team...",
-    "error": "Error loading data",
+    "subtitle": "Meet the people who make the heart of the club beat.",
+    "loading": "Loading...",
+    "error": "Error",
     "all": "All",
     "players": "Players",
     "coaches": "Coaches",
-    "staffs": "Staff Members",
+    "staffs": "Staffs",
     "player": "Player",
     "coach": "Coach",
-    "staff": "Staff Member",
-    "number": "Number",
-    "position": "Position",
-    "no_members": "No members found",
-    "no_members_desc": "The team is being built. Come back soon to discover our talents!",
-    "join_title": "Join Our Team!",
-    "join_text": "Are you passionate about basketball and want to be part of an ambitious team? Join our club today and contribute to our success!",
-    "contact_us": "Contact Us",
-    "join_club": "Join the Club"
+    "assistant": "Assistant",
+    "staff": "Technical Staff",
+    "manager": "Manager",
+    "no_members": "No members found"
   },
+
   
   
   "missions": {

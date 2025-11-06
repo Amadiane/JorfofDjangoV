@@ -460,26 +460,24 @@
     "slogan": "Toujours prêt à briller"
   }, 
   
+  
   "team": {
     "title": "Notre Équipe",
-    "loading": "Chargement de l'équipe...",
-    "error": "Erreur de chargement",
+    "subtitle": "Découvrez les membres qui font battre le cœur du club.",
+    "loading": "Chargement...",
+    "error": "Erreur",
     "all": "Tous",
     "players": "Joueurs",
     "coaches": "Entraîneurs",
     "staffs": "Staffs",
     "player": "Joueur",
     "coach": "Entraîneur",
-    "staff": "Membre du staff",
-    "number": "Numéro",
-    "position": "Poste",
-    "no_members": "Aucun membre trouvé",
-    "no_members_desc": "L'équipe est en cours de constitution. Revenez bientôt pour découvrir nos talents !",
-    "join_title": "Rejoignez notre équipe !",
-    "join_text": "Vous êtes passionné de basketball et souhaitez faire partie d'une équipe ambitieuse ? Rejoignez notre club dès aujourd'hui et contribuez à notre succès !",
-    "contact_us": "Nous contacter",
-    "join_club": "Rejoindre le club"
+    "assistant": "Assistant",
+    "staff": "Staff technique",
+    "manager": "Manager",
+    "no_members": "Aucun membre trouvé"
   },
+
   
   
   "missions": {
