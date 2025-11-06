@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Heart, Shield, Star, Zap, Trophy, Calendar, CheckCircle, ArrowRight, Sparkles, Award } from "lucide-react";
-
-// Configuration - Adaptez selon votre backend
-const CONFIG = {
-  BASE_URL: 'http://localhost:8000'
-};
+import {
+  Heart, Shield, Star, Zap, CheckCircle, ArrowRight, Sparkles, Calendar, Award,
+} from "lucide-react";
+import CONFIG from "../../config/config.js";
 
 const NosValeurs = () => {
   const { t, i18n } = useTranslation();
@@ -14,25 +12,47 @@ const NosValeurs = () => {
   const [error, setError] = useState(null);
 
   // ✅ Scroll vers le haut au chargement de la page
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     const fetchValeur = async () => {
       try {
-        const response = await fetch(`${CONFIG.BASE_URL}/api/valeurs/`);
+        const response = await fetch(`${CONFIG.API_VALEUR_LIST}`);
         if (!response.ok) throw new Error("Erreur lors du chargement des valeurs");
+        
         const data = await response.json();
-        // Prendre la première valeur ou la plus récente
         const valeurs = data.results || data;
-        setValeur(Array.isArray(valeurs) && valeurs.length > 0 ? valeurs[0] : null);
+
+        console.log("📦 Données valeurs reçues :", valeurs);
+
+        if (Array.isArray(valeurs) && valeurs.length > 0) {
+          const v = valeurs[0];
+
+          // ✅ Normaliser l'URL image
+          const normalizeUrl = (url) => {
+            if (!url) return null;
+            if (url.startsWith("http")) return url;
+            if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
+            return `${CONFIG.BASE_URL}/${url}`;
+          };
+
+          setValeur({
+            ...v,
+            image_url: normalizeUrl(v.image_url || v.image),
+          });
+        } else {
+          setValeur(null);
+        }
       } catch (err) {
+        console.error("Erreur NosValeurs:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchValeur();
   }, []);
 
@@ -275,7 +295,7 @@ useEffect(() => {
                           className="relative group/btn overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-                          <div className="relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/btn:scale-105 transition-transform">
+                          <div className="relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/btn:scale-105 transition-transform text-white">
                             <span>{t("values.contact_us")}</span>
                             <ArrowRight className="w-5 h-5" />
                           </div>
@@ -286,7 +306,7 @@ useEffect(() => {
                           className="relative group/btn overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-white/10 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-                          <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/btn:scale-105 transition-all">
+                          <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/btn:scale-105 transition-all text-white">
                             {t("values.join_us")}
                           </div>
                         </a>
