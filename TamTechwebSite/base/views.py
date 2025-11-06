@@ -1642,7 +1642,7 @@ from rest_framework import viewsets
 from .models import Home
 from .serializers import HomeSerializer
 
-class HomeViewSet(viewsets.ReadOnlyModelViewSet):
+class HomeViewSet(viewsets.ModelViewSet):  # <- ModelViewSet permet GET, POST, PATCH, DELETE
     queryset = Home.objects.all().order_by('-created_at')
     serializer_class = HomeSerializer
 
@@ -1650,4 +1650,3 @@ class HomeViewSet(viewsets.ReadOnlyModelViewSet):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
-

@@ -870,6 +870,7 @@ class Newsletter(models.Model):
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+# models.py
 from django.db import models
 from cloudinary.models import CloudinaryField
 
@@ -878,13 +879,16 @@ class Home(models.Model):
     title_en = models.CharField(max_length=255, blank=True, null=True, verbose_name="Titre (EN)")
     description_fr = models.TextField(verbose_name="Description (FR)")
     description_en = models.TextField(blank=True, null=True, verbose_name="Description (EN)")
-    image = CloudinaryField('image', folder='home', blank=True, null=True)
+    image = CloudinaryField('Image', folder='home', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Page d'accueil"
         verbose_name_plural = "Pages d'accueil"
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.title_fr or "Accueil"
+
+

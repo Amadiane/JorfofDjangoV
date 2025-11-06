@@ -111,6 +111,7 @@ const App = () => {
     "/teamMessage",
     "/missionPost",
     "/activitiesPost",
+    "/homePost",
   ];
 
   const isAdminPage = adminPaths.includes(location.pathname);
