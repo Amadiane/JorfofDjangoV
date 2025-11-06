@@ -576,3 +576,30 @@ class NewsletterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Newsletter
         fields = '__all__'
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+from rest_framework import serializers
+from .models import Home
+
+class HomeSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Home
+        fields = [
+            "id",
+            "title_fr", "title_en",
+            "description_fr", "description_en",
+            "image",
+            "created_at", "updated_at"
+        ]
+
+    def get_image(self, obj):
+        if obj.image:
+            try:
+                return obj.image.url
+            except Exception:
+                return None
+        return None
+

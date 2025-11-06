@@ -1637,3 +1637,21 @@ class NewsletterReplyView(APIView):
         subscriber.is_replied = True
         subscriber.save()
         return Response({"success": "Message envoyé avec succès"})
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Home
+from .serializers import HomeSerializer
+
+class HomeViewSet(viewsets.ModelViewSet):
+    queryset = Home.objects.all().order_by("-created_at")
+    serializer_class = HomeSerializer
+
+    # Optionnel : si tu veux forcer un seul objet (pour ta page d'accueil unique)
+    def list(self, request, *args, **kwargs):
+        home = Home.objects.first()
+        if not home:
+            return Response({"detail": "Aucun contenu trouvé"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(home)
+        return Response(serializer.data)

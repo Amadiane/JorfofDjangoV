@@ -173,7 +173,7 @@ import Plateforms from './components/HeaderSection/Plateforms.jsx';
 import Videotheque from './components/HeaderSection/Videotheque.jsx';
 import Phototheque from './components/HeaderSection/Phototheque.jsx';
 import Document from './components/HeaderSection/Document.jsx';
-import MediaPartenaire from './components/HeaderSection/MediaPartenaire.jsx';
+import HomePost from './components/Admin/HomePost.jsx';
 import Actualites from './components/HeaderSection/Actualites.jsx';
 import NousRejoindreHeader from './components/HeaderSection/NousRejoindreHeader.jsx';
 
@@ -192,7 +192,7 @@ import MotPresidentPost from './components/Admin/MotPresidentPost.jsx';
 import VideoPost from './components/Admin/VideoPost.jsx';
 import PhotoPost from './components/Admin/PhotoPost.jsx';
 import DocumentPost from './components/Admin/DocumentPost.jsx';
-import MediaPartenairePost from './components/Admin/MediaPartenairePost.jsx';
+// import HomePost from './components/Admin/HomePost.jsx';
 import ProgramPost from './components/Admin/ProgramPost.jsx';
 import ActivitiesPost from './components/Admin/ActivitiesPost.jsx';
 import Activities from './components/HeaderSection/Activities.jsx';
@@ -204,7 +204,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       {/* Routes publiques */}
       {/* <Route index element={<Home />} /> */}
-      <Route index element={<Navigate to="/actualites" replace />} />
+      <Route index element={<Navigate to="/home" replace />} />
       <Route path="home" element={<Home />} />
       <Route path="categories" element={<Categories />} />
       <Route path="createpost" element={<Createpost />} />
@@ -226,7 +226,7 @@ const router = createBrowserRouter(
       <Route path="videotheque" element={<Videotheque />} />
       <Route path="phototheque" element={<Phototheque />} />
       <Route path="document" element={<Document />} />
-      <Route path="mediaPartenaire" element={<MediaPartenaire />} />
+      <Route path="homePost" element={<HomePost />} />
       <Route path="actualites" element={<Actualites />} />
       <Route path="nousRejoindreHeader" element={<NousRejoindreHeader />} />
       <Route path="activities" element={<Activities />} />
@@ -248,7 +248,7 @@ const router = createBrowserRouter(
         <Route path="videoPost" element={<VideoPost />} />
         <Route path="photoPost" element={<PhotoPost />} />
         <Route path="documentPost" element={<DocumentPost />} />
-        <Route path="mediaPartenairePost" element={<MediaPartenairePost />} />
+        {/* <Route path="homePost" element={<HomePost />} /> */}
         <Route path="programPost" element={<ProgramPost />} />
         <Route path="activitiesPost" element={<ActivitiesPost />} />
         <Route path="partnerPost" element={<PartnerPost />} />

@@ -308,5 +308,26 @@ class ContactAdmin(admin.ModelAdmin):
         return "Aucune image"
     preview_attachment.short_description = "Aperçu de la pièce jointe"
 
-
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+from django.contrib import admin
+from .models import Home
+
+@admin.register(Home)
+class HomeAdmin(admin.ModelAdmin):
+    list_display = ("title_fr", "created_at", "updated_at")
+    search_fields = ("title_fr", "title_en")
+    readonly_fields = ("created_at", "updated_at")
+
+    fieldsets = (
+        ("Contenu principal", {
+            "fields": (
+                "title_fr", "title_en",
+                "description_fr", "description_en",
+                "image",
+            ),
+        }),
+        ("Dates", {
+            "fields": ("created_at", "updated_at"),
+        }),
+    )

@@ -104,7 +104,12 @@ API_CONTACT_REPLY: (id) => `${BASE_URL}/api/contacts/${id}/reply/`,
   API_NEWSLETTER_CREATE: `${BASE_URL}/api/newsletter/`,
   API_NEWSLETTER_REPLY: (id) => `${BASE_URL}/api/newsletter/${id}/reply/`,
 
-
+// ✅ API Home
+API_HOME_LIST: `${BASE_URL}/api/home/`,
+API_HOME_DETAIL: (id) => `${BASE_URL}/api/home/${id}/`,
+API_HOME_CREATE: `${BASE_URL}/api/home/`,
+API_HOME_UPDATE: (id) => `${BASE_URL}/api/home/${id}/`,
+API_HOME_DELETE: (id) => `${BASE_URL}/api/home/${id}/`,
 
 
 

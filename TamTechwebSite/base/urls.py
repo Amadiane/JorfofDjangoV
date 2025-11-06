@@ -11,7 +11,7 @@ from .views import (
     ProtectedView, logout, ActivityViewSet, fondation_list_create, fondation_detail,
     VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet,
     ContactListCreateView, ContactDetailView, ContactReplyView, CommunityListCreateView, CommunityDetailView, CommunityReplyView,
-    NewsletterListCreateView, NewsletterDetailView, NewsletterReplyView
+    NewsletterListCreateView, NewsletterDetailView, NewsletterReplyView, HomeViewSet
 
 
 
@@ -33,6 +33,7 @@ router.register(r'albums', AlbumViewSet)
 router.register(r'photos', PhotoViewSet)
 router.register(r'equipe', EquipeMemberViewSet, basename='equipe')
 router.register(r'mot-president', MotPresidentViewSet, basename='mot-president')
+router.register(r'home', HomeViewSet, basename='home')
 
 
 

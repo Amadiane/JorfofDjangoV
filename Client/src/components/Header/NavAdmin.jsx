@@ -45,7 +45,7 @@ const NavAdmin = () => {
       "/listeContacts": <TrendingUp className="w-5 h-5" />,
       "/listePostulantsCommunity": <TrendingUp className="w-5 h-5" />,
       "/listeAbonnement": <TrendingUp className="w-5 h-5" />,
-
+      "/homePost": <TrendingUp className="w-5 h-5" />,
       "default": <FileText className="w-5 h-5" />
     };
     return icons[path] || icons["default"];
@@ -78,6 +78,7 @@ const NavAdmin = () => {
         { path: "/listeContacts", label: "Liste Contacts" },
         { path: "/listePostulantsCommunity", label: "Liste Community" },
         { path: "/listeAbonnement", label: "Liste Abonnement" },
+        { path: "/homePost", label: "Home" },
       ]
     },
   ];

@@ -297,6 +297,7 @@ const Navlinks = () => {
     { title: t("nav.acceuil"), path: "/Acceuil", keywords: ["acceuil"], icon: Newspaper },
     { title: t("nav.contact"), path: "/contacter-tamkine", keywords: ["contact"], icon: Phone },
     { title: t("nav.community"), path: "/community", keywords: ["communauté"], icon: Users },
+    { title: t("nav.homePost"), path: "/homePost", keywords: ["Home"], icon: Users },
   ];
 
   const handleSearchChange = (value) => {
@@ -352,7 +353,7 @@ const Navlinks = () => {
   };
 
   const navItems = [
-    { title: t("nav.acceuil"), path: "/Accueil", icon: Newspaper },
+    { title: t("nav.home"), path: "/home", icon: Newspaper },
     { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
       title: t("nav.club"),
@@ -385,7 +386,7 @@ const Navlinks = () => {
         { title: t("nav.community"), path: "/community" },
       ]
     },
-    // { title: t("nav.medias_partners"), path: "/mediaPartenaire", icon: Newspaper },
+    // { title: t("nav.homePost"), path: "/homePost", icon: Newspaper },
   ];
 
   return (
