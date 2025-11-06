@@ -366,7 +366,6 @@
 
 // export default Actualites;
 
-
 import React, { useEffect, useState } from "react";
 import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
@@ -461,10 +460,10 @@ const Home = () => {
 
                 <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden border-2 border-orange-500/30 shadow-2xl">
                   {/* Image Section */}
-                  {home.image ? (
+                  {home.image_url ? (
                     <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden">
                       <img
-                        src={home.image}
+                        src={home.image_url}
                         alt={getLocalized(home, "title")}
                         className="w-full h-full object-cover"
                         onError={(e) => {
