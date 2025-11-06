@@ -13,6 +13,21 @@ const Programs = () => {
   const [expandedMatch, setExpandedMatch] = useState(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
+
+  // ✅ Scroll vers le haut au chargement de la page
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, []);
+
+// ✅ Chargement des matchs depuis le backend Django
+useEffect(() => {
+  const fetchMatches = async () => {
+    // ... ton code existant
+  };
+  fetchMatches();
+}, []);
+
+
   // ✅ Chargement des matchs depuis le backend Django
   useEffect(() => {
     const fetchMatches = async () => {
@@ -319,7 +334,7 @@ const Programs = () => {
                 </div>
               </a>
               <a
-                href="/nousRejoindreHeader"
+                href="/community"
                 className="relative group/cta overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/10 blur-xl opacity-50 group-hover/cta:opacity-75 transition-opacity"></div>

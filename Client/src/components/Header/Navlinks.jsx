@@ -354,7 +354,6 @@ const Navlinks = () => {
 
   const navItems = [
     { title: t("nav.home"), path: "/home", icon: Newspaper },
-    { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
       title: t("nav.club"),
       isDropdown: true,
@@ -367,6 +366,7 @@ const Navlinks = () => {
       ]
     },
     { title: t("nav.calendrier"), path: "/programs", icon: Calendar },
+    { title: t("nav.news"), path: "/actualites", icon: Newspaper },
     {
       title: t("nav.medias"),
       isDropdown: true,

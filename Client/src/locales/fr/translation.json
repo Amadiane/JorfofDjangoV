@@ -548,6 +548,19 @@
   }, 
 
   
+  "phototheque": {
+    "titre": "PHOTOTHÈQUE",
+    "sous_titre": "Découvrez notre collection de photos illustrant nos activités et événements.",
+    "recherche": "Rechercher...",
+    "photos": "photos",
+    "aucun_album": "Aucun album trouvé",
+    "chargement": "Chargement...",
+    "erreur_chargement": "Erreur lors du chargement des albums ou des photos."
+  
+},
+
+
+  
   "Jorfof Club": "Jorfof Club",
   "Toujours Prêt à Gagner !": "Toujours Prêt à Gagner !",
 
@@ -575,6 +588,21 @@
   "✅ Votre message a été envoyé avec succès !": "✅ Votre message a été envoyé avec succès !",
   "❌ Une erreur s'est produite.": "❌ Une erreur s'est produite.",
   "⚠️ Impossible d'envoyer le formulaire pour le moment.": "⚠️ Impossible d'envoyer le formulaire pour le moment."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

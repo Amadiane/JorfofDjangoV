@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Send, Mail, User, MessageSquare, Tag, CheckCircle, AlertCircle, Loader } from "lucide-react";
 import ChatBotNew from "../ChatBot/ChatbotNew";
@@ -15,6 +15,11 @@ const Contacternous = () => {
   });
   const [responseMessage, setResponseMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ✅ Scroll vers le haut au chargement de la page
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, []);
 
   const apiUrl = CONFIG.API_CONTACT_CREATE;
 

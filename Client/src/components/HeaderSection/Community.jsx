@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Users, UserPlus, Mail, MessageSquare, Shield, CheckCircle, AlertCircle, X, Loader } from 'lucide-react';
 import ChatBotNew from "../ChatBot/ChatbotNew";
 import CONFIG from "../../config/config.js";
+
+
 
 const Community = () => {
   const { t } = useTranslation();
@@ -12,8 +14,15 @@ const Community = () => {
     role: '',
     message: '',
   });
+
+  
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ✅ Scroll vers le haut au chargement de la page
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, []);
 
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
@@ -29,6 +38,9 @@ const Community = () => {
       [name]: value,
     }));
   };
+
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,6 +73,7 @@ const Community = () => {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-[#0a0e27] w-full relative overflow-hidden">

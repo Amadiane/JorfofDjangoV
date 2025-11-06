@@ -553,7 +553,19 @@
     "objective_4": "Promote sports excellence and fair play at all levels",
     "president_name": "The President",
     "president_role": "Club President"
+  },
+  
+  "phototheque": {
+    "titre": "PHOTO GALLERY",
+    "sous_titre": "Discover our collection of photos showcasing our activities and events.",
+    "recherche": "Search...",
+    "photos": "photos",
+    "aucun_album": "No album found",
+    "chargement": "Loading...",
+    "erreur_chargement": "Error while loading albums or photos."
   }
+
+
 
 
 

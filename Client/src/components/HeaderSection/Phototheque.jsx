@@ -24,6 +24,11 @@ const Phototheque = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
   const [openAlbum, setOpenAlbum] = useState(null);
 
+  // ✅ Scroll vers le haut au chargement de la page
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, []);
+
   // 🟢 Charger albums + photos
   const fetchData = async () => {
     try {
