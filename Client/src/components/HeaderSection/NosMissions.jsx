@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Target, Zap, Trophy, Calendar, CheckCircle, ArrowRight, Sparkles, Eye, Heart } from "lucide-react";
-
-// Configuration - Adaptez selon votre backend
-const CONFIG = {
-  BASE_URL: 'http://localhost:8000'
-};
+import {
+  Target, Zap, Trophy, Calendar, CheckCircle, ArrowRight, Sparkles, Eye, Heart, Crosshair
+} from "lucide-react";
+import CONFIG from "../../config/config.js";
 
 const NosMissions = () => {
   const { t, i18n } = useTranslation();
@@ -13,31 +11,46 @@ const NosMissions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-// ✅ Scroll vers le haut au chargement de la page
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, []);
+  // ✅ Scroll vers le haut au chargement de la page
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
+  // 🧩 Normalisation URL Cloudinary
+  const normalizeUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
+    return `${CONFIG.BASE_URL}/${url}`;
+  };
+
+  // ✅ Fetch Missions
   useEffect(() => {
     const fetchMission = async () => {
       try {
-        const response = await fetch(`${CONFIG.BASE_URL}/api/missions/`);
-        if (!response.ok) {
-          throw new Error(`Erreur ${response.status}`);
-        }
+        const response = await fetch(`${CONFIG.API_MISSION_LIST}`);
+        if (!response.ok) throw new Error(`Erreur ${response.status}`);
+        
         const data = await response.json();
-        // Prendre la première mission ou la plus récente
-        setMission(Array.isArray(data) && data.length > 0 ? data[0] : null);
+        
+        if (Array.isArray(data) && data.length > 0) {
+          const m = data[0];
+          m.image_url = normalizeUrl(m.image_url || m.image);
+          setMission(m);
+        } else {
+          setMission(null);
+        }
       } catch (err) {
+        console.error("Erreur Mission API:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchMission();
   }, []);
 
+  // 🌀 État de chargement
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
@@ -46,19 +59,20 @@ useEffect(() => {
             <div className="absolute inset-0 border-4 border-orange-500/30 rounded-full animate-ping"></div>
             <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
           </div>
-          <p className="text-white text-lg font-semibold">{t("missions.loading")}</p>
+          <p className="text-white text-lg font-semibold">{t("missions.loading", "Chargement...")}</p>
         </div>
       </div>
     );
   }
 
+  // ⚠️ Erreur API
   if (error) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
         <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl backdrop-blur-xl max-w-md">
           <div className="flex items-center gap-3 mb-2">
             <Zap className="w-6 h-6 text-red-500" />
-            <p className="font-bold text-xl">{t("missions.error")}</p>
+            <p className="font-bold text-xl">{t("missions.error", "Erreur")}</p>
           </div>
           <p className="text-gray-300">{error}</p>
         </div>
@@ -66,6 +80,7 @@ useEffect(() => {
     );
   }
 
+  // 🚫 Aucune mission
   if (!mission) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
@@ -73,13 +88,14 @@ useEffect(() => {
           <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
             <Target className="w-12 h-12 text-orange-400" />
           </div>
-          <p className="text-white text-2xl font-bold mb-2">{t("missions.empty")}</p>
-          <p className="text-gray-400 text-lg">{t("missions.empty_desc")}</p>
+          <p className="text-white text-2xl font-bold mb-2">{t("missions.empty", "Aucune mission trouvée")}</p>
+          <p className="text-gray-400 text-lg">{t("missions.empty_desc", "Revenez bientôt")}</p>
         </div>
       </div>
     );
   }
 
+  // ✅ Affichage mission principale
   return (
     <div className="min-h-screen bg-[#0a0e27] w-full">
       {/* Effets de fond lumineux */}
@@ -100,7 +116,7 @@ useEffect(() => {
             </div>
             
             <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-3 tracking-tight">
-              {t("missions.title")}
+              {t("missions.title", "NOS MISSIONS")}
             </h1>
             
             <div className="relative w-24 h-1 mx-auto mt-4 overflow-hidden rounded-full">
@@ -128,7 +144,7 @@ useEffect(() => {
                     alt={mission[`title_${i18n.language}`] || mission.title_fr}
                     className="w-full h-full object-cover"
                     onError={(e) =>
-                      (e.target.src = "https://placehold.co/1920x1080/1a1a2e/ffffff?text=Notre+Mission")
+                      (e.target.src = "https://placehold.co/1920x1080/1a1a2e/ffffff?text=Nos+Missions")
                     }
                   />
                 ) : (
@@ -149,7 +165,9 @@ useEffect(() => {
                         <div className="flex items-center gap-3 text-white">
                           <Calendar className="w-5 h-5" />
                           <div>
-                            <p className="text-xs opacity-80 uppercase tracking-wide">{t("missions.published")}</p>
+                            <p className="text-xs opacity-80 uppercase tracking-wide">
+                              {t("missions.published", "Publié le")}
+                            </p>
                             <p className="text-sm font-black">
                               {new Date(mission.created_at).toLocaleDateString(i18n.language, { 
                                 day: 'numeric', 
@@ -168,9 +186,9 @@ useEffect(() => {
                 <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                   <div className="max-w-5xl">
                     <div className="inline-flex items-center gap-3 mb-4 bg-orange-500/20 backdrop-blur-sm border border-orange-500/40 px-4 py-2 rounded-full">
-                      <Eye className="w-4 h-4 text-orange-400" />
+                      <Crosshair className="w-4 h-4 text-orange-400" />
                       <span className="text-orange-300 text-sm font-bold uppercase tracking-wide">
-                        {t("missions.our_vision")}
+                        {t("missions.our_mission", "Notre Mission")}
                       </span>
                     </div>
                     
@@ -187,24 +205,26 @@ useEffect(() => {
               <div className="p-8 md:p-12 lg:p-16">
                 <div className="max-w-5xl mx-auto">
                   
-                  {/* Citation ou intro */}
+                  {/* Description principale */}
                   <div className="relative mb-12">
                     <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-orange-500 to-blue-500 rounded-full"></div>
-                    <blockquote className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-semibold leading-relaxed italic pl-8">
+                    <blockquote className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-semibold leading-relaxed pl-8">
                       {mission[`content_${i18n.language}`] || mission.content_fr}
                     </blockquote>
                   </div>
 
-                  {/* Stats ou points clés */}
+                  {/* Objectifs clés */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                     <div className="relative group/stat">
                       <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-orange-500/30 rounded-2xl p-6 text-center hover:border-orange-500/60 transition-all">
                         <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                          <Target className="w-7 h-7 text-white" />
+                          <Eye className="w-7 h-7 text-white" />
                         </div>
-                        <p className="text-3xl font-black text-white mb-2">100%</p>
-                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">{t("missions.dedication")}</p>
+                        <p className="text-3xl font-black text-white mb-2">Vision</p>
+                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
+                          {t("missions.vision", "Leadership")}
+                        </p>
                       </div>
                     </div>
 
@@ -212,10 +232,12 @@ useEffect(() => {
                       <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-blue-500/30 rounded-2xl p-6 text-center hover:border-blue-500/60 transition-all">
                         <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                          <Trophy className="w-7 h-7 text-white" />
+                          <Target className="w-7 h-7 text-white" />
                         </div>
-                        <p className="text-3xl font-black text-white mb-2">1er</p>
-                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">{t("missions.ambition")}</p>
+                        <p className="text-3xl font-black text-white mb-2">Objectif</p>
+                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
+                          {t("missions.objective", "Excellence")}
+                        </p>
                       </div>
                     </div>
 
@@ -223,28 +245,30 @@ useEffect(() => {
                       <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-2xl opacity-0 group-hover/stat:opacity-100 transition-opacity"></div>
                       <div className="relative bg-white/5 backdrop-blur-sm border-2 border-purple-500/30 rounded-2xl p-6 text-center hover:border-purple-500/60 transition-all">
                         <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                          <Heart className="w-7 h-7 text-white" />
+                          <Trophy className="w-7 h-7 text-white" />
                         </div>
-                        <p className="text-3xl font-black text-white mb-2">∞</p>
-                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">{t("missions.passion")}</p>
+                        <p className="text-3xl font-black text-white mb-2">Impact</p>
+                        <p className="text-gray-400 font-semibold text-sm uppercase tracking-wide">
+                          {t("missions.impact", "Succès")}
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Objectifs clés */}
+                  {/* Nos engagements */}
                   <div className="mb-12">
                     <h3 className="text-2xl md:text-3xl font-black text-white mb-6 flex items-center gap-3">
                       <CheckCircle className="w-8 h-8 text-orange-400" />
-                      {t("missions.key_objectives")}
+                      {t("missions.commitments", "Nos Engagements")}
                     </h3>
                     
                     <div className="space-y-4">
                       {[
-                        t("missions.objective_1"),
-                        t("missions.objective_2"),
-                        t("missions.objective_3"),
-                        t("missions.objective_4")
-                      ].map((objective, index) => (
+                        t("missions.commitment_1", "Former les futurs champions"),
+                        t("missions.commitment_2", "Promouvoir l'esprit d'équipe"),
+                        t("missions.commitment_3", "Développer les talents locaux"),
+                        t("missions.commitment_4", "Inspirer la nouvelle génération")
+                      ].map((commitment, index) => (
                         <div key={index} className="flex items-start gap-4 group/item">
                           <div className="relative flex-shrink-0 mt-1">
                             <div className="absolute inset-0 bg-orange-500/30 blur-lg rounded-full group-hover/item:bg-orange-500/50 transition-all"></div>
@@ -253,7 +277,7 @@ useEffect(() => {
                             </div>
                           </div>
                           <p className="text-gray-300 text-lg leading-relaxed flex-1 group-hover/item:text-white transition-colors">
-                            {objective}
+                            {commitment}
                           </p>
                         </div>
                       ))}
@@ -265,10 +289,10 @@ useEffect(() => {
                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-blue-500 rounded-2xl blur opacity-20"></div>
                     <div className="relative bg-gradient-to-br from-orange-500/10 to-blue-500/10 backdrop-blur-sm border-2 border-orange-500/30 rounded-2xl p-8 text-center">
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-3">
-                        {t("missions.cta_title")}
+                        {t("missions.cta_title", "Rejoignez Notre Mission")}
                       </h3>
                       <p className="text-gray-300 text-lg mb-6 max-w-2xl mx-auto">
-                        {t("missions.cta_text")}
+                        {t("missions.cta_text", "Ensemble, construisons l'avenir du basketball")}
                       </p>
                       
                       <div className="flex flex-wrap justify-center gap-4">
@@ -277,8 +301,8 @@ useEffect(() => {
                           className="relative group/btn overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-                          <div className="relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/btn:scale-105 transition-transform">
-                            <span>{t("missions.contact_us")}</span>
+                          <div className="relative flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-lg shadow-2xl border-2 border-orange-400/50 group-hover/btn:scale-105 transition-transform text-white">
+                            <span>{t("missions.contact_us", "Nous Contacter")}</span>
                             <ArrowRight className="w-5 h-5" />
                           </div>
                         </a>
@@ -288,8 +312,8 @@ useEffect(() => {
                           className="relative group/btn overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-white/10 blur-xl opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
-                          <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/btn:scale-105 transition-all">
-                            {t("missions.join_us")}
+                          <div className="relative px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-orange-500/50 rounded-xl font-bold text-lg hover:bg-white/20 group-hover/btn:scale-105 transition-all text-white">
+                            {t("missions.join_us", "Nous Rejoindre")}
                           </div>
                         </a>
                       </div>

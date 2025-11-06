@@ -481,27 +481,29 @@
     "join_club": "Rejoindre le club"
   },
   
+  
   "missions": {
-    "title": "NOTRE MISSION",
-    "loading": "Chargement de la mission...",
-    "error": "Erreur de chargement",
-    "empty": "Aucune mission disponible",
-    "empty_desc": "Revenez bientôt pour découvrir notre mission",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "empty": "Aucune mission trouvée",
+    "empty_desc": "Revenez bientôt pour découvrir nos prochaines missions.",
+    "title": "NOS MISSIONS",
     "published": "Publié le",
-    "our_vision": "Notre Vision",
-    "dedication": "Dévouement",
-    "ambition": "Ambition",
-    "passion": "Passion",
-    "key_objectives": "Nos Objectifs Clés",
-    "objective_1": "Former les jeunes talents et développer leurs compétences sportives et personnelles",
-    "objective_2": "Promouvoir les valeurs du basket-ball : fair-play, esprit d'équipe et dépassement de soi",
-    "objective_3": "Créer une communauté unie autour de la passion du sport",
-    "objective_4": "Représenter fièrement notre club dans toutes les compétitions",
-    "cta_title": "Rejoignez Notre Mission !",
-    "cta_text": "Ensemble, construisons l'avenir du basket-ball et formons la prochaine génération de champions",
+    "our_mission": "Notre Mission",
+    "vision": "Leadership",
+    "objective": "Excellence",
+    "impact": "Succès",
+    "commitments": "Nos Engagements",
+    "commitment_1": "Former les futurs champions",
+    "commitment_2": "Promouvoir l'esprit d'équipe",
+    "commitment_3": "Développer les talents locaux",
+    "commitment_4": "Inspirer la nouvelle génération",
+    "cta_title": "Rejoignez Notre Mission",
+    "cta_text": "Ensemble, construisons l'avenir du basketball.",
     "contact_us": "Nous Contacter",
-    "join_us": "Rejoindre le Club"
-  }, 
+    "join_us": "Nous Rejoindre"
+  },
+
 
   
   "values": {

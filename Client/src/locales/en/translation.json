@@ -516,27 +516,29 @@
     "join_club": "Join the Club"
   },
   
+  
   "missions": {
-    "title": "OUR MISSION",
-    "loading": "Loading mission...",
-    "error": "Loading error",
-    "empty": "No mission available",
-    "empty_desc": "Come back soon to discover our mission",
+    "loading": "Loading...",
+    "error": "Error",
+    "empty": "No mission found",
+    "empty_desc": "Check back soon to discover our upcoming missions.",
+    "title": "OUR MISSIONS",
     "published": "Published on",
-    "our_vision": "Our Vision",
-    "dedication": "Dedication",
-    "ambition": "Ambition",
-    "passion": "Passion",
-    "key_objectives": "Our Key Objectives",
-    "objective_1": "Train young talents and develop their sports and personal skills",
-    "objective_2": "Promote basketball values: fair play, team spirit and self-improvement",
-    "objective_3": "Create a united community around the passion for sports",
-    "objective_4": "Proudly represent our club in all competitions",
-    "cta_title": "Join Our Mission!",
-    "cta_text": "Together, let's build the future of basketball and train the next generation of champions",
+    "our_mission": "Our Mission",
+    "vision": "Leadership",
+    "objective": "Excellence",
+    "impact": "Success",
+    "commitments": "Our Commitments",
+    "commitment_1": "Train the future champions",
+    "commitment_2": "Promote team spirit",
+    "commitment_3": "Develop local talents",
+    "commitment_4": "Inspire the new generation",
+    "cta_title": "Join Our Mission",
+    "cta_text": "Together, let's build the future of basketball.",
     "contact_us": "Contact Us",
-    "join_us": "Join the Club"
+    "join_us": "Join Us"
   },
+
 
   "values": {
     "title": "OUR VALUES",
