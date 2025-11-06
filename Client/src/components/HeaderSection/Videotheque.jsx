@@ -15,11 +15,10 @@ const Videotheque = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
-
   // ✅ Scroll vers le haut au chargement de la page
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     fetchVideos();
@@ -145,11 +144,11 @@ useEffect(() => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-4 tracking-tight">
-            VIDÉOTHÈQUE
+            {t('videotheque.title')}
           </h1>
           
           <p className="text-xl text-gray-300 max-w-3xl mx-auto px-4 leading-relaxed mb-8">
-            Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage
+            {t('videotheque.description')}
           </p>
 
           {/* Ligne animée */}
@@ -165,7 +164,7 @@ useEffect(() => {
               className="px-6 py-3 bg-white/10 hover:bg-white/20 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-xl text-white font-semibold flex items-center gap-2 transition-all backdrop-blur-xl"
             >
               <Search size={20} className="text-orange-400" />
-              <span>Rechercher</span>
+              <span>{t('videotheque.search')}</span>
             </button>
 
             {/* Bouton actualiser */}
@@ -175,7 +174,7 @@ useEffect(() => {
               className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl text-white font-semibold flex items-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-blue-500/20"
             >
               <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
-              <span>{loading ? "Chargement..." : "Actualiser"}</span>
+              <span>{loading ? t('videotheque.loading') : t('videotheque.refresh')}</span>
             </button>
           </div>
         </div>
@@ -212,7 +211,7 @@ useEffect(() => {
                       className="px-6 py-3 bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-600 hover:to-blue-700 rounded-xl text-white font-bold flex items-center gap-2 transition-all"
                     >
                       <Play size={18} />
-                      Plein écran
+                      {t('videotheque.fullscreen')}
                     </button>
                   </div>
                 </div>
@@ -223,7 +222,7 @@ useEffect(() => {
           {/* Section titre des vidéos */}
           <h3 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-500 mb-8 flex items-center gap-3">
             <Video className="text-orange-400" size={32} />
-            {selectedVideo ? "Autres vidéos" : "Toutes les vidéos"}
+            {selectedVideo ? t('videotheque.other_videos') : t('videotheque.all_videos')}
           </h3>
 
           {/* États */}
@@ -233,13 +232,13 @@ useEffect(() => {
                 <div className="absolute inset-0 border-4 border-orange-500/30 rounded-full animate-ping"></div>
                 <div className="absolute inset-0 border-4 border-t-orange-500 rounded-full animate-spin"></div>
               </div>
-              <span className="text-white text-lg mt-6 font-semibold">Chargement des vidéos...</span>
+              <span className="text-white text-lg mt-6 font-semibold">{t('videotheque.loading_videos')}</span>
             </div>
           ) : error ? (
             <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl shadow-red-500/20 backdrop-blur-xl">
               <div className="flex items-center gap-3 mb-4">
                 <AlertCircle className="text-red-400" size={24} />
-                <p className="font-bold text-xl">Erreur</p>
+                <p className="font-bold text-xl">{t('videotheque.error')}</p>
               </div>
               <p className="text-gray-300 mb-4">{error}</p>
               <button
@@ -247,7 +246,7 @@ useEffect(() => {
                 className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg font-semibold flex items-center gap-2 transition-all"
               >
                 <RefreshCw size={18} />
-                Réessayer
+                {t('videotheque.retry')}
               </button>
             </div>
           ) : filteredVideos.length === 0 ? (
@@ -255,13 +254,13 @@ useEffect(() => {
               <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Video className="w-12 h-12 text-orange-400" />
               </div>
-              <p className="text-white text-2xl font-bold mb-2">Aucune vidéo trouvée</p>
+              <p className="text-white text-2xl font-bold mb-2">{t('videotheque.no_videos_found')}</p>
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm("")}
                   className="mt-4 text-orange-400 hover:text-orange-300 font-semibold"
                 >
-                  Effacer la recherche
+                  {t('videotheque.clear_search')}
                 </button>
               )}
             </div>
@@ -306,7 +305,7 @@ useEffect(() => {
                           onClick={() => handleVideoSelect(video)}
                           className="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 rounded-lg text-blue-400 text-sm font-semibold transition-all"
                         >
-                          Voir
+                          {t('videotheque.view')}
                         </button>
                         <button
                           onClick={(e) => {
@@ -316,7 +315,7 @@ useEffect(() => {
                           className="px-4 py-2 bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-600 hover:to-blue-700 rounded-lg text-white text-sm font-semibold flex items-center gap-1 transition-all"
                         >
                           <Play size={14} />
-                          Plein écran
+                          {t('videotheque.fullscreen')}
                         </button>
                       </div>
                     </div>
@@ -347,7 +346,7 @@ useEffect(() => {
                   <Search className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-500 mb-2">
-                  Rechercher une vidéo
+                  {t('videotheque.search_title')}
                 </h2>
               </div>
 
@@ -358,7 +357,7 @@ useEffect(() => {
                     <Search size={24} className="text-orange-400 mr-4 flex-shrink-0" />
                     <input
                       type="text"
-                      placeholder="Tapez le titre d'une vidéo..."
+                      placeholder={t('videotheque.search_placeholder')}
                       value={searchTerm}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       className="bg-transparent outline-none text-lg text-white placeholder-gray-400 w-full"
@@ -384,7 +383,7 @@ useEffect(() => {
               {searchResults.length > 0 && (
                 <div className="space-y-2 animate-fadeIn">
                   <p className="text-gray-400 text-sm mb-4 px-2">
-                    {searchResults.length} résultat{searchResults.length > 1 ? 's' : ''} trouvé{searchResults.length > 1 ? 's' : ''}
+                    {searchResults.length} {searchResults.length > 1 ? t('videotheque.results_found_plural') : t('videotheque.results_found')}
                   </p>
                   {searchResults.map((video) => (
                     <button
@@ -423,7 +422,7 @@ useEffect(() => {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-orange-500/30 hover:border-orange-500/60 rounded-xl text-white font-semibold transition-all"
                 >
                   <X size={18} />
-                  Fermer
+                  {t('videotheque.close')}
                 </button>
               </div>
             </div>

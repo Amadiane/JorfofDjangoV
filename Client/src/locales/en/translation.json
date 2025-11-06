@@ -303,6 +303,9 @@
   "❌ Une erreur s'est produite.": "❌ An error occurred.",
   "⚠️ Impossible d'envoyer le formulaire pour le moment.": "⚠️ Unable to send the form at the moment.",
 
+  
+
+
 
 
 
@@ -419,6 +422,28 @@
     "join_text": "Follow our news and come support the Jorfof Club at every match!",
     "contact_us": "Contact us",
     "join_us": "Join us"
+  },
+  
+  "videotheque": {
+    "title": "VIDEO LIBRARY",
+    "description": "Discover our collection of educational videos to enhance your learning experience",
+    "search": "Search",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "loading_videos": "Loading videos...",
+    "fullscreen": "Full screen",
+    "other_videos": "Other videos",
+    "all_videos": "All videos",
+    "error": "Error",
+    "retry": "Retry",
+    "no_videos_found": "No videos found",
+    "clear_search": "Clear search",
+    "view": "View",
+    "search_title": "Search for a video",
+    "search_placeholder": "Type a video title...",
+    "results_found": "result found",
+    "results_found_plural": "results found",
+    "close": "Close"
   },
 
   

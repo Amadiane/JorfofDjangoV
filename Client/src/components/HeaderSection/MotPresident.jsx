@@ -14,6 +14,11 @@ const MotPresident = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // ✅ Scroll vers le haut au chargement de la page
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, []);
+
   useEffect(() => {
     const fetchMotPresident = async () => {
       try {

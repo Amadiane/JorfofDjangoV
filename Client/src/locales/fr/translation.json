@@ -547,6 +547,27 @@
     "president_role": "Président du Club"
   }, 
 
+  "videotheque": {
+    "title": "VIDÉOTHÈQUE",
+    "description": "Découvrez notre collection de vidéos éducatives pour enrichir votre expérience d'apprentissage",
+    "search": "Rechercher",
+    "refresh": "Actualiser",
+    "loading": "Chargement...",
+    "loading_videos": "Chargement des vidéos...",
+    "fullscreen": "Plein écran",
+    "other_videos": "Autres vidéos",
+    "all_videos": "Toutes les vidéos",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "no_videos_found": "Aucune vidéo trouvée",
+    "clear_search": "Effacer la recherche",
+    "view": "Voir",
+    "search_title": "Rechercher une vidéo",
+    "search_placeholder": "Tapez le titre d'une vidéo...",
+    "results_found": "résultat",
+    "results_found_plural": "résultats trouvés",
+    "close": "Fermer"
+  },
   
   "phototheque": {
     "titre": "PHOTOTHÈQUE",
@@ -558,6 +579,7 @@
     "erreur_chargement": "Erreur lors du chargement des albums ou des photos."
   
 },
+
 
 
   
