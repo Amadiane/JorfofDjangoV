@@ -539,7 +539,7 @@ const NavAdmin = () => {
                 </div>
                 <div className="ml-2 md:ml-3">
                   <p className="text-xs md:text-sm font-bold text-white">Admin</p>
-                  <p className="text-xs text-gray-400 font-semibold hidden md:block">admin@jorfof.org</p>
+                  <p className="text-xs text-gray-400 font-semibold hidden md:block">admin@jbc.com</p>
                 </div>
               </div>
               <button className="relative group/logout">
