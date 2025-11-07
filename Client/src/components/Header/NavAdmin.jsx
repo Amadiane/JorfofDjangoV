@@ -378,6 +378,7 @@ const NavAdmin = () => {
     {
       title: "Contenu",
       items: [
+        { path: "/homePost", label: "Home" },
         { path: "/createpost", label: "Actualités" },
         { path: "/programPost", label: "Calendrier" },
         { path: "/videoPost", label: "Videothèque" },
@@ -395,7 +396,7 @@ const NavAdmin = () => {
         { path: "/listeContacts", label: "Liste Contacts" },
         { path: "/listePostulantsCommunity", label: "Liste Community" },
         { path: "/listeAbonnement", label: "Liste Abonnement" },
-        { path: "/homePost", label: "Home" },
+       
       ]
     },
   ];

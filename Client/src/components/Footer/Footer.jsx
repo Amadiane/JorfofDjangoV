@@ -64,8 +64,8 @@ const Footer = () => {
 
   const quickLinks = [
     { label: "Accueil", href: "/" },
-    { label: "Le Club", href: "/club" },
-    { label: "Équipes", href: "/equipes" },
+    { label: "Le Club", href: "/nosValeurs" },
+    { label: "Équipes", href: "/notreEquipe" },
     { label: "Actualités", href: "/actualites" },
     { label: "Galerie", href: "/phototheque" },
     { label: "Contact", href: "/contacter-tamkine" }
