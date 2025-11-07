@@ -94,7 +94,6 @@
 
 // export default App;
 
-
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -127,7 +126,7 @@ const App = () => {
     "/missionPost",
     "/activitiesPost",
     "/homePost",
-    "partnerPost",
+    "/partnerPost",
   ];
 
   const isAdminPage = adminPaths.includes(location.pathname);
@@ -146,9 +145,9 @@ const App = () => {
           {/* Sidebar Admin fixe */}
           <NavAdmin />
           
-          {/* Zone de contenu principal avec scroll */}
-          <main className="flex-1 overflow-y-auto overflow-x-hidden ml-16 md:ml-20 lg:ml-72 transition-all duration-300">
-            <div className="min-h-screen w-full">
+          {/* Zone de contenu principal avec scroll - CENTRÉ */}
+          <main className="flex-1 overflow-y-auto overflow-x-hidden transition-all duration-300">
+            <div className="min-h-screen w-full px-4 md:px-6 lg:px-8">
               <Outlet />
             </div>
           </main>
