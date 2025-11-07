@@ -1,511 +1,16 @@
-// // import React, { useState } from 'react';
-
-// // const VideoPost = () => {
-// //   const [titre, setTitre] = useState('');
-// //   const [lien, setLien] = useState('');
-// //   const [couverture, setCouverture] = useState(null);
-// //   const [loading, setLoading] = useState(false);
-// //   const [message, setMessage] = useState('');
-// //   const apiUrl = import.meta.env.VITE_API_BACKEND;
-
-// //   const handleSubmit = async (e) => {
-// //     e.preventDefault();
-// //     setLoading(true);
-// //     setMessage('');
-
-// //     const formData = new FormData();
-// //     formData.append('titre', titre);
-// //     formData.append('lien', lien);
-// //     if (couverture) {
-// //       formData.append('couverture', couverture);
-// //     }
-
-// //     try {
-// //       const response = await fetch(apiUrl + "/api/add-video/", {
-// //         method: 'POST',
-// //         body: formData,
-// //       });
-
-// //       if (!response.ok) {
-// //         throw new Error(`HTTP error! status: ${response.status}`);
-// //       }
-
-// //       const data = await response.json();
-// //       setMessage('✅ Vidéo ajoutée avec succès !');
-// //       setTitre('');
-// //       setLien('');
-// //       setCouverture(null);
-// //     } catch (error) {
-// //       setMessage(`❌ Erreur: ${error.message}`);
-// //     } finally {
-// //       setLoading(false);
-// //     }
-// //   };
-
-// //   return (
-// //     <div style={{
-// //       margin: '20px',
-// //       padding: '40px',
-// //       backgroundColor: '#f4f7f6',
-// //       borderRadius: '8px',
-// //       boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-// //       display: 'flex',
-// //       justifyContent: 'center',
-// //       alignItems: 'center',
-// //       minHeight: '100vh',
-// //     }}>
-// //       <section style={{
-// //         width: '100%',
-// //         maxWidth: '800px',
-// //         backgroundColor: '#ffffff',
-// //         borderRadius: '10px',
-// //         padding: '40px',
-// //         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-// //       }}>
-// //         <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>Ajouter une Vidéo</h1>
-// //         <form onSubmit={handleSubmit}>
-// //           <div style={{ marginBottom: '20px' }}>
-// //             <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Titre de la vidéo</label>
-// //             <input
-// //               type="text"
-// //               value={titre}
-// //               onChange={(e) => setTitre(e.target.value)}
-// //               required
-// //               style={{
-// //                 width: '100%',
-// //                 padding: '12px',
-// //                 border: '1px solid #ddd',
-// //                 borderRadius: '8px',
-// //                 fontSize: '16px'
-// //               }}
-// //             />
-// //           </div>
-
-// //           <div style={{ marginBottom: '20px' }}>
-// //             <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Lien de la vidéo</label>
-// //             <input
-// //               type="url"
-// //               value={lien}
-// //               onChange={(e) => setLien(e.target.value)}
-// //               required
-// //               style={{
-// //                 width: '100%',
-// //                 padding: '12px',
-// //                 border: '1px solid #ddd',
-// //                 borderRadius: '8px',
-// //                 fontSize: '16px'
-// //               }}
-// //             />
-// //           </div>
-
-// //           <div style={{ marginBottom: '20px' }}>
-// //             <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Image de couverture</label>
-// //             <input
-// //               type="file"
-// //               accept="image/*"
-// //               onChange={(e) => setCouverture(e.target.files[0])}
-// //               style={{
-// //                 width: '100%',
-// //                 padding: '12px',
-// //                 border: '1px solid #ddd',
-// //                 borderRadius: '8px',
-// //               }}
-// //             />
-// //             {couverture && (
-// //               <div style={{ marginTop: '10px' }}>
-// //                 <img src={URL.createObjectURL(couverture)} alt="Prévisualisation" style={{ maxWidth: '200px', maxHeight: '200px' }} />
-// //               </div>
-// //             )}
-// //           </div>
-
-// //           <button type="submit" disabled={loading} style={{
-// //             padding: '16px',
-// //             backgroundColor: '#1C1C47',
-// //             color: 'white',
-// //             border: 'none',
-// //             borderRadius: '8px',
-// //             fontSize: '20px',
-// //             cursor: 'pointer',
-// //             width: '100%',
-// //           }}>
-// //             {loading ? 'Envoi en cours...' : 'Ajouter la vidéo'}
-// //           </button>
-// //         </form>
-
-// //         {message && <p style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '20px' }}>{message}</p>}
-// //       </section>
-// //     </div>
-// //   );
-// // };
-
-// // export default VideoPost;
-
-
-// import React, { useState, useEffect } from "react";
-
-// const VideoPost = () => {
-//   const apiUrl = import.meta.env.VITE_API_BACKEND;
-//   const [videos, setVideos] = useState([]);
-//   const [formData, setFormData] = useState({
-//     title_fr: "",
-//     title_en: "",
-//     title_ar: "",
-//     comment_fr: "",
-//     comment_en: "",
-//     comment_ar: "",
-//     lien_video: "",
-//     cover_image: null,
-//   });
-//   const [editingId, setEditingId] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const [message, setMessage] = useState("");
-
-//   // Charger la liste des vidéos au montage
-//   useEffect(() => {
-//     fetchVideos();
-//   }, []);
-
-//   const fetchVideos = async () => {
-//     try {
-//       const res = await fetch(`${apiUrl}/api/videos/`);
-//       if (!res.ok) throw new Error("Erreur de chargement des vidéos");
-//       const data = await res.json();
-//       setVideos(data);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   const handleChange = (e) => {
-//     const { name, value, files } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: files ? files[0] : value,
-//     }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setMessage("");
-
-//     const data = new FormData();
-//     Object.entries(formData).forEach(([key, value]) => {
-//       if (value) data.append(key, value);
-//     });
-
-//     try {
-//       const endpoint = editingId
-//         ? `${apiUrl}/api/videos/${editingId}/update/`
-//         : `${apiUrl}/api/videos/create/`;
-//       const method = editingId ? "PUT" : "POST";
-
-//       const response = await fetch(endpoint, { method, body: data });
-//       if (!response.ok)
-//         throw new Error(`Erreur HTTP ${response.status}`);
-
-//       setMessage(
-//         editingId
-//           ? "✅ Vidéo mise à jour avec succès !"
-//           : "✅ Vidéo ajoutée avec succès !"
-//       );
-//       setFormData({
-//         title_fr: "",
-//         title_en: "",
-//         title_ar: "",
-//         comment_fr: "",
-//         comment_en: "",
-//         comment_ar: "",
-//         lien_video: "",
-//         cover_image: null,
-//       });
-//       setEditingId(null);
-//       fetchVideos();
-//     } catch (error) {
-//       setMessage(`❌ ${error.message}`);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleEdit = (video) => {
-//     setEditingId(video.id);
-//     setFormData({
-//       title_fr: video.title_fr || "",
-//       title_en: video.title_en || "",
-//       title_ar: video.title_ar || "",
-//       comment_fr: video.comment_fr || "",
-//       comment_en: video.comment_en || "",
-//       comment_ar: video.comment_ar || "",
-//       lien_video: video.lien_video || "",
-//       cover_image: null,
-//     });
-//     window.scrollTo(0, 0);
-//   };
-
-//   const handleDelete = async (id) => {
-//     if (!confirm("Supprimer cette vidéo ?")) return;
-//     try {
-//       const res = await fetch(`${apiUrl}/api/videos/${id}/delete/`, {
-//         method: "DELETE",
-//       });
-//       if (!res.ok) throw new Error("Suppression échouée");
-//       setVideos(videos.filter((v) => v.id !== id));
-//     } catch (err) {
-//       setMessage(`❌ ${err.message}`);
-//     }
-//   };
-
-//   return (
-//     <div
-//       style={{
-//         margin: "20px",
-//         padding: "40px",
-//         backgroundColor: "#f4f7f6",
-//         borderRadius: "8px",
-//         boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-//         display: "flex",
-//         flexDirection: "column",
-//         alignItems: "center",
-//       }}
-//     >
-//       <section
-//         style={{
-//           width: "100%",
-//           maxWidth: "900px",
-//           backgroundColor: "#ffffff",
-//           borderRadius: "10px",
-//           padding: "40px",
-//           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-//         }}
-//       >
-//         <h1 style={{ textAlign: "center", fontSize: "28px", marginBottom: "20px" }}>
-//           {editingId ? "Modifier la Vidéo" : "Ajouter une Vidéo"}
-//         </h1>
-
-//         <form onSubmit={handleSubmit}>
-//           <div style={{ display: "grid", gap: "20px" }}>
-//             <input
-//               type="text"
-//               name="title_fr"
-//               placeholder="Titre (Français)"
-//               value={formData.title_fr}
-//               onChange={handleChange}
-//               required
-//               style={inputStyle}
-//             />
-//             <input
-//               type="text"
-//               name="title_en"
-//               placeholder="Title (English)"
-//               value={formData.title_en}
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//             <input
-//               type="text"
-//               name="title_ar"
-//               placeholder="العنوان (Arabe)"
-//               value={formData.title_ar}
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//             <textarea
-//               name="comment_fr"
-//               placeholder="Commentaire (Français)"
-//               value={formData.comment_fr}
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//             <textarea
-//               name="comment_en"
-//               placeholder="Comment (English)"
-//               value={formData.comment_en}
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//             <textarea
-//               name="comment_ar"
-//               placeholder="تعليق (Arabe)"
-//               value={formData.comment_ar}
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//             <input
-//               type="url"
-//               name="lien_video"
-//               placeholder="Lien de la vidéo"
-//               value={formData.lien_video}
-//               onChange={handleChange}
-//               required
-//               style={inputStyle}
-//             />
-//             <input
-//               type="file"
-//               name="cover_image"
-//               accept="image/*"
-//               onChange={handleChange}
-//               style={inputStyle}
-//             />
-//           </div>
-
-//           <button
-//             type="submit"
-//             disabled={loading}
-//             style={{
-//               padding: "16px",
-//               backgroundColor: "#1C1C47",
-//               color: "white",
-//               border: "none",
-//               borderRadius: "8px",
-//               fontSize: "18px",
-//               cursor: "pointer",
-//               width: "100%",
-//               marginTop: "20px",
-//             }}
-//           >
-//             {loading
-//               ? "Envoi en cours..."
-//               : editingId
-//               ? "Mettre à jour"
-//               : "Ajouter la vidéo"}
-//           </button>
-//         </form>
-
-//         {message && (
-//           <p
-//             style={{
-//               textAlign: "center",
-//               fontWeight: "bold",
-//               marginTop: "20px",
-//               color: message.includes("✅") ? "green" : "red",
-//             }}
-//           >
-//             {message}
-//           </p>
-//         )}
-//       </section>
-
-//       {/* Liste des vidéos */}
-//       <section
-//         style={{
-//           marginTop: "40px",
-//           width: "100%",
-//           maxWidth: "900px",
-//           backgroundColor: "#fff",
-//           borderRadius: "10px",
-//           padding: "20px",
-//           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-//         }}
-//       >
-//         <h2 style={{ textAlign: "center", fontSize: "24px", marginBottom: "20px" }}>
-//           Liste des vidéos
-//         </h2>
-//         {videos.length === 0 ? (
-//           <p style={{ textAlign: "center" }}>Aucune vidéo disponible</p>
-//         ) : (
-//           <div
-//             style={{
-//               display: "grid",
-//               gap: "20px",
-//               gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-//             }}
-//           >
-//             {videos.map((v) => (
-//               <div
-//                 key={v.id}
-//                 style={{
-//                   border: "1px solid #ddd",
-//                   borderRadius: "10px",
-//                   padding: "10px",
-//                   backgroundColor: "#fafafa",
-//                   textAlign: "center",
-//                 }}
-//               >
-//                 {v.cover_image && (
-//                   <img
-//                     src={v.cover_image}
-//                     alt={v.title_fr}
-//                     style={{
-//                       width: "100%",
-//                       height: "160px",
-//                       objectFit: "cover",
-//                       borderRadius: "8px",
-//                     }}
-//                   />
-//                 )}
-//                 <h3 style={{ marginTop: "10px" }}>{v.title_fr}</h3>
-//                 <p style={{ fontSize: "14px", color: "#555" }}>
-//                   {v.comment_fr || "Aucun commentaire"}
-//                 </p>
-//                 <video
-//                   controls
-//                   src={v.lien_video}
-//                   style={{
-//                     width: "100%",
-//                     borderRadius: "8px",
-//                     marginTop: "8px",
-//                   }}
-//                 />
-//                 <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "10px" }}>
-//                   <button
-//                     onClick={() => handleEdit(v)}
-//                     style={btnEdit}
-//                   >
-//                     ✏️ Modifier
-//                   </button>
-//                   <button
-//                     onClick={() => handleDelete(v.id)}
-//                     style={btnDelete}
-//                   >
-//                     🗑️ Supprimer
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </section>
-//     </div>
-//   );
-// };
-
-// // Styles réutilisables
-// const inputStyle = {
-//   width: "100%",
-//   padding: "12px",
-//   border: "1px solid #ddd",
-//   borderRadius: "8px",
-//   fontSize: "16px",
-// };
-
-// const btnEdit = {
-//   backgroundColor: "#007bff",
-//   color: "white",
-//   border: "none",
-//   padding: "8px 12px",
-//   borderRadius: "6px",
-//   cursor: "pointer",
-// };
-
-// const btnDelete = {
-//   backgroundColor: "#dc3545",
-//   color: "white",
-//   border: "none",
-//   padding: "8px 12px",
-//   borderRadius: "6px",
-//   cursor: "pointer",
-// };
-
-// export default VideoPost;
-
-
-
 import React, { useEffect, useState } from "react";
-import CONFIG from "../../config/config.js"; 
+import { Video, Loader2, Trash2, PlusCircle, Edit2, X, Play, ExternalLink } from "lucide-react";
+import CONFIG from "../../config/config.js";
 
 const VideoPost = () => {
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [formData, setFormData] = useState({
     title_fr: "",
     title_en: "",
@@ -516,101 +21,104 @@ const VideoPost = () => {
     lien_video: "",
     cover_image: null,
   });
-  const [editingId, setEditingId] = useState(null);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
 
-  // ✅ Récupérer toutes les vidéos
+  // 🔄 Charger toutes les vidéos
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
   const fetchVideos = async () => {
+    setFetchLoading(true);
     try {
       const res = await fetch(CONFIG.API_VIDEO_LIST);
       if (!res.ok) throw new Error("Erreur de chargement des vidéos");
       const data = await res.json();
       setVideos(data);
-    } catch (error) {
-      console.error(error);
-      setMessage("❌ Impossible de charger les vidéos.");
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors du chargement des vidéos");
+    } finally {
+      setFetchLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchVideos();
-  }, []);
-
-  // ✅ Gérer la saisie
+  // 📝 Gestion des champs
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
       setFormData({ ...formData, [name]: files[0] });
+      setPreview(URL.createObjectURL(files[0]));
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  // ✅ Ajouter ou modifier une vidéo
+  // 🔄 Réinitialiser le formulaire
+  const resetForm = () => {
+    setFormData({
+      title_fr: "",
+      title_en: "",
+      title_ar: "",
+      comment_fr: "",
+      comment_en: "",
+      comment_ar: "",
+      lien_video: "",
+      cover_image: null,
+    });
+    setPreview(null);
+    setEditingId(null);
+  };
+
+  // ✅ Créer ou Mettre à jour
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
-
-    const fd = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (formData[key]) fd.append(key, formData[key]);
-    });
-
-    const url = editingId
-      ? CONFIG.API_VIDEO_UPDATE(editingId)
-      : CONFIG.API_VIDEO_CREATE;
-
-    const method = editingId ? "PUT" : "POST";
+    setError(null);
+    setSuccessMessage(null);
 
     try {
-      const res = await fetch(url, {
-        method,
-        body: fd,
+      const fd = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) fd.append(key, value);
       });
 
+      const url = editingId ? CONFIG.API_VIDEO_UPDATE(editingId) : CONFIG.API_VIDEO_CREATE;
+      const method = editingId ? "PUT" : "POST";
+
+      const res = await fetch(url, { method, body: fd });
       if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
 
-      await fetchVideos();
-      setMessage(
-        editingId ? "✅ Vidéo mise à jour avec succès !" : "✅ Vidéo ajoutée avec succès !"
-      );
-      setFormData({
-        title_fr: "",
-        title_en: "",
-        title_ar: "",
-        comment_fr: "",
-        comment_en: "",
-        comment_ar: "",
-        lien_video: "",
-        cover_image: null,
-      });
-      setEditingId(null);
-    } catch (error) {
-      setMessage(`❌ ${error.message}`);
+      setSuccessMessage(editingId ? "Vidéo mise à jour avec succès !" : "Vidéo ajoutée avec succès !");
+      resetForm();
+      fetchVideos();
+      setShowForm(false);
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors de la sauvegarde");
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Supprimer une vidéo
+  // 🗑️ Supprimer une vidéo
   const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer cette vidéo ?")) return;
+    if (!window.confirm("Voulez-vous vraiment supprimer cette vidéo ?")) return;
+
     try {
-      const res = await fetch(CONFIG.API_VIDEO_DELETE(id), {
-        method: "DELETE",
-      });
+      const res = await fetch(CONFIG.API_VIDEO_DELETE(id), { method: "DELETE" });
       if (!res.ok) throw new Error("Erreur de suppression");
-      await fetchVideos();
-      setMessage("🗑️ Vidéo supprimée avec succès !");
-    } catch (error) {
-      setMessage(`❌ ${error.message}`);
+      setSuccessMessage("Vidéo supprimée avec succès !");
+      fetchVideos();
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors de la suppression");
     }
   };
 
-  // ✅ Éditer une vidéo
+  // 🔄 Préparer le formulaire pour modification
   const handleEdit = (video) => {
+    setEditingId(video.id);
     setFormData({
       title_fr: video.title_fr || "",
       title_en: video.title_en || "",
@@ -621,208 +129,423 @@ const VideoPost = () => {
       lien_video: video.lien_video || "",
       cover_image: null,
     });
-    setEditingId(video.id);
+    setPreview(video.cover_image || null);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // 🎬 Extraire l'ID YouTube
+  const getYouTubeId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
+  if (fetchLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="animate-spin inline-block text-orange-500" size={40} />
+          <p className="mt-4 text-gray-300 text-lg">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      style={{
-        margin: "20px",
-        padding: "40px",
-        backgroundColor: "#f4f7f6",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <section
-        style={{
-          width: "100%",
-          maxWidth: "900px",
-          backgroundColor: "#fff",
-          borderRadius: "10px",
-          padding: "40px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h1 style={{ textAlign: "center", fontSize: "28px", marginBottom: "20px" }}>
-          {editingId ? "Modifier la Vidéo" : "Ajouter une Vidéo"}
-        </h1>
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
+      {/* Effets de fond lumineux */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/2 w-64 md:w-96 h-64 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
 
-        {/* FORMULAIRE */}
-        <form onSubmit={handleSubmit}>
-          {["title_fr", "title_en", "title_ar"].map((field, i) => (
-            <div key={field} style={{ marginBottom: "15px" }}>
-              <label style={{ fontWeight: "bold", display: "block", marginBottom: "6px" }}>
-                {["Titre (Français)", "Title (English)", "العنوان (Arabe)"][i]}
-              </label>
-              <input
-                type="text"
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                }}
-              />
+      {/* Grille de fond */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
+
+      <div className="relative max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-lg"></div>
+              <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-xl">
+                <Video className="w-6 h-6 text-white" />
+              </div>
             </div>
-          ))}
-
-          {["comment_fr", "comment_en", "comment_ar"].map((field, i) => (
-            <div key={field} style={{ marginBottom: "15px" }}>
-              <label style={{ fontWeight: "bold", display: "block", marginBottom: "6px" }}>
-                {["Commentaire (Français)", "Comment (English)", "تعليق (Arabe)"][i]}
-              </label>
-              <textarea
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                rows="3"
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                }}
-              />
-            </div>
-          ))}
-
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-              Lien de la vidéo (YouTube, Cloudinary, etc.)
-            </label>
-            <input
-              type="url"
-              name="lien_video"
-              value={formData.lien_video}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            />
+            <h1 className="text-2xl md:text-3xl font-black text-white">
+              Gestion des Vidéos
+            </h1>
           </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-              Image de couverture
-            </label>
-            <input
-              type="file"
-              name="cover_image"
-              accept="image/*"
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-              }}
-            />
-          </div>
-
           <button
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: "16px",
-              backgroundColor: "#1C1C47",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "20px",
-              cursor: "pointer",
-              width: "100%",
+            onClick={() => {
+              setShowForm(!showForm);
+              if (showForm) resetForm();
             }}
+            className="relative group w-full md:w-auto"
           >
-            {loading ? "Envoi en cours..." : editingId ? "Mettre à jour" : "Ajouter"}
+            <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+            <div className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2.5 rounded-lg hover:shadow-xl hover:shadow-orange-500/50 transition-all flex items-center justify-center gap-2 font-semibold">
+              <PlusCircle size={18} /> {showForm ? "Fermer" : "Nouvelle Vidéo"}
+            </div>
           </button>
-        </form>
+        </div>
 
-        {message && (
-          <p style={{ textAlign: "center", fontWeight: "bold", marginTop: "20px" }}>{message}</p>
+        {/* Messages */}
+        {error && (
+          <div className="bg-red-500/20 border-2 border-red-500/50 text-red-300 p-4 mb-6 rounded-xl backdrop-blur-sm">
+            {error}
+          </div>
         )}
-      </section>
+        {successMessage && (
+          <div className="bg-green-500/20 border-2 border-green-500/50 text-green-300 p-4 mb-6 rounded-xl backdrop-blur-sm">
+            {successMessage}
+          </div>
+        )}
 
-      {/* 🧾 Liste des vidéos */}
-      <section style={{ marginTop: "40px", width: "100%", maxWidth: "900px" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>📺 Liste des vidéos</h2>
-        {videos.length === 0 ? (
-          <p style={{ textAlign: "center" }}>Aucune vidéo pour le moment.</p>
-        ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-            {videos.map((video) => (
-              <div
-                key={video.id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "10px",
-                  padding: "20px",
-                  backgroundColor: "#fff",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                }}
-              >
-                {video.cover_image && (
-                  <img
-                    src={video.cover_image}
-                    alt={video.title_fr}
-                    style={{
-                      width: "100%",
-                      height: "180px",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                      marginBottom: "10px",
-                    }}
-                  />
+        {/* 🧾 FORMULAIRE */}
+        {showForm && (
+          <div className="relative mb-8">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-2xl blur opacity-20"></div>
+            <div className="relative bg-[#0f1729]/90 backdrop-blur-xl shadow-2xl p-6 md:p-8 rounded-2xl border-2 border-orange-500/30">
+              <h2 className="text-xl font-bold text-white mb-6">
+                {editingId ? "✏️ Modifier la vidéo" : "➕ Ajouter une vidéo"}
+              </h2>
+              
+              <div className="space-y-6">
+                {/* Titres */}
+                <div>
+                  <h3 className="text-lg font-semibold text-orange-400 mb-4">📝 Titres</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">Titre (FR) *</label>
+                      <input
+                        type="text"
+                        name="title_fr"
+                        value={formData.title_fr}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-orange-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">Title (EN)</label>
+                      <input
+                        type="text"
+                        name="title_en"
+                        value={formData.title_en}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-blue-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">العنوان (AR)</label>
+                      <input
+                        type="text"
+                        name="title_ar"
+                        value={formData.title_ar}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all"
+                        style={{ direction: 'rtl' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Commentaires */}
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-400 mb-4">💬 Commentaires</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">Commentaire (FR)</label>
+                      <textarea
+                        name="comment_fr"
+                        value={formData.comment_fr}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-orange-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-all"
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">Comment (EN)</label>
+                      <textarea
+                        name="comment_en"
+                        value={formData.comment_en}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-blue-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-all"
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-gray-300 mb-2">التعليق (AR)</label>
+                      <textarea
+                        name="comment_ar"
+                        value={formData.comment_ar}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all"
+                        rows={3}
+                        style={{ direction: 'rtl' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Lien vidéo et Image */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-semibold text-gray-300 mb-2">🔗 Lien vidéo (YouTube, etc.) *</label>
+                    <input
+                      type="url"
+                      name="lien_video"
+                      value={formData.lien_video}
+                      onChange={handleChange}
+                      placeholder="https://youtube.com/watch?v=..."
+                      className="w-full px-4 py-3 bg-white/10 border-2 border-green-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-all"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-gray-300 mb-2">🖼️ Image de couverture</label>
+                    <input
+                      type="file"
+                      name="cover_image"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="block w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-lg text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-500 file:text-white hover:file:bg-purple-600 transition-all"
+                    />
+                  </div>
+                </div>
+
+                {preview && (
+                  <div className="relative inline-block">
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl blur opacity-50"></div>
+                    <img src={preview} alt="Aperçu" className="relative w-full max-w-md h-48 object-cover rounded-xl border-2 border-white/20 shadow-xl" />
+                  </div>
                 )}
-                <h3>{video.title_fr}</h3>
-                <p style={{ fontSize: "14px", color: "#555" }}>{video.comment_fr}</p>
-                <a href={video.lien_video} target="_blank" rel="noreferrer">
-                  🔗 Voir la vidéo
-                </a>
-                <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between" }}>
+
+                {/* Boutons */}
+                <div className="flex gap-3 pt-4">
                   <button
-                    onClick={() => handleEdit(video)}
-                    style={{
-                      backgroundColor: "#1C1C47",
-                      color: "#fff",
-                      border: "none",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="relative group overflow-hidden flex-1"
                   >
-                    ✏️ Modifier
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-bold hover:shadow-2xl hover:shadow-orange-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                      {loading ? (
+                        <>
+                          <Loader2 className="animate-spin" size={18} />
+                          Enregistrement...
+                        </>
+                      ) : (
+                        editingId ? "Mettre à jour" : "Ajouter"
+                      )}
+                    </div>
                   </button>
                   <button
-                    onClick={() => handleDelete(video.id)}
-                    style={{
-                      backgroundColor: "#E74C3C",
-                      color: "#fff",
-                      border: "none",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
+                    onClick={resetForm}
+                    className="bg-gray-600/30 border-2 border-gray-500/50 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-600/50 transition-all font-semibold"
                   >
-                    🗑️ Supprimer
+                    Réinitialiser
                   </button>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         )}
-      </section>
+
+        {/* 🖼️ GRID DES VIDÉOS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {videos.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <Video size={64} className="mx-auto text-gray-600 mb-4" />
+              <p className="text-gray-400 text-lg">Aucune vidéo pour le moment</p>
+            </div>
+          ) : (
+            videos.map((video) => (
+              <div key={video.id} className="relative group cursor-pointer" onClick={() => setSelectedVideo(video)}>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all overflow-hidden border-2 border-white/10 group-hover:border-orange-500/50 h-full flex flex-col">
+                  {/* Image/Thumbnail */}
+                  <div className="relative h-48 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729] via-transparent to-transparent z-10"></div>
+                    <div className="absolute inset-0 flex items-center justify-center z-20">
+                      <div className="bg-orange-500/80 backdrop-blur-sm rounded-full p-4 group-hover:scale-110 transition-transform">
+                        <Play className="w-8 h-8 text-white" fill="white" />
+                      </div>
+                    </div>
+                    {video.cover_image ? (
+                      <img
+                        src={video.cover_image}
+                        alt={video.title_fr}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="h-full bg-gradient-to-br from-orange-500/20 to-purple-500/20 flex items-center justify-center">
+                        <Video size={48} className="text-white/30" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-orange-400 transition-colors">
+                      {video.title_fr}
+                    </h3>
+                    <p className="text-gray-400 text-sm line-clamp-3 flex-1">
+                      {video.comment_fr || "Aucun commentaire"}
+                    </p>
+                    
+                    {/* Actions */}
+                    <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(video);
+                        }}
+                        className="flex-1 bg-blue-500/20 border border-blue-500/50 text-blue-300 px-3 py-2 rounded-lg hover:bg-blue-500/30 transition-all text-sm font-semibold flex items-center justify-center gap-1"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(video.id);
+                        }}
+                        className="flex-1 bg-red-500/20 border border-red-500/50 text-red-300 px-3 py-2 rounded-lg hover:bg-red-500/30 transition-all text-sm font-semibold flex items-center justify-center gap-1"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* 🔍 MODAL DÉTAILS */}
+        {selectedVideo && (
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+            onClick={() => setSelectedVideo(null)}
+          >
+            <div 
+              className="relative max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-3xl blur-xl opacity-50"></div>
+              <div className="relative bg-[#0a0e27] rounded-3xl shadow-2xl border-2 border-orange-500/30 overflow-hidden">
+                {/* Vidéo Player */}
+                {selectedVideo.lien_video && getYouTubeId(selectedVideo.lien_video) ? (
+                  <div className="relative aspect-video">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYouTubeId(selectedVideo.lien_video)}`}
+                      title={selectedVideo.title_fr}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ) : selectedVideo.cover_image && (
+                  <div className="relative h-64 md:h-80 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e27] via-transparent to-transparent z-10"></div>
+                    <img
+                      src={selectedVideo.cover_image}
+                      alt={selectedVideo.title_fr}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                
+                {/* Contenu */}
+                <div className="p-6 md:p-8">
+                  <div className="flex justify-between items-start gap-4 mb-6">
+                    <div className="flex-1">
+                      <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
+                        {selectedVideo.title_fr}
+                      </h2>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {selectedVideo.title_en && (
+                          <span className="text-sm bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30">
+                            🇬🇧 {selectedVideo.title_en}
+                          </span>
+                        )}
+                        {selectedVideo.title_ar && (
+                          <span className="text-sm bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30" style={{ direction: 'rtl' }}>
+                            🇸🇦 {selectedVideo.title_ar}
+                          </span>
+                        )}
+                      </div>
+                      <a
+                        href={selectedVideo.lien_video}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors"
+                      >
+                        <ExternalLink size={16} />
+                        Voir la vidéo sur la plateforme
+                      </a>
+                    </div>
+                    <button
+                      onClick={() => setSelectedVideo(null)}
+                      className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-all"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+
+                  {/* Commentaires */}
+                  <div className="space-y-4 mb-6">
+                    {selectedVideo.comment_fr && (
+                      <div className="bg-white/5 p-4 rounded-xl border border-orange-500/30">
+                        <p className="text-xs font-bold text-orange-400 mb-2">🇫🇷 FRANÇAIS</p>
+                        <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{selectedVideo.comment_fr}</p>
+                      </div>
+                    )}
+                    {selectedVideo.comment_en && (
+                      <div className="bg-white/5 p-4 rounded-xl border border-blue-500/30">
+                        <p className="text-xs font-bold text-blue-400 mb-2">🇬🇧 ENGLISH</p>
+                        <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{selectedVideo.comment_en}</p>
+                      </div>
+                    )}
+                    {selectedVideo.comment_ar && (
+                      <div className="bg-white/5 p-4 rounded-xl border border-purple-500/30">
+                        <p className="text-xs font-bold text-purple-400 mb-2">🇸🇦 العربية</p>
+                        <p className="text-gray-300 leading-relaxed whitespace-pre-wrap" style={{ direction: 'rtl' }}>{selectedVideo.comment_ar}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => {
+                        handleEdit(selectedVideo);
+                        setSelectedVideo(null);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-blue-500/50 transition-all font-bold flex items-center justify-center gap-2"
+                    >
+                      <Edit2 size={18} /> Modifier
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleDelete(selectedVideo.id);
+                        setSelectedVideo(null);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-red-500/50 transition-all font-bold flex items-center justify-center gap-2"
+                    >
+                      <Trash2 size={18} /> Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
