@@ -1,907 +1,18 @@
-// import React, { useEffect, useState } from 'react';
-
-// const MotPresidentPost = () => {
-//   const [messages, setMessages] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [newMessage, setNewMessage] = useState({
-//     titre_fr: "", 
-//     titre_en: "",
-//     titre_ar: "",
-//     description_fr: "",
-//     description_en: "",
-//     description_ar: "",
-//     image: null,
-//   });
-//   const [editingId, setEditingId] = useState(null);
-//   const [showForm, setShowForm] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [notification, setNotification] = useState(null);
-//   const [expanded, setExpanded] = useState(null);
-//   const [imagePreview, setImagePreview] = useState(null);
-//   const apiUrl = import.meta.env.VITE_API_BACKEND;
-
-//   // Pagination
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const itemsPerPage = 5;
-
-//   const API_URL = apiUrl + "/api/motpresident/";
-//   // URL de base pour les images - assurez-vous que cette URL correspond à la configuration de votre serveur
-//   const IMAGE_BASE_URL = apiUrl;
-
-//   // Chargement des messages
-//   useEffect(() => {
-//     fetchMessages();
-//   }, []);
-
-//   // Ajustement page si suppression/ajout
-//   useEffect(() => {
-//     const totalPages = Math.ceil(messages.length / itemsPerPage);
-//     if (currentPage > totalPages && totalPages > 0) {
-//       setCurrentPage(totalPages);
-//     }
-//   }, [messages, currentPage, itemsPerPage]);
-
-//   // Fonction de récupération API
-//   const fetchMessages = async () => {
-//     try {
-//       setLoading(true);
-//       const response = await fetch(API_URL);
-      
-//       if (!response.ok) {
-//         throw new Error(`Erreur lors du chargement des messages: ${response.status} ${response.statusText}`);
-//       }
-      
-//       const data = await response.json();
-//       console.log("Messages récupérés:", data); // Pour le debug
-//       setMessages(data);
-//       setError(null);
-//     } catch (err) {
-//       console.error("Erreur de récupération:", err);
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Changement inputs formulaire
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setNewMessage(prev => ({ ...prev, [name]: value }));
-//   };
-
-//   // Changement image
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       setNewMessage(prev => ({ ...prev, image: file }));
-      
-//       // Création de l'aperçu de l'image
-//       const reader = new FileReader();
-//       reader.onloadend = () => setImagePreview(reader.result);
-//       reader.readAsDataURL(file);
-//     } else {
-//       // Si aucun fichier n'est sélectionné, conserver l'image actuelle en mode édition
-//       if (editingId) {
-//         // Ne pas modifier l'image si on est en mode édition
-//       } else {
-//         setImagePreview(null);
-//       }
-//     }
-//   };
-
-//   // Vérifier si l'URL de l'image est valide
-//   const getImageUrl = (imagePath) => {
-//     if (!imagePath) return null;
-    
-//     // Si l'URL est déjà absolue, la retourner telle quelle
-//     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-//       return imagePath;
-//     }
-    
-//     // Sinon, construire l'URL complète
-//     return `${IMAGE_BASE_URL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
-//   };
-
-//   // Soumission formulaire ajout/édition
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const method = editingId ? 'PUT' : 'POST';
-//     const url = editingId ? `${API_URL}${editingId}/` : API_URL;
-
-//     try {
-//       setLoading(true);
-//       const formData = new FormData();
-      
-//       // Ajouter tous les champs au FormData
-//       Object.keys(newMessage).forEach(key => {
-//         if (newMessage[key] !== null) {
-//           formData.append(key, newMessage[key]);
-//         }
-//       });
-
-//       // Afficher le contenu du FormData pour le debug
-//       console.log("FormData contenu:");
-//       for (let pair of formData.entries()) {
-//         console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
-//       }
-
-//       const response = await fetch(url, {
-//         method,
-//         body: formData,
-//         // Ne pas ajouter Content-Type header car il est automatiquement défini avec FormData
-//       });
-
-//       if (!response.ok) {
-//         const errorText = await response.text();
-//         throw new Error(`Erreur lors de l'enregistrement: ${response.status} ${response.statusText}. ${errorText}`);
-//       }
-
-//       await fetchMessages();
-//       setNotification(editingId ? "Message mis à jour avec succès !" : "Nouveau message ajouté avec succès !");
-//       setNewMessage({
-//         titre_fr: "",
-//         titre_en: "",
-//         titre_ar: "",
-//         description_fr: "",
-//         description_en: "",
-//         description_ar: "",
-//         image: null,
-//       });
-//       setImagePreview(null);
-//       setEditingId(null);
-//       setShowForm(false);
-//       setError(null);
-
-//       setTimeout(() => setNotification(null), 5000);
-
-//       // Rediriger vers la dernière page si ajout d'un nouveau message
-//       if (!editingId) {
-//         setTimeout(() => {
-//           const newTotalPages = Math.ceil((messages.length + 1) / itemsPerPage);
-//           setCurrentPage(newTotalPages);
-//         }, 100);
-//       }
-//     } catch (err) {
-//       console.error("Erreur de soumission:", err);
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Préparer l'édition d'un message
-//   const handleEdit = (message) => {
-//     setNewMessage({
-//       titre_fr: message.titre_fr || "",
-//       titre_en: message.titre_en || "",
-//       titre_ar: message.titre_ar || "",
-//       description_fr: message.description_fr || "",
-//       description_en: message.description_en || "",
-//       description_ar: message.description_ar || "",
-//       image: null, // On ne peut pas récupérer l'image existante comme un File object
-//     });
-    
-//     // Définir l'aperçu de l'image si elle existe
-//     setImagePreview(message.image ? getImageUrl(message.image) : null);
-//     setEditingId(message.id);
-//     setShowForm(true);
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   };
-
-//   // Supprimer un message
-//   const handleDelete = async (id) => {
-//     if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce message ?")) return;
-
-//     try {
-//       setLoading(true);
-//       const response = await fetch(`${API_URL}${id}/`, { method: 'DELETE' });
-      
-//       if (!response.ok) {
-//         const errorText = await response.text();
-//         throw new Error(`Erreur lors de la suppression: ${response.status} ${response.statusText}. ${errorText}`);
-//       }
-
-//       setMessages(prev => prev.filter(m => m.id !== id));
-//       setNotification("Message supprimé avec succès !");
-//       setTimeout(() => setNotification(null), 5000);
-
-//       // Ajuster page si besoin
-//       const newTotalPages = Math.ceil((messages.length - 1) / itemsPerPage);
-//       if (currentPage > newTotalPages && newTotalPages > 0) {
-//         setCurrentPage(newTotalPages);
-//       }
-//     } catch (err) {
-//       console.error("Erreur de suppression:", err);
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Afficher / cacher description complète
-//   const toggleExpand = (id) => {
-//     setExpanded(expanded === id ? null : id);
-//   };
-
-//   // Pagination
-//   const indexOfLastItem = currentPage * itemsPerPage;
-//   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-//   const currentItems = messages.slice(indexOfFirstItem, indexOfLastItem);
-//   const totalPages = Math.ceil(messages.length / itemsPerPage);
-
-//   // Fonction de pagination améliorée
-//   const paginate = (pageNumber) => {
-//     // Vérifier que le numéro de page est valide
-//     if (pageNumber >= 1 && pageNumber <= totalPages) {
-//       setCurrentPage(pageNumber);
-//       // Remonter en haut de la liste
-//       const listElement = document.getElementById('messages-list');
-//       if (listElement) {
-//         listElement.scrollIntoView({ behavior: 'smooth' });
-//       }
-//     }
-//   };
-
-//   // Fonction pour rendre le bouton de pagination en fonction de la page courante
-//   const renderPageNumbers = () => {
-//     const pageNumbers = [];
-//     const maxPagesToShow = 5; // Nombre maximal de boutons de page à afficher
-    
-//     // Calcul des pages à afficher
-//     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-//     let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-    
-//     // Ajustements pour toujours afficher le nombre maximal de pages quand c'est possible
-//     if (endPage - startPage + 1 < maxPagesToShow && startPage > 1) {
-//       startPage = Math.max(1, endPage - maxPagesToShow + 1);
-//     }
-    
-//     // Bouton pour la première page
-//     if (startPage > 1) {
-//       pageNumbers.push(
-//         <button
-//           key={1}
-//           onClick={() => paginate(1)}
-//           style={styles.pageButton}
-//         >
-//           1
-//         </button>
-//       );
-      
-//       // Ellipsis si nécessaire
-//       if (startPage > 2) {
-//         pageNumbers.push(<span key="ellipsis1" style={{margin: '0 5px'}}>...</span>);
-//       }
-//     }
-    
-//     // Pages numérotées
-//     for (let i = startPage; i <= endPage; i++) {
-//       pageNumbers.push(
-//         <button
-//           key={i}
-//           onClick={() => paginate(i)}
-//           style={{
-//             ...styles.pageButton,
-//             ...(currentPage === i ? styles.activePageButton : {})
-//           }}
-//         >
-//           {i}
-//         </button>
-//       );
-//     }
-    
-//     // Ellipsis et dernière page si nécessaire
-//     if (endPage < totalPages) {
-//       if (endPage < totalPages - 1) {
-//         pageNumbers.push(<span key="ellipsis2" style={{margin: '0 5px'}}>...</span>);
-//       }
-      
-//       pageNumbers.push(
-//         <button
-//           key={totalPages}
-//           onClick={() => paginate(totalPages)}
-//           style={styles.pageButton}
-//         >
-//           {totalPages}
-//         </button>
-//       );
-//     }
-    
-//     return pageNumbers;
-//   };
-
-//   // Styles pour le design responsive, inspirés du composant FondationPost
-//   const styles = {
-//     container: {
-//       padding: '20px',
-//       maxWidth: '1200px',
-//       margin: '0 auto',
-//     },
-//     header: {
-//       display: 'flex',
-//       justifyContent: 'space-between',
-//       alignItems: 'center',
-//       flexWrap: 'wrap',
-//       marginBottom: '20px',
-//     },
-//     title: {
-//       fontSize: '24px',
-//       margin: '10px 0',
-//     },
-//     addButton: {
-//       padding: '10px 15px',
-//       backgroundColor: '#1C1C47',
-//       color: 'white',
-//       fontSize: '16px',
-//       border: 'none',
-//       borderRadius: '8px',
-//       cursor: 'pointer',
-//       transition: 'background-color 0.3s',
-//       '&:hover': {
-//         backgroundColor: '#15153a',
-//       },
-//     },
-//     formContainer: {
-//       backgroundColor: '#f9f9f9',
-//       padding: '20px',
-//       borderRadius: '10px',
-//       boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-//       marginBottom: '30px',
-//       width: '100%',
-//     },
-//     form: {
-//       display: 'grid',
-//       gap: '15px',
-//     },
-//     formGroup: {
-//       display: 'flex',
-//       flexDirection: 'column',
-//     },
-//     label: {
-//       marginBottom: '5px',
-//       fontWeight: '500',
-//     },
-//     input: {
-//       padding: '10px',
-//       borderRadius: '5px',
-//       border: '1px solid #ddd',
-//       fontSize: '16px',
-//     },
-//     textarea: {
-//       padding: '10px',
-//       borderRadius: '5px',
-//       border: '1px solid #ddd',
-//       minHeight: '100px',
-//       fontSize: '16px',
-//       fontFamily: 'inherit',
-//       resize: 'vertical',
-//     },
-//     submitButton: {
-//       padding: '12px',
-//       backgroundColor: '#1C1C47',
-//       color: 'white',
-//       border: 'none',
-//       borderRadius: '5px',
-//       fontSize: '16px',
-//       cursor: 'pointer',
-//       transition: 'background-color 0.3s',
-//       '&:hover': {
-//         backgroundColor: '#15153a',
-//       },
-//     },
-//     messagesList: {
-//       display: 'grid',
-//       gap: '15px',
-//     },
-//     messageCard: {
-//       border: '1px solid #eaeaea',
-//       borderRadius: '8px',
-//       overflow: 'hidden',
-//       transition: 'box-shadow 0.3s',
-//       backgroundColor: '#fff',
-//       '&:hover': {
-//         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-//       },
-//     },
-//     messageHeader: {
-//       padding: '15px',
-//       cursor: 'pointer',
-//       display: 'flex',
-//       justifyContent: 'space-between',
-//       alignItems: 'center',
-//       backgroundColor: '#f5f5f5',
-//     },
-//     messageTitle: {
-//       margin: 0,
-//       fontSize: '18px',
-//       fontWeight: '500',
-//     },
-//     messageContent: {
-//       padding: '15px',
-//     },
-//     messageInfo: {
-//       margin: '8px 0',
-//     },
-//     messageActions: {
-//       display: 'flex',
-//       gap: '10px',
-//       marginTop: '15px',
-//     },
-//     actionButton: {
-//       padding: '8px 12px',
-//       borderRadius: '5px',
-//       border: 'none',
-//       cursor: 'pointer',
-//       fontSize: '14px',
-//       transition: 'background-color 0.2s',
-//     },
-//     editButton: {
-//       backgroundColor: '#e0e0e0',
-//       '&:hover': {
-//         backgroundColor: '#d0d0d0',
-//       },
-//     },
-//     deleteButton: {
-//       backgroundColor: '#ffebee',
-//       color: '#c62828',
-//       '&:hover': {
-//         backgroundColor: '#ffcdd2',
-//       },
-//     },
-//     paginationContainer: {
-//       display: 'flex',
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       gap: '5px',
-//       marginTop: '20px',
-//     },
-//     pageButton: {
-//       padding: '8px 12px',
-//       border: '1px solid #ddd',
-//       borderRadius: '5px',
-//       backgroundColor: '#fff',
-//       cursor: 'pointer',
-//       transition: 'all 0.2s',
-//       '&:hover': {
-//         backgroundColor: '#f0f0f0',
-//       },
-//     },
-//     activePageButton: {
-//       backgroundColor: '#1C1C47',
-//       color: 'white',
-//       border: '1px solid #1C1C47',
-//     },
-//     errorMessage: {
-//       padding: '10px',
-//       borderRadius: '5px',
-//       backgroundColor: '#ffebee',
-//       color: '#c62828',
-//       marginBottom: '15px',
-//     },
-//     notificationMessage: {
-//       padding: '10px',
-//       borderRadius: '5px',
-//       backgroundColor: '#e8f5e9',
-//       color: '#2e7d32',
-//       marginBottom: '15px',
-//     },
-//     languageSection: {
-//       marginTop: '10px',
-//       padding: '10px',
-//       borderTop: '1px solid #eee',
-//     },
-//     languageTitle: {
-//       fontSize: '16px',
-//       fontWeight: '500',
-//       marginBottom: '8px',
-//     },
-//     imagePreview: {
-//       marginTop: '10px',
-//       maxWidth: '200px',
-//       maxHeight: '200px',
-//       objectFit: 'contain',
-//       borderRadius: '5px',
-//       border: '1px solid #ddd',
-//     },
-//     imageContainer: {
-//       marginTop: '15px',
-//     },
-//     fileInput: {
-//       marginTop: '5px',
-//     },
-//     infoItem: {
-//       marginBottom: '12px',
-//       lineHeight: '1.5',
-//     },
-//     loadingContainer: {
-//       display: 'flex',
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       height: '100px',
-//     },
-//     loadingText: {
-//       fontSize: '18px',
-//       fontWeight: '500',
-//       color: '#666',
-//     },
-//     paginationInfo: {
-//       textAlign: 'center',
-//       margin: '10px 0',
-//       color: '#666',
-//       fontSize: '14px',
-//     },
-//     noMessageText: {
-//       textAlign: 'center',
-//       padding: '20px',
-//       color: '#666',
-//       fontStyle: 'italic',
-//     },
-//     expandButton: {
-//       fontSize: '18px',
-//       fontWeight: 'bold',
-//     }
-//   };
-
-//   if (loading && messages.length === 0) {
-//     return (
-//       <div style={styles.loadingContainer}>
-//         <div style={styles.loadingText}>
-//           Chargement des messages...
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div style={styles.container}>
-//       <div style={styles.header}>
-//         <h1 style={styles.title}>Messages du Président</h1>
-//         <button
-//           onClick={() => {
-//             setShowForm(!showForm);
-//             setEditingId(null);
-//             setNewMessage({
-//               titre_fr: "",
-//               titre_en: "",
-//               titre_ar: "",
-//               description_fr: "",
-//               description_en: "",
-//               description_ar: "",
-//               image: null,
-//             });
-//             setImagePreview(null);
-//           }}
-//           style={styles.addButton}
-//         >
-//           {showForm ? 'Fermer le formulaire' : 'Ajouter un message'}
-//         </button>
-//       </div>
-
-//       {error && (
-//         <div style={styles.errorMessage}>
-//           <strong>Erreur:</strong> {error}
-//         </div>
-//       )}
-
-//       {notification && (
-//         <div style={styles.notificationMessage}>
-//           {notification}
-//         </div>
-//       )}
-
-//       {/* Formulaire d'ajout de message */}
-//       {showForm && (
-//         <section style={styles.formContainer}>
-//           <h2 style={styles.title}>{editingId ? 'Modifier le message' : 'Nouveau message'}</h2>
-//           <form onSubmit={handleSubmit} style={styles.form} encType="multipart/form-data">
-//             {/* Champs titre */}
-//             <div style={styles.formGroup}>
-//               <label htmlFor="titre_fr" style={styles.label}>Titre en Français</label>
-//               <input
-//                 type="text"
-//                 id="titre_fr"
-//                 name="titre_fr"
-//                 style={styles.input}
-//                 value={newMessage.titre_fr}
-//                 onChange={handleInputChange}
-//                 required
-//               />
-//             </div>
-//             <div style={styles.formGroup}>
-//               <label htmlFor="titre_en" style={styles.label}>Title in English</label>
-//               <input
-//                 type="text"
-//                 id="titre_en"
-//                 name="titre_en"
-//                 style={styles.input}
-//                 value={newMessage.titre_en}
-//                 onChange={handleInputChange}
-//                 required
-//               />
-//             </div>
-//             <div style={styles.formGroup}>
-//               <label htmlFor="titre_ar" style={styles.label}>العنوان بالعربية</label>
-//               <input
-//                 type="text"
-//                 id="titre_ar"
-//                 name="titre_ar"
-//                 style={{...styles.input, textAlign: 'right'}}
-//                 value={newMessage.titre_ar}
-//                 onChange={handleInputChange}
-//                 dir="rtl"
-//                 required
-//               />
-//             </div>
-
-//             {/* Champs description */}
-//             <div style={styles.formGroup}>
-//               <label htmlFor="description_fr" style={styles.label}>Description en Français</label>
-//               <textarea
-//                 id="description_fr"
-//                 name="description_fr"
-//                 rows="3"
-//                 style={styles.textarea}
-//                 value={newMessage.description_fr}
-//                 onChange={handleInputChange}
-//                 required
-//               />
-//             </div>
-//             <div style={styles.formGroup}>
-//               <label htmlFor="description_en" style={styles.label}>Description in English</label>
-//               <textarea
-//                 id="description_en"
-//                 name="description_en"
-//                 rows="3"
-//                 style={styles.textarea}
-//                 value={newMessage.description_en}
-//                 onChange={handleInputChange}
-//                 required
-//               />
-//             </div>
-//             <div style={styles.formGroup}>
-//               <label htmlFor="description_ar" style={styles.label}>الوصف بالعربية</label>
-//               <textarea
-//                 id="description_ar"
-//                 name="description_ar"
-//                 rows="3"
-//                 style={{...styles.textarea, textAlign: 'right'}}
-//                 value={newMessage.description_ar}
-//                 onChange={handleInputChange}
-//                 dir="rtl"
-//                 required
-//               />
-//             </div>
-
-//             {/* Champ image */}
-//             <div style={styles.formGroup}>
-//               <label htmlFor="image" style={styles.label}>Image {editingId && !newMessage.image ? "(laisser vide pour conserver l'image actuelle)" : ""}</label>
-//               <input 
-//                 type="file" 
-//                 id="image"
-//                 name="image"
-//                 onChange={handleImageChange}
-//                 style={styles.fileInput}
-//                 accept="image/*"
-//               />
-//               {imagePreview && (
-//                 <div style={styles.imageContainer}>
-//                   <h4 style={styles.languageTitle}>Prévisualisation de l'image:</h4>
-//                   <img 
-//                     src={imagePreview} 
-//                     alt="Aperçu" 
-//                     style={styles.imagePreview}
-//                     onError={(e) => {
-//                       console.error("Erreur de chargement de l'image preview:", e);
-//                       e.target.src = '/placeholder-image.png'; // Image par défaut
-//                     }}
-//                   />
-//                 </div>
-//               )}
-//             </div>
-
-//             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px', gap: '10px' }}>
-//               <button 
-//                 type="button" 
-//                 onClick={() => {
-//                   setShowForm(false);
-//                   setEditingId(null);
-//                   setImagePreview(null);
-//                 }}
-//                 style={{
-//                   padding: '12px',
-//                   backgroundColor: '#e0e0e0',
-//                   border: 'none',
-//                   borderRadius: '5px',
-//                   fontSize: '16px',
-//                   cursor: 'pointer',
-//                 }}
-//               >
-//                 Annuler
-//               </button>
-//               <button type="submit" style={styles.submitButton}>
-//                 {editingId ? 'Mettre à jour' : 'Ajouter'}
-//               </button>
-//             </div>
-//           </form>
-//         </section>
-//       )}
-
-//       {/* Liste des messages */}
-//       <h2 id="messages-list" style={styles.title}>Liste des messages</h2>
-      
-//       {loading && messages.length > 0 && (
-//         <div style={styles.loadingContainer}>
-//           <div style={styles.loadingText}>
-//             Chargement...
-//           </div>
-//         </div>
-//       )}
-      
-//       <div style={styles.messagesList}>
-//         {!loading && currentItems.length === 0 ? (
-//           <p style={styles.noMessageText}>Aucun message à afficher.</p>
-//         ) : (
-//           currentItems.map((message) => (
-//             <div key={message.id} style={styles.messageCard}>
-//               <div
-//                 onClick={() => toggleExpand(message.id)}
-//                 style={styles.messageHeader}
-//               >
-//                 <h3 style={styles.messageTitle}>{message.titre_fr}</h3>
-//                 <span style={styles.expandButton}>{expanded === message.id ? '−' : '+'}</span>
-//               </div>
-
-//               {expanded === message.id && (
-//                 <div style={styles.messageContent}>
-//                   {/* Information en français */}
-//                   <div style={styles.infoItem}>
-//                     <strong>Titre (FR):</strong> {message.titre_fr}
-//                   </div>
-//                   <div style={styles.infoItem}>
-//                     <strong>Title (EN):</strong> {message.titre_en}
-//                   </div>
-//                   <div style={{...styles.infoItem, textAlign: 'right'}} dir="rtl">
-//                     <strong>العنوان (AR):</strong> {message.titre_ar}
-//                   </div>
-                  
-//                   <div style={styles.infoItem}>
-//                     <strong>Description (FR):</strong> {message.description_fr}
-//                   </div>
-//                   <div style={styles.infoItem}>
-//                     <strong>Description (EN):</strong> {message.description_en}
-//                   </div>
-//                   <div style={{...styles.infoItem, textAlign: 'right'}} dir="rtl">
-//                     <strong>الوصف (AR):</strong> {message.description_ar}
-//                   </div>
-                  
-//                   {/* Image avec gestion d'erreur améliorée */}
-//                   {message.image && (
-//                     <div style={styles.languageSection}>
-//                       <div style={styles.languageTitle}>Image</div>
-//                       <img 
-//                         src={getImageUrl(message.image)}
-//                         alt={message.titre_fr} 
-//                         style={{
-//                           maxWidth: '100%',
-//                           height: 'auto',
-//                           maxHeight: '300px',
-//                           objectFit: 'contain',
-//                           borderRadius: '5px',
-//                           border: '1px solid #eee',
-//                         }}
-//                         onError={(e) => {
-//                           console.error("Erreur de chargement de l'image:", message.image);
-//                           e.target.onerror = null; 
-//                           e.target.src = '/placeholder-image.png'; // Image par défaut
-//                         }}
-//                       />
-//                     </div>
-//                   )}
-                  
-//                   <div style={styles.messageActions}>
-//                     <button 
-//                       onClick={(e) => {
-//                         e.stopPropagation();
-//                         handleEdit(message);
-//                       }}
-//                       style={{...styles.actionButton, ...styles.editButton}}
-//                     >
-//                       ✏️ Modifier
-//                     </button>
-//                     <button 
-//                       onClick={(e) => {
-//                         e.stopPropagation();
-//                         handleDelete(message.id);
-//                       }}
-//                       style={{...styles.actionButton, ...styles.deleteButton}}
-//                     >
-//                       🗑️ Supprimer
-//                     </button>
-//                   </div>
-//                 </div>
-//               )}
-//             </div>
-//           ))
-//         )}
-//       </div>
-      
-//       {/* Affichage de l'information de pagination */}
-//       {messages.length > 0 && (
-//         <div style={styles.paginationInfo}>
-//           Affichage {indexOfFirstItem + 1} à {Math.min(indexOfLastItem, messages.length)} sur {messages.length} messages
-//         </div>
-//       )}
-      
-//       {/* Pagination améliorée */}
-//       {messages.length > itemsPerPage && (
-//         <div style={styles.paginationContainer}>
-//           <button 
-//             onClick={() => paginate(1)}
-//             disabled={currentPage === 1}
-//             style={{
-//               ...styles.pageButton,
-//               opacity: currentPage === 1 ? 0.5 : 1,
-//               cursor: currentPage === 1 ? 'default' : 'pointer'
-//             }}
-//             aria-label="Première page"
-//           >
-//             &laquo;&laquo;
-//           </button>
-          
-//           <button 
-//             onClick={() => paginate(Math.max(1, currentPage - 1))}
-//             disabled={currentPage === 1}
-//             style={{
-//               ...styles.pageButton,
-//               opacity: currentPage === 1 ? 0.5 : 1,
-//               cursor: currentPage === 1 ? 'default' : 'pointer'
-//             }}
-//             aria-label="Page précédente"
-//           >
-//             &laquo;
-//           </button>
-          
-//           {renderPageNumbers()}
-          
-//           <button 
-//             onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-//             disabled={currentPage === totalPages}
-//             style={{
-//               ...styles.pageButton,
-//               opacity: currentPage === totalPages ? 0.5 : 1,
-//               cursor: currentPage === totalPages ? 'default' : 'pointer'
-//             }}
-//             aria-label="Page suivante"
-//           >
-//             &raquo;
-//           </button>
-          
-//           <button 
-//             onClick={() => paginate(totalPages)}
-//             disabled={currentPage === totalPages}
-//             style={{
-//               ...styles.pageButton,
-//               opacity: currentPage === totalPages ? 0.5 : 1,
-//               cursor: currentPage === totalPages ? 'default' : 'pointer'
-//             }}
-//             aria-label="Dernière page"
-//           >
-//             &raquo;&raquo;
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default MotPresidentPost;
-
 import React, { useState, useEffect } from "react";
+import { MessageSquare, Loader2, Trash2, PlusCircle, Edit2, X } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
 const MotPresidentPost = () => {
   const [motPresidents, setMotPresidents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [selectedMot, setSelectedMot] = useState(null);
+  const [preview, setPreview] = useState(null);
+
   const [formData, setFormData] = useState({
     title_fr: "",
     title_en: "",
@@ -911,248 +22,518 @@ const MotPresidentPost = () => {
     description_ar: "",
     image: null,
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  // 🔹 Charger la liste au montage
+  // 🔄 Charger tous les messages
   useEffect(() => {
     fetchMotPresidents();
   }, []);
 
   const fetchMotPresidents = async () => {
+    setFetchLoading(true);
     try {
       const res = await fetch(CONFIG.API_MOTPRESIDENT_LIST);
-      if (!res.ok) throw new Error("Erreur de chargement");
+      if (!res.ok) throw new Error("Erreur de chargement des messages");
       const data = await res.json();
       setMotPresidents(data);
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError("Erreur lors du chargement des messages");
+    } finally {
+      setFetchLoading(false);
     }
   };
 
-  // 🔹 Gestion des inputs
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+  // 🔼 Upload vers Cloudinary
+  const uploadToCloudinary = async (file) => {
+    if (!file) return null;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      return data.secure_url;
+    } catch (err) {
+      console.error("Erreur upload Cloudinary:", err);
+      return null;
+    }
   };
 
-  // 🔹 Créer ou mettre à jour
+  // 📝 Gestion des champs
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData({ ...formData, [name]: files[0] });
+      setPreview(URL.createObjectURL(files[0]));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  // 🔄 Réinitialiser le formulaire
+  const resetForm = () => {
+    setFormData({
+      title_fr: "",
+      title_en: "",
+      title_ar: "",
+      description_fr: "",
+      description_en: "",
+      description_ar: "",
+      image: null,
+    });
+    setPreview(null);
+    setEditingId(null);
+  };
+
+  // ✅ Créer ou Mettre à jour
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-
-    const form = new FormData();
-    for (const key in formData) {
-      form.append(key, formData[key]);
-    }
+    setError(null);
+    setSuccessMessage(null);
 
     try {
-      const url = selectedMot
-        ? CONFIG.API_MOTPRESIDENT_UPDATE(selectedMot.id)
-        : CONFIG.API_MOTPRESIDENT_CREATE;
+      let imageUrl = null;
+      if (formData.image) {
+        imageUrl = await uploadToCloudinary(formData.image);
+      }
 
-      const method = selectedMot ? "PUT" : "POST";
+      const payload = {
+        title_fr: formData.title_fr,
+        title_en: formData.title_en,
+        title_ar: formData.title_ar,
+        description_fr: formData.description_fr,
+        description_en: formData.description_en,
+        description_ar: formData.description_ar,
+        image: imageUrl,
+      };
+
+      const url = editingId ? CONFIG.API_MOTPRESIDENT_UPDATE(editingId) : CONFIG.API_MOTPRESIDENT_CREATE;
+      const method = editingId ? "PUT" : "POST";
 
       const res = await fetch(url, {
         method,
-        body: form,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Erreur d’enregistrement");
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
 
-      await fetchMotPresidents();
-      setSelectedMot(null);
-      setFormData({
-        title_fr: "",
-        title_en: "",
-        title_ar: "",
-        description_fr: "",
-        description_en: "",
-        description_ar: "",
-        image: null,
-      });
+      setSuccessMessage(editingId ? "Message mis à jour avec succès !" : "Message ajouté avec succès !");
+      resetForm();
+      fetchMotPresidents();
+      setShowForm(false);
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError("Erreur lors de la sauvegarde");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Supprimer
+  // 🗑️ Supprimer un message
   const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer ce message ?")) return;
+    if (!window.confirm("Voulez-vous vraiment supprimer ce message ?")) return;
+
     try {
-      const res = await fetch(CONFIG.API_MOTPRESIDENT_DELETE(id), {
-        method: "DELETE",
-      });
+      const res = await fetch(CONFIG.API_MOTPRESIDENT_DELETE(id), { method: "DELETE" });
       if (!res.ok) throw new Error("Erreur de suppression");
-      await fetchMotPresidents();
+      setSuccessMessage("Message supprimé avec succès !");
+      fetchMotPresidents();
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError("Erreur lors de la suppression");
     }
   };
 
-  // 🔹 Sélection pour édition
+  // 🔄 Préparer le formulaire pour modification
   const handleEdit = (mot) => {
-    setSelectedMot(mot);
+    setEditingId(mot.id);
     setFormData({
-      title_fr: mot.title_fr,
-      title_en: mot.title_en,
-      title_ar: mot.title_ar,
-      description_fr: mot.description_fr,
-      description_en: mot.description_en,
-      description_ar: mot.description_ar,
-      image: null, // on ne recharge pas l'image
+      title_fr: mot.title_fr || "",
+      title_en: mot.title_en || "",
+      title_ar: mot.title_ar || "",
+      description_fr: mot.description_fr || "",
+      description_en: mot.description_en || "",
+      description_ar: mot.description_ar || "",
+      image: null,
     });
+    setPreview(mot.image_url || null);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-blue-800 mb-8 text-center">
-        Gestion du Mot du Président
-      </h1>
-
-      {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
-          {error}
+  if (fetchLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="animate-spin inline-block text-orange-500" size={40} />
+          <p className="mt-4 text-gray-300 text-lg">Chargement...</p>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* ✅ Formulaire */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto space-y-4"
-      >
-        <h2 className="text-xl font-semibold text-blue-700 mb-4">
-          {selectedMot ? "Modifier" : "Ajouter"} un Mot
-        </h2>
+  return (
+    <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
+      {/* Effets de fond lumineux */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/2 w-64 md:w-96 h-64 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
 
-        <input
-          type="text"
-          name="title_fr"
-          value={formData.title_fr}
-          onChange={handleChange}
-          placeholder="Titre (FR)"
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="title_en"
-          value={formData.title_en}
-          onChange={handleChange}
-          placeholder="Title (EN)"
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="text"
-          name="title_ar"
-          value={formData.title_ar}
-          onChange={handleChange}
-          placeholder="العنوان (AR)"
-          className="w-full border p-2 rounded"
-        />
+      {/* Grille de fond */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-40"></div>
 
-        <textarea
-          name="description_fr"
-          value={formData.description_fr}
-          onChange={handleChange}
-          placeholder="Description (FR)"
-          className="w-full border p-2 rounded"
-          required
-        />
-        <textarea
-          name="description_en"
-          value={formData.description_en}
-          onChange={handleChange}
-          placeholder="Description (EN)"
-          className="w-full border p-2 rounded"
-        />
-        <textarea
-          name="description_ar"
-          value={formData.description_ar}
-          onChange={handleChange}
-          placeholder="الوصف (AR)"
-          className="w-full border p-2 rounded"
-        />
-
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition"
-        >
-          {loading
-            ? "Enregistrement..."
-            : selectedMot
-            ? "Mettre à jour"
-            : "Créer"}
-        </button>
-
-        {selectedMot && (
+      <div className="relative max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute inset-0 bg-orange-500/30 blur-xl rounded-lg"></div>
+              <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-xl">
+                <MessageSquare className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-black text-white">
+              Gestion du Mot du Président
+            </h1>
+          </div>
           <button
-            type="button"
-            onClick={() => setSelectedMot(null)}
-            className="ml-3 bg-gray-300 px-6 py-2 rounded hover:bg-gray-400"
+            onClick={() => {
+              setShowForm(!showForm);
+              if (showForm) resetForm();
+            }}
+            className="relative group w-full md:w-auto"
           >
-            Annuler
+            <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+            <div className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2.5 rounded-lg hover:shadow-xl hover:shadow-orange-500/50 transition-all flex items-center justify-center gap-2 font-semibold">
+              <PlusCircle size={18} /> {showForm ? "Fermer" : "Nouveau Message"}
+            </div>
           </button>
-        )}
-      </form>
+        </div>
 
-      {/* ✅ Liste */}
-      <div className="mt-12 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-blue-700 mb-6">
-          Liste des Messages
-        </h2>
-        {motPresidents.length === 0 ? (
-          <p className="text-gray-600 text-center">Aucun message enregistré.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {motPresidents.map((mot) => (
-              <div
-                key={mot.id}
-                className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
-              >
-                <img
-                  src={mot.image_url || "/image_indispo.png"}
-                  alt={mot.title_fr}
-                  className="w-full h-60 object-cover rounded-lg mb-3"
-                  onError={(e) => (e.target.src = "/image_indispo.png")}
-                />
-                <h3 className="text-xl font-bold text-blue-900 mb-2">
-                  {mot.title_fr}
-                </h3>
-                <p className="text-gray-700 mb-4 line-clamp-3">
-                  {mot.description_fr}
-                </p>
-                <div className="flex justify-between">
+        {/* Messages */}
+        {error && (
+          <div className="bg-red-500/20 border-2 border-red-500/50 text-red-300 p-4 mb-6 rounded-xl backdrop-blur-sm">
+            {error}
+          </div>
+        )}
+        {successMessage && (
+          <div className="bg-green-500/20 border-2 border-green-500/50 text-green-300 p-4 mb-6 rounded-xl backdrop-blur-sm">
+            {successMessage}
+          </div>
+        )}
+
+        {/* 🧾 FORMULAIRE */}
+        {showForm && (
+          <div className="relative mb-8">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-2xl blur opacity-20"></div>
+            <div className="relative bg-[#0f1729]/90 backdrop-blur-xl shadow-2xl p-6 md:p-8 rounded-2xl border-2 border-orange-500/30">
+              <h2 className="text-xl font-bold text-white mb-6">
+                {editingId ? "✏️ Modifier le message" : "➕ Ajouter un message"}
+              </h2>
+              
+              <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-semibold text-gray-300 mb-2">🇫🇷 Titre (FR) *</label>
+                    <input
+                      type="text"
+                      name="title_fr"
+                      value={formData.title_fr}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/10 border-2 border-orange-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-all"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-gray-300 mb-2">🇬🇧 Title (EN) *</label>
+                    <input
+                      type="text"
+                      name="title_en"
+                      value={formData.title_en}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-white/10 border-2 border-blue-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-all"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-300 mb-2 text-right" dir="rtl">🇸🇦 العنوان (AR) *</label>
+                  <input
+                    type="text"
+                    name="title_ar"
+                    value={formData.title_ar}
+                    onChange={handleChange}
+                    dir="rtl"
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-green-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-all"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-300 mb-2">📝 Description (FR) *</label>
+                  <textarea
+                    name="description_fr"
+                    value={formData.description_fr}
+                    onChange={handleChange}
+                    rows="4"
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-orange-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-all resize-none"
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-300 mb-2">📝 Description (EN) *</label>
+                  <textarea
+                    name="description_en"
+                    value={formData.description_en}
+                    onChange={handleChange}
+                    rows="4"
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-blue-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-all resize-none"
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-300 mb-2 text-right" dir="rtl">📝 الوصف (AR) *</label>
+                  <textarea
+                    name="description_ar"
+                    value={formData.description_ar}
+                    onChange={handleChange}
+                    dir="rtl"
+                    rows="4"
+                    className="w-full px-4 py-3 bg-white/10 border-2 border-green-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-all resize-none"
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-300 mb-2">🖼️ Photo du président *</label>
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleChange}
+                    className="block w-full px-4 py-3 bg-white/10 border-2 border-purple-500/30 rounded-lg text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-500 file:text-white hover:file:bg-purple-600 transition-all"
+                    required={!editingId}
+                  />
+                  {preview && (
+                    <div className="mt-4 relative inline-block">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-purple-500 rounded-xl blur opacity-50"></div>
+                      <div className="relative bg-white p-4 rounded-xl">
+                        <img src={preview} alt="Aperçu" className="w-full max-w-xs h-32 object-contain" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-3 pt-4">
                   <button
-                    onClick={() => handleEdit(mot)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="relative group overflow-hidden flex-1"
                   >
-                    Modifier
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                    <div className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-bold hover:shadow-2xl hover:shadow-orange-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                      {loading ? (
+                        <>
+                          <Loader2 className="animate-spin" size={18} />
+                          Enregistrement...
+                        </>
+                      ) : (
+                        editingId ? "Mettre à jour" : "Ajouter"
+                      )}
+                    </div>
                   </button>
                   <button
-                    onClick={() => handleDelete(mot.id)}
-                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                    onClick={resetForm}
+                    className="bg-gray-600/30 border-2 border-gray-500/50 text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-600/50 transition-all font-semibold"
                   >
-                    Supprimer
+                    Réinitialiser
                   </button>
                 </div>
               </div>
-            ))}
+            </div>
+          </div>
+        )}
+
+        {/* 🖼️ GRID DES MESSAGES */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {motPresidents.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <MessageSquare size={64} className="mx-auto text-gray-600 mb-4" />
+              <p className="text-gray-400 text-lg">Aucun message pour le moment</p>
+            </div>
+          ) : (
+            motPresidents.map((mot) => (
+              <div key={mot.id} className="relative group cursor-pointer" onClick={() => setSelectedMot(mot)}>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                <div className="relative bg-[#0f1729]/90 backdrop-blur-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all overflow-hidden border-2 border-white/10 group-hover:border-orange-500/50 h-full flex flex-col">
+                  {/* Image */}
+                  <div className="relative aspect-video bg-gradient-to-br from-orange-500/20 to-purple-500/20">
+                    {mot.image_url ? (
+                      <img
+                        src={mot.image_url}
+                        alt={mot.title_en}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <MessageSquare size={48} className="text-white/30" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Contenu */}
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 className="text-base font-bold text-white mb-1 line-clamp-2 group-hover:text-orange-400 transition-colors">
+                      {mot.title_fr}
+                    </h3>
+                    {mot.title_en && (
+                      <p className="text-sm text-gray-400 line-clamp-1 mb-2">
+                        {mot.title_en}
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-500 line-clamp-3 mb-3">
+                      {mot.description_fr}
+                    </p>
+                    
+                    {/* Actions */}
+                    <div className="flex gap-2 mt-auto pt-3 border-t border-white/10">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(mot);
+                        }}
+                        className="flex-1 bg-blue-500/20 border border-blue-500/50 text-blue-300 px-3 py-2 rounded-lg hover:bg-blue-500/30 transition-all text-xs font-semibold flex items-center justify-center gap-1"
+                      >
+                        <Edit2 size={14} /> Modifier
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(mot.id);
+                        }}
+                        className="flex-1 bg-red-500/20 border border-red-500/50 text-red-300 px-3 py-2 rounded-lg hover:bg-red-500/30 transition-all text-xs font-semibold flex items-center justify-center gap-1"
+                      >
+                        <Trash2 size={14} /> Supprimer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* 🔍 MODAL DÉTAILS */}
+        {selectedMot && (
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+            onClick={() => setSelectedMot(null)}
+          >
+            <div 
+              className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-blue-500 to-purple-500 rounded-3xl blur-xl opacity-50"></div>
+              <div className="relative bg-[#0a0e27] rounded-3xl shadow-2xl border-2 border-orange-500/30 overflow-hidden">
+                {/* Image grande taille */}
+                <div className="relative h-64 md:h-80 bg-gradient-to-br from-orange-500/20 to-purple-500/20">
+                  {selectedMot.image_url ? (
+                    <img
+                      src={selectedMot.image_url}
+                      alt={selectedMot.title_en}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <MessageSquare size={96} className="text-gray-400" />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Contenu */}
+                <div className="p-6 md:p-8">
+                  <div className="flex justify-between items-start gap-4 mb-6">
+                    <div className="flex-1">
+                      <h2 className="text-2xl md:text-3xl font-black text-white mb-2">
+                        {selectedMot.title_fr}
+                      </h2>
+                      {selectedMot.title_en && (
+                        <p className="text-lg text-orange-400 font-semibold">
+                          🇬🇧 {selectedMot.title_en}
+                        </p>
+                      )}
+                      {selectedMot.title_ar && (
+                        <p className="text-lg text-green-400 font-semibold" dir="rtl">
+                          🇸🇦 {selectedMot.title_ar}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setSelectedMot(null)}
+                      className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-all"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+
+                  {/* Descriptions */}
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-white/5 p-4 rounded-xl border border-blue-500/30">
+                      <p className="text-xs font-bold text-blue-400 mb-2">🇫🇷 MESSAGE</p>
+                      <p className="text-gray-300 leading-relaxed">{selectedMot.description_fr}</p>
+                    </div>
+
+                    {selectedMot.description_en && (
+                      <div className="bg-white/5 p-4 rounded-xl border border-green-500/30">
+                        <p className="text-xs font-bold text-green-400 mb-2">🇬🇧 MESSAGE</p>
+                        <p className="text-gray-300 leading-relaxed">{selectedMot.description_en}</p>
+                      </div>
+                    )}
+
+                    {selectedMot.description_ar && (
+                      <div className="bg-white/5 p-4 rounded-xl border border-purple-500/30" dir="rtl">
+                        <p className="text-xs font-bold text-purple-400 mb-2">🇸🇦 الرسالة</p>
+                        <p className="text-gray-300 leading-relaxed">{selectedMot.description_ar}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => {
+                        handleEdit(selectedMot);
+                        setSelectedMot(null);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-blue-500/50 transition-all font-bold flex items-center justify-center gap-2"
+                    >
+                      <Edit2 size={18} /> Modifier
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleDelete(selectedMot.id);
+                        setSelectedMot(null);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-red-500/50 transition-all font-bold flex items-center justify-center gap-2"
+                    >
+                      <Trash2 size={18} /> Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
