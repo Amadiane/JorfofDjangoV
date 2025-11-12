@@ -218,6 +218,7 @@
 // };
 
 // export default MotPresident;
+
 import React, { useEffect, useState } from "react";
 import { User, Sparkles, Quote, Calendar, Zap, MessageSquare } from "lucide-react";
 import CONFIG from "../../config/config.js";

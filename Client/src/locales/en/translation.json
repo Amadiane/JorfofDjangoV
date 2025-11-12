@@ -561,25 +561,22 @@
     "join_us": "Join the Club"
   }, 
   
+ 
   "president": {
-    "title": "PRESIDENT'S MESSAGE",
-    "loading": "Loading message...",
-    "error": "Loading error",
+    "loading": "Loading the President’s message...",
+    "error": "An error occurred",
     "empty": "No message available",
-    "empty_desc": "Come back soon to read the president's message",
+    "empty_desc": "The President’s message is not yet available. Please check back soon!",
+    "title": "President’s Message",
     "published": "Published on",
-    "message_from": "President's Message",
-    "years_experience": "Years Experience",
-    "commitment": "Commitment",
-    "passion": "Passion",
-    "vision_objectives": "Our Vision and Objectives",
-    "objective_1": "Develop basketball in our region and train young talents",
-    "objective_2": "Create a united and supportive community around sports values",
-    "objective_3": "Proudly represent our club in all competitions",
-    "objective_4": "Promote sports excellence and fair play at all levels",
-    "president_name": "The President",
-    "president_role": "Club President"
-  },
+    "message_from": "Message from the President",
+    "president_name": "Mr. Ousmane Diallo",
+    "president_role": "President of Jorfof Basket Club",
+    "cta_title": "Join the Jorfof Basketball Spirit",
+    "cta_text": "Let’s share together the values of sportsmanship, excellence, and teamwork. Basketball is more than a game — it’s a passion that brings us together.",
+    "cta_button": "Discover the club"
+  
+},
   
   "phototheque": {
     "titre": "PHOTO GALLERY",
