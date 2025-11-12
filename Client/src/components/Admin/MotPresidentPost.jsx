@@ -23,7 +23,6 @@ const MotPresidentPost = () => {
     image: null,
   });
 
-  // 🔄 Charger tous les messages
   useEffect(() => {
     fetchMotPresidents();
   }, []);
@@ -43,19 +42,33 @@ const MotPresidentPost = () => {
     }
   };
 
-  // 🔼 Upload vers Cloudinary
+  // ✅ Fonction robuste pour récupérer l'image correcte
+  const getImageSrc = (mot) => {
+    const img = mot.image_url || mot.image;
+    if (!img) return "https://placehold.co/600x400/1a1a2e/ffffff?text=President";
+
+    // Si c’est déjà une URL Cloudinary complète
+    if (img.startsWith("http")) {
+      // Ajoute .jpg si manquant (erreur ERR_CONNECTION_RESET si absent)
+      if (!img.match(/\.(jpg|jpeg|png|webp|gif)$/)) return `${img}.jpg`;
+      return img;
+    }
+
+    // Sinon, on suppose que c’est un chemin local (dev)
+    return `${CONFIG.MEDIA_URL}${img}`;
+  };
+
   const uploadToCloudinary = async (file) => {
     if (!file) return null;
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", CONFIG.CLOUDINARY_UPLOAD_PRESET);
 
     try {
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/image/upload`,
-        { method: "POST", body: formData }
-      );
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CONFIG.CLOUDINARY_NAME}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
       const data = await res.json();
       return data.secure_url;
     } catch (err) {
@@ -64,7 +77,6 @@ const MotPresidentPost = () => {
     }
   };
 
-  // 📝 Gestion des champs
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
@@ -75,7 +87,6 @@ const MotPresidentPost = () => {
     }
   };
 
-  // 🔄 Réinitialiser le formulaire
   const resetForm = () => {
     setFormData({
       title_fr: "",
@@ -90,7 +101,6 @@ const MotPresidentPost = () => {
     setEditingId(null);
   };
 
-  // ✅ Créer ou Mettre à jour
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -136,10 +146,8 @@ const MotPresidentPost = () => {
     }
   };
 
-  // 🗑️ Supprimer un message
   const handleDelete = async (id) => {
     if (!window.confirm("Voulez-vous vraiment supprimer ce message ?")) return;
-
     try {
       const res = await fetch(CONFIG.API_MOTPRESIDENT_DELETE(id), { method: "DELETE" });
       if (!res.ok) throw new Error("Erreur de suppression");
@@ -151,7 +159,6 @@ const MotPresidentPost = () => {
     }
   };
 
-  // 🔄 Préparer le formulaire pour modification
   const handleEdit = (mot) => {
     setEditingId(mot.id);
     setFormData({
@@ -163,7 +170,7 @@ const MotPresidentPost = () => {
       description_ar: mot.description_ar || "",
       image: null,
     });
-    setPreview(mot.image_url || null);
+    setPreview(getImageSrc(mot));
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -178,6 +185,9 @@ const MotPresidentPost = () => {
       </div>
     );
   }
+
+  // 🖼️ --- le reste du rendu inchangé, mais remplace chaque `mot.image_url` par `getImageSrc(mot)` ---
+
 
   return (
     <div className="min-h-screen bg-[#0a0e27] relative overflow-hidden">
