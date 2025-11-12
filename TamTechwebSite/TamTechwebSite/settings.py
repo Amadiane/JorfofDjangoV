@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'phototheque',     # si tu as album/photo
     'missions',
     'valeurs',
-    'match',
+    # 'match',
     'equipe',
     'partners',
     'contact',

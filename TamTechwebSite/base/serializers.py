@@ -724,11 +724,17 @@ class NewsletterSerializer(serializers.ModelSerializer):
 #         mots = MotPresident.objects.all().order_by('-created_at')[:1]
 #         return MotPresidentSerializer(mots, many=True, context=self.context).data
 
-
 from rest_framework import serializers
 from .models import (
-    Home, News, Video, Match, Partner,
-    EquipeMember, Mission, Valeur, MotPresident
+    Home,
+    News,
+    Video,
+    Match,
+    Partner,
+    EquipeMember,
+    Mission,
+    Valeur,
+    MotPresident
 )
 
 # -------------------------------
@@ -743,9 +749,7 @@ class HomeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -756,9 +760,7 @@ class NewsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -769,9 +771,7 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_cover_image(self, obj):
-        if obj.cover_image:
-            return obj.cover_image.url
-        return None
+        return obj.cover_image.url if obj.cover_image else None
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -788,9 +788,7 @@ class PartnerSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_cover_image_url(self, obj):
-        if obj.cover_image:
-            return obj.cover_image.url
-        return None
+        return obj.cover_image.url if obj.cover_image else None
 
 
 class EquipeMemberSerializer(serializers.ModelSerializer):
@@ -801,9 +799,7 @@ class EquipeMemberSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_photo_url(self, obj):
-        if obj.photo:
-            return obj.photo.url
-        return None
+        return obj.photo.url if obj.photo else None
 
 
 class MissionSerializer(serializers.ModelSerializer):
@@ -814,9 +810,7 @@ class MissionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
 
 
 class ValeurSerializer(serializers.ModelSerializer):
@@ -827,9 +821,7 @@ class ValeurSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
 
 
 class MotPresidentSerializer(serializers.ModelSerializer):
@@ -840,9 +832,7 @@ class MotPresidentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        if obj.image:
-            return obj.image.url
-        return None
+        return obj.image.url if obj.image else None
 
 
 # -------------------------------
