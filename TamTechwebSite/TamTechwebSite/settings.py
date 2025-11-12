@@ -51,17 +51,17 @@ INSTALLED_APPS = [
     # apps locales
     'base',  # Remplace par ton app principale (si c’est autre chose que base)
     # tes apps locales
-    'news',            # ✅ ajoute ceci          # si tu as une app video
-    'phototheque',     # si tu as album/photo
-    'missions',
-    'valeurs',
-    # 'match',
-    'equipe',
-    'partners',
-    'contact',
-    'community',
-    'newsletter',
-    'motpresident',
+    # 'news',            # ✅ ajoute ceci          # si tu as une app video
+    # 'phototheque',     # si tu as album/photo
+    # 'missions',
+    # 'valeurs',
+    # # 'match',
+    # 'equipe',
+    # 'partners',
+    # 'contact',
+    # 'community',
+    # 'newsletter',
+    # 'motpresident',
 
    
 ]
