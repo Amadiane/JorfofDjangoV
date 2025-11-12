@@ -148,7 +148,6 @@
 
 // export default Home;
 
-
 import React, { useEffect, useState } from "react";
 import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
@@ -222,126 +221,71 @@ const Home = () => {
     );
   }
 
-  const { home, latest_news, latest_videos, latest_matches, partners } = homeFull;
+  const {
+    home,
+    latest_news,
+    latest_videos,
+    latest_matches,
+    partners,
+    latest_team_members,
+    latest_missions,
+    latest_valeurs,
+    latest_mot_president
+  } = homeFull;
+
+  const renderCard = (item, titleField, contentField, imageField) => (
+    <div className="bg-[#0f1729]/80 rounded-xl p-4">
+      {item[imageField] && (
+        <img
+          src={item[imageField]}
+          alt={getLocalized(item, titleField)}
+          className="w-full h-48 object-cover rounded-lg mb-4"
+        />
+      )}
+      <h3 className="text-white font-bold text-lg mb-2">{getLocalized(item, titleField)}</h3>
+      {contentField && <p className="text-gray-300 text-sm">{getLocalized(item, contentField)}</p>}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#0a0e27] w-full relative overflow-hidden">
+
       {/* Home Section */}
-      {home && (
-        <div className="py-12 md:py-20 px-4">
-          <div className="max-w-6xl mx-auto space-y-16 md:space-y-24">
-            <div className="relative group">
-              {home.image_url && (
-                <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden">
-                  <img
-                    src={home.image_url}
-                    alt={getLocalized(home, "title")}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729]/50 to-transparent pointer-events-none"></div>
-                </div>
-              )}
-              <div className="p-8 md:p-12 lg:p-16 text-center">
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-6 md:mb-8">
-                  {getLocalized(home, "title")}
-                </h1>
-                <p className="text-base md:text-xl lg:text-2xl text-gray-300 leading-relaxed md:leading-loose">
-                  {getLocalized(home, "description")}
-                </p>
-              </div>
+      {home && home.image_url && (
+        <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden">
+          <img
+            src={home.image_url}
+            alt={getLocalized(home, "title")}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f1729]/50 to-transparent pointer-events-none"></div>
+          <div className="absolute bottom-8 left-8 md:left-16 text-white">
+            <h1 className="text-3xl md:text-5xl font-black">{getLocalized(home, "title")}</h1>
+            <p className="text-base md:text-xl">{getLocalized(home, "description")}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Sections */}
+      {[
+        { title: t("Dernières News"), data: latest_news, titleField: "title", contentField: "description", imageField: "image_url" },
+        { title: t("Vidéothèque"), data: latest_videos, titleField: "title", contentField: null, imageField: "cover_image" },
+        { title: t("Prochains Matchs"), data: latest_matches, titleField: "home_team_name", contentField: "location", imageField: null },
+        { title: t("Nos Partenaires"), data: partners, titleField: "name", contentField: null, imageField: "cover_image_url" },
+        { title: t("Équipe"), data: latest_team_members, titleField: "name", contentField: "role", imageField: "photo_url" },
+        { title: t("Missions"), data: latest_missions, titleField: "title", contentField: "description", imageField: "image_url" },
+        { title: t("Valeurs"), data: latest_valeurs, titleField: "title", contentField: "description", imageField: "image_url" },
+        { title: t("Mot du Président"), data: latest_mot_president, titleField: "title", contentField: "description", imageField: "image_url" }
+      ].map((section, idx) => (
+        section.data && section.data.length > 0 && (
+          <div key={idx} className="py-12 md:py-20 px-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">{section.title}</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {section.data.map(item => renderCard(item, section.titleField, section.contentField, section.imageField))}
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Latest News */}
-      {latest_news && latest_news.length > 0 && (
-        <div className="py-12 md:py-20 px-4">
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">{t("Dernières News")}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {latest_news.map((news) => (
-              <div key={news.id} className="bg-[#0f1729]/80 rounded-xl p-4">
-                {news.image_url && (
-                  <img
-                    src={news.image_url}
-                    alt={getLocalized(news, "title")}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                )}
-                <h3 className="text-white font-bold text-lg mb-2">{getLocalized(news, "title")}</h3>
-                <p className="text-gray-300 text-sm">{getLocalized(news, "content")}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Latest Videos */}
-      {latest_videos && latest_videos.length > 0 && (
-        <div className="py-12 md:py-20 px-4">
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">{t("Vidéothèque")}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {latest_videos.map((video) => (
-              <div key={video.id} className="bg-[#0f1729]/80 rounded-xl p-4">
-                {video.cover_image && (
-                  <img
-                    src={video.cover_image}
-                    alt={getLocalized(video, "title")}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                )}
-                <h3 className="text-white font-bold text-lg mb-2">{getLocalized(video, "title")}</h3>
-                <a
-                  href={video.lien_video}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-orange-400 font-bold text-sm"
-                >
-                  {t("Voir la vidéo")}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Latest Matches */}
-      {latest_matches && latest_matches.length > 0 && (
-        <div className="py-12 md:py-20 px-4">
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">{t("Prochains Matchs")}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {latest_matches.map((match) => (
-              <div key={match.id} className="bg-[#0f1729]/80 rounded-xl p-4">
-                <h3 className="text-white font-bold text-lg mb-2">
-                  {getLocalized(match, "home_team_name")} vs {getLocalized(match, "away_team_name")}
-                </h3>
-                <p className="text-gray-300 text-sm">{getLocalized(match, "location")}</p>
-                <p className="text-gray-300 text-sm">{match.match_date}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Partners */}
-      {partners && partners.length > 0 && (
-        <div className="py-12 md:py-20 px-4">
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">{t("Nos Partenaires")}</h2>
-          <div className="grid md:grid-cols-5 gap-8 items-center">
-            {partners.map((partner) => (
-              <div key={partner.id} className="bg-[#0f1729]/80 rounded-xl p-4 flex justify-center items-center">
-                {partner.cover_image && (
-                  <img
-                    src={partner.cover_image}
-                    alt={getLocalized(partner, "name")}
-                    className="max-h-24 object-contain"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        )
+      ))}
     </div>
   );
 };

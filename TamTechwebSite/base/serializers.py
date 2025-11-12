@@ -603,58 +603,251 @@ class NewsletterSerializer(serializers.ModelSerializer):
 #                 return None
 #         return None
 # serializers.py
+# from rest_framework import serializers
+# from .models import Home
+
+# class HomeSerializer(serializers.ModelSerializer):
+#     # Champ pour l'URL complète Cloudinary
+#     image_url = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Home
+#         fields = [
+#             "id",
+#             "title_fr", "title_en",
+#             "description_fr", "description_en",
+#             "image",       # l'objet CloudinaryField
+#             "image_url",   # URL directe utilisable dans le frontend
+#             "created_at",
+#             "updated_at"
+#         ]
+
+#     def get_image_url(self, obj):
+#         if obj.image:
+#             try:
+#                 return obj.image.url  # CloudinaryField gère déjà l'URL complète
+#             except Exception:
+#                 return None
+#         return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # # base/serializers.py
+# # from rest_framework import serializers
+# # from .models import Home, News, Video, Match, Partner
+# # from .models import Home  # HomeSerializer est déjà dans le même fichier
+# # from .serializers import HomeSerializer, NewsSerializer, VideoSerializer, MatchSerializer, PartnerSerializer
+
+
+# # class HomeFullSerializer(serializers.Serializer):
+# #     home = HomeSerializer(read_only=True)
+# #     latest_news = serializers.SerializerMethodField()
+# #     latest_videos = serializers.SerializerMethodField()
+# #     latest_matches = serializers.SerializerMethodField()
+# #     partners = serializers.SerializerMethodField()
+
+# #     def get_latest_news(self, obj):
+# #         news = News.objects.all().order_by('-created_at')[:3]
+# #         return NewsSerializer(news, many=True, context=self.context).data
+
+# #     def get_latest_videos(self, obj):
+# #         videos = Video.objects.all().order_by('-created_at')[:3]
+# #         return VideoSerializer(videos, many=True, context=self.context).data
+
+# #     def get_latest_matches(self, obj):
+# #         matches = Match.objects.all().order_by('-created_at')[:3]
+# #         return MatchSerializer(matches, many=True, context=self.context).data
+
+# #     def get_partners(self, obj):
+# #         partners = Partner.objects.all().order_by('-created_at')[:5]
+# #         return PartnerSerializer(partners, many=True, context=self.context).data
+
+
+# # Serializer pour la Home "vitrine" complète
+# class HomeFullSerializer(serializers.Serializer):
+#     home = HomeSerializer(read_only=True)
+#     latest_news = serializers.SerializerMethodField()
+#     latest_videos = serializers.SerializerMethodField()
+#     latest_matches = serializers.SerializerMethodField()
+#     partners = serializers.SerializerMethodField()
+#     latest_team_members = serializers.SerializerMethodField()
+#     latest_missions = serializers.SerializerMethodField()
+#     latest_valeurs = serializers.SerializerMethodField()
+#     latest_mot_president = serializers.SerializerMethodField()
+
+#     def get_latest_news(self, obj):
+#         news = News.objects.all().order_by('-created_at')[:3]
+#         return NewsSerializer(news, many=True, context=self.context).data
+
+#     def get_latest_videos(self, obj):
+#         videos = Video.objects.all().order_by('-created_at')[:3]
+#         return VideoSerializer(videos, many=True, context=self.context).data
+
+#     def get_latest_matches(self, obj):
+#         matches = Match.objects.all().order_by('-created_at')[:3]
+#         return MatchSerializer(matches, many=True, context=self.context).data
+
+#     def get_partners(self, obj):
+#         partners = Partner.objects.all().order_by('-created_at')[:5]
+#         return PartnerSerializer(partners, many=True, context=self.context).data
+
+#     def get_latest_team_members(self, obj):
+#         members = EquipeMember.objects.all().order_by('-created_at')[:5]
+#         return EquipeMemberSerializer(members, many=True, context=self.context).data
+
+#     def get_latest_missions(self, obj):
+#         missions = Mission.objects.all().order_by('-created_at')[:3]
+#         return MissionSerializer(missions, many=True, context=self.context).data
+
+#     def get_latest_valeurs(self, obj):
+#         valeurs = Valeur.objects.all().order_by('-id')[:5]
+#         return ValeurSerializer(valeurs, many=True, context=self.context).data
+
+#     def get_latest_mot_president(self, obj):
+#         mots = MotPresident.objects.all().order_by('-created_at')[:1]
+#         return MotPresidentSerializer(mots, many=True, context=self.context).data
+
+
 from rest_framework import serializers
-from .models import Home
+from .models import (
+    Home, News, Video, Match, Partner,
+    EquipeMember, Mission, Valeur, MotPresident
+)
+
+# -------------------------------
+# Serializers des modèles principaux
+# -------------------------------
 
 class HomeSerializer(serializers.ModelSerializer):
-    # Champ pour l'URL complète Cloudinary
     image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Home
-        fields = [
-            "id",
-            "title_fr", "title_en",
-            "description_fr", "description_en",
-            "image",       # l'objet CloudinaryField
-            "image_url",   # URL directe utilisable dans le frontend
-            "created_at",
-            "updated_at"
-        ]
+        fields = "__all__"
 
     def get_image_url(self, obj):
         if obj.image:
-            try:
-                return obj.image.url  # CloudinaryField gère déjà l'URL complète
-            except Exception:
-                return None
+            return obj.image.url
         return None
 
 
+class NewsSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = News
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
+class VideoSerializer(serializers.ModelSerializer):
+    cover_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Video
+        fields = "__all__"
+
+    def get_cover_image(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
 
 
+class MatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Match
+        fields = "__all__"
 
 
+class PartnerSerializer(serializers.ModelSerializer):
+    cover_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Partner
+        fields = "__all__"
+
+    def get_cover_image_url(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
 
 
+class EquipeMemberSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EquipeMember
+        fields = "__all__"
+
+    def get_photo_url(self, obj):
+        if obj.photo:
+            return obj.photo.url
+        return None
 
 
+class MissionSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Mission
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
+class ValeurSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Valeur
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
+class MotPresidentSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MotPresident
+        fields = "__all__"
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
-
-
-# base/serializers.py
-from rest_framework import serializers
-from .models import Home, News, Video, Match, Partner
-from .models import Home  # HomeSerializer est déjà dans le même fichier
-from .serializers import HomeSerializer, NewsSerializer, VideoSerializer, MatchSerializer, PartnerSerializer
-
+# -------------------------------
+# Serializer complet pour la Home
+# -------------------------------
 
 class HomeFullSerializer(serializers.Serializer):
     home = HomeSerializer(read_only=True)
@@ -662,6 +855,10 @@ class HomeFullSerializer(serializers.Serializer):
     latest_videos = serializers.SerializerMethodField()
     latest_matches = serializers.SerializerMethodField()
     partners = serializers.SerializerMethodField()
+    latest_team_members = serializers.SerializerMethodField()
+    latest_missions = serializers.SerializerMethodField()
+    latest_valeurs = serializers.SerializerMethodField()
+    latest_mot_president = serializers.SerializerMethodField()
 
     def get_latest_news(self, obj):
         news = News.objects.all().order_by('-created_at')[:3]
@@ -678,3 +875,19 @@ class HomeFullSerializer(serializers.Serializer):
     def get_partners(self, obj):
         partners = Partner.objects.all().order_by('-created_at')[:5]
         return PartnerSerializer(partners, many=True, context=self.context).data
+
+    def get_latest_team_members(self, obj):
+        members = EquipeMember.objects.all().order_by('-created_at')[:5]
+        return EquipeMemberSerializer(members, many=True, context=self.context).data
+
+    def get_latest_missions(self, obj):
+        missions = Mission.objects.all().order_by('-created_at')[:3]
+        return MissionSerializer(missions, many=True, context=self.context).data
+
+    def get_latest_valeurs(self, obj):
+        valeurs = Valeur.objects.all().order_by('-id')[:5]
+        return ValeurSerializer(valeurs, many=True, context=self.context).data
+
+    def get_latest_mot_president(self, obj):
+        mots = MotPresident.objects.all().order_by('-created_at')[:1]
+        return MotPresidentSerializer(mots, many=True, context=self.context).data

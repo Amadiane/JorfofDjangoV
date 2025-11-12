@@ -111,6 +111,7 @@ API_HOME_CREATE: `${BASE_URL}/api/home/`,
 API_HOME_UPDATE: (id) => `${BASE_URL}/api/home/${id}/`,
 API_HOME_DELETE: (id) => `${BASE_URL}/api/home/${id}/`,
 
+API_HOME_FULL: `${BASE_URL}/api/home-full/`,
 
 
 
