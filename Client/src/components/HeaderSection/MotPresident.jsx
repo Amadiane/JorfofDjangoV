@@ -219,14 +219,9 @@
 
 // export default MotPresident;
 import React, { useEffect, useState } from "react";
-import { User, Zap, Calendar, Quote, MessageSquare } from "lucide-react";
+import { User, Sparkles, Quote, Calendar, Zap, MessageSquare } from "lucide-react";
+import CONFIG from "../../config/config.js";
 import { useTranslation } from "react-i18next";
-
-// Configuration - à adapter selon votre backend
-const CONFIG = {
-  API_MOTPRESIDENT_LIST: 'http://localhost:8000/api/mot-president/',
-  MEDIA_URL: 'http://localhost:8000/media/'
-};
 
 const MotPresident = () => {
   const { t, i18n } = useTranslation();
@@ -234,16 +229,16 @@ const MotPresident = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Scroll vers le haut au chargement
+  // ✅ Scroll vers le haut au chargement
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
     const fetchMotPresident = async () => {
       try {
         const response = await fetch(CONFIG.API_MOTPRESIDENT_LIST);
-        if (!response.ok) throw new Error(`Erreur ${response.status}`);
+        if (!response.ok) throw new Error("Erreur API Mot du Président");
         const data = await response.json();
         setMotPresident(Array.isArray(data) && data.length > 0 ? data[0] : null);
       } catch (err) {
@@ -257,14 +252,13 @@ const MotPresident = () => {
   }, []);
 
   const getImageSrc = (motPresident) => {
-    if (!motPresident) return "https://placehold.co/1920x1080/1a1a2e/ffffff?text=President";
+    if (!motPresident) return "";
     if (motPresident.image_url) return motPresident.image_url;
     if (motPresident.image?.startsWith("http")) return motPresident.image;
     if (motPresident.image) return `${CONFIG.MEDIA_URL}${motPresident.image}`;
     return "https://placehold.co/1920x1080/1a1a2e/ffffff?text=President";
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
@@ -279,11 +273,10 @@ const MotPresident = () => {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
-        <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl backdrop-blur-xl max-w-md w-full">
+        <div className="bg-red-500/10 border-2 border-red-500/50 text-white p-6 rounded-2xl shadow-2xl backdrop-blur-xl max-w-md">
           <div className="flex items-center gap-3 mb-2">
             <Zap className="w-6 h-6 text-red-500" />
             <p className="font-bold text-xl">{t("president.error")}</p>
@@ -294,29 +287,27 @@ const MotPresident = () => {
     );
   }
 
-  // Empty state
   if (!motPresident) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center px-4">
-        <div className="text-center py-12 md:py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-6 md:px-8 max-w-2xl w-full">
-          <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
-            <MessageSquare className="w-10 h-10 md:w-12 md:h-12 text-orange-400" />
+        <div className="text-center py-20 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-orange-500/30 px-8 max-w-2xl">
+          <div className="w-24 h-24 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <MessageSquare className="w-12 h-12 text-orange-400" />
           </div>
-          <p className="text-white text-xl md:text-2xl font-bold mb-2">{t("president.empty")}</p>
-          <p className="text-gray-400 text-base md:text-lg">{t("president.empty_desc")}</p>
+          <p className="text-white text-2xl font-bold mb-2">{t("president.empty")}</p>
+          <p className="text-gray-400 text-lg">{t("president.empty_desc")}</p>
         </div>
       </div>
     );
   }
 
-  // Main content
   return (
     <div className="min-h-screen bg-[#0a0e27] w-full">
       {/* Effets de fond lumineux */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/2 w-64 h-64 md:w-96 md:h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header Compact */}
@@ -356,9 +347,6 @@ const MotPresident = () => {
                   src={getImageSrc(motPresident)}
                   alt={motPresident[`title_${i18n.language}`] || motPresident.title_fr}
                   className="w-full h-full object-cover"
-                  onError={(e) =>
-                    (e.target.src = "https://placehold.co/1920x1080/1a1a2e/ffffff?text=President")
-                  }
                 />
                 
                 {/* Overlay gradient */}
@@ -434,6 +422,27 @@ const MotPresident = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ⚡ CTA */}
+      <div className="relative py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-orange-500/10 backdrop-blur-xl border-2 border-orange-500/30 rounded-2xl md:rounded-3xl p-8 md:p-12 text-center shadow-2xl">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-400 to-white mb-4">
+              {t("president.cta_title")}
+            </h2>
+            <p className="text-base md:text-lg lg:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-medium">
+              {t("president.cta_text")}
+            </p>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="relative px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-bold text-base md:text-lg shadow-2xl border-2 border-orange-400/50 text-white hover:scale-105 transition-transform duration-300"
+            >
+              <Zap className="w-4 h-4 md:w-5 md:h-5 inline mr-2" />
+              {t("president.cta_button")}
+            </button>
           </div>
         </div>
       </div>
