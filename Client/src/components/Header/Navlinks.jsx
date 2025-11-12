@@ -397,7 +397,7 @@ const Navlinks = () => {
           <div className="w-full flex items-center justify-center">
             <div className="flex items-center justify-between w-[95%] lg:w-[90%] xl:w-[85%] py-2">
               {/* LOGO */}
-              <NavLink to="/actualites" className="flex items-center space-x-3 group">
+              <NavLink to="/home" className="flex items-center space-x-3 group">
                 <div className="relative">
                   <div className="absolute inset-0 bg-orange-500/30 blur-lg rounded-full group-hover:bg-orange-500/50 transition-all"></div>
                   <img src={logo} alt="Jorfof Basket Club" className="relative h-12 w-12 rounded-full border-2 border-orange-500 shadow-lg object-cover group-hover:scale-105 transition-transform" />
