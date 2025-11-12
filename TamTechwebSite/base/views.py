@@ -1650,3 +1650,20 @@ class HomeViewSet(viewsets.ModelViewSet):  # <- ModelViewSet permet GET, POST, P
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+
+
+#//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Home
+from .serializers import HomeFullSerializer
+
+class HomeFullView(APIView):
+    def get(self, request):
+        home_instance = Home.objects.first()
+        serializer = HomeFullSerializer({"home": home_instance}, context={"request": request})
+        return Response(serializer.data)

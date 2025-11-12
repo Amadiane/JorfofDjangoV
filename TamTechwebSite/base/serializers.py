@@ -629,3 +629,52 @@ class HomeSerializer(serializers.ModelSerializer):
             except Exception:
                 return None
         return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# base/serializers.py
+from rest_framework import serializers
+from .models import Home, News, Video, Match, Partner
+from .models import Home  # HomeSerializer est déjà dans le même fichier
+from .serializers import HomeSerializer, NewsSerializer, VideoSerializer, MatchSerializer, PartnerSerializer
+
+
+class HomeFullSerializer(serializers.Serializer):
+    home = HomeSerializer(read_only=True)
+    latest_news = serializers.SerializerMethodField()
+    latest_videos = serializers.SerializerMethodField()
+    latest_matches = serializers.SerializerMethodField()
+    partners = serializers.SerializerMethodField()
+
+    def get_latest_news(self, obj):
+        news = News.objects.all().order_by('-created_at')[:3]
+        return NewsSerializer(news, many=True, context=self.context).data
+
+    def get_latest_videos(self, obj):
+        videos = Video.objects.all().order_by('-created_at')[:3]
+        return VideoSerializer(videos, many=True, context=self.context).data
+
+    def get_latest_matches(self, obj):
+        matches = Match.objects.all().order_by('-created_at')[:3]
+        return MatchSerializer(matches, many=True, context=self.context).data
+
+    def get_partners(self, obj):
+        partners = Partner.objects.all().order_by('-created_at')[:5]
+        return PartnerSerializer(partners, many=True, context=self.context).data

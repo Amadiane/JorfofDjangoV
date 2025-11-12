@@ -11,7 +11,8 @@ from .views import (
     ProtectedView, logout, ActivityViewSet, fondation_list_create, fondation_detail,
     VideoViewSet, NewsViewSet, MatchViewSet, PartnerViewSet, AlbumViewSet, PhotoViewSet, EquipeMemberViewSet, MotPresidentViewSet,
     ContactListCreateView, ContactDetailView, ContactReplyView, CommunityListCreateView, CommunityDetailView, CommunityReplyView,
-    NewsletterListCreateView, NewsletterDetailView, NewsletterReplyView, HomeViewSet
+    NewsletterListCreateView, NewsletterDetailView, NewsletterReplyView, HomeViewSet, HomeFullView
+
 
 
 
@@ -50,7 +51,7 @@ urlpatterns = [
     
     # Route pour DELETE (supprimer un contact) avec un id
    
-   
+    path('home-full/', HomeFullView.as_view(), name='home-full'),
     path('missions/', views.mission_list_create, name='mission_list_create'),
     path('missions/<int:pk>/', views.mission_detail, name='mission_detail'),
     path('rejoindre/', RejoindreAPIView.as_view(), name='rejoindre'),
