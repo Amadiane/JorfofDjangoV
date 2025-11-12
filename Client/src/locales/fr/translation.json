@@ -255,7 +255,7 @@
 
 
   
-
+                                                      
 
                                                     
                                                         "Nos Programmes": "Nos Programmes",
@@ -576,6 +576,23 @@
     "erreur_chargement": "Erreur lors du chargement des albums ou des photos."
   
 },
+
+  "home": {
+    "title": "Bienvenue sur notre site",
+    "loading": "Chargement en cours...",
+    "error": "Erreur lors du chargement",
+    "no_content": "Aucun contenu trouvé",
+    "president_message": "Message du Président",
+    "president_name": "Nom du Président",
+    "president_role": "Président",
+    "latest_news": "Dernières actualités",
+    "calendar": "Calendrier des matchs",
+    "team": "Notre Équipe",
+    "videos": "Vidéothèque",
+    "partners": "Nos Partenaires"
+  
+},
+
 
 
 

@@ -309,6 +309,19 @@
 
 
 
+                            
+  "title": "Welcome to our website",
+  "loading": "Loading...",
+  "error": "Error while loading",
+  "no_content": "No content found",
+  "president_message": "President's Message",
+  "president_name": "President Name",
+  "president_role": "President",
+  "latest_news": "Latest News",
+  "calendar": "Match Calendar",
+  "team": "Our Team",
+  "videos": "Video Library",
+  "partners": "Our Partners",
 
 
                           
@@ -495,6 +508,21 @@
     "slogan": "Always ready to shine",
     "values":"Our Values"
   }, 
+  
+  "home": {
+    "title": "Welcome to our website",
+    "loading": "Loading...",
+    "error": "Error while loading",
+    "no_content": "No content found",
+    "president_message": "President's Message",
+    "president_name": "President Name",
+    "president_role": "President",
+    "latest_news": "Latest News",
+    "calendar": "Match Calendar",
+    "team": "Our Team",
+    "videos": "Video Library",
+    "partners": "Our Partners"
+  },
 
   
   "team": {
