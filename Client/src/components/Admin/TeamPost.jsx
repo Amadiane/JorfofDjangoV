@@ -530,9 +530,8 @@
 
 // export default TeamMessage;
 
-
 import React, { useEffect, useState } from "react";
-import { Users, Loader2, Trash2, PlusCircle, Edit2, X, UserCircle } from "lucide-react";
+import { Users, Loader2, Trash2, PlusCircle, Edit2, X, UserCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import CONFIG from "../../config/config.js";
 
 const TeamMessage = () => {
@@ -546,6 +545,10 @@ const TeamMessage = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [preview, setPreview] = useState(null);
 
+  // 🔹 Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -558,7 +561,7 @@ const TeamMessage = () => {
     photo: null,
   });
 
-  // Charger les membres
+  // Charger TOUS les membres (pagination backend)
   useEffect(() => {
     fetchMembres();
   }, []);
@@ -566,10 +569,26 @@ const TeamMessage = () => {
   const fetchMembres = async () => {
     setFetchLoading(true);
     try {
-      const response = await fetch(`${CONFIG.BASE_URL}/api/equipe/`);
-      if (!response.ok) throw new Error("Erreur lors du chargement");
-      const data = await response.json();
-      setMembres(data.results || data);
+      let url = `${CONFIG.BASE_URL}/api/equipe/`;
+      let allResults = [];
+
+      // Récupérer toutes les pages de l'API Django paginée
+      while (url) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Erreur lors du chargement");
+
+        const data = await response.json();
+        
+        // Django peut renvoyer { results: [...], next: "..." } ou directement un tableau
+        const results = data.results || data;
+        allResults = [...allResults, ...results];
+        
+        // Continuer si il y a une page suivante
+        url = data.next;
+      }
+
+      setMembres(allResults);
+      console.log(`✅ ${allResults.length} membres chargés`);
     } catch (err) {
       console.error(err);
       setError("Erreur lors du chargement des membres");
@@ -671,6 +690,7 @@ const TeamMessage = () => {
       setSuccessMessage(editingId ? "Membre mis à jour avec succès !" : "Membre ajouté avec succès !");
       resetForm();
       setShowForm(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error(err);
       setError("Erreur lors de la sauvegarde");
@@ -714,6 +734,17 @@ const TeamMessage = () => {
     return badges[role] || badges.player;
   };
 
+  // 🔹 Pagination frontend
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentMembres = membres.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(membres.length / itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  };
+
   if (fetchLoading) {
     return (
       <div className="min-h-screen bg-[#0a0e27] flex items-center justify-center">
@@ -747,9 +778,14 @@ const TeamMessage = () => {
                 <Users className="w-6 h-6 text-white" />
               </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              Gestion de l'Équipe
-            </h1>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-black text-white">
+                Gestion de l'Équipe
+              </h1>
+              <p className="text-sm text-gray-400 font-semibold">
+                {membres.length} membre{membres.length !== 1 ? "s" : ""} au total
+              </p>
+            </div>
           </div>
           <button
             onClick={() => {
@@ -760,7 +796,8 @@ const TeamMessage = () => {
           >
             <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
             <div className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2.5 rounded-lg hover:shadow-xl hover:shadow-orange-500/50 transition-all flex items-center justify-center gap-2 font-semibold">
-              <PlusCircle size={18} /> {showForm ? "Fermer" : "Nouveau Membre"}
+              {showForm ? <X size={18} /> : <PlusCircle size={18} />}
+              {showForm ? "Fermer" : "Nouveau Membre"}
             </div>
           </button>
         </div>
@@ -938,13 +975,13 @@ const TeamMessage = () => {
 
         {/* GRID DES MEMBRES */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-          {membres.length === 0 ? (
+          {currentMembres.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <Users size={64} className="mx-auto text-gray-600 mb-4" />
               <p className="text-gray-400 text-lg">Aucun membre pour le moment</p>
             </div>
           ) : (
-            membres.map((membre) => {
+            currentMembres.map((membre) => {
               const roleBadge = getRoleBadge(membre.role);
               return (
                 <div key={membre.id} className="relative group cursor-pointer" onClick={() => setSelectedMember(membre)}>
@@ -1017,7 +1054,60 @@ const TeamMessage = () => {
           )}
         </div>
 
-        {/* MODAL DÉTAILS */}
+        {/* 🔹 PAGINATION */}
+        {membres.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-2 mt-8">
+            {/* Bouton précédent */}
+            <button
+              onClick={() => paginate(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="relative group disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+              <div className="relative bg-white/10 border-2 border-orange-500/30 text-white px-4 py-2 rounded-lg hover:bg-orange-500/20 hover:border-orange-500/50 transition-all flex items-center gap-2 font-semibold">
+                <ChevronLeft size={18} />
+                <span className="hidden sm:inline">Précédent</span>
+              </div>
+            </button>
+
+            {/* Numéros de pages */}
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                <button
+                  key={number}
+                  onClick={() => paginate(number)}
+                  className={`relative group ${currentPage === number ? '' : 'hover:scale-110'} transition-transform`}
+                >
+                  {currentPage === number && (
+                    <div className="absolute inset-0 bg-orange-500/50 blur-lg"></div>
+                  )}
+                  <div className={`relative px-4 py-2 rounded-lg font-bold transition-all ${
+                    currentPage === number
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-xl shadow-orange-500/50 border-2 border-orange-400'
+                      : 'bg-white/10 border-2 border-white/20 text-gray-300 hover:bg-white/20 hover:border-white/40'
+                  }`}>
+                    {number}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Bouton suivant */}
+            <button
+              onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              className="relative group disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <div className="absolute inset-0 bg-orange-500/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+              <div className="relative bg-white/10 border-2 border-orange-500/30 text-white px-4 py-2 rounded-lg hover:bg-orange-500/20 hover:border-orange-500/50 transition-all flex items-center gap-2 font-semibold">
+                <span className="hidden sm:inline">Suivant</span>
+                <ChevronRight size={18} />
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* MODAL DÉTAILS - Identique au code précédent */}
         {selectedMember && (
           <div 
             className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
@@ -1101,6 +1191,15 @@ const TeamMessage = () => {
 
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onClick={() => {
+                        handleEdit(selectedMember);
+                        setSelectedMember(null);
+                      }}
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-blue-500/50 transition-all font-bold flex items-center justify-center gap-2"
+                    >
+                      <Edit2 size={18} /> Modifier
+                    </button>
                     <button
                       onClick={() => {
                         handleDelete(selectedMember.id);
