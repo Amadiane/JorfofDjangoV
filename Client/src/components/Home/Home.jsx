@@ -827,6 +827,8 @@ const Home = () => {
         </div>
       )} */}
 
+      
+
       {/* Vidéos Section */}
       {latest_videos && latest_videos.length > 0 && (
         <div className="relative py-8 px-4">
