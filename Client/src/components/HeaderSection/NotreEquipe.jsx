@@ -18,36 +18,43 @@ const NotreEquipe = () => {
 
   // 🟢 Charger les membres
   const fetchEquipe = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(CONFIG.API_EQUIPE_LIST); // même logique que Phototheque
+  try {
+    setLoading(true);
+    let allResults = [];
+    let url = CONFIG.API_EQUIPE_LIST;
+
+    while (url) {
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Erreur lors du chargement de l'équipe");
 
       const data = await res.json();
 
-      // ✅ Normalisation des URLs Cloudinary
-      const normalizeUrl = (url) => {
-        if (!url) return null;
-        if (url.startsWith("http")) return url;
-        if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
-        return `${CONFIG.BASE_URL}/${url}`;
-      };
-
-      // ✅ On adapte les photos
-      const normalized = (data.results || data).map((m) => ({
-        ...m,
-        photo_url: normalizeUrl(m.photo_url || m.photo),
-      }));
-
-      setMembres(normalized);
-      setError("");
-    } catch (err) {
-      console.error("Erreur:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      allResults = [...allResults, ...(data.results || [])];
+      url = data.next; // ➜ charge la page suivante
     }
-  };
+
+    const normalizeUrl = (url) => {
+      if (!url) return null;
+      if (url.startsWith("http")) return url;
+      if (url.startsWith("/")) return `${CONFIG.BASE_URL}${url}`;
+      return `${CONFIG.BASE_URL}/${url}`;
+    };
+
+    const normalized = allResults.map((m) => ({
+      ...m,
+      photo_url: normalizeUrl(m.photo_url || m.photo)
+    }));
+
+    setMembres(normalized);
+    setError("");
+  } catch (err) {
+    console.error("Erreur:", err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchEquipe();
